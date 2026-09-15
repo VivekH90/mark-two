@@ -2,9 +2,10 @@ const vscode = require("vscode");
 
 const DIRECTIVES = [
   "documenttitle", "button", "title", "section", "subsection", "image",
-  "label", "ref", "enumerate", "itemize", "item", "theorem", "lemma",
-  "definition", "corollary", "axiom", "proposition", "remark", "example",
-  "conjecture", "notation", "warning", "proof", "relatedlinks", "relatedlink"
+  "text", "bold", "italic", "color", "label", "ref", "enumerate",
+  "itemize", "item", "theorem", "lemma", "definition", "corollary",
+  "axiom", "proposition", "remark", "example", "conjecture", "notation",
+  "warning", "proof", "relatedlinks", "relatedlink"
 ];
 
 function activate(context) {
