@@ -4,7 +4,6 @@
     --sidebar-width: 310px;
     --page-pad: clamp(22px, 4vw, 54px);
     --text: #111111;
-    --muted: #4b4b4b;
     --border: #d9d9d9;
     --panel-blue: #edf5ff;
     --panel-green: #eefaf0;
@@ -131,9 +130,7 @@ button, input, select, textarea { font-family: inherit; }
     font-weight: 700;
 }
 
-.article p {
-    margin: 0 0 17px;
-}
+.article p { margin: 0 0 17px; }
 
 .sidebar {
     position: sticky;
@@ -191,21 +188,10 @@ button, input, select, textarea { font-family: inherit; }
     padding: 2px;
 }
 
-.toc {
-    padding: 0 17px 15px;
-}
-
-.toc ol {
-    margin: 0;
-    padding: 0;
-    list-style-position: inside;
-}
-
-.toc > ol > li {
-    padding: 8px 0;
-    border-top: 1px solid rgba(40, 80, 130, 0.14);
-}
-
+.toc { padding: 0 17px 15px; }
+.toc.collapsed { display: none; }
+.toc ol { margin: 0; padding: 0; list-style-position: inside; }
+.toc > ol > li { padding: 8px 0; border-top: 1px solid rgba(40, 80, 130, 0.14); }
 .toc li { color: #173e80; }
 .toc a, .related-links a { color: #1553ad; text-decoration: none; }
 .toc a:hover, .related-links a:hover { text-decoration: underline; }
@@ -220,17 +206,8 @@ button, input, select, textarea { font-family: inherit; }
 
 .toc-subsections li { padding: 3px 0; }
 
-.related-links {
-    list-style: none;
-    margin: 0;
-    padding: 0 18px 15px;
-}
-
-.related-links li {
-    padding: 8px 0;
-    border-top: 1px solid rgba(45, 110, 65, 0.14);
-}
-
+.related-links { list-style: none; margin: 0; padding: 0 18px 15px; }
+.related-links li { padding: 8px 0; border-top: 1px solid rgba(45, 110, 65, 0.14); }
 .related-links li::before {
     content: "↗";
     display: inline-block;
@@ -255,43 +232,14 @@ button, input, select, textarea { font-family: inherit; }
     );
 }
 
-.math-environment.theorem {
-    --environment-accent: #2f5fa7;
-    --environment-border: #b9cde9;
-    --environment-fill: #eaf2ff;
-}
+.math-environment.theorem { --environment-accent: #2f5fa7; --environment-border: #b9cde9; --environment-fill: #eaf2ff; }
+.math-environment.lemma { --environment-accent: #5867a5; --environment-border: #c5cae7; --environment-fill: #eff0ff; }
+.math-environment.definition { --environment-accent: #39745a; --environment-border: #b9d9c7; --environment-fill: #eaf7ef; }
+.math-environment.corollary { --environment-accent: #8a5a2c; --environment-border: #dfc9b0; --environment-fill: #fbf1e5; }
 
-.math-environment.lemma {
-    --environment-accent: #5867a5;
-    --environment-border: #c5cae7;
-    --environment-fill: #eff0ff;
-}
-
-.math-environment.definition {
-    --environment-accent: #39745a;
-    --environment-border: #b9d9c7;
-    --environment-fill: #eaf7ef;
-}
-
-.math-environment.corollary {
-    --environment-accent: #8a5a2c;
-    --environment-border: #dfc9b0;
-    --environment-fill: #fbf1e5;
-}
-
-.environment-heading {
-    margin-bottom: 8px;
-    font-size: 18px;
-    font-weight: 700;
-}
-
+.environment-heading { margin-bottom: 8px; font-size: 18px; font-weight: 700; }
 .environment-content p:last-child { margin-bottom: 0; }
-
-.math-environment mjx-container {
-    font-size: 105%;
-}
-
-.sidebar.collapsed .toc { display: none; }
+.math-environment mjx-container { font-size: 105%; }
 
 @media (max-width: 1080px) {
     :root { --sidebar-width: 280px; --article-max: 820px; }
