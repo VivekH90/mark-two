@@ -94,7 +94,11 @@ def _math_html(math: MathBlock) -> str: return f'<div class="math-display">\\[{m
 def _image_html(image: Image, references, figure_number=None) -> str:
     src = escape(image.src, quote=True); alt = escape(image.alt, quote=True)
     identifier = f' id="{escape(image.label, quote=True)}"' if image.label else ""
-    html = [f'<figure class="article-image"{identifier}>', f'<img src="{src}" alt="{alt}" loading="lazy">']
+    size_style = []
+    if image.width: size_style.append(f"width: {escape(image.width, quote=True)}")
+    if image.height: size_style.append(f"height: {escape(image.height, quote=True)}")
+    style = f' style="{"; ".join(size_style)}"' if size_style else ""
+    html = [f'<figure class="article-image"{identifier}>', f'<img src="{src}" alt="{alt}" loading="lazy"{style}>']
     if image.caption: html.append(f'<figcaption>{escape(image.caption)}</figcaption>')
     html.append('</figure>'); return "\n".join(html)
 
@@ -180,7 +184,9 @@ def render(document: Document, template_path: str | Path) -> str:
         color = escape(button.color, quote=True); dark_color = escape(_dark_mode_color(button.color), quote=True)
         buttons.append(f'<a class="nav-button" href="{escape(button.href, quote=True)}" style="--button-color: {color}; --button-color-dark: {dark_color};">{escape(button.name)}</a>')
     if document.banner:
-        banner = f'<div class="site-banner"><img src="{escape(document.banner, quote=True)}" alt="" loading="eager"><a class="banner-title" href="#">{escape(document.document_title)}</a></div>'
+        banner_color = escape(document.banner_color or "#ffffff", quote=True)
+        banner_dark_color = escape(_dark_mode_color(document.banner_color or "#ffffff"), quote=True)
+        banner = f'<div class="site-banner"><img src="{escape(document.banner, quote=True)}" alt="" loading="eager"><a class="banner-title" href="#" style="--banner-title-color: {banner_color}; --banner-title-color-dark: {banner_dark_color};">{escape(document.document_title)}</a></div>'
     else: banner = f'<a class="document-title" href="#">{escape(document.document_title)}</a>'
     references = _build_reference_index(document)
     toc, article, environment_counters = [], [], {}
