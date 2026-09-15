@@ -21,12 +21,30 @@ def _slugify(text: str) -> str:
     return slug or "section"
 
 
+def _quote_starts(text: str, index: int) -> bool:
+    """Return whether a quote at index starts a quoted value.
+
+    Apostrophes in ordinary prose, such as Cauchy's or Liouville's, are not
+    string delimiters. A single quote is treated as a delimiter only when it
+    occurs at the start of a value, after '=', ',', or an opening delimiter.
+    """
+    char = text[index]
+    if char == '"':
+        return True
+    if char != "'":
+        return False
+    previous = index - 1
+    while previous >= 0 and text[previous].isspace():
+        previous -= 1
+    return previous < 0 or text[previous] in "=,([{"
+
+
 def _split_top_level(text: str) -> List[str]:
     parts, current = [], []
     quote = None
     depth = 0
     escaped = False
-    for char in text:
+    for index, char in enumerate(text):
         if escaped:
             escaped = False
             current.append(char)
@@ -35,20 +53,26 @@ def _split_top_level(text: str) -> List[str]:
             escaped = True
             current.append(char)
             continue
-        if char in {'"', "'"}:
-            if quote == char: quote = None
-            elif quote is None: quote = char
+        if char in {'"', "'"} and _quote_starts(text, index):
+            if quote == char:
+                quote = None
+            elif quote is None:
+                quote = char
         elif quote is None:
-            if char in "{[(": depth += 1
-            elif char in "})]": depth = max(0, depth - 1)
+            if char in "{[(":
+                depth += 1
+            elif char in "})]":
+                depth = max(0, depth - 1)
             elif char == "," and depth == 0:
                 part = "".join(current).strip()
-                if part: parts.append(part)
+                if part:
+                    parts.append(part)
                 current = []
                 continue
         current.append(char)
     part = "".join(current).strip()
-    if part: parts.append(part)
+    if part:
+        parts.append(part)
     return parts
 
 
@@ -114,7 +138,8 @@ def _unique_slug(base: str, used: set[str]) -> str:
         used.add(base); return base
     number = 2
     while f"{base}-{number}" in used: number += 1
-    slug = f"{base}-{number}"; used.add(slug); return slug
+    slug = f"{base}-{number}"; used.add(slug)
+    return slug
 
 
 def _extract_directive_blocks(text: str, command: str):
@@ -122,27 +147,36 @@ def _extract_directive_blocks(text: str, command: str):
     blocks, position = [], 0
     while True:
         match = prefix.search(text, position)
-        if not match: break
+        if not match:
+            break
         start, brace_start = match.start(), match.end() - 1
         depth, quote, end, escaped = 0, None, None, False
         for index in range(brace_start, len(text)):
             char = text[index]
             if escaped:
                 escaped = False
+                blocks_char = char
                 continue
             if char == "\\":
                 escaped = True
                 continue
-            if char in {'"', "'"}:
-                if quote == char: quote = None
-                elif quote is None: quote = char
+            if char in {'"', "'"} and _quote_starts(text, index):
+                if quote == char:
+                    quote = None
+                elif quote is None:
+                    quote = char
             elif quote is None:
-                if char == "{": depth += 1
+                if char == "{":
+                    depth += 1
                 elif char == "}":
                     depth -= 1
-                    if depth == 0: end = index; break
-        if end is None: raise ValueError(f"Unclosed @{command}{{...}} block")
-        blocks.append((start, end + 1, text[brace_start + 1:end])); position = end + 1
+                    if depth == 0:
+                        end = index
+                        break
+        if end is None:
+            raise ValueError(f"Unclosed @{command}{{...}} block")
+        blocks.append((start, end + 1, text[brace_start + 1:end]))
+        position = end + 1
     return blocks
 
 
@@ -167,15 +201,22 @@ def _extract_directive(lines: List[str], start_index: int):
         for position, char in enumerate(line[offset:], start=offset):
             if escaped:
                 escaped = False
+                argument_parts[-1] += char
                 continue
             if char == "\\":
                 escaped = True
+                if not argument_parts:
+                    argument_parts.append("")
+                argument_parts[-1] += char
                 continue
-            if char in {'"', "'"}:
+            if char in {'"', "'"} and _quote_starts(line, position):
                 if quote == char:
                     quote = None
                 elif quote is None:
                     quote = char
+                if not argument_parts:
+                    argument_parts.append("")
+                argument_parts[-1] += char
                 continue
             if quote is None and char == "{":
                 depth += 1
@@ -185,12 +226,19 @@ def _extract_directive(lines: List[str], start_index: int):
                     trailing = line[position + 1:]
                     if trailing.strip():
                         raise ValueError(f"Unexpected text after @{command}{{...}} directive")
-                    before_close = line[offset:position]
-                    argument_parts.append(before_close)
+                    if not argument_parts:
+                        argument_parts.append("")
+                    argument_parts[-1] += line[offset:position] if not argument_parts[-1] else ""
                     argument = "\n".join(argument_parts).strip()
                     return command, argument, line_index
+            if not argument_parts:
+                argument_parts.append("")
+            argument_parts[-1] += char
 
-        argument_parts.append(line[offset:])
+        if not argument_parts:
+            argument_parts.append("")
+        if line_index < len(lines) - 1:
+            argument_parts.append("")
 
     raise ValueError(f"Unclosed @{command}{{...}} block")
 
