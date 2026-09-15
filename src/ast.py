@@ -28,11 +28,18 @@ class MathBlock:
 
 
 @dataclass
+class ListItem:
+    """One list item containing normal Mark Two content."""
+
+    content: List["ContentItem"] = field(default_factory=list)
+
+
+@dataclass
 class ListBlock:
     """An ordered or unordered list with colored markers."""
 
     ordered: bool
-    items: List[str] = field(default_factory=list)
+    items: List[ListItem] = field(default_factory=list)
     color: str = "black"
 
 
