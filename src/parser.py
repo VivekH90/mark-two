@@ -8,7 +8,7 @@ from .ast import Button, Document, Environment, Image, ListBlock, ListItem, Math
 
 
 _DIRECTIVE = re.compile(r"^\s*@([A-Za-z][\w ]*)\s*\{(.*)\}\s*$")
-_ENVIRONMENTS = {"theorem", "lemma", "definition", "corollary"}
+_ENVIRONMENTS = {"theorem", "lemma", "definition", "corollary", "axiom", "proof"}
 _LIST_ENVIRONMENTS = {"enumerate", "itemize"}
 
 
@@ -162,7 +162,7 @@ def parse(source: str) -> Document:
         elif command in _ENVIRONMENTS:
             target = current_subsection or current_section
             if target is None: raise ValueError(f"@{command} must appear after @section")
-            environment = Environment(kind=command, title=argument); target.content.append(environment); current_environment = environment
+            environment = Environment(kind=command, title=argument if command != "proof" else ""); target.content.append(environment); current_environment = environment
         elif command in _LIST_ENVIRONMENTS:
             target = current_environment or current_subsection or current_section
             if target is None: raise ValueError(f"@{command} must appear after @section")
