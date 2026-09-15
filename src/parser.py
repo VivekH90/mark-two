@@ -4,7 +4,7 @@ import re
 from pathlib import Path
 from typing import List
 
-from .ast import Button, Document, Environment, Image, RelatedLink, Section, Subsection
+from .ast import Button, Document, Environment, Image, MathBlock, RelatedLink, Section, Subsection
 
 
 _DIRECTIVE = re.compile(r"^\s*@([A-Za-z][\w ]*)\s*\{(.*)\}\s*$")
@@ -78,13 +78,38 @@ def parse(source: str) -> Document:
     current_subsection = None
     current_environment = None
     used_slugs = set()
+    display_math_lines = None
 
-    for raw_line in source.splitlines():
+    lines = source.splitlines()
+    index = 0
+    while index < len(lines):
+        raw_line = lines[index]
+
+        # A display-math block is structural content. Capture everything from
+        # an opening \[ through its matching \], preserving TeX exactly.
+        if display_math_lines is not None:
+            if raw_line.strip() == r"\]":
+                target = current_environment or current_subsection or current_section
+                if target is None:
+                    raise ValueError("display math must appear after @section")
+                target.content.append(MathBlock("\n".join(display_math_lines)))
+                display_math_lines = None
+            else:
+                display_math_lines.append(raw_line)
+            index += 1
+            continue
+
+        if raw_line.strip() == r"\[":
+            display_math_lines = []
+            index += 1
+            continue
+
         match = _DIRECTIVE.match(raw_line)
         if not match:
             target = current_environment or current_subsection or current_section
             if target is not None:
                 _add_content(target, raw_line)
+            index += 1
             continue
 
         command = match.group(1).strip().lower().replace(" ", "")
@@ -154,6 +179,11 @@ def parse(source: str) -> Document:
             ))
         else:
             raise ValueError(f"Unknown Mark Two directive: @{match.group(1)}")
+
+        index += 1
+
+    if display_math_lines is not None:
+        raise ValueError("Unclosed display math block: expected \\]")
 
     return document
 
