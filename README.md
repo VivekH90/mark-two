@@ -91,6 +91,47 @@ Because Mark Two was installed with `pip install -e`, the command uses the updat
 
 Mark Two uses `@` directives for document structure and semantics.
 
+### Multiline Directives
+
+**Every Mark Two directive can span multiple lines.** The parser matches the opening `{` with its corresponding closing `}`, while respecting nested braces and quoted strings. This means formatting a directive across several lines is purely a matter of readability and does not change its meaning.
+
+For example, an ordered list can be written naturally:
+
+```text
+@enumerate{
+    color = green,
+    @item{
+        First item in the list.
+    },
+    @item{
+        Second item in the list.
+    }
+}
+```
+
+The same applies to images:
+
+```text
+@image{
+    image(1) = first.png,
+    image(2) = second.png,
+    width(1) = 50%,
+    caption = Two related figures.
+}
+```
+
+And to document metadata:
+
+```text
+@documenttitle{
+    My Notes,
+    banner = images/banner.jpg,
+    color = #ffcc00
+}
+```
+
+The single-line form remains valid too.
+
 | Command | Purpose | Example |
 | --- | --- | --- |
 | `@documenttitle` | Sets the document/site title and optional banner. Supports `color` for the banner title text. | `@documenttitle{My Notes, banner = images/banner.jpg, color = #ffcc00}` |
