@@ -10,7 +10,7 @@
   ],
   "surroundingPairs": [["{", "}"], ["(", ")"], ["[", "]"]],
   "indentationRules": {
-    "increaseIndentPattern": "^\\s*@(?:documenttitle|button|title|section|subsection|image|text|bold|italic|color|label|ref|enumerate|itemize|item|theorem|lemma|definition|corollary|axiom|proposition|remark|example|conjecture|notation|warning|proof|relatedlinks|relatedlink)\\b.*\\{[^}]*$",
+    "increaseIndentPattern": "^\\s*@(?:documenttitle|button|title|section|subsection|image|text|label|ref|enumerate|itemize|item|theorem|lemma|definition|corollary|axiom|proposition|remark|example|conjecture|notation|warning|proof|relatedlinks|relatedlink)\\b.*\\{[^}]*$",
     "decreaseIndentPattern": "^\\s*\\}"
   }
 }
