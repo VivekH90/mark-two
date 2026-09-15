@@ -1,9 +1,9 @@
-"""Render a Mark Two Document into the article HTML template."""
+"""Render a Mark Two Document into the HTML template."""
 
 from html import escape
 from pathlib import Path
 
-from .ast import Document, Section, Subsection
+from .ast import Document, Environment, Section, Subsection
 
 
 def _paragraphs(lines):
@@ -12,32 +12,59 @@ def _paragraphs(lines):
     paragraphs = []
     current = []
     for line in lines:
-        if line:
-            current.append(line)
+        if line.strip():
+            current.append(line.strip())
         elif current:
             paragraphs.append(" ".join(current))
             current = []
     if current:
         paragraphs.append(" ".join(current))
-    return "\n".join(f'<p>{escape(p)}</p>' for p in paragraphs)
+    return "\n".join(f"<p>{escape(p)}</p>" for p in paragraphs)
 
 
-def _section_html(section: Section, number: int) -> str:
-    html = [f'<section class="article-section" id="{escape(section.slug or "section")}">']
-    html.append(f'<h2>{number}. {escape(section.title)}</h2>')
-    html.append(_paragraphs(section.content))
+def _environment_html(environment: Environment, number: int) -> str:
+    kind = escape(environment.kind.lower())
+    label = environment.kind.capitalize()
+    heading = f"{label} {number}"
+    if environment.title:
+        heading += f" ({escape(environment.title)})"
+    return (
+        f'<div class="math-environment {kind}">'
+        f'<div class="environment-heading">{heading}</div>'
+        f'<div class="environment-content">{_paragraphs(environment.content)}</div>'
+        f"</div>"
+    )
+
+
+def _content_html(items, environment_counters) -> str:
+    html = []
+    for item in items:
+        if isinstance(item, Environment):
+            environment_counters[item.kind] = environment_counters.get(item.kind, 0) + 1
+            html.append(_environment_html(item, environment_counters[item.kind]))
+        else:
+            html.append(_paragraphs([item]))
+    return "\n".join(html)
+
+
+def _section_html(section: Section, number: int, environment_counters) -> str:
+    section_color = escape(section.color, quote=True)
+    html = [
+        f'<section class="article-section" id="{escape(section.slug or "section")}" '
+        f'style="--section-color: {section_color};">'
+    ]
+    html.append(f'<h2><span class="section-symbol">§</span> {number}. {escape(section.title)}</h2>')
+    html.append(_content_html(section.content, environment_counters))
 
     for sub_number, subsection in enumerate(section.subsections, 1):
         html.append(
             f'<section class="article-subsection" id="{escape(subsection.slug or "subsection")}">'
         )
-        html.append(
-            f'<h3>{number}.{sub_number}. {escape(subsection.title)}</h3>'
-        )
-        html.append(_paragraphs(subsection.content))
-        html.append('</section>')
+        html.append(f'<h3>{number}.{sub_number}. {escape(subsection.title)}</h3>')
+        html.append(_content_html(subsection.content, environment_counters))
+        html.append("</section>")
 
-    html.append('</section>')
+    html.append("</section>")
     return "\n".join(html)
 
 
@@ -49,15 +76,16 @@ def render(document: Document, template_path: str | Path) -> str:
         color = escape(button.color, quote=True)
         buttons.append(
             f'<a class="nav-button" href="{escape(button.href, quote=True)}" '
-            f'data-color="{color}">{escape(button.name)}</a>'
+            f'style="--button-color: {color};">{escape(button.name)}</a>'
         )
 
     toc = []
     article = []
+    environment_counters = {}
     for number, section in enumerate(document.sections, 1):
         toc.append(
             f'<li><a href="#{escape(section.slug or "section")}">'
-            f'{number}. {escape(section.title)}</a>'
+            f'<span class="toc-section-symbol">§</span> {number}. {escape(section.title)}</a>'
         )
         if section.subsections:
             toc.append('<ol class="toc-subsections">')
@@ -66,9 +94,9 @@ def render(document: Document, template_path: str | Path) -> str:
                     f'<li><a href="#{escape(subsection.slug or "subsection")}">'
                     f'{number}.{sub_number}. {escape(subsection.title)}</a></li>'
                 )
-            toc.append('</ol>')
-        toc.append('</li>')
-        article.append(_section_html(section, number))
+            toc.append("</ol>")
+        toc.append("</li>")
+        article.append(_section_html(section, number, environment_counters))
 
     related = []
     for link in document.related_links:
