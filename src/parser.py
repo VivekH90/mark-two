@@ -4,7 +4,7 @@ import re
 from pathlib import Path
 from typing import List
 
-from .ast import Button, Document, Environment, Image, ListBlock, MathBlock, RelatedLink, Section, Subsection
+from .ast import Button, Document, Environment, Image, ListBlock, ListItem, MathBlock, RelatedLink, Section, Subsection
 
 
 _DIRECTIVE = re.compile(r"^\s*@([A-Za-z][\w ]*)\s*\{(.*)\}\s*$")
@@ -68,27 +68,74 @@ def _unique_slug(base: str, used: set[str]) -> str:
     return slug
 
 
-def _parse_list(argument: str, ordered: bool) -> ListBlock:
-    """Parse @enumerate{...} or @itemize{...}. Items are @item{...}."""
-    color = "black"
-    item_text = argument
-
-    # Allow @enumerate{color = green, @item{...}, @item{...}}.
-    parts = _split_top_level(argument)
-    if parts and "=" in parts[0] and not parts[0].lstrip().startswith("@item"):
-        key, value = parts[0].split("=", 1)
-        if key.strip().lower() == "color":
-            color = value.strip().strip('"\'') or "black"
-            item_text = ",".join(parts[1:])
-
-    items = []
-    pattern = re.compile(r"@item\s*\{([^{}]*)\}", re.DOTALL)
+def _extract_directive_blocks(text: str, command: str):
+    """Extract balanced @command{...} blocks, including nested braces."""
+    prefix = re.compile(rf"@{re.escape(command)}\s*\{{", re.IGNORECASE)
+    blocks = []
     position = 0
-    for match in pattern.finditer(item_text):
-        if item_text[position:match.start()].strip().strip(",").strip():
+    while True:
+        match = prefix.search(text, position)
+        if not match:
+            break
+        start = match.start()
+        brace_start = match.end() - 1
+        depth = 0
+        quote = None
+        end = None
+        for index in range(brace_start, len(text)):
+            char = text[index]
+            if char in {'"', "'"}:
+                if quote == char:
+                    quote = None
+                elif quote is None:
+                    quote = char
+            elif quote is None:
+                if char == "{":
+                    depth += 1
+                elif char == "}":
+                    depth -= 1
+                    if depth == 0:
+                        end = index
+                        break
+        if end is None:
+            raise ValueError(f"Unclosed @{command}{{...}} block")
+        blocks.append((start, end + 1, text[brace_start + 1:end]))
+        position = end + 1
+    return blocks
+
+
+def _parse_list_item_content(body: str):
+    """Parse an @item body as a miniature Mark Two content stream."""
+    if not body.strip():
+        return []
+    # Reuse the normal parser so items can contain images, display math,
+    # inline math, and even nested lists without introducing a second grammar.
+    item_document = parse(f"@section{{List item}}\n{body}")
+    return item_document.sections[0].content
+
+
+def _parse_list(argument: str, ordered: bool) -> ListBlock:
+    """Parse @enumerate{...} or @itemize{...}. Each @item may contain content."""
+    color = "black"
+    parts = _split_top_level(argument)
+    item_parts = []
+    for part in parts:
+        if "=" in part and not part.lstrip().lower().startswith("@item"):
+            key, value = part.split("=", 1)
+            if key.strip().lower() == "color":
+                color = value.strip().strip('"\'') or "black"
+                continue
+        item_parts.append(part)
+
+    item_text = ",".join(item_parts)
+    blocks = _extract_directive_blocks(item_text, "item")
+    items = []
+    position = 0
+    for start, end, body in blocks:
+        if item_text[position:start].strip().strip(",").strip():
             raise ValueError("Only @item{...} entries may appear inside @enumerate or @itemize")
-        items.append(match.group(1).strip())
-        position = match.end()
+        items.append(ListItem(content=_parse_list_item_content(body)))
+        position = end
     if item_text[position:].strip().strip(",").strip():
         raise ValueError("Only @item{...} entries may appear inside @enumerate or @itemize")
     if not items:
@@ -166,7 +213,7 @@ def parse(source: str) -> Document:
             current_subsection = Subsection(title=argument, slug=_unique_slug(_slugify(argument), used_slugs))
             current_section.subsections.append(current_subsection)
         elif command == "image":
-            target = current_subsection or current_section
+            target = current_environment or current_subsection or current_section
             if target is None:
                 raise ValueError("@image must appear after @section")
             values = _parse_key_values(argument)
