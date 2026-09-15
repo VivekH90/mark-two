@@ -4,8 +4,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>A Test Article for Mark Two | Mark Two Test</title>
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sugina-dev/latin-modern-web@1.0.1/style/latinmodern-sans.css">
     <link rel="stylesheet" href="style.css">
+
+    <!-- MathJax 4 for standard TeX delimiters. -->
     <script>
         window.MathJax = {
             tex: {
@@ -14,7 +17,9 @@
                 processEscapes: true,
                 tags: 'ams'
             },
-            options: { skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            }
         };
     </script>
     <script defer src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
@@ -22,114 +27,134 @@
 <body>
     <div class="site-shell">
         <header class="site-header">
-            <div class="site-banner">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/3/31/Portal_Math_Banner_Background_ka.jpg" alt="" loading="eager">
-                <a class="banner-title" href="#">Mark Two Test</a>
-            </div>
+            <div class="site-banner"><img src="https://upload.wikimedia.org/wikipedia/commons/3/31/Portal_Math_Banner_Background_ka.jpg" alt="" loading="eager"><a class="banner-title" href="#">Mark Two Test</a></div>
             <nav class="navigation" aria-label="Site navigation">
                 <a class="nav-button" href="/" style="--button-color: black; --button-color-dark: #737373;">Home</a>
-                <a class="nav-button" href="https://github.com/VivekH90/mark-two" style="--button-color: #4f6fd8; --button-color-dark: #6a8fe3;">GitHub</a>
-                <a class="nav-button" href="/about" style="--button-color: #4f9d69; --button-color-dark: #5bac82;">About</a>
+<a class="nav-button" href="https://github.com/VivekH90/mark-two" style="--button-color: #4f6fd8; --button-color-dark: #4f6fd8;">GitHub</a>
+<a class="nav-button" href="/about" style="--button-color: #4f9d69; --button-color-dark: #4f9d69;">About</a>
                 <button class="nav-button theme-toggle" type="button" aria-label="Enable dark mode" aria-pressed="false">
                     <span class="theme-icon" aria-hidden="true">☾</span>
                     <span class="theme-label">Dark Mode</span>
                 </button>
             </nav>
         </header>
+
         <div class="page-layout">
             <main class="article">
                 <h1 class="article-title">A Test Article for Mark Two</h1>
                 <section class="article-section" id="introduction" style="--section-color: #1f4f91; --section-color-dark: #2867bd;">
-                    <h2><span class="section-symbol">§</span> 1. Introduction</h2>
-                    <p>This section verifies that ordinary prose is parsed correctly and that the generated section numbering is not duplicated.</p>
-                    <section class="article-subsection" id="goals">
-                        <h3>1.1. Goals</h3>
-                        <p>The first goal is to verify section and subsection structure. The second goal is to verify that the table of contents points to the generated anchors.</p>
-                        <ol class="mark-list" style="--list-color: green; --list-color-dark: #00e600;">
-                            <li>First item in a green enumeration.</li>
-                            <li class="has-list-item-title"><span class="list-item-title">hehheheh</span><p>Second item in a green enumeration.</p></li>
-                            <li>Third item in a green enumeration.</li>
-                        </ol>
-                        <ul class="mark-list" style="--list-color: #8a3d91; --list-color-dark: #9a44a2;">
-                            <li>First item in a colored itemize list.</li>
-                            <li>Second item in a colored itemize list.</li>
-                            <li>Third item in a colored itemize list.</li>
-                        </ul>
-                        <ul class="mark-list" style="--list-color: #8a3d91; --list-color-dark: #9a44a2;">
-                            <li><p>This list item contains an image:</p><figure class="article-image"><img src="https://placehold.co/500x280/png" alt="An image inside a list item" loading="lazy"><figcaption>Figure 2. An image contained inside a list item.</figcaption></figure></li>
-                            <li><p>This item contains text and inline mathematics \(x^2 + y^2 = 1\).</p></li>
-                        </ul>
-                    </section>
-                </section>
-                <section class="article-section" id="images" style="--section-color: #8a5a2c; --section-color-dark: #a87345;">
-                    <h2><span class="section-symbol">§</span> 2. Images</h2>
-                    <p>This image has a caption:</p>
-                    <figure class="article-image"><img src="https://placehold.co/900x500/png" alt="A placeholder diagram" loading="lazy"><figcaption>Figure 1. An example image with a caption.</figcaption></figure>
-                    <p>This image has no caption:</p>
-                    <figure class="article-image"><img src="https://placehold.co/700x400/png" alt="A placeholder image without a caption" loading="lazy"></figure>
-                </section>
-                <section class="article-section" id="mathematics" style="--section-color: #6b3fa0; --section-color-dark: #9259ce;">
-                    <h2><span class="section-symbol">§</span> 3. Mathematics</h2>
-                    <p>Inline mathematics should be processed by MathJax: \(x^2 + y^2 = z^2\).</p>
-                    <p>The following display equation checks multi-line display mathematics:</p>
-                    <div class="math-display">\[\int_0^1 x^2\,dx = \frac{1}{3}.\]</div>
-                    <section class="article-subsection" id="a-simple-example">
-                        <h3>3.1. A Simple Example</h3>
-                        <p>Suppose \(f(x)=x^2\). This checks that mathematical expressions can appear naturally inside prose.</p>
-                        <div class="math-environment axiom">
-                            <div class="environment-heading"><span class="environment-label"><span class="environment-kind">Axiom</span> <span class="environment-number">1</span></span> <span class="environment-title">(A Basic Axiom)</span></div>
-                            <div class="environment-content"><p>For every object \(x\), we assume the stated axiom holds.</p></div>
-                        </div>
-                        <div class="math-environment definition">
-                            <div class="environment-heading"><span class="environment-label"><span class="environment-kind">Definition</span> <span class="environment-number">1</span></span> <span class="environment-title">(A Simple Function)</span></div>
-                            <div class="environment-content"><p>A function \(f : X \to Y\) assigns to every \(x \in X\) exactly one element \(f(x) \in Y\).</p></div>
-                        </div>
-                        <div class="math-environment theorem">
-                            <div class="environment-heading"><span class="environment-label"><span class="environment-kind">Theorem</span> <span class="environment-number">1</span></span> <span class="environment-title">(A Basic Identity)</span></div>
-                            <div class="environment-content"><p>For every real number \(x\), we have</p><div class="math-display">\[(x+1)^2 = x^2 + 2x + 1.\]</div></div>
-                        </div>
-                        <div class="proof-environment">
-                            <div class="proof-heading">Proof</div>
-                            <div class="proof-content"><p>We expand the left-hand side:</p><div class="math-display">\[(x+1)^2 = x^2 + 2x + 1.\]</div><p>This is exactly the required identity.</p></div>
-                            <div class="proof-qed" aria-label="Q.E.D.">□</div>
-                        </div>
-                        <div class="math-environment lemma">
-                            <div class="environment-heading"><span class="environment-label"><span class="environment-kind">Lemma</span> <span class="environment-number">1</span></span> <span class="environment-title">(A Useful Observation)</span></div>
-                            <div class="environment-content"><p>If \(a=b\), then \(a+c=b+c\) for every real number \(c\).</p></div>
-                        </div>
-                        <div class="proof-environment">
-                            <div class="proof-heading">Proof</div>
-                            <div class="proof-content"><p>Adding the same quantity \(c\) to both sides of \(a=b\) preserves equality, so \(a+c=b+c\). Therefore the lemma follows.</p></div>
-                            <div class="proof-qed" aria-label="Q.E.D.">□</div>
-                        </div>
-                        <div class="math-environment corollary">
-                            <div class="environment-heading"><span class="environment-label"><span class="environment-kind">Corollary</span> <span class="environment-number">1</span></span> <span class="environment-title">(Immediate Consequence)</span></div>
-                            <div class="environment-content"><p>Taking \(c=-b\) gives \(a-b=0\) whenever \(a=b\).</p></div>
-                        </div>
-                    </section>
-                </section>
-                <section class="article-section" id="conclusion" style="--section-color: #9a3d3d; --section-color-dark: #ad4848;">
-                    <h2><span class="section-symbol">§</span> 4. Conclusion</h2>
-                    <p>If this page renders correctly, the Mark Two article pipeline supports titled list items, images inside list items, mathematical environments, axioms, and proofs.</p>
-                </section>
+<h2><span class="section-symbol">§</span> 1. Introduction</h2>
+<p>This section verifies ordinary prose, labels, and cross references. Later we will refer back to <a class="cross-reference" href="#introduction">Section 1</a>.</p>
+<section class="article-subsection" id="goals">
+<h3>1.1. Goals</h3>
+<p>The first goal is to verify section and subsection structure. See <a class="cross-reference" href="#goals">Subsection 1.1</a> for this subsection.</p>
+<p>The second goal is to verify that references can point to generated anchors.</p>
+<ol class="mark-list" style="--list-color: green; --list-color-dark: #00e600;">
+<li><p>First item in a green enumeration.</p></li>
+<li class="has-list-item-title"><span class="list-item-title">hehheheh</span><p>Second item in a green enumeration.</p></li>
+<li><p>Third item in a green enumeration.</p></li>
+</ol>
+<ul class="mark-list" style="--list-color: #8a3d91; --list-color-dark: #9a44a2;">
+<li><p>First item in a colored itemize list.</p></li>
+<li><p>Second item in a colored itemize list.</p></li>
+<li><p>Third item in a colored itemize list.</p></li>
+</ul>
+</section>
+</section>
+<section class="article-section" id="images" style="--section-color: #8a5a2c; --section-color-dark: #ae7137;">
+<h2><span class="section-symbol">§</span> 2. Images</h2>
+<p>This image has a caption:</p>
+<figure class="article-image" id="diagram">
+<img src="https://placehold.co/900x500/png" alt="A placeholder diagram" loading="lazy">
+<figcaption>Figure 1. An example image with a caption.</figcaption>
+</figure>
+<p>You can jump directly to <a class="cross-reference unresolved-reference" href="#diagram">the diagram</a>.</p>
+<p>This image has no caption:</p>
+<figure class="article-image">
+<img src="https://placehold.co/700x400/png" alt="A placeholder image without a caption" loading="lazy">
+</figure>
+</section>
+<section class="article-section" id="mathematics" style="--section-color: #6b3fa0; --section-color-dark: #6e41a5;">
+<h2><span class="section-symbol">§</span> 3. Mathematics</h2>
+<p>Inline mathematics should be processed by MathJax: \(x^2 + y^2 = z^2\).</p>
+<p>The following display equation checks multi-line display mathematics:</p>
+<div class="math-display">\[\int_0^1 x^2\,dx = \frac{1}{3}.\]</div>
+<section class="article-subsection" id="a-simple-example">
+<h3>3.1. A Simple Example</h3>
+<p>Suppose \(f(x)=x^2\). This checks that mathematical expressions can appear naturally inside prose.</p>
+<div class="math-environment axiom" id="basic-axiom"><div class="environment-heading"><span class="environment-label"><span class="environment-kind">Axiom</span> <span class="environment-number">1</span></span> <span class="environment-title">(A Basic Axiom)</span></div><div class="environment-content"><p>For every object \(x\), we assume the stated axiom holds. See <a class="cross-reference" href="#basic-axiom">Axiom 1</a>.</p></div></div>
+<div class="math-environment definition" id="simple-function"><div class="environment-heading"><span class="environment-label"><span class="environment-kind">Definition</span> <span class="environment-number">1</span></span> <span class="environment-title">(A Simple Function)</span></div><div class="environment-content"><p>A function \(f : X \to Y\) assigns to every \(x \in X\) exactly one element \(f(x) \in Y\).</p></div></div>
+<div class="math-environment theorem" id="basic-identity"><div class="environment-heading"><span class="environment-label"><span class="environment-kind">Theorem</span> <span class="environment-number">1</span></span> <span class="environment-title">(A Basic Identity)</span></div><div class="environment-content"><p>For every real number \(x\), we have</p>
+<div class="math-display">\[(x+1)^2 = x^2 + 2x + 1.\]</div></div></div>
+<div class="proof-environment"><div class="proof-heading">Proof</div><div class="proof-content"><p>We expand the left-hand side:</p>
+<div class="math-display">\[(x+1)^2 = x^2 + 2x + 1.\]</div>
+<p>This is exactly the required identity.</p></div><div class="proof-qed" aria-label="Q.E.D.">□</div></div>
+<div class="math-environment lemma" id="useful-observation"><div class="environment-heading"><span class="environment-label"><span class="environment-kind">Lemma</span> <span class="environment-number">1</span></span> <span class="environment-title">(A Useful Observation)</span></div><div class="environment-content"><p>If \(a=b\), then \(a+c=b+c\) for every real number \(c\).</p></div></div>
+<div class="proof-environment"><div class="proof-heading">Proof</div><div class="proof-content"><p>Adding the same quantity \(c\) to both sides of \(a=b\) preserves equality, so \(a+c=b+c\). Therefore the lemma follows.</p></div><div class="proof-qed" aria-label="Q.E.D.">□</div></div>
+<div class="math-environment proposition" id="small-proposition"><div class="environment-heading"><span class="environment-label"><span class="environment-kind">Proposition</span> <span class="environment-number">1</span></span> <span class="environment-title">(A Small Proposition)</span></div><div class="environment-content"><p>Every integer is either even or odd.</p></div></div>
+<div class="math-environment remark" id="brief-remark"><div class="environment-heading"><span class="environment-label"><span class="environment-kind">Remark</span> <span class="environment-number">1</span></span> <span class="environment-title">(A Brief Remark)</span></div><div class="environment-content"><p>The terminology is standard, but the convention is worth remembering.</p></div></div>
+<div class="math-environment example" id="simple-example-env"><div class="environment-heading"><span class="environment-label"><span class="environment-kind">Example</span> <span class="environment-number">1</span></span> <span class="environment-title">(A Simple Example)</span></div><div class="environment-content"><p>Take the integer \(4\). It is even.</p></div></div>
+<div class="math-environment conjecture" id="test-conjecture"><div class="environment-heading"><span class="environment-label"><span class="environment-kind">Conjecture</span> <span class="environment-number">1</span></span> <span class="environment-title">(A Test Conjecture)</span></div><div class="environment-content"><p>There are infinitely many primes of the required form.</p></div></div>
+<div class="math-environment notation" id="test-notation"><div class="environment-heading"><span class="environment-label"><span class="environment-kind">Notation</span> <span class="environment-number">1</span></span> <span class="environment-title">(A Test Notation)</span></div><div class="environment-content"><p>We write \(\mathbb{N}\) for the natural numbers.</p></div></div>
+<div class="math-environment warning" id="test-warning"><div class="environment-heading"><span class="environment-label"><span class="environment-kind">Warning</span> <span class="environment-number">1</span></span> <span class="environment-title">(A Test Warning)</span></div><div class="environment-content"><p>Do not confuse a necessary condition with a sufficient one.</p></div></div>
+<div class="math-environment corollary" id="immediate-consequence"><div class="environment-heading"><span class="environment-label"><span class="environment-kind">Corollary</span> <span class="environment-number">1</span></span> <span class="environment-title">(Immediate Consequence)</span></div><div class="environment-content"><p>Taking \(c=-b\) gives \(a-b=0\) whenever \(a=b\).</p></div></div>
+</section>
+</section>
+<section class="article-section" id="cross-page-links" style="--section-color: #39745a; --section-color-dark: #4c9a77;">
+<h2><span class="section-symbol">§</span> 4. Cross-Page Links</h2>
+<p>A cross-page reference can use a generated page and anchor directly, for example <a class="cross-reference unresolved-reference" href="other-article.html#main-theorem">Theorem on another page</a>.</p>
+<p>A named anchor can also be created explicitly:</p>
+<span class="mark-label" id="custom-anchor"></span>
+<p>This paragraph follows an explicit anchor. Jump back to <a class="cross-reference unresolved-reference" href="#custom-anchor">custom-anchor</a>.</p>
+</section>
+<section class="article-section" id="conclusion" style="--section-color: #9a3d3d; --section-color-dark: #a44141;">
+<h2><span class="section-symbol">§</span> 5. Conclusion</h2>
+<p>If this page renders correctly, Mark Two supports labels, local references, cross-page references, and the expanded semantic environment family.</p>
+</section>
             </main>
+
             <aside class="sidebar" aria-label="Article information">
                 <section class="sidebar-card toc-card">
-                    <div class="sidebar-heading"><h2>Table of Contents</h2><button class="sidebar-toggle" type="button" aria-label="Toggle table of contents" aria-expanded="true">☷</button></div>
-                    <nav class="toc" aria-label="Table of contents"><ol>
-                        <li><a href="#introduction"><span class="toc-section-symbol">§</span> 1. Introduction</a><ol class="toc-subsections"><li><a href="#goals">1.1. Goals</a></li></ol></li>
-                        <li><a href="#images"><span class="toc-section-symbol">§</span> 2. Images</a></li>
-                        <li><a href="#mathematics"><span class="toc-section-symbol">§</span> 3. Mathematics</a><ol class="toc-subsections"><li><a href="#a-simple-example">3.1. A Simple Example</a></li></ol></li>
-                        <li><a href="#conclusion"><span class="toc-section-symbol">§</span> 4. Conclusion</a></li>
-                    </ol></nav>
+                    <div class="sidebar-heading">
+                        <h2>Table of Contents</h2>
+                        <button class="sidebar-toggle" type="button" aria-label="Toggle table of contents" aria-expanded="true">☷</button>
+                    </div>
+                    <nav class="toc" aria-label="Table of contents">
+                        <ol>
+                            <li><a href="#introduction"><span class="toc-section-symbol">§</span> 1. Introduction</a>
+<ol class="toc-subsections">
+<li><a href="#goals">1.1. Goals</a></li>
+</ol>
+</li>
+<li><a href="#images"><span class="toc-section-symbol">§</span> 2. Images</a>
+</li>
+<li><a href="#mathematics"><span class="toc-section-symbol">§</span> 3. Mathematics</a>
+<ol class="toc-subsections">
+<li><a href="#a-simple-example">3.1. A Simple Example</a></li>
+</ol>
+</li>
+<li><a href="#cross-page-links"><span class="toc-section-symbol">§</span> 4. Cross-Page Links</a>
+</li>
+<li><a href="#conclusion"><span class="toc-section-symbol">§</span> 5. Conclusion</a>
+</li>
+                        </ol>
+                    </nav>
                 </section>
+
                 <section class="sidebar-card related-card">
-                    <div class="sidebar-heading"><h2>Related Links</h2><span class="link-symbol" aria-hidden="true">↗</span></div>
-                    <ul class="related-links"><li><a href="https://github.com/VivekH90/mark-two" target="_blank" rel="noopener noreferrer">Mark Two GitHub</a></li><li><a href="https://www.python.org" target="_blank" rel="noopener noreferrer">Python</a></li></ul>
+                    <div class="sidebar-heading">
+                        <h2>Related Links</h2>
+                        <span class="link-symbol" aria-hidden="true">↗</span>
+                    </div>
+                    <ul class="related-links">
+                        <li><a href="https://github.com/VivekH90/mark-two" target="_blank" rel="noopener noreferrer">Mark Two GitHub</a></li>
+<li><a href="https://www.python.org" target="_blank" rel="noopener noreferrer">Python</a></li>
+                    </ul>
                 </section>
             </aside>
         </div>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>

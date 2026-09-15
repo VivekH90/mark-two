@@ -80,17 +80,27 @@ html.dark-mode .list-item-title { color: var(--list-color-dark, var(--list-color
 .related-links { list-style: none; margin: 0; padding: 0 18px 15px; }
 .related-links li { padding: 8px 0; border-top: 1px solid rgba(45, 110, 65, 0.14); }
 .related-links li::before { content: "↗"; display: inline-block; margin-right: 9px; color: #4f6b55; font-family: Arial, sans-serif; }
-.math-environment { position: relative; margin: 22px 0; padding: 17px 24px 16px; border: 1px solid var(--environment-border, #ccd6e5); border-left: 4px solid var(--environment-accent, #314a78); border-radius: 13px; background: linear-gradient(90deg, var(--environment-fill, #edf2f8) 0%, rgba(255, 255, 255, 0.78) 72%, rgba(255, 255, 255, 0.18) 100%); }
+.cross-reference { color: #1553ad; font-weight: 600; text-decoration: none; border-bottom: 1px dotted currentColor; }
+.cross-reference:hover, .cross-reference:focus-visible { text-decoration: underline; }
+.unresolved-reference { color: #b45a00; }
+.mark-label { display: block; width: 0; height: 0; scroll-margin-top: 24px; }
+.math-environment { position: relative; margin: 22px 0; padding: 17px 24px 16px; border: 1px solid var(--environment-border, #ccd6e5); border-left: 4px solid var(--environment-accent, #314a78); border-radius: 13px; background: linear-gradient(90deg, var(--environment-fill, #edf2f8) 0%, rgba(255, 255, 255, 0.78) 72%, rgba(255, 255, 255, 0.18) 100%); scroll-margin-top: 24px; }
 .math-environment.theorem { --environment-accent: #2f5fa7; --environment-border: #b9cde9; --environment-fill: #eaf2ff; }
 .math-environment.lemma { --environment-accent: #5867a5; --environment-border: #c5cae7; --environment-fill: #eff0ff; }
 .math-environment.definition { --environment-accent: #39745a; --environment-border: #b9d9c7; --environment-fill: #eaf7ef; }
 .math-environment.corollary { --environment-accent: #8a5a2c; --environment-border: #dfc9b0; --environment-fill: #fbf1e5; }
 .math-environment.axiom { --environment-accent: #8a3d91; --environment-border: #d7b8dc; --environment-fill: #f8edfa; }
+.math-environment.proposition { --environment-accent: #286f73; --environment-border: #b5d8da; --environment-fill: #eaf7f8; }
+.math-environment.remark { --environment-accent: #6b7280; --environment-border: #c9cdd3; --environment-fill: #f3f4f6; }
+.math-environment.example { --environment-accent: #9a6a16; --environment-border: #dfcba2; --environment-fill: #fcf6e8; }
+.math-environment.conjecture { --environment-accent: #8b3f68; --environment-border: #d9b7ca; --environment-fill: #faedf5; }
+.math-environment.notation { --environment-accent: #5a4a8a; --environment-border: #c8c0df; --environment-fill: #f2effa; }
+.math-environment.warning { --environment-accent: #a53d27; --environment-border: #e0b9af; --environment-fill: #fff0ec; }
 .environment-heading { margin-bottom: 8px; font-size: 18px; font-weight: 700; }
 .environment-label { display: inline-block; padding: 2px 11px 3px; border-radius: 999px; background: color-mix(in srgb, var(--environment-accent) 22%, var(--environment-fill)); font-weight: 700; }
 .environment-number { font-weight: 700; }
 .environment-title { font-weight: 600; }
-.proof-environment { position: relative; margin: 22px 0; padding: 4px 0 30px; border-bottom: 1px solid var(--border); }
+.proof-environment { position: relative; margin: 22px 0; padding: 4px 0 30px; border-bottom: 1px solid var(--border); scroll-margin-top: 24px; }
 .proof-heading { margin-bottom: 9px; font-size: 18px; font-weight: 700; }
 .proof-content p:last-child { margin-bottom: 0; }
 .proof-qed { position: absolute; right: 0; bottom: 4px; font-size: 20px; line-height: 1; }
@@ -100,12 +110,20 @@ html.dark-mode .related-card { border-color: #477456; }
 html.dark-mode .toc li { color: #9fc1f2; }
 html.dark-mode .toc a, html.dark-mode .related-links a { color: #79aaf2; }
 html.dark-mode .related-links li::before { color: #7fb58d; }
+html.dark-mode .cross-reference { color: #79aaf2; }
+html.dark-mode .unresolved-reference { color: #e0a45a; }
 html.dark-mode .math-environment { background: linear-gradient(90deg, var(--environment-fill) 0%, rgba(17, 18, 20, 0.78) 72%, rgba(17, 18, 20, 0.18) 100%); }
 html.dark-mode .math-environment.theorem { --environment-border: #496d9f; --environment-fill: #1a2b43; }
 html.dark-mode .math-environment.lemma { --environment-border: #5a6090; --environment-fill: #252743; }
 html.dark-mode .math-environment.definition { --environment-border: #4b8065; --environment-fill: #1e382b; }
 html.dark-mode .math-environment.corollary { --environment-border: #8a6542; --environment-fill: #3a2a1c; }
 html.dark-mode .math-environment.axiom { --environment-border: #8a5a95; --environment-fill: #3a243d; }
+html.dark-mode .math-environment.proposition { --environment-border: #477f83; --environment-fill: #1d3537; }
+html.dark-mode .math-environment.remark { --environment-border: #60666f; --environment-fill: #292c31; }
+html.dark-mode .math-environment.example { --environment-border: #8e7138; --environment-fill: #3a311d; }
+html.dark-mode .math-environment.conjecture { --environment-border: #88516f; --environment-fill: #3a2332; }
+html.dark-mode .math-environment.notation { --environment-border: #65588d; --environment-fill: #2d2940; }
+html.dark-mode .math-environment.warning { --environment-border: #98533f; --environment-fill: #3d2520; }
 @media (max-width: 1080px) { :root { --sidebar-width: 280px; --article-max: 820px; } .page-layout { gap: 30px; } .nav-button { min-width: 130px; } }
 @media (max-width: 850px) { .page-layout { grid-template-columns: 1fr; } .article { max-width: 900px; } .sidebar { position: static; order: -1; } .toc-card { max-height: 70vh; } .toc { overflow-y: auto; } }
 @media (max-width: 760px) { body { font-size: 16px; } .site-shell { padding-top: 10px; } .site-header { padding-bottom: 20px; } .navigation { gap: 8px; margin-top: 13px; } .nav-button { min-width: 0; min-height: 45px; padding: 7px 17px; font-size: 17px; } .page-layout { padding-top: 20px; } .site-banner { border-radius: 10px; } .site-banner img { max-height: 190px; } .banner-title { padding: 15px 20px; font-size: clamp(29px, 8vw, 42px); } }

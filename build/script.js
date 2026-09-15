@@ -1,5 +1,8 @@
 "use strict";
 
+// Mark Two frontend behavior. The compiler generates the document structure;
+// JavaScript only handles small interactive enhancements.
+
 document.addEventListener("DOMContentLoaded", () => {
     const toggle = document.querySelector(".sidebar-toggle");
     const toc = document.querySelector(".toc");
@@ -34,6 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // Keep the active table-of-contents entry in sync with the article.
     const tocLinks = [...document.querySelectorAll(".toc a")];
     const headings = tocLinks
         .map((link) => document.getElementById(link.getAttribute("href")?.slice(1)))
