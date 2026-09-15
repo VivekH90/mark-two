@@ -18,6 +18,7 @@ class Image:
     src: str
     alt: str = ""
     caption: str = ""
+    label: str = ""
 
 
 @dataclass
@@ -25,6 +26,21 @@ class MathBlock:
     """A display-math block delimited by \\[ and \\]."""
 
     content: str
+
+
+@dataclass
+class Label:
+    """A named anchor that can be targeted by a cross reference."""
+
+    name: str
+
+
+@dataclass
+class Reference:
+    """A link to a local label or a label on another generated page."""
+
+    target: str
+    text: str = ""
 
 
 @dataclass
@@ -50,10 +66,11 @@ class Environment:
 
     kind: str
     title: str = ""
-    content: List[Union[str, Image, MathBlock, ListBlock]] = field(default_factory=list)
+    label: str = ""
+    content: List[Union[str, Image, MathBlock, Label, Reference, ListBlock]] = field(default_factory=list)
 
 
-ContentItem = Union[str, Image, MathBlock, ListBlock, Environment]
+ContentItem = Union[str, Image, MathBlock, Label, Reference, ListBlock, Environment]
 
 
 @dataclass
@@ -61,6 +78,7 @@ class Subsection:
     title: str
     content: List[ContentItem] = field(default_factory=list)
     slug: Optional[str] = None
+    label: str = ""
 
 
 @dataclass
@@ -70,6 +88,7 @@ class Section:
     content: List[ContentItem] = field(default_factory=list)
     subsections: List[Subsection] = field(default_factory=list)
     slug: Optional[str] = None
+    label: str = ""
 
 
 @dataclass
