@@ -13,7 +13,7 @@ class Button:
 
 @dataclass
 class Image:
-    """An article image with optional accessibility text, caption, label, and size."""
+    """An article image with optional accessibility text, caption, label, size, and group."""
 
     src: str
     alt: str = ""
@@ -21,6 +21,7 @@ class Image:
     label: str = ""
     width: str = ""
     height: str = ""
+    group: Optional[int] = None
 
 
 @dataclass
