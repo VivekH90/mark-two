@@ -12,36 +12,80 @@ A lightweight mathematical document language that compiles `.mt` source files in
 
 </div>
 
+## Installation
+
+Mark Two can be installed as an editable local Python package. This is useful when Mark Two lives inside another project, such as a blog repository.
+
+From the parent project:
+
+```bash
+python3 -m pip install -e resources/mark-two
+```
+
+After this one-time setup, the `mark-two` command can be used from any directory.
+
 ## Usage
 
-Clone the repository and enter the project directory:
+Create a `.mt` file anywhere in your project:
 
-```bash
-git clone https://github.com/VivekH90/mark-two.git
-cd mark-two
+```text
+mathematics/
+└── real-analysis/
+    └── completeness/
+        └── completeness.mt
 ```
 
-Compile a Mark Two document with Python 3:
+Then compile it from that directory:
 
 ```bash
-python3 -m src.main test/test.mt
+cd mathematics/real-analysis/completeness
+mark-two completeness.mt
 ```
 
-By default this writes the generated site to `build/index.html` and copies the stylesheet and JavaScript into the same `build/` directory.
+By default, Mark Two creates a complete web bundle beside the source file:
 
-A different output file can be selected with:
+```text
+completeness/
+├── completeness.mt
+├── index.html
+├── style.css
+└── script.js
+```
+
+You can also give the source file as a path from anywhere in the project:
 
 ```bash
-python3 -m src.main test/test.mt --output build/article.html
+mark-two mathematics/real-analysis/completeness/completeness.mt
 ```
 
-The HTML template can be changed with:
+A custom output path can be selected with:
 
 ```bash
-python3 -m src.main test/test.mt --template web/index.html
+mark-two completeness.mt --output build/article.html
 ```
 
-Open the generated HTML directly or serve the project with a local web server such as VS Code Live Server.
+A custom HTML template can be selected with:
+
+```bash
+mark-two completeness.mt --template path/to/index.html
+```
+
+For compatibility, Mark Two can also be run as a Python module:
+
+```bash
+python3 -m mark_two completeness.mt
+```
+
+## Updating Mark Two
+
+If Mark Two is cloned into another repository, update it with Git instead of downloading it again:
+
+```bash
+cd resources/mark-two
+git pull
+```
+
+Because Mark Two was installed with `pip install -e`, the command uses the updated source immediately. There is no need to reinstall the package after normal source-code updates.
 
 ## Mark Two Syntax
 
@@ -139,9 +183,10 @@ For extension development, open the repository in VS Code and press `F5`. This l
 
 ```text
 mark-two/
-├── src/                 # Parser, AST, renderer, compiler entry point
+├── src/                 # Mark Two Python package source
 ├── test/                # Example Mark Two source document
 ├── web/                 # HTML template and frontend assets
-├── build/               # Generated HTML bundle
-└── vscode-mark-two/     # VS Code language support
+├── build/               # Generated example HTML bundle
+├── vscode-mark-two/     # VS Code language support
+└── pyproject.toml       # Python package and CLI configuration
 ```
