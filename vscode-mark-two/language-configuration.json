@@ -1,0 +1,26 @@
+{
+  "comments": {
+    "lineComment": "%"
+  },
+  "brackets": [
+    ["{", "}"],
+    ["(", ")"],
+    ["[", "]"]
+  ],
+  "autoClosingPairs": [
+    { "open": "{", "close": "}" },
+    { "open": "(", "close": ")" },
+    { "open": "[", "close": "]" },
+    { "open": "\\(", "close": "\\)" },
+    { "open": "\\[", "close": "\\]" }
+  ],
+  "surroundingPairs": [
+    ["{", "}"],
+    ["(", ")"],
+    ["[", "]"]
+  ],
+  "indentationRules": {
+    "increaseIndentPattern": "^\\s*@(?:documenttitle|button|title|section|subsection|image|enumerate|itemize|item|theorem|lemma|definition|corollary|axiom|proof|relatedlinks|relatedlink)\\b.*\\{[^}]*$",
+    "decreaseIndentPattern": "^\\s*\\}"
+  }
+}
