@@ -63,9 +63,9 @@ def _parse_key_values(text: str):
     for part in _split_top_level(text):
         if "=" in part:
             key, value = part.split("=", 1)
-            values[key.strip().lower()] = value.strip().strip('"\'')
+            values[key.strip().lower()] = value.strip().strip('\"\\\'')
         elif "name" not in values:
-            values["name"] = part.strip().strip('"\'')
+            values["name"] = part.strip().strip('\"\\\'')
     return values
 
 
@@ -213,7 +213,7 @@ def _parse_list(argument: str, ordered: bool) -> ListBlock:
         if "=" in part and not part.lstrip().lower().startswith("@item"):
             key, value = part.split("=", 1)
             if key.strip().lower() == "color":
-                color = value.strip().strip('"\'') or "black"
+                color = value.strip().strip('\"\\\'') or "black"
                 continue
         item_parts.append(part)
     item_text = ",".join(item_parts)
@@ -286,7 +286,7 @@ def parse(source: str) -> Document:
 
         command, argument, end_index = directive
         command = command.strip().lower().replace(" ", "")
-        if command in {"documenttitle", "title", "button", "section", "subsection", "image", "relatedlinks", "relatedlink", "enumerate", "itemize"}:
+        if command in {"documenttitle", "title", "button", "section", "subsection", "image", "relatedlinks", "relatedlink"}:
             current_environment = None
 
         if command == "documenttitle":
@@ -322,7 +322,7 @@ def parse(source: str) -> Document:
             target = current_environment or current_subsection or current_section
             if target is None:
                 raise ValueError("@label must appear after @section")
-            label = argument.strip().strip('"\'')
+            label = argument.strip().strip('\"\\\'')
             if not label:
                 raise ValueError("@label requires a label name")
             target.content.append(Label(name=label))
