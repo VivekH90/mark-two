@@ -32,8 +32,7 @@ def _inline_text(text: str, references) -> str:
     for part in parts:
         match = re.fullmatch(r"@ref\{([^{}]*)\}", part.strip())
         if not match: html.append(escape(part)); continue
-        target, custom_text = _parse_ref_argument(match.group(1).strip())
-        entry = references.get(target)
+        target, custom_text = _parse_ref_argument(match.group(1).strip()); entry = references.get(target)
         if entry:
             href, label_text = entry; html.append(f'<a class="cross-reference" href="{escape(href, quote=True)}">{escape(custom_text or label_text)}</a>')
         else:
@@ -82,8 +81,7 @@ def _math_html(math: MathBlock) -> str:
 
 
 def _image_tag(image: Image, extra_style: str = "") -> str:
-    src = escape(image.src, quote=True); alt = escape(image.alt, quote=True)
-    size_style = []
+    src = escape(image.src, quote=True); alt = escape(image.alt, quote=True); size_style = []
     if image.width: size_style.append(f"width: {escape(image.width, quote=True)}")
     if image.height: size_style.append(f"height: {escape(image.height, quote=True)}")
     if extra_style: size_style.append(extra_style)
@@ -99,8 +97,7 @@ def _image_html(image: Image, figure_number: int) -> str:
     identifier = f' id="{escape(image.label, quote=True)}"' if image.label else ""
     html = [f'<figure class="article-image"{identifier}>', _image_tag(image)]
     if image.caption: html.append(_caption_html(image.caption, figure_number))
-    html.append('</figure>')
-    return "\n".join(html)
+    html.append('</figure>'); return "\n".join(html)
 
 
 def _multi_image_html(images, figure_number: int) -> str:
@@ -110,23 +107,20 @@ def _multi_image_html(images, figure_number: int) -> str:
         columns = f'{escape(first_width, quote=True)} ' + " ".join("minmax(0, 1fr)" for _ in images[1:])
     else:
         columns = " ".join("minmax(0, 1fr)" for _ in images)
-    image_html = []
-    for image in images:
-        image_html.append(_image_tag(image, "width: 100%; height: 280px; object-fit: cover; margin: 0;"))
-    html = [f'<figure class="article-image multi-image"{identifier}>', f'<div class="image-row" style="grid-template-columns: {columns};">', "\n".join(image_html), '</div>']
+    image_html = [_image_tag(image, "width: 100%; height: 280px; object-fit: cover; margin: 0;") for image in images]
+    row_style = f'display: grid; grid-template-columns: {columns}; gap: 10px; align-items: stretch;'
+    html = [f'<figure class="article-image multi-image"{identifier}>', f'<div class="image-row" style="{row_style}">', "\n".join(image_html), '</div>']
     if images[0].caption: html.append(_caption_html(images[0].caption, figure_number))
-    html.append('</figure>')
-    return "\n".join(html)
+    html.append('</figure>'); return "\n".join(html)
 
 
 def _list_html(list_block: ListBlock, environment_counters, references, figure_counter) -> str:
-    tag = "ol" if list_block.ordered else "ul"; color = escape(list_block.color, quote=True); dark_color = escape(_dark_mode_color(list_block.color), quote=True)
-    items = []
+    tag = "ol" if list_block.ordered else "ul"; color = escape(list_block.color, quote=True); dark_color = escape(_dark_mode_color(list_block.color), quote=True); items = []
     for item in list_block.items:
-        title_html = f'<span class="list-item-title">{escape(item.title)}</span>' if item.title else ""
-        item_class = ' class="has-list-item-title"' if item.title else ""
+        title_html = f'<span class="list-item-title">{escape(item.title)}</span>' if item.title else ""; item_class = ' class="has-list-item-title"' if item.title else ""
         items.append(f'<li{item_class}>{title_html}{_content_html(item.content, environment_counters, references, figure_counter)}</li>')
-    return f'<{tag} class="mark-list" style="--list-color: {color}; --list-color-dark: {dark_color};">\n{"\n".join(items)}\n</{tag}>'
+    item_html = "\n".join(items)
+    return f'<{tag} class="mark-list" style="--list-color: {color}; --list-color-dark: {dark_color};">\n{item_html}\n</{tag}>'
 
 
 def _environment_html(environment: Environment, number: int, environment_counters, references, figure_counter) -> str:
@@ -193,14 +187,14 @@ def _section_html(section: Section, number: int, environment_counters, reference
 
 
 def render(document: Document, template_path: str | Path) -> str:
-    template = Path(template_path).read_text(encoding="utf-8")
-    buttons = []
+    template = Path(template_path).read_text(encoding="utf-8"); buttons = []
     for button in document.buttons:
         color = escape(button.color, quote=True); dark_color = escape(_dark_mode_color(button.color), quote=True)
         buttons.append(f'<a class="nav-button" href="{escape(button.href, quote=True)}" style="--button-color: {color}; --button-color-dark: {dark_color};">{escape(button.name)}</a>')
     if document.banner:
-        banner_color = escape(document.banner_color or "#ffffff", quote=True); banner_dark_color = escape(_dark_mode_color(document.banner_color or "#ffffff"), quote=True)
-        banner = f'<div class="site-banner"><img src="{escape(document.banner, quote=True)}" alt="" loading="eager"><a class="banner-title" href="#" style="--banner-title-color: {banner_color}; --banner-title-color-dark: {banner_dark_color};">{escape(document.document_title)}</a></div>'
+        banner_color = escape(document.banner_color or "#ffffff", quote=True)
+        banner_dark_color = escape(_dark_mode_color(document.banner_color or "#ffffff"), quote=True)
+        banner = f'<div class="site-banner"><img src="{escape(document.banner, quote=True)}" alt="" loading="eager"><a class="banner-title" href="#" style="color: {banner_color}; --banner-title-color: {banner_color}; --banner-title-color-dark: {banner_dark_color};">{escape(document.document_title)}</a></div>'
     else: banner = f'<a class="document-title" href="#">{escape(document.document_title)}</a>'
     references = _build_reference_index(document); toc, article, environment_counters = [], [], {}; figure_counter = {"number": 0}
     for number, section in enumerate(document.sections, 1):
