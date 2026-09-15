@@ -42,7 +42,8 @@ def _list_html(list_block: ListBlock, environment_counters) -> str:
     items = []
     for item in list_block.items:
         items.append(f'<li>{_content_html(item.content, environment_counters)}</li>')
-    return f'<{tag} class="mark-list" style="--list-color: {color};">\n{"\n".join(items)}\n</{tag}>'
+    item_html = "\n".join(items)
+    return f'<{tag} class="mark-list" style="--list-color: {color};">\n{item_html}\n</{tag}>'
 
 
 def _environment_html(environment: Environment, number: int) -> str:
