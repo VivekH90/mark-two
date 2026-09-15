@@ -55,6 +55,10 @@ Suppose \(f(x)=x^2\). This checks that mathematical expressions can appear natur
 
 A function \(f : X \to Y\) assigns to every \(x \in X\) exactly one element \(f(x) \in Y\).
 
+@axiom{A Basic Axiom}
+
+For every object \(x\), we assume the stated axiom holds.
+
 @theorem{A Basic Identity}
 
 For every real number \(x\), we have
@@ -62,9 +66,21 @@ For every real number \(x\), we have
 (x+1)^2 = x^2 + 2x + 1.
 \]
 
+@proof{}
+
+We expand the left-hand side:
+\[
+(x+1)^2 = x^2 + 2x + 1.
+\]
+This is exactly the required identity.
+
 @lemma{A Useful Observation}
 
 If \(a=b\), then \(a+c=b+c\) for every real number \(c\).
+
+@proof{}
+
+Adding the same quantity \(c\) to both sides of \(a=b\) preserves equality, so \(a+c=b+c\). Therefore the lemma follows.
 
 @corollary{Immediate Consequence}
 
