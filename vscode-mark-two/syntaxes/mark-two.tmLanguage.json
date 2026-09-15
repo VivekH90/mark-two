@@ -12,26 +12,16 @@
     { "include": "#urls" }
   ],
   "repository": {
-    "comments": {
-      "patterns": [
-        { "name": "comment.line.percent.mark-two", "match": "%.*$" }
-      ]
-    },
+    "comments": { "patterns": [{ "name": "comment.line.percent.mark-two", "match": "%.*$" }] },
     "math-display": {
       "name": "markup.math.display.mark-two",
-      "begin": "\\\\\\[",
-      "end": "\\\\\\]",
-      "patterns": [
-        { "include": "#math-common" }
-      ]
+      "begin": "\\\\\\[", "end": "\\\\\\]",
+      "patterns": [{ "include": "#math-common" }]
     },
     "math-inline": {
       "name": "markup.math.inline.mark-two",
-      "begin": "\\\\\\(",
-      "end": "\\\\\\)",
-      "patterns": [
-        { "include": "#math-common" }
-      ]
+      "begin": "\\\\\\(", "end": "\\\\\\)",
+      "patterns": [{ "include": "#math-common" }]
     },
     "math-common": {
       "patterns": [
@@ -45,33 +35,29 @@
       "patterns": [
         {
           "name": "keyword.control.directive.mark-two",
-          "match": "@(documenttitle|button|title|section|subsection|image|enumerate|itemize|item|theorem|lemma|definition|corollary|axiom|proof|relatedlinks|relatedlink)\\b"
+          "match": "@(documenttitle|button|title|section|subsection|image|label|ref|enumerate|itemize|item|theorem|lemma|definition|corollary|axiom|proposition|remark|example|conjecture|notation|warning|proof|relatedlinks|relatedlink)\\b"
         },
         {
           "name": "variable.other.parameter.mark-two",
-          "match": "\\b(?:href|color|src|alt|caption|title)\\b(?=\\s*=)"
+          "match": "\\b(?:href|color|src|alt|caption|title|label|text|banner)\\b(?=\\s*=)"
         },
-        {
-          "name": "constant.language.boolean.mark-two",
-          "match": "\\b(?:true|false)\\b"
-        }
+        { "name": "constant.language.boolean.mark-two", "match": "\\b(?:true|false)\\b" }
       ]
     },
     "strings": {
       "name": "string.quoted.double.mark-two",
-      "begin": "\"",
-      "end": "\"",
-      "patterns": [
-        { "name": "constant.character.escape.mark-two", "match": "\\\\\\.|\\\\$" }
-      ]
+      "begin": "\"", "end": "\"",
+      "patterns": [{ "name": "constant.character.escape.mark-two", "match": "\\\\\\.|\\\\$" }]
     },
-    "numbers": {
-      "name": "constant.numeric.mark-two",
-      "match": "\\b\\d+(?:\\.\\d+)?\\b"
-    },
-    "urls": {
+    "numbers": { "name": "constant.numeric.mark-two", "match": "\\b\\d+(?:\\.\\d+)?\\b" },
+    "urls": { "name": "markup.underline.link.mark-two", "match": "https?://[^\\s,}]+" },
+    "cross-reference": {
       "name": "markup.underline.link.mark-two",
-      "match": "https?://[^\\s,}]+"
+      "match": "@ref\\{[^{}]+\\}"
+    },
+    "label": {
+      "name": "entity.name.label.mark-two",
+      "match": "\\blabel\\s*=\\s*(?:\"[^\"]+\"|'[^']+'|[^,}\\s]+)"
     }
   }
 }
