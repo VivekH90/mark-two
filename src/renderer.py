@@ -2,8 +2,40 @@
 
 from html import escape
 from pathlib import Path
+import colorsys
+import re
 
 from .ast import Document, Environment, Image, ListBlock, ListItem, MathBlock, Section
+
+
+_CSS_COLOR_NAMES = {
+    "black": "#000000", "white": "#ffffff", "red": "#ff0000", "green": "#008000",
+    "blue": "#0000ff", "yellow": "#ffff00", "orange": "#ffa500", "purple": "#800080",
+    "gray": "#808080", "grey": "#808080", "brown": "#a52a2a", "pink": "#ffc0cb",
+    "teal": "#008080", "navy": "#000080", "maroon": "#800000", "olive": "#808000",
+    "lime": "#00ff00", "cyan": "#00ffff", "magenta": "#ff00ff",
+}
+
+
+def _dark_mode_color(value: str) -> str:
+    """Lighten colors that are too dark to remain readable on a dark page."""
+    original = value.strip()
+    raw = original.lower()
+    raw = _CSS_COLOR_NAMES.get(raw, raw)
+    match = re.fullmatch(r"#([0-9a-f]{6})", raw)
+    if not match:
+        return original
+
+    r, g, b = [int(match.group(1)[i:i + 2], 16) / 255 for i in (0, 2, 4)]
+    luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b
+    if luminance >= 0.42:
+        return f"#{round(r * 255):02x}{round(g * 255):02x}{round(b * 255):02x}"
+
+    # Preserve hue and saturation, while raising dark colors to a readable floor.
+    hue, lightness, saturation = colorsys.rgb_to_hls(r, g, b)
+    lightness = max(lightness, 0.45)
+    r, g, b = colorsys.hls_to_rgb(hue, lightness, saturation)
+    return f"#{round(r * 255):02x}{round(g * 255):02x}{round(b * 255):02x}"
 
 
 def _paragraphs(lines):
@@ -32,6 +64,7 @@ def _image_html(image: Image) -> str:
 def _list_html(list_block: ListBlock, environment_counters) -> str:
     tag = "ol" if list_block.ordered else "ul"
     color = escape(list_block.color, quote=True)
+    dark_color = escape(_dark_mode_color(list_block.color), quote=True)
     items = []
     for item in list_block.items:
         title_html = ""
@@ -41,7 +74,7 @@ def _list_html(list_block: ListBlock, environment_counters) -> str:
             item_class = ' class="has-list-item-title"'
         items.append(f'<li{item_class}>{title_html}{_content_html(item.content, environment_counters)}</li>')
     item_html = "\n".join(items)
-    return f'<{tag} class="mark-list" style="--list-color: {color};">\n{item_html}\n</{tag}>'
+    return f'<{tag} class="mark-list" style="--list-color: {color}; --list-color-dark: {dark_color};">\n{item_html}\n</{tag}>'
 
 
 def _environment_html(environment: Environment, number: int) -> str:
@@ -66,7 +99,12 @@ def _content_html(items, environment_counters) -> str:
 
 def _section_html(section: Section, number: int, environment_counters) -> str:
     section_color = escape(section.color, quote=True)
-    html = [f'<section class="article-section" id="{escape(section.slug or "section")}" style="--section-color: {section_color};">', f'<h2><span class="section-symbol">§</span> {number}. {escape(section.title)}</h2>', _content_html(section.content, environment_counters)]
+    dark_section_color = escape(_dark_mode_color(section.color), quote=True)
+    html = [
+        f'<section class="article-section" id="{escape(section.slug or "section")}" style="--section-color: {section_color}; --section-color-dark: {dark_section_color};">',
+        f'<h2><span class="section-symbol">§</span> {number}. {escape(section.title)}</h2>',
+        _content_html(section.content, environment_counters),
+    ]
     for sub_number, subsection in enumerate(section.subsections, 1):
         html.extend([f'<section class="article-subsection" id="{escape(subsection.slug or "subsection")}">', f'<h3>{number}.{sub_number}. {escape(subsection.title)}</h3>', _content_html(subsection.content, environment_counters), '</section>'])
     html.append('</section>')
@@ -75,7 +113,11 @@ def _section_html(section: Section, number: int, environment_counters) -> str:
 
 def render(document: Document, template_path: str | Path) -> str:
     template = Path(template_path).read_text(encoding="utf-8")
-    buttons = [f'<a class="nav-button" href="{escape(b.href, quote=True)}" style="--button-color: {escape(b.color, quote=True)};">{escape(b.name)}</a>' for b in document.buttons]
+    buttons = []
+    for button in document.buttons:
+        color = escape(button.color, quote=True)
+        dark_color = escape(_dark_mode_color(button.color), quote=True)
+        buttons.append(f'<a class="nav-button" href="{escape(button.href, quote=True)}" style="--button-color: {color}; --button-color-dark: {dark_color};">{escape(button.name)}</a>')
     if document.banner:
         banner = f'<div class="site-banner"><img src="{escape(document.banner, quote=True)}" alt="" loading="eager"><a class="banner-title" href="#">{escape(document.document_title)}</a></div>'
     else: banner = f'<a class="document-title" href="#">{escape(document.document_title)}</a>'
