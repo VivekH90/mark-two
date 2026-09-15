@@ -1,4 +1,4 @@
-@documenttitle{Mark Two Test}
+@documenttitle{Mark Two Test, banner = https://placehold.co/1400x260/png}
 
 @button{Home, href = /, color = black}
 @button{GitHub, href = https://github.com/VivekH90/mark-two, color = #4f6fd8}
