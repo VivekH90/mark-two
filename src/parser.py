@@ -4,11 +4,12 @@ import re
 from pathlib import Path
 from typing import List
 
-from .ast import Button, Document, Environment, Image, MathBlock, RelatedLink, Section, Subsection
+from .ast import Button, Document, Environment, Image, ListBlock, MathBlock, RelatedLink, Section, Subsection
 
 
 _DIRECTIVE = re.compile(r"^\s*@([A-Za-z][\w ]*)\s*\{(.*)\}\s*$")
 _ENVIRONMENTS = {"theorem", "lemma", "definition", "corollary"}
+_LIST_ENVIRONMENTS = {"enumerate", "itemize"}
 
 
 def _slugify(text: str) -> str:
@@ -67,6 +68,34 @@ def _unique_slug(base: str, used: set[str]) -> str:
     return slug
 
 
+def _parse_list(argument: str, ordered: bool) -> ListBlock:
+    """Parse @enumerate{...} or @itemize{...}. Items are @item{...}."""
+    color = "black"
+    item_text = argument
+
+    # Allow @enumerate{color = green, @item{...}, @item{...}}.
+    parts = _split_top_level(argument)
+    if parts and "=" in parts[0] and not parts[0].lstrip().startswith("@item"):
+        key, value = parts[0].split("=", 1)
+        if key.strip().lower() == "color":
+            color = value.strip().strip('"\'') or "black"
+            item_text = ",".join(parts[1:])
+
+    items = []
+    pattern = re.compile(r"@item\s*\{([^{}]*)\}", re.DOTALL)
+    position = 0
+    for match in pattern.finditer(item_text):
+        if item_text[position:match.start()].strip().strip(",").strip():
+            raise ValueError("Only @item{...} entries may appear inside @enumerate or @itemize")
+        items.append(match.group(1).strip())
+        position = match.end()
+    if item_text[position:].strip().strip(",").strip():
+        raise ValueError("Only @item{...} entries may appear inside @enumerate or @itemize")
+    if not items:
+        raise ValueError("@enumerate or @itemize requires at least one @item{...}")
+    return ListBlock(ordered=ordered, items=items, color=color)
+
+
 def _add_content(container, line: str) -> None:
     if line.strip():
         container.content.append(line.strip())
@@ -85,8 +114,6 @@ def parse(source: str) -> Document:
     while index < len(lines):
         raw_line = lines[index]
 
-        # A display-math block is structural content. Capture everything from
-        # an opening \[ through its matching \], preserving TeX exactly.
         if display_math_lines is not None:
             if raw_line.strip() == r"\]":
                 target = current_environment or current_subsection or current_section
@@ -115,7 +142,7 @@ def parse(source: str) -> Document:
         command = match.group(1).strip().lower().replace(" ", "")
         argument = match.group(2).strip()
 
-        if command in {"documenttitle", "title", "button", "section", "subsection", "image", "relatedlinks", "relatedlink"}:
+        if command in {"documenttitle", "title", "button", "section", "subsection", "image", "relatedlinks", "relatedlink", "enumerate", "itemize"}:
             current_environment = None
 
         if command == "documenttitle":
@@ -126,28 +153,17 @@ def parse(source: str) -> Document:
             document.article_title = argument
         elif command == "button":
             values = _parse_key_values(argument)
-            document.buttons.append(Button(
-                name=values.get("name", "Button"),
-                href=values.get("href", "#"),
-                color=values.get("color", "black"),
-            ))
+            document.buttons.append(Button(name=values.get("name", "Button"), href=values.get("href", "#"), color=values.get("color", "black")))
         elif command == "section":
             values = _parse_key_values(argument)
             title = values.get("name", argument)
-            current_section = Section(
-                title=title,
-                color=values.get("color", "#111111"),
-                slug=_unique_slug(_slugify(title), used_slugs),
-            )
+            current_section = Section(title=title, color=values.get("color", "#111111"), slug=_unique_slug(_slugify(title), used_slugs))
             document.sections.append(current_section)
             current_subsection = None
         elif command == "subsection":
             if current_section is None:
                 raise ValueError("@subsection must appear after @section")
-            current_subsection = Subsection(
-                title=argument,
-                slug=_unique_slug(_slugify(argument), used_slugs),
-            )
+            current_subsection = Subsection(title=argument, slug=_unique_slug(_slugify(argument), used_slugs))
             current_section.subsections.append(current_subsection)
         elif command == "image":
             target = current_subsection or current_section
@@ -157,11 +173,7 @@ def parse(source: str) -> Document:
             src = values.get("src", "")
             if not src:
                 raise ValueError("@image requires src = ...")
-            target.content.append(Image(
-                src=src,
-                alt=values.get("alt", ""),
-                caption=values.get("caption", ""),
-            ))
+            target.content.append(Image(src=src, alt=values.get("alt", ""), caption=values.get("caption", "")))
         elif command in _ENVIRONMENTS:
             target = current_subsection or current_section
             if target is None:
@@ -169,14 +181,16 @@ def parse(source: str) -> Document:
             environment = Environment(kind=command, title=argument)
             target.content.append(environment)
             current_environment = environment
+        elif command in _LIST_ENVIRONMENTS:
+            target = current_environment or current_subsection or current_section
+            if target is None:
+                raise ValueError(f"@{command} must appear after @section")
+            target.content.append(_parse_list(argument, ordered=(command == "enumerate")))
         elif command in {"relatedlinks", "relatedlink"}:
             values = _parse_key_values(argument)
             if "href" not in values:
                 raise ValueError("@relatedlinks requires href = ...")
-            document.related_links.append(RelatedLink(
-                name=values.get("name", "Related link"),
-                href=values["href"],
-            ))
+            document.related_links.append(RelatedLink(name=values.get("name", "Related link"), href=values["href"]))
         else:
             raise ValueError(f"Unknown Mark Two directive: @{match.group(1)}")
 
