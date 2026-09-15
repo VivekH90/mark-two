@@ -32,6 +32,16 @@ class MathBlock:
 
 
 @dataclass
+class TextBlock:
+    """A formatted prose block."""
+
+    text: str
+    bold: bool = False
+    italic: bool = False
+    color: str = ""
+
+
+@dataclass
 class Label:
     """A named anchor that can be targeted by a cross reference."""
 
@@ -70,10 +80,10 @@ class Environment:
     kind: str
     title: str = ""
     label: str = ""
-    content: List[Union[str, Image, MathBlock, Label, Reference, ListBlock]] = field(default_factory=list)
+    content: List[Union[str, Image, MathBlock, TextBlock, Label, Reference, ListBlock]] = field(default_factory=list)
 
 
-ContentItem = Union[str, Image, MathBlock, Label, Reference, ListBlock, Environment]
+ContentItem = Union[str, Image, MathBlock, TextBlock, Label, Reference, ListBlock, Environment]
 
 
 @dataclass
