@@ -74,13 +74,17 @@ def _parse_image_group(argument: str, group_id: int):
     values = _parse_key_values(argument)
     indexed_sources = {}
     indexed_widths = {}
+    indexed_heights = {}
     for key, value in values.items():
         source_match = re.fullmatch(r"image\((\d+)\)", key, re.IGNORECASE)
         width_match = re.fullmatch(r"width\((\d+)\)", key, re.IGNORECASE)
+        height_match = re.fullmatch(r"height\((\d+)\)", key, re.IGNORECASE)
         if source_match:
             indexed_sources[int(source_match.group(1))] = value
         elif width_match:
             indexed_widths[int(width_match.group(1))] = value
+        elif height_match:
+            indexed_heights[int(height_match.group(1))] = value
 
     if not indexed_sources:
         src = values.get("src", values.get("image", ""))
@@ -95,8 +99,18 @@ def _parse_image_group(argument: str, group_id: int):
     if len(indexes) < 2:
         raise ValueError("Use image = ... for a single image")
 
-    first_width = indexed_widths.get(1, "")
-    return [Image(src=indexed_sources[index], alt=values.get(f"alt({index})", values.get("alt", "")), caption=values.get("caption", ""), label=values.get("label", ""), width=(first_width if index == 1 else ""), height=values.get("height", ""), group=group_id) for index in range(1, len(indexes) + 1)]
+    return [
+        Image(
+            src=indexed_sources[index],
+            alt=values.get(f"alt({index})", values.get("alt", "")),
+            caption=values.get("caption", ""),
+            label=values.get("label", ""),
+            width=indexed_widths.get(index, ""),
+            height=indexed_heights.get(index, ""),
+            group=group_id,
+        )
+        for index in range(1, len(indexes) + 1)
+    ]
 
 
 def _unique_slug(base: str, used: set[str]) -> str:
