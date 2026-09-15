@@ -21,25 +21,12 @@ def _slugify(text: str) -> str:
     return slug or "section"
 
 
-def _quote_starts(text: str, index: int) -> bool:
-    """Return whether a quote at index starts a quoted value."""
-    char = text[index]
-    if char == '"':
-        return True
-    if char != "'":
-        return False
-    previous = index - 1
-    while previous >= 0 and text[previous].isspace():
-        previous -= 1
-    return previous < 0 or text[previous] in "=,([{"
-
-
 def _split_top_level(text: str) -> List[str]:
     parts, current = [], []
     quote = None
     depth = 0
     escaped = False
-    for index, char in enumerate(text):
+    for char in text:
         if escaped:
             escaped = False
             current.append(char)
@@ -48,7 +35,7 @@ def _split_top_level(text: str) -> List[str]:
             escaped = True
             current.append(char)
             continue
-        if char in {'"', "'"} and _quote_starts(text, index):
+        if char == '"':
             if quote == char:
                 quote = None
             elif quote is None:
@@ -99,15 +86,7 @@ def _parse_image_group(argument: str, group_id: int):
         src = values.get("src", values.get("image", ""))
         if not src:
             raise ValueError("@image requires src = ... or image = ...")
-        return [Image(
-            src=src,
-            alt=values.get("alt", ""),
-            caption=values.get("caption", ""),
-            label=values.get("label", ""),
-            width=values.get("width", ""),
-            height=values.get("height", ""),
-            group=group_id,
-        )]
+        return [Image(src=src, alt=values.get("alt", ""), caption=values.get("caption", ""), label=values.get("label", ""), width=values.get("width", ""), height=values.get("height", ""), group=group_id)]
 
     indexes = sorted(indexed_sources)
     expected = list(range(1, len(indexes) + 1))
@@ -117,15 +96,7 @@ def _parse_image_group(argument: str, group_id: int):
         raise ValueError("Use image = ... for a single image")
 
     first_width = indexed_widths.get(1, "")
-    return [Image(
-        src=indexed_sources[index],
-        alt=values.get(f"alt({index})", values.get("alt", "")),
-        caption=values.get("caption", ""),
-        label=values.get("label", ""),
-        width=(first_width if index == 1 else ""),
-        height=values.get("height", ""),
-        group=group_id,
-    ) for index in range(1, len(indexes) + 1)]
+    return [Image(src=indexed_sources[index], alt=values.get(f"alt({index})", values.get("alt", "")), caption=values.get("caption", ""), label=values.get("label", ""), width=(first_width if index == 1 else ""), height=values.get("height", ""), group=group_id) for index in range(1, len(indexes) + 1)]
 
 
 def _unique_slug(base: str, used: set[str]) -> str:
@@ -153,7 +124,7 @@ def _extract_directive_blocks(text: str, command: str):
             if char == "\\":
                 escaped = True
                 continue
-            if char in {'"', "'"} and _quote_starts(text, index):
+            if char == '"':
                 if quote == char:
                     quote = None
                 elif quote is None:
@@ -201,7 +172,7 @@ def _extract_directive(lines: List[str], start_index: int):
                 escaped = True
                 current.append(char)
                 continue
-            if char in {'"', "'"} and _quote_starts(line, position):
+            if char == '"':
                 if quote == char:
                     quote = None
                 elif quote is None:
