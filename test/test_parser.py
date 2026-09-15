@@ -15,10 +15,22 @@ def test_multiline_enumerate_with_commas():
 }
 '''
     document = parse(source)
-    list_block = document.sections[0].content[0].content[0]
+    list_block = document.sections[0].content[1]
     assert list_block.ordered is True
     assert list_block.color == 'green'
     assert len(list_block.items) == 2
+
+
+def test_apostrophes_inside_directives():
+    source = '''@documenttitle{Mathematics}
+@section{Test}
+@theorem{Cauchy's Theorem, label = cauchy}
+Cauchy's theorem is a test of ordinary apostrophes inside directive content.
+'''
+    document = parse(source)
+    theorem = document.sections[0].content[0]
+    assert theorem.title == "Cauchy's Theorem"
+    assert theorem.label == 'cauchy'
 
 
 def test_multiline_image_and_documenttitle():
