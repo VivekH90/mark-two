@@ -35,13 +35,13 @@
       "patterns": [
         {
           "name": "keyword.control.directive.mark-two",
-          "match": "@(documenttitle|button|title|section|subsection|image|label|ref|enumerate|itemize|item|theorem|lemma|definition|corollary|axiom|proposition|remark|example|conjecture|notation|warning|proof|relatedlinks|relatedlink)\\b"
+          "match": "@(documenttitle|button|title|section|subsection|image|text|label|ref|enumerate|itemize|item|theorem|lemma|definition|corollary|axiom|proposition|remark|example|conjecture|notation|warning|proof|relatedlinks|relatedlink)\\b"
         },
         {
           "name": "variable.other.parameter.mark-two",
-          "match": "\\b(?:href|color|src|alt|caption|title|label|text|banner)\\b(?=\\s*=)"
+          "match": "\\b(?:href|color|src|alt|caption|title|label|text|banner|bold|italic|width|height)\\b(?=\\s*=)"
         },
-        { "name": "constant.language.boolean.mark-two", "match": "\\b(?:true|false)\\b" }
+        { "name": "constant.language.boolean.mark-two", "match": "\\b(?:true|false|yes|no|on|off)\\b" }
       ]
     },
     "strings": {
