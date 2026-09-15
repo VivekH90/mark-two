@@ -4,13 +4,6 @@
 // JavaScript only handles small interactive enhancements.
 
 document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll(".nav-button").forEach((button) => {
-        const color = button.dataset.color || "black";
-        if (CSS.supports("color", color)) {
-            button.style.setProperty("--button-color", color);
-        }
-    });
-
     const toggle = document.querySelector(".sidebar-toggle");
     const toc = document.querySelector(".toc");
 
@@ -33,7 +26,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 entries.forEach((entry) => {
                     if (!entry.isIntersecting) return;
                     tocLinks.forEach((link) => link.classList.remove("active"));
-                    const active = document.querySelector(`.toc a[href="#${CSS.escape(entry.target.id)}"]`);
+                    const active = document.querySelector(
+                        `.toc a[href="#${CSS.escape(entry.target.id)}"]`
+                    );
                     active?.classList.add("active");
                 });
             },
