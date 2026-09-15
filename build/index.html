@@ -27,9 +27,9 @@
                 <a class="banner-title" href="#">Mark Two Test</a>
             </div>
             <nav class="navigation" aria-label="Site navigation">
-                <a class="nav-button" href="/" style="--button-color: black;">Home</a>
-                <a class="nav-button" href="https://github.com/VivekH90/mark-two" style="--button-color: #4f6fd8;">GitHub</a>
-                <a class="nav-button" href="/about" style="--button-color: #4f9d69;">About</a>
+                <a class="nav-button" href="/" style="--button-color: black; --button-color-dark: #737373;">Home</a>
+                <a class="nav-button" href="https://github.com/VivekH90/mark-two" style="--button-color: #4f6fd8; --button-color-dark: #6a8fe3;">GitHub</a>
+                <a class="nav-button" href="/about" style="--button-color: #4f9d69; --button-color-dark: #5bac82;">About</a>
                 <button class="nav-button theme-toggle" type="button" aria-label="Enable dark mode" aria-pressed="false">
                     <span class="theme-icon" aria-hidden="true">☾</span>
                     <span class="theme-label">Dark Mode</span>
@@ -39,36 +39,36 @@
         <div class="page-layout">
             <main class="article">
                 <h1 class="article-title">A Test Article for Mark Two</h1>
-                <section class="article-section" id="introduction" style="--section-color: #1f4f91;">
+                <section class="article-section" id="introduction" style="--section-color: #1f4f91; --section-color-dark: #2867bd;">
                     <h2><span class="section-symbol">§</span> 1. Introduction</h2>
                     <p>This section verifies that ordinary prose is parsed correctly and that the generated section numbering is not duplicated.</p>
                     <section class="article-subsection" id="goals">
                         <h3>1.1. Goals</h3>
                         <p>The first goal is to verify section and subsection structure. The second goal is to verify that the table of contents points to the generated anchors.</p>
-                        <ol class="mark-list" style="--list-color: green;">
+                        <ol class="mark-list" style="--list-color: green; --list-color-dark: #00e600;">
                             <li>First item in a green enumeration.</li>
                             <li class="has-list-item-title"><span class="list-item-title">hehheheh</span><p>Second item in a green enumeration.</p></li>
                             <li>Third item in a green enumeration.</li>
                         </ol>
-                        <ul class="mark-list" style="--list-color: #8a3d91;">
+                        <ul class="mark-list" style="--list-color: #8a3d91; --list-color-dark: #9a44a2;">
                             <li>First item in a colored itemize list.</li>
                             <li>Second item in a colored itemize list.</li>
                             <li>Third item in a colored itemize list.</li>
                         </ul>
-                        <ul class="mark-list" style="--list-color: #8a3d91;">
+                        <ul class="mark-list" style="--list-color: #8a3d91; --list-color-dark: #9a44a2;">
                             <li><p>This list item contains an image:</p><figure class="article-image"><img src="https://placehold.co/500x280/png" alt="An image inside a list item" loading="lazy"><figcaption>Figure 2. An image contained inside a list item.</figcaption></figure></li>
                             <li><p>This item contains text and inline mathematics \(x^2 + y^2 = 1\).</p></li>
                         </ul>
                     </section>
                 </section>
-                <section class="article-section" id="images" style="--section-color: #8a5a2c;">
+                <section class="article-section" id="images" style="--section-color: #8a5a2c; --section-color-dark: #a87345;">
                     <h2><span class="section-symbol">§</span> 2. Images</h2>
                     <p>This image has a caption:</p>
                     <figure class="article-image"><img src="https://placehold.co/900x500/png" alt="A placeholder diagram" loading="lazy"><figcaption>Figure 1. An example image with a caption.</figcaption></figure>
                     <p>This image has no caption:</p>
                     <figure class="article-image"><img src="https://placehold.co/700x400/png" alt="A placeholder image without a caption" loading="lazy"></figure>
                 </section>
-                <section class="article-section" id="mathematics" style="--section-color: #6b3fa0;">
+                <section class="article-section" id="mathematics" style="--section-color: #6b3fa0; --section-color-dark: #9259ce;">
                     <h2><span class="section-symbol">§</span> 3. Mathematics</h2>
                     <p>Inline mathematics should be processed by MathJax: \(x^2 + y^2 = z^2\).</p>
                     <p>The following display equation checks multi-line display mathematics:</p>
@@ -94,7 +94,7 @@
                         </div>
                     </section>
                 </section>
-                <section class="article-section" id="conclusion" style="--section-color: #9a3d3d;">
+                <section class="article-section" id="conclusion" style="--section-color: #9a3d3d; --section-color-dark: #ad4848;">
                     <h2><span class="section-symbol">§</span> 4. Conclusion</h2>
                     <p>If this page renders correctly, the first stage of the Mark Two article pipeline is working.</p>
                 </section>
