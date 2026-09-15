@@ -144,6 +144,10 @@ The single-line form remains valid too.
 | `@enumerate` | Creates an ordered list. | `@enumerate{color = green, @item{First}, @item{Second}}` |
 | `@itemize` | Creates an unordered list. | `@itemize{color = #8a3d91, @item{First}, @item{Second}}` |
 | `@item` | Creates an item inside `@enumerate` or `@itemize`; may have a title. | `@item{An item}` or `@item{title = "Step one", Details.}` |
+| `@text` | Creates a text block with optional formatting applied to the whole block: `bold`, `italic`, and `color`. | `@text{bold = true, text = "Important."}` |
+| `@bold` | Makes only the enclosed text bold. Works inside normal prose, `@text`, lists, and other rendered text. | `This is @bold{important}.` |
+| `@italic` | Makes only the enclosed text italic. Works inside normal prose, `@text`, lists, and other rendered text. | `This is @italic{emphasized}.` |
+| `@color` | Changes only the enclosed text's color. Use `@color{red, text}` or a CSS color value such as `#315a9b`. | `This is @color{red, highlighted}.` |
 | `@theorem` | Creates a numbered theorem environment. | `@theorem{Fundamental Theorem, label = fundamental-theorem}` |
 | `@lemma` | Creates a numbered lemma environment. | `@lemma{A Useful Lemma, label = useful-lemma}` |
 | `@definition` | Creates a numbered definition environment. | `@definition{Continuity, label = continuity}` |
@@ -160,6 +164,16 @@ The single-line form remains valid too.
 | `@ref` | Creates a clickable cross-reference to a label or page anchor. | `@ref{fundamental-theorem}` |
 | `@relatedlinks` | Adds a related link to the sidebar. | `@relatedlinks{Python, href = https://www.python.org}` |
 | `@relatedlink` | Alias for `@relatedlinks`. | `@relatedlink{Python, href = https://www.python.org}` |
+
+Inline formatting can be nested. For example:
+
+```text
+This is @bold{very @italic{important}}.
+
+This is @color{red, @bold{extremely important}}.
+```
+
+`@text` formats the whole text block, while `@bold`, `@italic`, and `@color` format only the selected inline content.
 
 ### Images
 
