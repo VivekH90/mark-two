@@ -14,7 +14,7 @@
 html.dark-mode { --text: #eeeeee; --muted-text: #b8b8b8; --page-bg: #111214; --border: #3b3d42; --panel-blue: #182438; --panel-green: #18281f; --accent: #c7d7f5; }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-body { margin: 0; background: var(--page-bg); color: var(--text); font-family: "Computer Modern Sans Serif", "Computer Modern Sans", sans-serif; font-size: 17px; line-height: 1.48; font-weight: 400; transition: background 180ms ease, color 180ms ease; }
+body { margin: 0; background: var(--page-bg); color: var(--text); font-family: "Latin Modern Sans", "Computer Modern Sans Serif", "Computer Modern Sans", sans-serif; font-size: 17px; line-height: 1.48; font-weight: 400; transition: background 180ms ease, color 180ms ease; }
 button, input, select, textarea { font-family: inherit; }
 .site-shell { width: min(100%, var(--page-max)); margin: 0 auto; padding: 12px var(--page-pad) 56px; }
 .site-header { text-align: center; padding-bottom: 25px; border-bottom: 1px solid var(--border); }
