@@ -11,17 +11,7 @@
     --panel-green: #eefaf0;
     --accent: #182c55;
 }
-
-html.dark-mode {
-    --text: #eeeeee;
-    --muted-text: #b8b8b8;
-    --page-bg: #111214;
-    --border: #3b3d42;
-    --panel-blue: #182438;
-    --panel-green: #18281f;
-    --accent: #c7d7f5;
-}
-
+html.dark-mode { --text: #eeeeee; --muted-text: #b8b8b8; --page-bg: #111214; --border: #3b3d42; --panel-blue: #182438; --panel-green: #18281f; --accent: #c7d7f5; }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body { margin: 0; background: var(--page-bg); color: var(--text); font-family: "Computer Modern Sans Serif", "Computer Modern Sans", sans-serif; font-size: 17px; line-height: 1.48; font-weight: 400; transition: background 180ms ease, color 180ms ease; }
@@ -95,8 +85,15 @@ html.dark-mode .list-item-title { color: var(--list-color-dark, var(--list-color
 .math-environment.lemma { --environment-accent: #5867a5; --environment-border: #c5cae7; --environment-fill: #eff0ff; }
 .math-environment.definition { --environment-accent: #39745a; --environment-border: #b9d9c7; --environment-fill: #eaf7ef; }
 .math-environment.corollary { --environment-accent: #8a5a2c; --environment-border: #dfc9b0; --environment-fill: #fbf1e5; }
+.math-environment.axiom { --environment-accent: #8a3d91; --environment-border: #d7b8dc; --environment-fill: #f8edfa; }
 .environment-heading { margin-bottom: 8px; font-size: 18px; font-weight: 700; }
-.environment-content p:last-child { margin-bottom: 0; }
+.environment-label { display: inline-block; padding: 2px 11px 3px; border-radius: 999px; background: color-mix(in srgb, var(--environment-accent) 22%, var(--environment-fill)); font-weight: 700; }
+.environment-number { font-weight: 700; }
+.environment-title { font-weight: 600; }
+.proof-environment { position: relative; margin: 22px 0; padding: 4px 0 30px; border-bottom: 1px solid var(--border); }
+.proof-heading { margin-bottom: 9px; font-size: 18px; font-weight: 700; }
+.proof-content p:last-child { margin-bottom: 0; }
+.proof-qed { position: absolute; right: 0; bottom: 4px; font-size: 20px; line-height: 1; }
 .math-environment mjx-container { font-size: 105%; }
 html.dark-mode .toc-card { border-color: #476a9d; }
 html.dark-mode .related-card { border-color: #477456; }
@@ -108,6 +105,7 @@ html.dark-mode .math-environment.theorem { --environment-border: #496d9f; --envi
 html.dark-mode .math-environment.lemma { --environment-border: #5a6090; --environment-fill: #252743; }
 html.dark-mode .math-environment.definition { --environment-border: #4b8065; --environment-fill: #1e382b; }
 html.dark-mode .math-environment.corollary { --environment-border: #8a6542; --environment-fill: #3a2a1c; }
+html.dark-mode .math-environment.axiom { --environment-border: #8a5a95; --environment-fill: #3a243d; }
 @media (max-width: 1080px) { :root { --sidebar-width: 280px; --article-max: 820px; } .page-layout { gap: 30px; } .nav-button { min-width: 130px; } }
 @media (max-width: 850px) { .page-layout { grid-template-columns: 1fr; } .article { max-width: 900px; } .sidebar { position: static; order: -1; } .toc-card { max-height: 70vh; } .toc { overflow-y: auto; } }
 @media (max-width: 760px) { body { font-size: 16px; } .site-shell { padding-top: 10px; } .site-header { padding-bottom: 20px; } .navigation { gap: 8px; margin-top: 13px; } .nav-button { min-width: 0; min-height: 45px; padding: 7px 17px; font-size: 17px; } .page-layout { padding-top: 20px; } .site-banner { border-radius: 10px; } .site-banner img { max-height: 190px; } .banner-title { padding: 15px 20px; font-size: clamp(29px, 8vw, 42px); } }
