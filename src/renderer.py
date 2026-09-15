@@ -107,7 +107,8 @@ def _multi_image_html(images, figure_number: int) -> str:
         columns = f'{escape(first_width, quote=True)} ' + " ".join("minmax(0, 1fr)" for _ in images[1:])
     else:
         columns = " ".join("minmax(0, 1fr)" for _ in images)
-    image_html = [_image_tag(image, "width: 100%; height: 280px; object-fit: cover; margin: 0;") for image in images]
+    height = images[0].height.strip() or "280px"
+    image_html = [_image_tag(image, f"width: 100%; height: {escape(height, quote=True)}; object-fit: cover; margin: 0;") for image in images]
     row_style = f'display: grid; grid-template-columns: {columns}; gap: 10px; align-items: stretch;'
     html = [f'<figure class="article-image multi-image"{identifier}>', f'<div class="image-row" style="{row_style}">', "\n".join(image_html), '</div>']
     if images[0].caption: html.append(_caption_html(images[0].caption, figure_number))
@@ -143,7 +144,8 @@ def _content_html(items, environment_counters, references, figure_counter) -> st
             html.append(_environment_html(item, environment_counters[item.kind], environment_counters, references, figure_counter))
         elif isinstance(item, Image):
             group = [item]; next_index = index + 1
-            while next_index < len(items) and isinstance(items[next_index], Image):
+            while (next_index < len(items) and isinstance(items[next_index], Image)
+                   and items[next_index].group == item.group):
                 group.append(items[next_index]); next_index += 1
             figure_counter["number"] += 1
             if len(group) == 1: html.append(_image_html(group[0], figure_counter["number"]))
@@ -192,8 +194,7 @@ def render(document: Document, template_path: str | Path) -> str:
         color = escape(button.color, quote=True); dark_color = escape(_dark_mode_color(button.color), quote=True)
         buttons.append(f'<a class="nav-button" href="{escape(button.href, quote=True)}" style="--button-color: {color}; --button-color-dark: {dark_color};">{escape(button.name)}</a>')
     if document.banner:
-        banner_color = escape(document.banner_color or "#ffffff", quote=True)
-        banner_dark_color = escape(_dark_mode_color(document.banner_color or "#ffffff"), quote=True)
+        banner_color = escape(document.banner_color or "#ffffff", quote=True); banner_dark_color = escape(_dark_mode_color(document.banner_color or "#ffffff"), quote=True)
         banner = f'<div class="site-banner"><img src="{escape(document.banner, quote=True)}" alt="" loading="eager"><a class="banner-title" href="#" style="color: {banner_color}; --banner-title-color: {banner_color}; --banner-title-color-dark: {banner_dark_color};">{escape(document.document_title)}</a></div>'
     else: banner = f'<a class="document-title" href="#">{escape(document.document_title)}</a>'
     references = _build_reference_index(document); toc, article, environment_counters = [], [], {}; figure_counter = {"number": 0}
