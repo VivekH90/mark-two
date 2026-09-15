@@ -51,13 +51,13 @@ The following display equation checks multi-line display mathematics:
 
 Suppose \(f(x)=x^2\). This checks that mathematical expressions can appear naturally inside prose.
 
-@definition{A Simple Function}
-
-A function \(f : X \to Y\) assigns to every \(x \in X\) exactly one element \(f(x) \in Y\).
-
 @axiom{A Basic Axiom}
 
 For every object \(x\), we assume the stated axiom holds.
+
+@definition{A Simple Function}
+
+A function \(f : X \to Y\) assigns to every \(x \in X\) exactly one element \(f(x) \in Y\).
 
 @theorem{A Basic Identity}
 
@@ -88,7 +88,7 @@ Taking \(c=-b\) gives \(a-b=0\) whenever \(a=b\).
 
 @section{Conclusion, color = #9a3d3d}
 
-If this page renders correctly, the first stage of the Mark Two article pipeline is working.
+If this page renders correctly, the Mark Two article pipeline supports titled list items, images inside list items, mathematical environments, axioms, and proofs.
 
 @relatedlinks{Mark Two GitHub, href = https://github.com/VivekH90/mark-two}
 @relatedlinks{Python, href = https://www.python.org}
