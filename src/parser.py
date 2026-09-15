@@ -4,7 +4,7 @@ import re
 from pathlib import Path
 from typing import List
 
-from .ast import Button, Document, Environment, RelatedLink, Section, Subsection
+from .ast import Button, Document, Environment, Image, RelatedLink, Section, Subsection
 
 
 _DIRECTIVE = re.compile(r"^\s*@([A-Za-z][\w ]*)\s*\{(.*)\}\s*$")
@@ -90,7 +90,7 @@ def parse(source: str) -> Document:
         command = match.group(1).strip().lower().replace(" ", "")
         argument = match.group(2).strip()
 
-        if command in {"documenttitle", "title", "button", "section", "subsection", "relatedlinks", "relatedlink"}:
+        if command in {"documenttitle", "title", "button", "section", "subsection", "image", "relatedlinks", "relatedlink"}:
             current_environment = None
 
         if command == "documenttitle":
@@ -122,6 +122,19 @@ def parse(source: str) -> Document:
                 slug=_unique_slug(_slugify(argument), used_slugs),
             )
             current_section.subsections.append(current_subsection)
+        elif command == "image":
+            target = current_subsection or current_section
+            if target is None:
+                raise ValueError("@image must appear after @section")
+            values = _parse_key_values(argument)
+            src = values.get("src", "")
+            if not src:
+                raise ValueError("@image requires src = ...")
+            target.content.append(Image(
+                src=src,
+                alt=values.get("alt", ""),
+                caption=values.get("caption", ""),
+            ))
         elif command in _ENVIRONMENTS:
             target = current_subsection or current_section
             if target is None:
