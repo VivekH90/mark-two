@@ -19,6 +19,14 @@ The second goal is to verify that the table of contents points to the generated 
 
 @itemize{color = #8a3d91, @item{First item in a colored itemize list.}, @item{Second item in a colored itemize list.}, @item{Third item in a colored itemize list.}}
 
+@itemize{color = #8a3d91,
+    @item{
+        This list item contains an image:
+        @image{src = https://placehold.co/500x280/png, alt = An image inside a list item, caption = Figure 2. An image contained inside a list item.}
+    },
+    @item{This item contains text and inline mathematics \(x^2 + y^2 = 1\).}
+}
+
 @section{Images, color = #8a5a2c}
 
 This image has a caption:
