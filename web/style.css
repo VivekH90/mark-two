@@ -28,12 +28,11 @@ button, input, select, textarea { font-family: inherit; }
 .site-shell { width: min(100%, var(--page-max)); margin: 0 auto; padding: 12px var(--page-pad) 56px; }
 .site-header { text-align: center; padding-bottom: 25px; border-bottom: 1px solid #dedede; }
 .document-title { display: inline-block; margin-bottom: 17px; color: var(--text); text-decoration: none; font-size: clamp(35px, 4.3vw, 53px); font-weight: 700; line-height: 1.05; }
-.header-divider { height: 1px; width: 100%; background: #dedede; margin: 0 0 17px; }
-.navigation { display: flex; justify-content: center; align-items: center; gap: 15px; flex-wrap: wrap; }
+.navigation { display: flex; justify-content: center; align-items: center; gap: 15px; flex-wrap: wrap; margin-top: 17px; }
 .nav-button { display: inline-flex; min-width: 145px; min-height: 48px; padding: 8px 25px; align-items: center; justify-content: center; border: 1.3px solid color-mix(in srgb, var(--button-color, #111) 28%, white); border-radius: 999px; background: color-mix(in srgb, var(--button-color, #111) 10%, white); color: color-mix(in srgb, var(--button-color, #111) 78%, black); text-decoration: none; font-size: 18px; font-weight: 600; transition: transform 150ms ease, box-shadow 150ms ease, background 150ms ease; }
 .nav-button:hover, .nav-button:focus-visible { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0, 0, 0, 0.10); background: color-mix(in srgb, var(--button-color, #111) 16%, white); }
 
-.site-banner { width: 100%; margin: 22px auto 0; overflow: hidden; border: 1px solid #d7d7d7; border-radius: 13px; }
+.site-banner { width: 100%; margin: 0 auto; overflow: hidden; border: 1px solid #d7d7d7; border-radius: 13px; }
 .site-banner img { display: block; width: 100%; height: auto; max-height: 260px; object-fit: cover; }
 
 .page-layout { display: grid; grid-template-columns: minmax(0, var(--article-max)) var(--sidebar-width); justify-content: center; gap: 46px; align-items: start; padding-top: 25px; }
@@ -85,5 +84,5 @@ button, input, select, textarea { font-family: inherit; }
 
 @media (max-width: 1080px) { :root { --sidebar-width: 280px; --article-max: 820px; } .page-layout { gap: 30px; } .nav-button { min-width: 130px; } }
 @media (max-width: 850px) { .page-layout { grid-template-columns: 1fr; } .article { max-width: 900px; } .sidebar { position: static; order: -1; } .toc-card { max-height: 70vh; } .toc { overflow-y: auto; } }
-@media (max-width: 760px) { body { font-size: 16px; } .site-shell { padding-top: 10px; } .site-header { padding-bottom: 20px; } .navigation { gap: 8px; } .nav-button { min-width: 0; min-height: 45px; padding: 7px 17px; font-size: 17px; } .page-layout { padding-top: 20px; } .site-banner { margin-top: 17px; border-radius: 10px; } .site-banner img { max-height: 190px; } }
+@media (max-width: 760px) { body { font-size: 16px; } .site-shell { padding-top: 10px; } .site-header { padding-bottom: 20px; } .navigation { gap: 8px; margin-top: 13px; } .nav-button { min-width: 0; min-height: 45px; padding: 7px 17px; font-size: 17px; } .page-layout { padding-top: 20px; } .site-banner { border-radius: 10px; } .site-banner img { max-height: 190px; } }
 @media (max-width: 430px) { .navigation .nav-button { flex: 1 1 calc(50% - 8px); } .math-environment { padding: 14px 17px; } }
