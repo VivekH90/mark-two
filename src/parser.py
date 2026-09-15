@@ -8,6 +8,7 @@ from .ast import Button, Document, Environment, Image, Label, ListBlock, ListIte
 
 
 _DIRECTIVE = re.compile(r"^\s*@([A-Za-z][\w ]*)\s*\{(.*)\}\s*$")
+_DIRECTIVE_START = re.compile(r"^\s*@([A-Za-z][\w ]*)\s*\{")
 _ENVIRONMENTS = {
     "theorem", "lemma", "definition", "corollary", "axiom",
     "proposition", "remark", "example", "conjecture", "notation", "warning", "proof",
@@ -24,7 +25,16 @@ def _split_top_level(text: str) -> List[str]:
     parts, current = [], []
     quote = None
     depth = 0
+    escaped = False
     for char in text:
+        if escaped:
+            escaped = False
+            current.append(char)
+            continue
+        if char == "\\":
+            escaped = True
+            current.append(char)
+            continue
         if char in {'"', "'"}:
             if quote == char: quote = None
             elif quote is None: quote = char
@@ -114,9 +124,15 @@ def _extract_directive_blocks(text: str, command: str):
         match = prefix.search(text, position)
         if not match: break
         start, brace_start = match.start(), match.end() - 1
-        depth, quote, end = 0, None, None
+        depth, quote, end, escaped = 0, None, None, False
         for index in range(brace_start, len(text)):
             char = text[index]
+            if escaped:
+                escaped = False
+                continue
+            if char == "\\":
+                escaped = True
+                continue
             if char in {'"', "'"}:
                 if quote == char: quote = None
                 elif quote is None: quote = char
@@ -128,6 +144,65 @@ def _extract_directive_blocks(text: str, command: str):
         if end is None: raise ValueError(f"Unclosed @{command}{{...}} block")
         blocks.append((start, end + 1, text[brace_start + 1:end])); position = end + 1
     return blocks
+
+
+def _extract_directive(lines: List[str], start_index: int):
+    """Extract one balanced directive starting at a source line.
+
+    Directives may now span any number of lines. Braces inside nested
+    directives, TeX commands, and quoted strings are handled while looking
+    for the matching closing brace.
+    """
+    first_line = lines[start_index]
+    match = _DIRECTIVE_START.match(first_line)
+    if not match:
+        return None
+
+    command = match.group(1)
+    brace_start = match.end() - 1
+    depth, quote, escaped = 0, None, False
+    argument_parts = []
+
+    for line_index in range(start_index, len(lines)):
+        line = lines[line_index]
+        offset = brace_start if line_index == start_index else 0
+        current = []
+
+        for char in line[offset:]:
+            if escaped:
+                escaped = False
+                current.append(char)
+                continue
+            if char == "\\":
+                escaped = True
+                current.append(char)
+                continue
+            if char in {'"', "'"}:
+                if quote == char:
+                    quote = None
+                elif quote is None:
+                    quote = char
+                current.append(char)
+                continue
+            if quote is None and char == "{":
+                depth += 1
+                if depth > 1:
+                    current.append(char)
+                continue
+            if quote is None and char == "}":
+                depth -= 1
+                if depth == 0:
+                    trailing = line[offset:][len("".join(current)) + 1:]
+                    if trailing.strip():
+                        raise ValueError(f"Unexpected text after @{command}{{...}} directive")
+                    return command, "\n".join(argument_parts + ["".join(current).rstrip()]).strip(), line_index
+                current.append(char)
+                continue
+            current.append(char)
+
+        argument_parts.append("".join(current))
+
+    raise ValueError(f"Unclosed @{command}{{...}} block")
 
 
 def _parse_list_item_content(body: str):
@@ -180,13 +255,14 @@ def parse(source: str) -> Document:
             index += 1; continue
         if raw_line.strip() == r"\[": display_math_lines = []; index += 1; continue
 
-        match = _DIRECTIVE.match(raw_line)
-        if not match:
+        directive = _extract_directive(lines, index)
+        if directive is None:
             target = current_environment or current_subsection or current_section
             if target is not None: _add_content(target, raw_line)
             index += 1; continue
 
-        command = match.group(1).strip().lower().replace(" ", ""); argument = match.group(2).strip()
+        command, argument, end_index = directive
+        command = command.strip().lower().replace(" ", "")
         if command in {"documenttitle", "title", "button", "section", "subsection", "image", "relatedlinks", "relatedlink", "enumerate", "itemize"}:
             current_environment = None
 
@@ -230,8 +306,8 @@ def parse(source: str) -> Document:
             values = _parse_key_values(argument)
             if "href" not in values: raise ValueError("@relatedlinks requires href = ...")
             document.related_links.append(RelatedLink(name=values.get("name", "Related link"), href=values["href"]))
-        else: raise ValueError(f"Unknown Mark Two directive: @{match.group(1)}")
-        index += 1
+        else: raise ValueError(f"Unknown Mark Two directive: @{command}")
+        index = end_index + 1
     if display_math_lines is not None: raise ValueError("Unclosed display math block: expected \\]")
     return document
 
