@@ -6,8 +6,8 @@ A lightweight mathematical document language that compiles `.mt` source files in
 
 [![HTML](https://img.shields.io/badge/HTML-MARK%20TWO-176c5b?style=for-the-badge)](https://github.com/VivekH90/mark-two)
 [![MathJax](https://img.shields.io/badge/MATHJAX-SUPPORTED-76547e?style=for-the-badge)](https://www.mathjax.org/)
-[![Commits](https://img.shields.io/badge/COMMITS-141-46a800?style=for-the-badge)](https://github.com/VivekH90/mark-two/commits/master)
-[![Last Commit](https://img.shields.io/badge/LAST%20COMMIT-TESTING-555555?style=for-the-badge)](https://github.com/VivekH90/mark-two/commits/master)
+[![Commits](https://img.shields.io/github/commit-activity/t/VivekH90/mark-two?style=for-the-badge&label=COMMITS)](https://github.com/VivekH90/mark-two/commits/master)
+[![Last Commit](https://img.shields.io/github/last-commit/VivekH90/mark-two?style=for-the-badge&label=LAST%20COMMIT)](https://github.com/VivekH90/mark-two/commits/master)
 [![License](https://img.shields.io/badge/LICENSE-NOT%20SPECIFIED-999999?style=for-the-badge)](https://github.com/VivekH90/mark-two)
 
 </div>
