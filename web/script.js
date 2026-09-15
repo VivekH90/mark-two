@@ -14,6 +14,29 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    const themeToggle = document.querySelector(".theme-toggle");
+    const themeIcon = themeToggle?.querySelector(".theme-icon");
+    const themeLabel = themeToggle?.querySelector(".theme-label");
+
+    const applyTheme = (dark) => {
+        document.documentElement.classList.toggle("dark-mode", dark);
+        themeToggle?.setAttribute("aria-pressed", String(dark));
+        themeToggle?.setAttribute("aria-label", dark ? "Disable dark mode" : "Enable dark mode");
+        if (themeIcon) themeIcon.textContent = dark ? "☀" : "☾";
+        if (themeLabel) themeLabel.textContent = dark ? "Light Mode" : "Dark Mode";
+    };
+
+    if (themeToggle) {
+        const savedTheme = localStorage.getItem("mark-two-theme");
+        applyTheme(savedTheme === "dark");
+
+        themeToggle.addEventListener("click", () => {
+            const dark = !document.documentElement.classList.contains("dark-mode");
+            applyTheme(dark);
+            localStorage.setItem("mark-two-theme", dark ? "dark" : "light");
+        });
+    }
+
     // Keep the active table-of-contents entry in sync with the article.
     const tocLinks = [...document.querySelectorAll(".toc a")];
     const headings = tocLinks
