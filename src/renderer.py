@@ -43,8 +43,8 @@ def _parse_ref_argument(argument: str):
             escaped = True
             current.append(char)
             continue
-        if char == '"':
-            quote = None if quote else char
+        if char in "\"'":
+            quote = None if quote == char else char if quote is None else quote
         elif quote is None:
             if char in "{[(":
                 depth += 1
@@ -78,12 +78,12 @@ def _split_top_level(argument: str):
             escaped = True
             current.append(char)
             continue
-        if char == '"':
-            quote = None if quote else char
+        if char in "\"'":
+            quote = None if quote == char else char if quote is None else quote
         elif quote is None:
-            if char == "{":
+            if char in "{[(":
                 depth += 1
-            elif char == "}":
+            elif char in "})]":
                 depth = max(0, depth - 1)
             elif char == "," and depth == 0:
                 parts.append("".join(current).strip())
@@ -123,8 +123,8 @@ def _extract_inline_block(text: str, start: int):
         if char == "\\":
             escaped = True
             continue
-        if char == '"':
-            quote = None if quote else char
+        if char in "\"'":
+            quote = None if quote == char else char if quote is None else quote
             continue
         if quote is not None:
             continue
@@ -151,8 +151,17 @@ def _split_inline_color(argument: str):
         return color, content
     parts = _split_top_level(argument)
     if len(parts) >= 2:
-        return _strip_quotes(parts[0]), ", ".join(parts[1:])
+        return _strip_quotes(parts[0]), ",".join(parts[1:]).strip()
     return "", argument
+
+
+def _safe_color(value: str) -> bool:
+    value = value.strip()
+    return bool(
+        re.fullmatch(r"#[0-9a-fA-F]{3,8}", value)
+        or re.fullmatch(r"(?:rgb|rgba|hsl|hsla)\([^{};]*\)", value, re.IGNORECASE)
+        or re.fullmatch(r"[a-zA-Z]+", value)
+    )
 
 
 def _inline_text(text: str, references) -> str:
@@ -171,9 +180,9 @@ def _inline_text(text: str, references) -> str:
                     output.append(f"<em>{_inline_text(argument, references)}</em>")
                 elif command == "color":
                     color, content = _split_inline_color(argument)
-                    if color:
+                    if color and _safe_color(color):
                         dark = _dark_mode_color(color)
-                        output.append(f'<span class="inline-color" style="color: {escape(color, quote=True)}; --inline-color-dark: {escape(dark, quote=True)}">{_inline_text(content, references)}</span>')
+                        output.append(f'<span class="inline-color" style="--inline-color: {escape(color, quote=True)}; --inline-color-dark: {escape(dark, quote=True)}">{_inline_text(content, references)}</span>')
                     else:
                         output.append(escape(text[i:end]))
                 else:
@@ -216,8 +225,8 @@ def _text_html(text: TextBlock, references) -> str:
         styles.append("font-weight: 700")
     if text.italic:
         styles.append("font-style: italic")
-    if text.color:
-        styles.append(f"color: {escape(text.color, quote=True)}")
+    if text.color and _safe_color(text.color):
+        styles.append(f"--text-color: {escape(text.color, quote=True)}")
         styles.append(f"--text-color-dark: {escape(_dark_mode_color(text.color), quote=True)}")
     style = f' style="{"; ".join(styles)}"' if styles else ""
     return f'<p class="mark-text"{style}>{_inline_text(text.text, references)}</p>'
