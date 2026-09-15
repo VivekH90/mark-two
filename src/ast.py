@@ -13,12 +13,14 @@ class Button:
 
 @dataclass
 class Image:
-    """An article image with optional accessibility text and caption."""
+    """An article image with optional accessibility text, caption, label, and size."""
 
     src: str
     alt: str = ""
     caption: str = ""
     label: str = ""
+    width: str = ""
+    height: str = ""
 
 
 @dataclass
@@ -101,6 +103,7 @@ class RelatedLink:
 class Document:
     document_title: str = ""
     banner: str = ""
+    banner_color: str = ""
     article_title: str = ""
     buttons: List[Button] = field(default_factory=list)
     sections: List[Section] = field(default_factory=list)
