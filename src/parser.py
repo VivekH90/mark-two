@@ -53,7 +53,7 @@ def _parse_key_values(text: str):
     return values
 
 
-def _parse_image_group(argument: str):
+def _parse_image_group(argument: str, group_id: int):
     """Parse one @image block as either a single image or a multi-image row."""
     values = _parse_key_values(argument)
     indexed_sources = {}
@@ -77,6 +77,7 @@ def _parse_image_group(argument: str):
             label=values.get("label", ""),
             width=values.get("width", ""),
             height=values.get("height", ""),
+            group=group_id,
         )]
 
     indexes = sorted(indexed_sources)
@@ -86,7 +87,6 @@ def _parse_image_group(argument: str):
     if len(indexes) < 2:
         raise ValueError("Use image = ... for a single image")
 
-    count = len(indexes)
     first_width = indexed_widths.get(1, "")
     return [Image(
         src=indexed_sources[index],
@@ -95,7 +95,8 @@ def _parse_image_group(argument: str):
         label=values.get("label", ""),
         width=(first_width if index == 1 else ""),
         height=values.get("height", ""),
-    ) for index in range(1, count + 1)]
+        group=group_id,
+    ) for index in range(1, len(indexes) + 1)]
 
 
 def _unique_slug(base: str, used: set[str]) -> str:
@@ -167,7 +168,7 @@ def _title_and_label(argument: str):
 
 def parse(source: str) -> Document:
     document = Document(); current_section = None; current_subsection = None; current_environment = None
-    used_slugs = set(); display_math_lines = None; lines = source.splitlines(); index = 0
+    used_slugs = set(); display_math_lines = None; lines = source.splitlines(); index = 0; image_group_id = 0
     while index < len(lines):
         raw_line = lines[index]
         if display_math_lines is not None:
@@ -190,10 +191,7 @@ def parse(source: str) -> Document:
             current_environment = None
 
         if command == "documenttitle":
-            values = _parse_key_values(argument)
-            document.document_title = values.get("name", argument)
-            document.banner = values.get("banner", "")
-            document.banner_color = values.get("color", "")
+            values = _parse_key_values(argument); document.document_title = values.get("name", argument); document.banner = values.get("banner", ""); document.banner_color = values.get("color", "")
         elif command == "title": document.article_title = argument
         elif command == "button":
             values = _parse_key_values(argument); document.buttons.append(Button(name=values.get("name", "Button"), href=values.get("href", "#"), color=values.get("color", "black")))
@@ -207,7 +205,8 @@ def parse(source: str) -> Document:
         elif command == "image":
             target = current_environment or current_subsection or current_section
             if target is None: raise ValueError("@image must appear after @section")
-            target.content.extend(_parse_image_group(argument))
+            image_group_id += 1
+            target.content.extend(_parse_image_group(argument, image_group_id))
         elif command == "label":
             target = current_environment or current_subsection or current_section
             if target is None: raise ValueError("@label must appear after @section")
@@ -217,13 +216,11 @@ def parse(source: str) -> Document:
         elif command == "ref":
             target = current_environment or current_subsection or current_section
             if target is None: raise ValueError("@ref must appear after @section")
-            values = _parse_key_values(argument); target_name = values.get("name", argument)
-            target.content.append(Reference(target=target_name, text=values.get("text", "")))
+            values = _parse_key_values(argument); target_name = values.get("name", argument); target.content.append(Reference(target=target_name, text=values.get("text", "")))
         elif command in _ENVIRONMENTS:
             target = current_subsection or current_section
             if target is None: raise ValueError(f"@{command} must appear after @section")
-            title, label = _title_and_label(argument)
-            environment = Environment(kind=command, title=title or (argument if command != "proof" else ""), label=label)
+            title, label = _title_and_label(argument); environment = Environment(kind=command, title=title or (argument if command != "proof" else ""), label=label)
             target.content.append(environment); current_environment = environment
         elif command in _LIST_ENVIRONMENTS:
             target = current_environment or current_subsection or current_section
