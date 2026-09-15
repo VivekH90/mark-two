@@ -4,7 +4,7 @@ import re
 from pathlib import Path
 from typing import List
 
-from .ast import Button, Document, Environment, Image, ListBlock, ListItem, MathBlock, RelatedLink, Section, Subsection
+from .ast import Button, Document, Environment, Image, Label, ListBlock, ListItem, MathBlock, Reference, RelatedLink, Section, Subsection
 
 
 _DIRECTIVE = re.compile(r"^\s*@([A-Za-z][\w ]*)\s*\{(.*)\}\s*$")
@@ -72,26 +72,20 @@ def _extract_directive_blocks(text: str, command: str):
     blocks, position = [], 0
     while True:
         match = prefix.search(text, position)
-        if not match:
-            break
+        if not match: break
         start, brace_start = match.start(), match.end() - 1
         depth, quote, end = 0, None, None
         for index in range(brace_start, len(text)):
             char = text[index]
             if char in {'"', "'"}:
-                if quote == char:
-                    quote = None
-                elif quote is None:
-                    quote = char
+                if quote == char: quote = None
+                elif quote is None: quote = char
             elif quote is None:
                 if char == "{": depth += 1
                 elif char == "}":
                     depth -= 1
-                    if depth == 0:
-                        end = index
-                        break
-        if end is None:
-            raise ValueError(f"Unclosed @{command}{{...}} block")
+                    if depth == 0: end = index; break
+        if end is None: raise ValueError(f"Unclosed @{command}{{...}} block")
         blocks.append((start, end + 1, text[brace_start + 1:end]))
         position = end + 1
     return blocks
@@ -112,7 +106,6 @@ def _parse_list(argument: str, ordered: bool) -> ListBlock:
                 color = value.strip().strip('"\'') or "black"
                 continue
         item_parts.append(part)
-
     item_text = ",".join(item_parts)
     blocks = _extract_directive_blocks(item_text, "item")
     items, position = [], 0
@@ -128,20 +121,17 @@ def _parse_list(argument: str, ordered: bool) -> ListBlock:
         position = end
     if item_text[position:].strip().strip(",").strip():
         raise ValueError("Only @item{...} entries may appear inside @enumerate or @itemize")
-    if not items:
-        raise ValueError("@enumerate or @itemize requires at least one @item{...}")
+    if not items: raise ValueError("@enumerate or @itemize requires at least one @item{...}")
     return ListBlock(ordered=ordered, items=items, color=color)
 
 
 def _add_content(container, line: str) -> None:
-    if line.strip():
-        container.content.append(line.strip())
+    if line.strip(): container.content.append(line.strip())
 
 
 def _title_and_label(argument: str):
     values = _parse_key_values(argument)
-    title = values.get("name", "")
-    return title, values.get("label", "")
+    return values.get("name", ""), values.get("label", "")
 
 
 def parse(source: str) -> Document:
@@ -159,15 +149,13 @@ def parse(source: str) -> Document:
         if display_math_lines is not None:
             if raw_line.strip() == r"\]":
                 target = current_environment or current_subsection or current_section
-                if target is None:
-                    raise ValueError("display math must appear after @section")
+                if target is None: raise ValueError("display math must appear after @section")
                 target.content.append(MathBlock("\n".join(display_math_lines)))
                 display_math_lines = None
             else:
                 display_math_lines.append(raw_line)
             index += 1
             continue
-
         if raw_line.strip() == r"\[":
             display_math_lines = []
             index += 1
@@ -176,8 +164,7 @@ def parse(source: str) -> Document:
         match = _DIRECTIVE.match(raw_line)
         if not match:
             target = current_environment or current_subsection or current_section
-            if target is not None:
-                _add_content(target, raw_line)
+            if target is not None: _add_content(target, raw_line)
             index += 1
             continue
 
@@ -198,64 +185,54 @@ def parse(source: str) -> Document:
         elif command == "section":
             values = _parse_key_values(argument)
             title = values.get("name", argument)
-            label = values.get("label", "")
-            current_section = Section(title=title, color=values.get("color", "#111111"), slug=_unique_slug(_slugify(title), used_slugs), label=label)
+            current_section = Section(title=title, color=values.get("color", "#111111"), slug=_unique_slug(_slugify(title), used_slugs), label=values.get("label", ""))
             document.sections.append(current_section)
             current_subsection = None
         elif command == "subsection":
-            if current_section is None:
-                raise ValueError("@subsection must appear after @section")
+            if current_section is None: raise ValueError("@subsection must appear after @section")
             title, label = _title_and_label(argument)
-            current_subsection = Subsection(title=title or argument, slug=_unique_slug(_slugify(title or argument), used_slugs), label=label)
+            title = title or argument
+            current_subsection = Subsection(title=title, slug=_unique_slug(_slugify(title), used_slugs), label=label)
             current_section.subsections.append(current_subsection)
         elif command == "image":
             target = current_environment or current_subsection or current_section
-            if target is None:
-                raise ValueError("@image must appear after @section")
+            if target is None: raise ValueError("@image must appear after @section")
             values = _parse_key_values(argument)
             src = values.get("src", "")
-            if not src:
-                raise ValueError("@image requires src = ...")
+            if not src: raise ValueError("@image requires src = ...")
             target.content.append(Image(src=src, alt=values.get("alt", ""), caption=values.get("caption", ""), label=values.get("label", "")))
         elif command == "label":
             target = current_environment or current_subsection or current_section
-            if target is None:
-                raise ValueError("@label must appear after @section")
+            if target is None: raise ValueError("@label must appear after @section")
             label = argument.strip().strip('"\'')
-            if not label:
-                raise ValueError("@label requires a label name")
-            from .ast import Label
+            if not label: raise ValueError("@label requires a label name")
             target.content.append(Label(name=label))
         elif command == "ref":
-            values = _parse_key_values(argument)
             target = current_environment or current_subsection or current_section
-            if target is None:
-                raise ValueError("@ref must appear after @section")
-            target.content.append(__import__(".ast", fromlist=["Reference"]).Reference(target=values.get("name", argument), text=values.get("text", "")))
+            if target is None: raise ValueError("@ref must appear after @section")
+            values = _parse_key_values(argument)
+            target_name = values.get("name", argument)
+            target.content.append(Reference(target=target_name, text=values.get("text", "")))
         elif command in _ENVIRONMENTS:
             target = current_subsection or current_section
-            if target is None:
-                raise ValueError(f"@{command} must appear after @section")
+            if target is None: raise ValueError(f"@{command} must appear after @section")
             title, label = _title_and_label(argument)
             environment = Environment(kind=command, title=title or (argument if command != "proof" else ""), label=label)
             target.content.append(environment)
             current_environment = environment
         elif command in _LIST_ENVIRONMENTS:
             target = current_environment or current_subsection or current_section
-            if target is None:
-                raise ValueError(f"@{command} must appear after @section")
+            if target is None: raise ValueError(f"@{command} must appear after @section")
             target.content.append(_parse_list(argument, ordered=(command == "enumerate")))
         elif command in {"relatedlinks", "relatedlink"}:
             values = _parse_key_values(argument)
-            if "href" not in values:
-                raise ValueError("@relatedlinks requires href = ...")
+            if "href" not in values: raise ValueError("@relatedlinks requires href = ...")
             document.related_links.append(RelatedLink(name=values.get("name", "Related link"), href=values["href"]))
         else:
             raise ValueError(f"Unknown Mark Two directive: @{match.group(1)}")
         index += 1
 
-    if display_math_lines is not None:
-        raise ValueError("Unclosed display math block: expected \\]")
+    if display_math_lines is not None: raise ValueError("Unclosed display math block: expected \\]")
     return document
 
 
