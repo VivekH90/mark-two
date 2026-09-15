@@ -53,6 +53,51 @@ def _parse_key_values(text: str):
     return values
 
 
+def _parse_image_group(argument: str):
+    """Parse one @image block as either a single image or a multi-image row."""
+    values = _parse_key_values(argument)
+    indexed_sources = {}
+    indexed_widths = {}
+    for key, value in values.items():
+        source_match = re.fullmatch(r"image\((\d+)\)", key, re.IGNORECASE)
+        width_match = re.fullmatch(r"width\((\d+)\)", key, re.IGNORECASE)
+        if source_match:
+            indexed_sources[int(source_match.group(1))] = value
+        elif width_match:
+            indexed_widths[int(width_match.group(1))] = value
+
+    if not indexed_sources:
+        src = values.get("src", values.get("image", ""))
+        if not src:
+            raise ValueError("@image requires src = ... or image = ...")
+        return [Image(
+            src=src,
+            alt=values.get("alt", ""),
+            caption=values.get("caption", ""),
+            label=values.get("label", ""),
+            width=values.get("width", ""),
+            height=values.get("height", ""),
+        )]
+
+    indexes = sorted(indexed_sources)
+    expected = list(range(1, len(indexes) + 1))
+    if indexes != expected:
+        raise ValueError("Multi-image @image blocks must use consecutive image(1), image(2), ... entries")
+    if len(indexes) < 2:
+        raise ValueError("Use image = ... for a single image")
+
+    count = len(indexes)
+    first_width = indexed_widths.get(1, "")
+    return [Image(
+        src=indexed_sources[index],
+        alt=values.get(f"alt({index})", values.get("alt", "")),
+        caption=values.get("caption", ""),
+        label=values.get("label", ""),
+        width=(first_width if index == 1 else ""),
+        height=values.get("height", ""),
+    ) for index in range(1, count + 1)]
+
+
 def _unique_slug(base: str, used: set[str]) -> str:
     if base not in used:
         used.add(base); return base
@@ -162,9 +207,7 @@ def parse(source: str) -> Document:
         elif command == "image":
             target = current_environment or current_subsection or current_section
             if target is None: raise ValueError("@image must appear after @section")
-            values = _parse_key_values(argument); src = values.get("src", "")
-            if not src: raise ValueError("@image requires src = ...")
-            target.content.append(Image(src=src, alt=values.get("alt", ""), caption=values.get("caption", ""), label=values.get("label", ""), width=values.get("width", ""), height=values.get("height", "")))
+            target.content.extend(_parse_image_group(argument))
         elif command == "label":
             target = current_environment or current_subsection or current_section
             if target is None: raise ValueError("@label must appear after @section")
