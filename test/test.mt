@@ -15,6 +15,16 @@ This section verifies that ordinary prose is parsed correctly and that the gener
 The first goal is to verify section and subsection structure.
 The second goal is to verify that the table of contents points to the generated anchors.
 
+@section{Images, color = #8a5a2c}
+
+This image has a caption:
+
+@image{src = https://placehold.co/900x500/png, alt = A placeholder diagram, caption = Figure 1. An example image with a caption.}
+
+This image has no caption:
+
+@image{src = https://placehold.co/700x400/png, alt = A placeholder image without a caption}
+
 @section{Mathematics, color = #6b3fa0}
 
 Inline mathematics should be processed by MathJax: $x^2 + y^2 = z^2$.
