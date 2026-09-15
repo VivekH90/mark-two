@@ -56,3 +56,23 @@ def test_multiline_image_and_documenttitle():
     image = document.sections[0].content[0]
     assert image.width == '60%'
     assert image.height == '200px'
+
+
+def test_per_image_sizes_in_image_group():
+    source = '''@documenttitle{Mathematics}
+@section{Test}
+@image{
+    image(1) = first.png,
+    image(2) = second.png,
+    image(3) = third.png,
+    width(1) = 50%,
+    width(2) = 25%,
+    height(1) = 240px,
+    height(2) = 180px,
+    caption = A resizable figure group.
+}
+'''
+    document = parse(source)
+    images = document.sections[0].content
+    assert [image.width for image in images] == ['50%', '25%', '']
+    assert [image.height for image in images] == ['240px', '180px', '']
