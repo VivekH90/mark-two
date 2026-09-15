@@ -33,15 +33,18 @@ button, input, select, textarea { font-family: inherit; }
 .article-subsection { scroll-margin-top: 24px; margin: 25px 0 0 8px; }
 .article-subsection h3 { margin: 0 0 11px; font-size: clamp(21px, 2.1vw, 27px); line-height: 1.25; font-weight: 700; }
 .article p { margin: 0 0 17px; }
-.math-display { margin: 24px 0; text-align: center; overflow-x: auto; overflow-y: hidden; }
 .article-image { margin: 28px auto 30px; max-width: 100%; text-align: center; }
 .article-image img { display: block; width: auto; max-width: 100%; height: auto; margin: 0 auto; border-radius: 10px; }
 .article-image figcaption { max-width: 90%; margin: 10px auto 0; color: #555555; font-size: 0.92em; line-height: 1.4; text-align: center; }
+.math-display { margin: 20px 0 22px; overflow-x: auto; overflow-y: hidden; text-align: center; }
+.math-display mjx-container { margin: 0 auto !important; }
 .mark-list { margin: 8px 0 20px 1.8em; padding-left: 1.15em; }
 .mark-list li { margin: 6px 0; padding-left: 0.25em; }
 .mark-list li::marker { color: var(--list-color, black); font-weight: 700; }
 ul.mark-list { list-style-type: disc; }
 ol.mark-list { list-style-type: decimal; }
+.list-item-title { display: block; color: var(--list-color, black); font-size: 1.08em; font-weight: 700; line-height: 1.35; margin-bottom: 3px; }
+.mark-list li.has-list-item-title::marker { font-size: 1.08em; }
 .mark-list .article-image { margin: 18px 0 22px; text-align: left; }
 .mark-list .article-image img { margin-left: 0; }
 .mark-list .article-image figcaption { margin-left: 0; text-align: left; }
