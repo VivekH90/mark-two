@@ -22,12 +22,7 @@ def _slugify(text: str) -> str:
 
 
 def _quote_starts(text: str, index: int) -> bool:
-    """Return whether a quote at index starts a quoted value.
-
-    Apostrophes in ordinary prose, such as Cauchy's or Liouville's, are not
-    string delimiters. A single quote is treated as a delimiter only when it
-    occurs at the start of a value, after '=', ',', or an opening delimiter.
-    """
+    """Return whether a quote at index starts a quoted value."""
     char = text[index]
     if char == '"':
         return True
@@ -138,8 +133,7 @@ def _unique_slug(base: str, used: set[str]) -> str:
         used.add(base); return base
     number = 2
     while f"{base}-{number}" in used: number += 1
-    slug = f"{base}-{number}"; used.add(slug)
-    return slug
+    slug = f"{base}-{number}"; used.add(slug); return slug
 
 
 def _extract_directive_blocks(text: str, command: str):
@@ -155,7 +149,6 @@ def _extract_directive_blocks(text: str, command: str):
             char = text[index]
             if escaped:
                 escaped = False
-                blocks_char = char
                 continue
             if char == "\\":
                 escaped = True
@@ -197,48 +190,42 @@ def _extract_directive(lines: List[str], start_index: int):
     for line_index in range(start_index, len(lines)):
         line = lines[line_index]
         offset = brace_start if line_index == start_index else 0
+        current = []
 
         for position, char in enumerate(line[offset:], start=offset):
             if escaped:
                 escaped = False
-                argument_parts[-1] += char
+                current.append(char)
                 continue
             if char == "\\":
                 escaped = True
-                if not argument_parts:
-                    argument_parts.append("")
-                argument_parts[-1] += char
+                current.append(char)
                 continue
             if char in {'"', "'"} and _quote_starts(line, position):
                 if quote == char:
                     quote = None
                 elif quote is None:
                     quote = char
-                if not argument_parts:
-                    argument_parts.append("")
-                argument_parts[-1] += char
+                current.append(char)
                 continue
             if quote is None and char == "{":
                 depth += 1
-            elif quote is None and char == "}":
+                if depth > 1:
+                    current.append(char)
+                continue
+            if quote is None and char == "}":
                 depth -= 1
                 if depth == 0:
                     trailing = line[position + 1:]
                     if trailing.strip():
                         raise ValueError(f"Unexpected text after @{command}{{...}} directive")
-                    if not argument_parts:
-                        argument_parts.append("")
-                    argument_parts[-1] += line[offset:position] if not argument_parts[-1] else ""
-                    argument = "\n".join(argument_parts).strip()
-                    return command, argument, line_index
-            if not argument_parts:
-                argument_parts.append("")
-            argument_parts[-1] += char
+                    argument_parts.append("".join(current).rstrip())
+                    return command, "\n".join(argument_parts).strip(), line_index
+                current.append(char)
+                continue
+            current.append(char)
 
-        if not argument_parts:
-            argument_parts.append("")
-        if line_index < len(lines) - 1:
-            argument_parts.append("")
+        argument_parts.append("".join(current))
 
     raise ValueError(f"Unclosed @{command}{{...}} block")
 
