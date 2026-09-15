@@ -147,12 +147,7 @@ def _extract_directive_blocks(text: str, command: str):
 
 
 def _extract_directive(lines: List[str], start_index: int):
-    """Extract one balanced directive starting at a source line.
-
-    Directives may now span any number of lines. Braces inside nested
-    directives, TeX commands, and quoted strings are handled while looking
-    for the matching closing brace.
-    """
+    """Extract one balanced directive starting at a source line."""
     first_line = lines[start_index]
     match = _DIRECTIVE_START.match(first_line)
     if not match:
@@ -160,47 +155,42 @@ def _extract_directive(lines: List[str], start_index: int):
 
     command = match.group(1)
     brace_start = match.end() - 1
-    depth, quote, escaped = 0, None, False
+    depth = 0
+    quote = None
+    escaped = False
     argument_parts = []
 
     for line_index in range(start_index, len(lines)):
         line = lines[line_index]
         offset = brace_start if line_index == start_index else 0
-        current = []
 
-        for char in line[offset:]:
+        for position, char in enumerate(line[offset:], start=offset):
             if escaped:
                 escaped = False
-                current.append(char)
                 continue
             if char == "\\":
                 escaped = True
-                current.append(char)
                 continue
             if char in {'"', "'"}:
                 if quote == char:
                     quote = None
                 elif quote is None:
                     quote = char
-                current.append(char)
                 continue
             if quote is None and char == "{":
                 depth += 1
-                if depth > 1:
-                    current.append(char)
-                continue
-            if quote is None and char == "}":
+            elif quote is None and char == "}":
                 depth -= 1
                 if depth == 0:
-                    trailing = line[offset:][len("".join(current)) + 1:]
+                    trailing = line[position + 1:]
                     if trailing.strip():
                         raise ValueError(f"Unexpected text after @{command}{{...}} directive")
-                    return command, "\n".join(argument_parts + ["".join(current).rstrip()]).strip(), line_index
-                current.append(char)
-                continue
-            current.append(char)
+                    before_close = line[offset:position]
+                    argument_parts.append(before_close)
+                    argument = "\n".join(argument_parts).strip()
+                    return command, argument, line_index
 
-        argument_parts.append("".join(current))
+        argument_parts.append(line[offset:])
 
     raise ValueError(f"Unclosed @{command}{{...}} block")
 
@@ -211,29 +201,38 @@ def _parse_list_item_content(body: str):
 
 def _parse_list(argument: str, ordered: bool) -> ListBlock:
     color = "black"
-    parts = _split_top_level(argument); item_parts = []
+    parts = _split_top_level(argument)
+    item_parts = []
     for part in parts:
         if "=" in part and not part.lstrip().lower().startswith("@item"):
             key, value = part.split("=", 1)
             if key.strip().lower() == "color":
-                color = value.strip().strip('"\'') or "black"; continue
+                color = value.strip().strip('"\'') or "black"
+                continue
         item_parts.append(part)
-    item_text = ",".join(item_parts); blocks = _extract_directive_blocks(item_text, "item")
+    item_text = ",".join(item_parts)
+    blocks = _extract_directive_blocks(item_text, "item")
     items, position = [], 0
     for start, end, body in blocks:
-        if item_text[position:start].strip().strip(",").strip(): raise ValueError("Only @item{...} entries may appear inside @enumerate or @itemize")
+        if item_text[position:start].strip().strip(",").strip():
+            raise ValueError("Only @item{...} entries may appear inside @enumerate or @itemize")
         title = ""
         title_match = re.match(r"\s*title\s*=\s*(?:\"((?:[^\"\\]|\\.)*)\"|'((?:[^'\\]|\\.)*)')\s*,?\s*(.*)\Z", body, re.DOTALL | re.IGNORECASE)
         if title_match:
-            title = (title_match.group(1) if title_match.group(1) is not None else title_match.group(2)).strip(); body = title_match.group(3).strip()
-        items.append(ListItem(content=_parse_list_item_content(body), title=title)); position = end
-    if item_text[position:].strip().strip(",").strip(): raise ValueError("Only @item{...} entries may appear inside @enumerate or @itemize")
-    if not items: raise ValueError("@enumerate or @itemize requires at least one @item{...}")
+            title = (title_match.group(1) if title_match.group(1) is not None else title_match.group(2)).strip()
+            body = title_match.group(3).strip()
+        items.append(ListItem(content=_parse_list_item_content(body), title=title))
+        position = end
+    if item_text[position:].strip().strip(",").strip():
+        raise ValueError("Only @item{...} entries may appear inside @enumerate or @itemize")
+    if not items:
+        raise ValueError("@enumerate or @itemize requires at least one @item{...}")
     return ListBlock(ordered=ordered, items=items, color=color)
 
 
 def _add_content(container, line: str) -> None:
-    if line.strip(): container.content.append(line.strip())
+    if line.strip():
+        container.content.append(line.strip())
 
 
 def _title_and_label(argument: str):
@@ -242,24 +241,42 @@ def _title_and_label(argument: str):
 
 
 def parse(source: str) -> Document:
-    document = Document(); current_section = None; current_subsection = None; current_environment = None
-    used_slugs = set(); display_math_lines = None; lines = source.splitlines(); index = 0; image_group_id = 0
+    document = Document()
+    current_section = None
+    current_subsection = None
+    current_environment = None
+    used_slugs = set()
+    display_math_lines = None
+    lines = source.splitlines()
+    index = 0
+    image_group_id = 0
+
     while index < len(lines):
         raw_line = lines[index]
         if display_math_lines is not None:
             if raw_line.strip() == r"\]":
                 target = current_environment or current_subsection or current_section
-                if target is None: raise ValueError("display math must appear after @section")
-                target.content.append(MathBlock("\n".join(display_math_lines))); display_math_lines = None
-            else: display_math_lines.append(raw_line)
-            index += 1; continue
-        if raw_line.strip() == r"\[": display_math_lines = []; index += 1; continue
+                if target is None:
+                    raise ValueError("display math must appear after @section")
+                target.content.append(MathBlock("\n".join(display_math_lines)))
+                display_math_lines = None
+            else:
+                display_math_lines.append(raw_line)
+            index += 1
+            continue
+
+        if raw_line.strip() == r"\[":
+            display_math_lines = []
+            index += 1
+            continue
 
         directive = _extract_directive(lines, index)
         if directive is None:
             target = current_environment or current_subsection or current_section
-            if target is not None: _add_content(target, raw_line)
-            index += 1; continue
+            if target is not None:
+                _add_content(target, raw_line)
+            index += 1
+            continue
 
         command, argument, end_index = directive
         command = command.strip().lower().replace(" ", "")
@@ -267,48 +284,74 @@ def parse(source: str) -> Document:
             current_environment = None
 
         if command == "documenttitle":
-            values = _parse_key_values(argument); document.document_title = values.get("name", argument); document.banner = values.get("banner", ""); document.banner_color = values.get("color", "")
-        elif command == "title": document.article_title = argument
+            values = _parse_key_values(argument)
+            document.document_title = values.get("name", argument)
+            document.banner = values.get("banner", "")
+            document.banner_color = values.get("color", "")
+        elif command == "title":
+            document.article_title = argument
         elif command == "button":
-            values = _parse_key_values(argument); document.buttons.append(Button(name=values.get("name", "Button"), href=values.get("href", "#"), color=values.get("color", "black")))
+            values = _parse_key_values(argument)
+            document.buttons.append(Button(name=values.get("name", "Button"), href=values.get("href", "#"), color=values.get("color", "black")))
         elif command == "section":
-            values = _parse_key_values(argument); title = values.get("name", argument)
-            current_section = Section(title=title, color=values.get("color", "#111111"), slug=_unique_slug(_slugify(title), used_slugs), label=values.get("label", "")); document.sections.append(current_section); current_subsection = None
+            values = _parse_key_values(argument)
+            title = values.get("name", argument)
+            current_section = Section(title=title, color=values.get("color", "#111111"), slug=_unique_slug(_slugify(title), used_slugs), label=values.get("label", ""))
+            document.sections.append(current_section)
+            current_subsection = None
         elif command == "subsection":
-            if current_section is None: raise ValueError("@subsection must appear after @section")
-            title, label = _title_and_label(argument); title = title or argument
-            current_subsection = Subsection(title=title, slug=_unique_slug(_slugify(title), used_slugs), label=label); current_section.subsections.append(current_subsection)
+            if current_section is None:
+                raise ValueError("@subsection must appear after @section")
+            title, label = _title_and_label(argument)
+            title = title or argument
+            current_subsection = Subsection(title=title, slug=_unique_slug(_slugify(title), used_slugs), label=label)
+            current_section.subsections.append(current_subsection)
         elif command == "image":
             target = current_environment or current_subsection or current_section
-            if target is None: raise ValueError("@image must appear after @section")
+            if target is None:
+                raise ValueError("@image must appear after @section")
             image_group_id += 1
             target.content.extend(_parse_image_group(argument, image_group_id))
         elif command == "label":
             target = current_environment or current_subsection or current_section
-            if target is None: raise ValueError("@label must appear after @section")
+            if target is None:
+                raise ValueError("@label must appear after @section")
             label = argument.strip().strip('"\'')
-            if not label: raise ValueError("@label requires a label name")
+            if not label:
+                raise ValueError("@label requires a label name")
             target.content.append(Label(name=label))
         elif command == "ref":
             target = current_environment or current_subsection or current_section
-            if target is None: raise ValueError("@ref must appear after @section")
-            values = _parse_key_values(argument); target_name = values.get("name", argument); target.content.append(Reference(target=target_name, text=values.get("text", "")))
+            if target is None:
+                raise ValueError("@ref must appear after @section")
+            values = _parse_key_values(argument)
+            target_name = values.get("name", argument)
+            target.content.append(Reference(target=target_name, text=values.get("text", "")))
         elif command in _ENVIRONMENTS:
             target = current_subsection or current_section
-            if target is None: raise ValueError(f"@{command} must appear after @section")
-            title, label = _title_and_label(argument); environment = Environment(kind=command, title=title or (argument if command != "proof" else ""), label=label)
-            target.content.append(environment); current_environment = environment
+            if target is None:
+                raise ValueError(f"@{command} must appear after @section")
+            title, label = _title_and_label(argument)
+            environment = Environment(kind=command, title=title or (argument if command != "proof" else ""), label=label)
+            target.content.append(environment)
+            current_environment = environment
         elif command in _LIST_ENVIRONMENTS:
             target = current_environment or current_subsection or current_section
-            if target is None: raise ValueError(f"@{command} must appear after @section")
+            if target is None:
+                raise ValueError(f"@{command} must appear after @section")
             target.content.append(_parse_list(argument, ordered=(command == "enumerate")))
         elif command in {"relatedlinks", "relatedlink"}:
             values = _parse_key_values(argument)
-            if "href" not in values: raise ValueError("@relatedlinks requires href = ...")
+            if "href" not in values:
+                raise ValueError("@relatedlinks requires href = ...")
             document.related_links.append(RelatedLink(name=values.get("name", "Related link"), href=values["href"]))
-        else: raise ValueError(f"Unknown Mark Two directive: @{command}")
+        else:
+            raise ValueError(f"Unknown Mark Two directive: @{command}")
+
         index = end_index + 1
-    if display_math_lines is not None: raise ValueError("Unclosed display math block: expected \\]")
+
+    if display_math_lines is not None:
+        raise ValueError("Unclosed display math block: expected \\]")
     return document
 
 
