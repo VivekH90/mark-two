@@ -21,15 +21,22 @@ class Image:
 
 
 @dataclass
+class MathBlock:
+    """A display-math block delimited by \\[ and \\]."""
+
+    content: str
+
+
+@dataclass
 class Environment:
     """A semantic boxed environment such as theorem or definition."""
 
     kind: str
     title: str = ""
-    content: List[Union[str, Image]] = field(default_factory=list)
+    content: List[Union[str, Image, MathBlock]] = field(default_factory=list)
 
 
-ContentItem = Union[str, Image, Environment]
+ContentItem = Union[str, Image, MathBlock, Environment]
 
 
 @dataclass
