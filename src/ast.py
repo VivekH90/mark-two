@@ -28,15 +28,24 @@ class MathBlock:
 
 
 @dataclass
+class ListBlock:
+    """An ordered or unordered list with colored markers."""
+
+    ordered: bool
+    items: List[str] = field(default_factory=list)
+    color: str = "black"
+
+
+@dataclass
 class Environment:
     """A semantic boxed environment such as theorem or definition."""
 
     kind: str
     title: str = ""
-    content: List[Union[str, Image, MathBlock]] = field(default_factory=list)
+    content: List[Union[str, Image, MathBlock, ListBlock]] = field(default_factory=list)
 
 
-ContentItem = Union[str, Image, MathBlock, Environment]
+ContentItem = Union[str, Image, MathBlock, ListBlock, Environment]
 
 
 @dataclass
