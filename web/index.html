@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ARTICLE_TITLE}} | {{DOCUMENT_TITLE}}</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="site-shell">
+        <header class="site-header">
+            <a class="document-title" href="#">{{DOCUMENT_TITLE}}</a>
+            <nav class="navigation" aria-label="Site navigation">
+                {{BUTTONS}}
+            </nav>
+        </header>
+
+        <div class="page-layout">
+            <main class="article">
+                <h1 class="article-title">{{ARTICLE_TITLE}}</h1>
+                {{ARTICLE}}
+            </main>
+
+            <aside class="sidebar" aria-label="Article information">
+                <section class="sidebar-card toc-card">
+                    <div class="sidebar-heading">
+                        <h2>Table of Contents</h2>
+                        <button class="sidebar-toggle" type="button" aria-label="Toggle table of contents" aria-expanded="true">☷</button>
+                    </div>
+                    <nav class="toc" aria-label="Table of contents">
+                        <ol>
+                            {{TOC}}
+                        </ol>
+                    </nav>
+                </section>
+
+                <section class="sidebar-card related-card">
+                    <div class="sidebar-heading">
+                        <h2>Related Links</h2>
+                        <span class="link-symbol" aria-hidden="true">↗</span>
+                    </div>
+                    <ul class="related-links">
+                        {{RELATED_LINKS}}
+                    </ul>
+                </section>
+            </aside>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
