@@ -3,7 +3,7 @@
 from html import escape
 from pathlib import Path
 
-from .ast import Document, Environment, Section, Subsection
+from .ast import Document, Environment, Image, Section, Subsection
 
 
 def _paragraphs(lines):
@@ -22,6 +22,19 @@ def _paragraphs(lines):
     return "\n".join(f"<p>{escape(p)}</p>" for p in paragraphs)
 
 
+def _image_html(image: Image) -> str:
+    src = escape(image.src, quote=True)
+    alt = escape(image.alt, quote=True)
+    html = [
+        '<figure class="article-image">',
+        f'<img src="{src}" alt="{alt}" loading="lazy">',
+    ]
+    if image.caption:
+        html.append(f'<figcaption>{escape(image.caption)}</figcaption>')
+    html.append('</figure>')
+    return "\n".join(html)
+
+
 def _environment_html(environment: Environment, number: int) -> str:
     kind = escape(environment.kind.lower())
     label = environment.kind.capitalize()
@@ -31,7 +44,7 @@ def _environment_html(environment: Environment, number: int) -> str:
     return (
         f'<div class="math-environment {kind}">'
         f'<div class="environment-heading">{heading}</div>'
-        f'<div class="environment-content">{_paragraphs(environment.content)}</div>'
+        f'<div class="environment-content">{_content_html(environment.content, {})}</div>'
         f"</div>"
     )
 
@@ -42,6 +55,8 @@ def _content_html(items, environment_counters) -> str:
         if isinstance(item, Environment):
             environment_counters[item.kind] = environment_counters.get(item.kind, 0) + 1
             html.append(_environment_html(item, environment_counters[item.kind]))
+        elif isinstance(item, Image):
+            html.append(_image_html(item))
         else:
             html.append(_paragraphs([item]))
     return "\n".join(html)
