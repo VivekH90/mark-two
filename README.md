@@ -93,12 +93,12 @@ Mark Two uses `@` directives for document structure and semantics.
 
 | Command | Purpose | Example |
 | --- | --- | --- |
-| `@documenttitle` | Sets the document/site title and optional banner and title color. | `@documenttitle{My Notes, banner = images/banner.jpg, color = #ffcc00}` |
+| `@documenttitle` | Sets the document/site title and optional banner. Supports `color` for the banner title text. | `@documenttitle{My Notes, banner = images/banner.jpg, color = #ffcc00}` |
 | `@button` | Adds a navigation button. | `@button{Home, href = /, color = black}` |
 | `@title` | Sets the article title. | `@title{Introduction to Analysis}` |
 | `@section` | Creates a numbered section. Supports `color` and `label`. | `@section{Limits, color = #315a9b, label = limits}` |
 | `@subsection` | Creates a numbered subsection. Supports `label`. | `@subsection{One-sided limits, label = one-sided}` |
-| `@image` | Inserts a single image or a multi-image figure. Single images support `image`/`src`, `width`, `height`, `alt`, `caption`, and `label`. | `@image{image = figure.png, width = 60%, caption = A diagram}` |
+| `@image` | Inserts a single image or a multi-image row. Single images support `image`/`src`, `width`, `height`, `alt`, `caption`, and `label`. Multiple images use `image(1)`, `image(2)`, ...; they share one row with equal image heights and equal widths by default. `width(1)` can set the first image's share of the row, with the remaining space divided equally among the other images. `width(2)`, `width(3)`, etc. are ignored for multi-image rows. | `@image{image(1) = first.png, image(2) = second.png, width(1) = 40%, caption = A comparison.}` |
 | `@enumerate` | Creates an ordered list. | `@enumerate{color = green, @item{First}, @item{Second}}` |
 | `@itemize` | Creates an unordered list. | `@itemize{color = #8a3d91, @item{First}, @item{Second}}` |
 | `@item` | Creates an item inside `@enumerate` or `@itemize`; may have a title. | `@item{An item}` or `@item{title = "Step one", Details.}` |
@@ -119,48 +119,46 @@ Mark Two uses `@` directives for document structure and semantics.
 | `@relatedlinks` | Adds a related link to the sidebar. | `@relatedlinks{Python, href = https://www.python.org}` |
 | `@relatedlink` | Alias for `@relatedlinks`. | `@relatedlink{Python, href = https://www.python.org}` |
 
-## Images and Figures
+### Images
 
-A single image works as before:
+Single-image figures can be written as:
 
 ```text
-@image{image = figure.png, width = 60%, caption = A single figure.}
+@image{
+    image = figure.png,
+    width = 65%,
+    caption = The completeness construction.
+}
 ```
 
-For multiple images, put them in one `@image` block using indexed image names:
+`src = figure.png` is also accepted for single images. Width and height accept CSS size values such as `300px`, `50%`, `20rem`, or `80vw`.
+
+For multiple images in one figure, use indexed image names:
 
 ```text
 @image{
     image(1) = first.png,
     image(2) = second.png,
     image(3) = third.png,
-    caption = Three related images.
+    caption = Three stages of the construction.
 }
 ```
 
-The images are placed in one row. They share the available width equally and are displayed at the same height. If you specify `width(1)`, that fixes the width of the first image and the remaining images divide the remaining space equally:
+All images are placed in the same row with equal heights. When `width(1)` is omitted, the available width is shared equally between all images. When `width(1)` is present, it controls only the first image, and the remaining width is divided equally between images 2, 3, and so on:
 
 ```text
 @image{
     image(1) = wide.png,
     image(2) = middle.png,
-    image(3) = small.png,
+    image(3) = narrow.png,
     width(1) = 50%,
-    width(2) = 20%,
-    width(3) = 10%,
     caption = One wide image and two smaller images.
 }
 ```
 
-Only `width(1)` is used in a multi-image figure. `width(2)`, `width(3)`, and so on are intentionally ignored. If `width(1)` is omitted, all images share the width equally.
+For multi-image figures, `width(2)`, `width(3)`, etc. are ignored by design.
 
-Whenever `caption` is present, Mark Two automatically formats it as:
-
-```text
-Figure N: Your caption text.
-```
-
-where `Figure N:` is bold. A multi-image row counts as one figure.
+Whenever an image or image group has a `caption`, Mark Two automatically formats it as **Figure N:** followed by the caption text, where the figure number counts image figures in document order. A multi-image row counts as one figure.
 
 ## Cross References
 
