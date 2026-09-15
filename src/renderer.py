@@ -3,7 +3,7 @@
 from html import escape
 from pathlib import Path
 
-from .ast import Document, Environment, Image, Section, Subsection
+from .ast import Document, Environment, Image, MathBlock, Section, Subsection
 
 
 def _paragraphs(lines):
@@ -20,6 +20,12 @@ def _paragraphs(lines):
     if current:
         paragraphs.append(" ".join(current))
     return "\n".join(f"<p>{escape(p)}</p>" for p in paragraphs)
+
+
+def _math_html(math: MathBlock) -> str:
+    # TeX backslashes must be preserved exactly. HTML escaping does not alter
+    # backslashes, so the source reaches MathJax unchanged.
+    return f'<div class="math-display">\\[{math.content}\\]</div>'
 
 
 def _image_html(image: Image) -> str:
@@ -57,6 +63,8 @@ def _content_html(items, environment_counters) -> str:
             html.append(_environment_html(item, environment_counters[item.kind]))
         elif isinstance(item, Image):
             html.append(_image_html(item))
+        elif isinstance(item, MathBlock):
+            html.append(_math_html(item))
         else:
             html.append(_paragraphs([item]))
     return "\n".join(html)
@@ -103,9 +111,7 @@ def render(document: Document, template_path: str | Path) -> str:
             '</div>'
         )
     else:
-        banner = (
-            f'<a class="document-title" href="#">{escape(document.document_title)}</a>'
-        )
+        banner = f'<a class="document-title" href="#">{escape(document.document_title)}</a>'
 
     toc = []
     article = []
