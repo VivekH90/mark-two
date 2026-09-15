@@ -1,11 +1,7 @@
-"""Core document model for Mark Two.
-
-The AST intentionally models the things the author writes about rather than
-HTML elements. HTML is a rendering detail handled by renderer.py.
-"""
+"""Core document model for Mark Two."""
 
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import List, Optional, Union
 
 
 @dataclass
@@ -16,16 +12,29 @@ class Button:
 
 
 @dataclass
+class Environment:
+    """A semantic boxed environment such as theorem or definition."""
+
+    kind: str
+    title: str = ""
+    content: List[str] = field(default_factory=list)
+
+
+ContentItem = Union[str, Environment]
+
+
+@dataclass
 class Subsection:
     title: str
-    content: List[str] = field(default_factory=list)
+    content: List[ContentItem] = field(default_factory=list)
     slug: Optional[str] = None
 
 
 @dataclass
 class Section:
     title: str
-    content: List[str] = field(default_factory=list)
+    color: str = "#111111"
+    content: List[ContentItem] = field(default_factory=list)
     subsections: List[Subsection] = field(default_factory=list)
     slug: Optional[str] = None
 
