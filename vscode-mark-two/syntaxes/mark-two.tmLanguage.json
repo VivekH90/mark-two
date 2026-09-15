@@ -1,0 +1,77 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Mark Two",
+  "scopeName": "source.mark-two",
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#math-display" },
+    { "include": "#math-inline" },
+    { "include": "#directives" },
+    { "include": "#strings" },
+    { "include": "#numbers" },
+    { "include": "#urls" }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        { "name": "comment.line.percent.mark-two", "match": "%.*$" }
+      ]
+    },
+    "math-display": {
+      "name": "markup.math.display.mark-two",
+      "begin": "\\\\\\[",
+      "end": "\\\\\\]",
+      "patterns": [
+        { "include": "#math-common" }
+      ]
+    },
+    "math-inline": {
+      "name": "markup.math.inline.mark-two",
+      "begin": "\\\\\\(",
+      "end": "\\\\\\)",
+      "patterns": [
+        { "include": "#math-common" }
+      ]
+    },
+    "math-common": {
+      "patterns": [
+        { "name": "constant.numeric.math.mark-two", "match": "\\b\\d+(?:\\.\\d+)?\\b" },
+        { "name": "keyword.operator.math.mark-two", "match": "[+\\-*/=<>^_]" },
+        { "name": "support.function.math.mark-two", "match": "\\\\(?:frac|sqrt|sum|prod|int|lim|sin|cos|tan|log|ln|exp|infty|cdot|times|to|in|notin|leq|geq)\\b" },
+        { "name": "variable.parameter.math.mark-two", "match": "\\b[a-zA-Z]\\b" }
+      ]
+    },
+    "directives": {
+      "patterns": [
+        {
+          "name": "keyword.control.directive.mark-two",
+          "match": "@(documenttitle|button|title|section|subsection|image|enumerate|itemize|item|theorem|lemma|definition|corollary|axiom|proof|relatedlinks|relatedlink)\\b"
+        },
+        {
+          "name": "variable.other.parameter.mark-two",
+          "match": "\\b(?:href|color|src|alt|caption|title)\\b(?=\\s*=)"
+        },
+        {
+          "name": "constant.language.boolean.mark-two",
+          "match": "\\b(?:true|false)\\b"
+        }
+      ]
+    },
+    "strings": {
+      "name": "string.quoted.double.mark-two",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [
+        { "name": "constant.character.escape.mark-two", "match": "\\\\\\.|\\\\$" }
+      ]
+    },
+    "numbers": {
+      "name": "constant.numeric.mark-two",
+      "match": "\\b\\d+(?:\\.\\d+)?\\b"
+    },
+    "urls": {
+      "name": "markup.underline.link.mark-two",
+      "match": "https?://[^\\s,}]+"
+    }
+  }
+}
