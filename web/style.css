@@ -43,6 +43,9 @@ button, input, select, textarea { font-family: inherit; }
 .mark-list li::marker { color: var(--list-color, black); font-weight: 700; }
 ul.mark-list { list-style-type: disc; }
 ol.mark-list { list-style-type: decimal; }
+.mark-list .article-image { margin: 18px 0 22px; text-align: left; }
+.mark-list .article-image img { margin-left: 0; }
+.mark-list .article-image figcaption { margin-left: 0; text-align: left; }
 .sidebar { position: sticky; top: 20px; display: flex; flex-direction: column; gap: 17px; min-width: 0; }
 .sidebar-card { border: 1.4px solid #d9d9d9; border-radius: 16px; overflow: hidden; }
 .toc-card { border-color: #a8c8f7; background: linear-gradient(180deg, var(--panel-blue), #ffffff 52%); }
