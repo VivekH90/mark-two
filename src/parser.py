@@ -94,7 +94,9 @@ def parse(source: str) -> Document:
             current_environment = None
 
         if command == "documenttitle":
-            document.document_title = argument
+            values = _parse_key_values(argument)
+            document.document_title = values.get("name", argument)
+            document.banner = values.get("banner", "")
         elif command == "title":
             document.article_title = argument
         elif command == "button":
