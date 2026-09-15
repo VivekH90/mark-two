@@ -24,7 +24,6 @@ body {
 }
 
 button, input, select, textarea { font-family: inherit; }
-
 .site-shell { width: min(100%, var(--page-max)); margin: 0 auto; padding: 12px var(--page-pad) 56px; }
 .site-header { text-align: center; padding-bottom: 25px; border-bottom: 1px solid #dedede; }
 .document-title { display: inline-block; margin-bottom: 17px; color: var(--text); text-decoration: none; font-size: clamp(35px, 4.3vw, 53px); font-weight: 700; line-height: 1.05; }
@@ -40,6 +39,11 @@ button, input, select, textarea { font-family: inherit; }
 .article-subsection { scroll-margin-top: 24px; margin: 25px 0 0 8px; }
 .article-subsection h3 { margin: 0 0 11px; font-size: clamp(21px, 2.1vw, 27px); line-height: 1.25; font-weight: 700; }
 .article p { margin: 0 0 17px; }
+
+.article-image { margin: 28px auto 30px; max-width: 100%; text-align: center; }
+.article-image img { display: block; width: auto; max-width: 100%; height: auto; margin: 0 auto; border-radius: 10px; }
+.article-image figcaption { max-width: 90%; margin: 10px auto 0; color: #555555; font-size: 0.92em; line-height: 1.4; text-align: center; }
+
 .sidebar { position: sticky; top: 20px; display: flex; flex-direction: column; gap: 17px; min-width: 0; }
 .sidebar-card { border: 1.4px solid #d9d9d9; border-radius: 16px; overflow: hidden; }
 .toc-card { border-color: #a8c8f7; background: linear-gradient(180deg, var(--panel-blue), #ffffff 52%); }
@@ -62,6 +66,7 @@ button, input, select, textarea { font-family: inherit; }
 .related-links { list-style: none; margin: 0; padding: 0 18px 15px; }
 .related-links li { padding: 8px 0; border-top: 1px solid rgba(45, 110, 65, 0.14); }
 .related-links li::before { content: "↗"; display: inline-block; margin-right: 9px; color: #4f6b55; font-family: Arial, sans-serif; }
+
 .math-environment { position: relative; margin: 22px 0; padding: 17px 24px 16px; border: 1px solid var(--environment-border, #ccd6e5); border-left: 4px solid var(--environment-accent, #314a78); border-radius: 13px; background: linear-gradient(90deg, var(--environment-fill, #edf2f8) 0%, rgba(255, 255, 255, 0.78) 72%, rgba(255, 255, 255, 0.18) 100%); }
 .math-environment.theorem { --environment-accent: #2f5fa7; --environment-border: #b9cde9; --environment-fill: #eaf2ff; }
 .math-environment.lemma { --environment-accent: #5867a5; --environment-border: #c5cae7; --environment-fill: #eff0ff; }
