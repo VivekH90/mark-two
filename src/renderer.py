@@ -102,13 +102,28 @@ def _image_html(image: Image, figure_number: int) -> str:
 
 def _multi_image_html(images, figure_number: int) -> str:
     identifier = f' id="{escape(images[0].label, quote=True)}"' if images[0].label else ""
-    first_width = images[0].width.strip()
-    if first_width:
-        columns = f'{escape(first_width, quote=True)} ' + " ".join("minmax(0, 1fr)" for _ in images[1:])
-    else:
+    widths = [image.width.strip() for image in images]
+    explicit_widths = [index for index, width in enumerate(widths) if width]
+    if not explicit_widths:
         columns = " ".join("minmax(0, 1fr)" for _ in images)
-    height = images[0].height.strip() or "280px"
-    image_html = [_image_tag(image, f"width: 100%; height: {escape(height, quote=True)}; object-fit: cover; margin: 0;") for image in images]
+    else:
+        # Explicit CSS widths are respected. Unspecified columns share the remaining space.
+        # CSS calc() lets percentages and fixed units coexist with the remaining 1fr columns.
+        explicit_total = " + ".join(f"{escape(widths[index], quote=True)}" for index in explicit_widths)
+        remaining_count = len(images) - len(explicit_widths)
+        if remaining_count:
+            columns = []
+            for index, width in enumerate(widths):
+                if width:
+                    columns.append(escape(width, quote=True))
+                else:
+                    columns.append(f"minmax(0, calc((100% - ({explicit_total}) - {10 * (len(images) - 1)}px) / {remaining_count}))")
+            columns = " ".join(columns)
+        else:
+            columns = " ".join(escape(width, quote=True) for width in widths)
+    explicit_heights = [image.height.strip() for image in images if image.height.strip()]
+    height = explicit_heights[0] if explicit_heights else "280px"
+    image_html = [_image_tag(image, f"width: 100%; height: {escape(image.height.strip() or height, quote=True)}; object-fit: cover; margin: 0;") for image in images]
     row_style = f'display: grid; grid-template-columns: {columns}; gap: 10px; align-items: stretch;'
     html = [f'<figure class="article-image multi-image"{identifier}>', f'<div class="image-row" style="{row_style}">', "\n".join(image_html), '</div>']
     if images[0].caption: html.append(_caption_html(images[0].caption, figure_number))
