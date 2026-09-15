@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mark-two"
+version = "0.1.0"
+description = "A lightweight mathematical document language that compiles .mt files into HTML"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+    { name = "VivekH90" }
+]
+dependencies = []
+
+[project.scripts]
+mark-two = "mark_two.main:main"
+
+[tool.setuptools]
+packages = ["mark_two"]
+package-dir = { mark_two = "src" }
