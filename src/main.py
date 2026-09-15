@@ -19,9 +19,9 @@ def compile_document(
     directory so relative asset paths work when the result is opened or
     served locally.
     """
-    source_path = Path(source_path)
-    output_path = Path(output_path)
-    template_path = Path(template_path)
+    source_path = Path(source_path).resolve()
+    output_path = Path(output_path).resolve()
+    template_path = Path(template_path).resolve()
 
     document = parse_file(source_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -42,9 +42,10 @@ def compile_document(
 
 
 def main() -> None:
-    project_root = Path(__file__).resolve().parent.parent
-    default_template = project_root / "web" / "index.html"
-    default_output = project_root / "build" / "index.html"
+    # main.py lives in <mark-two>/src/, so this remains valid even when the
+    # command is launched from a completely different working directory.
+    mark_two_root = Path(__file__).resolve().parent.parent
+    default_template = mark_two_root / "web" / "index.html"
 
     parser = argparse.ArgumentParser(
         description="Compile a Mark Two article to a self-contained HTML bundle."
@@ -53,17 +54,19 @@ def main() -> None:
     parser.add_argument(
         "-o",
         "--output",
-        default=str(default_output),
-        help="Output HTML path (default: build/index.html)",
+        help="Output HTML path (default: index.html beside the source file)",
     )
     parser.add_argument(
         "--template",
         default=str(default_template),
-        help="HTML template path",
+        help="HTML template path (default: Mark Two's built-in template)",
     )
     args = parser.parse_args()
 
-    output_path = compile_document(args.source, args.output, args.template)
+    source_path = Path(args.source).resolve()
+    output_path = Path(args.output).resolve() if args.output else source_path.parent / "index.html"
+
+    output_path = compile_document(source_path, output_path, args.template)
     print(f"Mark Two: wrote {output_path}")
     print(f"Mark Two: assets copied to {output_path.parent}")
 
