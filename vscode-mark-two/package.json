@@ -2,47 +2,29 @@
   "name": "mark-two-language",
   "displayName": "Mark Two Language Support",
   "description": "Syntax highlighting, snippets, and directive completions for Mark Two documents.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "publisher": "VivekH90",
   "license": "MIT",
-  "engines": {
-    "vscode": "^1.85.0"
-  },
-  "categories": [
-    "Programming Languages"
-  ],
+  "engines": { "vscode": "^1.85.0" },
+  "categories": ["Programming Languages"],
   "contributes": {
-    "languages": [
-      {
-        "id": "mark-two",
-        "aliases": ["Mark Two", "mark-two"],
-        "extensions": [".mt"],
-        "configuration": "./language-configuration.json"
-      }
-    ],
-    "grammars": [
-      {
-        "language": "mark-two",
-        "scopeName": "source.mark-two",
-        "path": "./syntaxes/mark-two.tmLanguage.json"
-      }
-    ],
-    "snippets": [
-      {
-        "language": "mark-two",
-        "path": "./snippets/mark-two.code-snippets.json"
-      }
-    ]
+    "languages": [{
+      "id": "mark-two",
+      "aliases": ["Mark Two", "mark-two"],
+      "extensions": [".mt"],
+      "configuration": "./language-configuration.json"
+    }],
+    "grammars": [{
+      "language": "mark-two",
+      "scopeName": "source.mark-two",
+      "path": "./syntaxes/mark-two.tmLanguage.json"
+    }],
+    "snippets": [{
+      "language": "mark-two",
+      "path": "./snippets/mark-two.code-snippets.json"
+    }]
   },
-  "activationEvents": [
-    "onLanguage:mark-two"
-  ],
+  "activationEvents": ["onLanguage:mark-two"],
   "main": "./extension.js",
-  "files": [
-    "extension.js",
-    "language-configuration.json",
-    "package.json",
-    "snippets",
-    "syntaxes"
-  ]
+  "files": ["extension.js", "language-configuration.json", "package.json", "snippets", "syntaxes"]
 }
