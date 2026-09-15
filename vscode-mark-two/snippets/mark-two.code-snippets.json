@@ -1,92 +1,30 @@
 {
-  "Document title": {
-    "prefix": "documenttitle",
-    "body": ["@documenttitle{${1:Document Title}}", "", "${0}"],
-    "description": "Create a Mark Two document title"
-  },
-  "Button": {
-    "prefix": "button",
-    "body": ["@button{${1:Home}, href = ${2:/}, color = ${3:black}}", "${0}"],
-    "description": "Create a navigation button"
-  },
-  "Article title": {
-    "prefix": "title",
-    "body": ["@title{${1:Article Title}}", "", "${0}"],
-    "description": "Create an article title"
-  },
-  "Section": {
-    "prefix": "section",
-    "body": ["@section{${1:Section Title}, color = ${2:#1f4f91}}", "", "${0}"],
-    "description": "Create a numbered section"
-  },
-  "Subsection": {
-    "prefix": "subsection",
-    "body": ["@subsection{${1:Subsection Title}}", "", "${0}"],
-    "description": "Create a subsection"
-  },
-  "Image": {
-    "prefix": "image",
-    "body": ["@image{src = ${1:https://example.com/image.png}, alt = ${2:Description}, caption = ${3:Figure caption}}", "${0}"],
-    "description": "Insert an image"
-  },
-  "Enumeration": {
-    "prefix": "enumerate",
-    "body": ["@enumerate{color = ${1:green},", "    @item{${2:First item}},", "    @item{${3:Second item}},", "    @item{${4:Third item}}", "}", "${0}"],
-    "description": "Create a numbered list"
-  },
-  "Itemize": {
-    "prefix": "itemize",
-    "body": ["@itemize{color = ${1:#8a3d91},", "    @item{${2:First item}},", "    @item{${3:Second item}}", "}", "${0}"],
-    "description": "Create a bullet list"
-  },
-  "Theorem": {
-    "prefix": "theorem",
-    "body": ["@theorem{${1:Theorem Title}}", "", "${2:Theorem statement.}", "", "@proof{}", "", "${3:Proof.}", "", "${0}"],
-    "description": "Create a theorem with a proof"
-  },
-  "Lemma": {
-    "prefix": "lemma",
-    "body": ["@lemma{${1:Lemma Title}}", "", "${2:Lemma statement.}", "", "@proof{}", "", "${3:Proof.}", "", "${0}"],
-    "description": "Create a lemma with a proof"
-  },
-  "Definition": {
-    "prefix": "definition",
-    "body": ["@definition{${1:Definition Title}}", "", "${2:Definition text.}", "", "${0}"],
-    "description": "Create a definition"
-  },
-  "Corollary": {
-    "prefix": "corollary",
-    "body": ["@corollary{${1:Corollary Title}}", "", "${2:Corollary statement.}", "", "${0}"],
-    "description": "Create a corollary"
-  },
-  "Axiom": {
-    "prefix": "axiom",
-    "body": ["@axiom{${1:Axiom Title}}", "", "${2:Axiom statement.}", "", "${0}"],
-    "description": "Create an axiom"
-  },
-  "Proof": {
-    "prefix": "proof",
-    "body": ["@proof{}", "", "${1:Proof text.}", "", "${0}"],
-    "description": "Create a proof"
-  },
-  "Math inline": {
-    "prefix": "math",
-    "body": ["\\(${1:x^2 + y^2 = z^2}\\)${0}"],
-    "description": "Insert inline TeX mathematics"
-  },
-  "Math display": {
-    "prefix": "displaymath",
-    "body": ["\\[", "${1:x^2 + y^2 = z^2}", "\\]", "${0}"],
-    "description": "Insert display TeX mathematics"
-  },
-  "List item": {
-    "prefix": "item",
-    "body": ["@item{${1:Item text}}${0}"],
-    "description": "Create a list item"
-  },
-  "Related link": {
-    "prefix": "relatedlink",
-    "body": ["@relatedlinks{${1:Link name}, href = ${2:https://example.com}}", "${0}"],
-    "description": "Create a related link"
-  }
+  "Document title": {"prefix":"documenttitle","body":["@documenttitle{${1:Document Title}}","","${0}"],"description":"Create a Mark Two document title"},
+  "Button": {"prefix":"button","body":["@button{${1:Home}, href = ${2:/}, color = ${3:black}}","${0}"],"description":"Create a navigation button"},
+  "Article title": {"prefix":"title","body":["@title{${1:Article Title}}","","${0}"],"description":"Create an article title"},
+  "Section": {"prefix":"section","body":["@section{${1:Section Title}, color = ${2:#1f4f91}, label = ${3:section-label}}","","${0}"],"description":"Create a numbered section"},
+  "Subsection": {"prefix":"subsection","body":["@subsection{${1:Subsection Title}, label = ${2:subsection-label}}","","${0}"],"description":"Create a subsection"},
+  "Image": {"prefix":"image","body":["@image{src = ${1:https://example.com/image.png}, alt = ${2:Description}, caption = ${3:Figure caption}, label = ${4:figure-label}}","${0}"],"description":"Insert an image"},
+  "Enumeration": {"prefix":"enumerate","body":["@enumerate{color = ${1:green},","    @item{${2:First item}},","    @item{${3:Second item}},","    @item{${4:Third item}}","}","${0}"],"description":"Create a numbered list"},
+  "Itemize": {"prefix":"itemize","body":["@itemize{color = ${1:#8a3d91},","    @item{${2:First item}},","    @item{${3:Second item}}","}","${0}"],"description":"Create a bullet list"},
+  "Theorem": {"prefix":"theorem","body":["@theorem{${1:Theorem Title}, label = ${2:theorem-label}}","","${3:Theorem statement.}","","@proof{}","","${4:Proof.}","","${0}"],"description":"Create a theorem with a proof"},
+  "Lemma": {"prefix":"lemma","body":["@lemma{${1:Lemma Title}, label = ${2:lemma-label}}","","${3:Lemma statement.}","","@proof{}","","${4:Proof.}","","${0}"],"description":"Create a lemma with a proof"},
+  "Definition": {"prefix":"definition","body":["@definition{${1:Definition Title}, label = ${2:definition-label}}","","${3:Definition text.}","","${0}"],"description":"Create a definition"},
+  "Corollary": {"prefix":"corollary","body":["@corollary{${1:Corollary Title}, label = ${2:corollary-label}}","","${3:Corollary statement.}","","${0}"],"description":"Create a corollary"},
+  "Axiom": {"prefix":"axiom","body":["@axiom{${1:Axiom Title}, label = ${2:axiom-label}}","","${3:Axiom statement.}","","${0}"],"description":"Create an axiom"},
+  "Proposition": {"prefix":"proposition","body":["@proposition{${1:Proposition Title}, label = ${2:proposition-label}}","","${3:Proposition statement.}","","${0}"],"description":"Create a proposition"},
+  "Remark": {"prefix":"remark","body":["@remark{${1:Remark Title}, label = ${2:remark-label}}","","${3:Remark text.}","","${0}"],"description":"Create a remark"},
+  "Example": {"prefix":"example","body":["@example{${1:Example Title}, label = ${2:example-label}}","","${3:Example text.}","","${0}"],"description":"Create an example"},
+  "Conjecture": {"prefix":"conjecture","body":["@conjecture{${1:Conjecture Title}, label = ${2:conjecture-label}}","","${3:Conjecture statement.}","","${0}"],"description":"Create a conjecture"},
+  "Notation": {"prefix":"notation","body":["@notation{${1:Notation Title}, label = ${2:notation-label}}","","${3:Notation text.}","","${0}"],"description":"Create notation"},
+  "Warning": {"prefix":"warning","body":["@warning{${1:Warning Title}, label = ${2:warning-label}}","","${3:Warning text.}","","${0}"],"description":"Create a warning"},
+  "Proof": {"prefix":"proof","body":["@proof{}","","${1:Proof text.}","","${0}"],"description":"Create a proof"},
+  "Reference": {"prefix":"ref","body":["@ref{${1:label}}${0}"],"description":"Create a cross reference"},
+  "Reference with text": {"prefix":"reft","body":["@ref{${1:label}, text = \"${2:custom text}\"}${0}"],"description":"Create a cross reference with custom link text"},
+  "Cross-page reference": {"prefix":"pageref","body":["@ref{${1:other-page.html#label}}${0}"],"description":"Link to a label on another generated page"},
+  "Label": {"prefix":"label","body":["@label{${1:label-name}}${0}"],"description":"Create a named anchor"},
+  "Math inline": {"prefix":"math","body":["\\(${1:x^2 + y^2 = z^2}\\)${0}"],"description":"Insert inline TeX mathematics"},
+  "Math display": {"prefix":"displaymath","body":["\\[","${1:x^2 + y^2 = z^2}","\\]","${0}"],"description":"Insert display TeX mathematics"},
+  "List item": {"prefix":"item","body":["@item{${1:Item text}}${0}"],"description":"Create a list item"},
+  "Related link": {"prefix":"relatedlink","body":["@relatedlinks{${1:Link name}, href = ${2:https://example.com}}","${0}"],"description":"Create a related link"}
 }
