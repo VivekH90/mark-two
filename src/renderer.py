@@ -94,13 +94,17 @@ def render(document: Document, template_path: str | Path) -> str:
             f'style="--button-color: {color};">{escape(button.name)}</a>'
         )
 
-    banner = ""
     if document.banner:
         banner_src = escape(document.banner, quote=True)
         banner = (
             '<div class="site-banner">'
             f'<img src="{banner_src}" alt="" loading="eager">'
+            f'<a class="banner-title" href="#">{escape(document.document_title)}</a>'
             '</div>'
+        )
+    else:
+        banner = (
+            f'<a class="document-title" href="#">{escape(document.document_title)}</a>'
         )
 
     toc = []
@@ -130,7 +134,7 @@ def render(document: Document, template_path: str | Path) -> str:
         )
 
     replacements = {
-        "{{DOCUMENT_TITLE}}": escape(document.document_title),
+        "{{DOCUMENT_TITLE}}": "",
         "{{ARTICLE_TITLE}}": escape(document.article_title),
         "{{BANNER}}": banner,
         "{{BUTTONS}}": "\n".join(buttons),
