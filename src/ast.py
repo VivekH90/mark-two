@@ -29,9 +29,10 @@ class MathBlock:
 
 @dataclass
 class ListItem:
-    """One list item containing normal Mark Two content."""
+    """One list item with an optional title and normal Mark Two content."""
 
     content: List["ContentItem"] = field(default_factory=list)
+    title: str = ""
 
 
 @dataclass
