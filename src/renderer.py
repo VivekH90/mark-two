@@ -3,7 +3,7 @@
 from html import escape
 from pathlib import Path
 
-from .ast import Document, Environment, Image, ListBlock, MathBlock, Section
+from .ast import Document, Environment, Image, ListBlock, ListItem, MathBlock, Section
 
 
 def _paragraphs(lines):
@@ -36,11 +36,13 @@ def _image_html(image: Image) -> str:
     return "\n".join(html)
 
 
-def _list_html(list_block: ListBlock) -> str:
+def _list_html(list_block: ListBlock, environment_counters) -> str:
     tag = "ol" if list_block.ordered else "ul"
     color = escape(list_block.color, quote=True)
-    items = "\n".join(f"<li>{item}</li>" for item in list_block.items)
-    return f'<{tag} class="mark-list" style="--list-color: {color};">\n{items}\n</{tag}>'
+    items = []
+    for item in list_block.items:
+        items.append(f'<li>{_content_html(item.content, environment_counters)}</li>')
+    return f'<{tag} class="mark-list" style="--list-color: {color};">\n{"\n".join(items)}\n</{tag}>'
 
 
 def _environment_html(environment: Environment, number: int) -> str:
@@ -68,7 +70,7 @@ def _content_html(items, environment_counters) -> str:
         elif isinstance(item, MathBlock):
             html.append(_math_html(item))
         elif isinstance(item, ListBlock):
-            html.append(_list_html(item))
+            html.append(_list_html(item, environment_counters))
         else:
             html.append(_paragraphs([item]))
     return "\n".join(html)
