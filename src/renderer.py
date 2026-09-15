@@ -54,7 +54,8 @@ def _list_html(list_block: ListBlock, environment_counters) -> str:
         title_html = f'<span class="list-item-title">{escape(item.title)}</span>' if item.title else ""
         item_class = ' class="has-list-item-title"' if item.title else ""
         items.append(f'<li{item_class}>{title_html}{_content_html(item.content, environment_counters)}</li>')
-    return f'<{tag} class="mark-list" style="--list-color: {color}; --list-color-dark: {dark_color};">\n{"\n".join(items)}\n</{tag}>'
+    item_html = "\n".join(items)
+    return f'<{tag} class="mark-list" style="--list-color: {color}; --list-color-dark: {dark_color};">\n{item_html}\n</{tag}>'
 
 
 def _environment_html(environment: Environment, number: int) -> str:
