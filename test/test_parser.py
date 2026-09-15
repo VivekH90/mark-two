@@ -1,7 +1,7 @@
 from src.parser import parse
 
 
-def test_multiline_enumerate_with_commas():
+def test_multiline_enumerate_with_commas_inside_proof():
     source = '''@documenttitle{Mathematics, banner = com_int_banner.png, color = #111111}
 @section{Test}
 @proof{}
@@ -15,7 +15,9 @@ def test_multiline_enumerate_with_commas():
 }
 '''
     document = parse(source)
-    list_block = document.sections[0].content[1]
+    proof = document.sections[0].content[0]
+    list_block = proof.content[0]
+    assert proof.kind == 'proof'
     assert list_block.ordered is True
     assert list_block.color == 'green'
     assert len(list_block.items) == 2
