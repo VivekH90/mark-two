@@ -36,11 +36,8 @@ def _split_top_level(text: str) -> List[str]:
             escaped = True
             current.append(char)
             continue
-        if char in {'"', "'"}:
-            if quote == char:
-                quote = None
-            elif quote is None:
-                quote = char
+        if char == '"':
+            quote = None if quote == char else char if quote is None else quote
         elif quote is None:
             if char in "{[(":
                 depth += 1
@@ -112,11 +109,8 @@ def _extract_directive(lines: List[str], start_index: int):
                 escaped = True
                 current.append(char)
                 continue
-            if char in {'"', "'"}:
-                if quote == char:
-                    quote = None
-                elif quote is None:
-                    quote = char
+            if char == '"':
+                quote = None if quote == char else char if quote is None else quote
                 current.append(char)
                 continue
             if quote is None and char == "{":
@@ -157,11 +151,8 @@ def _extract_directive_blocks(text: str, command: str):
             if char == "\\":
                 escaped = True
                 continue
-            if char in {'"', "'"}:
-                if quote == char:
-                    quote = None
-                elif quote is None:
-                    quote = char
+            if char == '"':
+                quote = None if quote == char else char if quote is None else quote
                 continue
             if quote is None and char == "{":
                 depth += 1
@@ -258,6 +249,8 @@ def _parse_list(argument: str, ordered: bool) -> ListBlock:
 
 
 def _parse_text(argument: str) -> TextBlock:
+    if "=" not in argument:
+        return TextBlock(text=argument.strip())
     values = _parse_key_values(argument)
     text = values.get("text", values.get("name", ""))
     if not text:
@@ -329,16 +322,11 @@ def parse(source: str) -> Document:
             document.article_title = argument
         elif command == "button":
             values = _parse_key_values(argument)
-            document.buttons.append(Button(
-                name=values.get("name", "Button"), href=values.get("href", "#"), color=values.get("color", "black")
-            ))
+            document.buttons.append(Button(name=values.get("name", "Button"), href=values.get("href", "#"), color=values.get("color", "black")))
         elif command == "section":
             values = _parse_key_values(argument)
             title = values.get("name", argument)
-            current_section = Section(
-                title=title, color=values.get("color", "#111111"),
-                slug=_unique_slug(_slugify(title), used_slugs), label=values.get("label", "")
-            )
+            current_section = Section(title=title, color=values.get("color", "#111111"), slug=_unique_slug(_slugify(title), used_slugs), label=values.get("label", ""))
             document.sections.append(current_section)
             current_subsection = None
         elif command == "subsection":
