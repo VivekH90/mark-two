@@ -12,15 +12,24 @@ class Button:
 
 
 @dataclass
+class Image:
+    """An article image with optional accessibility text and caption."""
+
+    src: str
+    alt: str = ""
+    caption: str = ""
+
+
+@dataclass
 class Environment:
     """A semantic boxed environment such as theorem or definition."""
 
     kind: str
     title: str = ""
-    content: List[str] = field(default_factory=list)
+    content: List[Union[str, Image]] = field(default_factory=list)
 
 
-ContentItem = Union[str, Environment]
+ContentItem = Union[str, Image, Environment]
 
 
 @dataclass
