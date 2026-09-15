@@ -15,7 +15,8 @@ This section verifies that ordinary prose is parsed correctly and that the gener
 The first goal is to verify section and subsection structure.
 The second goal is to verify that the table of contents points to the generated anchors.
 
-@enumerate{color = green, @item{First item in a green enumeration.}, @item{Second item in a green enumeration.}, @item{Third item in a green enumeration.}}
+@enumerate{color = green, @item{First item in a green enumeration.}, @item{title = "hehheheh",
+Second item in a green enumeration.}, @item{Third item in a green enumeration.}}
 
 @itemize{color = #8a3d91, @item{First item in a colored itemize list.}, @item{Second item in a colored itemize list.}, @item{Third item in a colored itemize list.}}
 
