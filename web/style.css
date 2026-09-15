@@ -11,17 +11,7 @@
     --panel-green: #eefaf0;
     --accent: #182c55;
 }
-
-html.dark-mode {
-    --text: #eeeeee;
-    --muted-text: #b8b8b8;
-    --page-bg: #111214;
-    --border: #3b3d42;
-    --panel-blue: #182438;
-    --panel-green: #18281f;
-    --accent: #c7d7f5;
-}
-
+html.dark-mode { --text: #eeeeee; --muted-text: #b8b8b8; --page-bg: #111214; --border: #3b3d42; --panel-blue: #182438; --panel-green: #18281f; --accent: #c7d7f5; }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body { margin: 0; background: var(--page-bg); color: var(--text); font-family: "Computer Modern Sans Serif", "Computer Modern Sans", sans-serif; font-size: 17px; line-height: 1.48; font-weight: 400; transition: background 180ms ease, color 180ms ease; }
@@ -96,7 +86,13 @@ html.dark-mode .list-item-title { color: var(--list-color-dark, var(--list-color
 .math-environment.definition { --environment-accent: #39745a; --environment-border: #b9d9c7; --environment-fill: #eaf7ef; }
 .math-environment.corollary { --environment-accent: #8a5a2c; --environment-border: #dfc9b0; --environment-fill: #fbf1e5; }
 .environment-heading { margin-bottom: 8px; font-size: 18px; font-weight: 700; }
-.environment-content p:last-child { margin-bottom: 0; }
+.environment-label { display: inline-block; padding: 2px 11px 3px; border-radius: 999px; background: color-mix(in srgb, var(--environment-accent) 22%, var(--environment-fill)); font-weight: 700; }
+.environment-number { font-weight: 700; }
+.environment-title { font-weight: 600; }
+.proof-environment { position: relative; margin: 22px 0; padding: 4px 0 30px; border-bottom: 1px solid var(--border); }
+.proof-heading { margin-bottom: 9px; font-size: 18px; font-weight: 700; }
+.proof-content p:last-child { margin-bottom: 0; }
+.proof-qed { position: absolute; right: 0; bottom: 4px; font-size: 20px; line-height: 1; }
 .math-environment mjx-container { font-size: 105%; }
 html.dark-mode .toc-card { border-color: #476a9d; }
 html.dark-mode .related-card { border-color: #477456; }
