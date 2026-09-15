@@ -145,7 +145,10 @@ def parse(source: str) -> Document:
             current_environment = None
 
         if command == "documenttitle":
-            values = _parse_key_values(argument); document.document_title = values.get("name", argument); document.banner = values.get("banner", "")
+            values = _parse_key_values(argument)
+            document.document_title = values.get("name", argument)
+            document.banner = values.get("banner", "")
+            document.banner_color = values.get("color", "")
         elif command == "title": document.article_title = argument
         elif command == "button":
             values = _parse_key_values(argument); document.buttons.append(Button(name=values.get("name", "Button"), href=values.get("href", "#"), color=values.get("color", "black")))
