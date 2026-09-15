@@ -62,7 +62,8 @@ def _environment_html(environment: Environment, number: int) -> str:
     kind = escape(environment.kind.lower())
     if kind == "proof":
         return f'<div class="proof-environment"><div class="proof-heading">Proof</div><div class="proof-content">{_content_html(environment.content, {})}</div><div class="proof-qed" aria-label="Q.E.D.">□</div></div>'
-    label = environment.kind.capitalize(); heading = f'<span class="environment-label">{label}</span> <span class="environment-number">{number}</span>'
+    label = environment.kind.capitalize()
+    heading = f'<span class="environment-label"><span class="environment-kind">{label}</span> <span class="environment-number">{number}</span></span>'
     if environment.title: heading += f' <span class="environment-title">({escape(environment.title)})</span>'
     return f'<div class="math-environment {kind}"><div class="environment-heading">{heading}</div><div class="environment-content">{_content_html(environment.content, {})}</div></div>'
 
