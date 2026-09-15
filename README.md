@@ -116,6 +116,7 @@ The same applies to images:
     image(1) = first.png,
     image(2) = second.png,
     width(1) = 50%,
+    width(2) = 35%,
     caption = Two related figures.
 }
 ```
@@ -139,7 +140,7 @@ The single-line form remains valid too.
 | `@title` | Sets the article title. | `@title{Introduction to Analysis}` |
 | `@section` | Creates a numbered section. Supports `color` and `label`. | `@section{Limits, color = #315a9b, label = limits}` |
 | `@subsection` | Creates a numbered subsection. Supports `label`. | `@subsection{One-sided limits, label = one-sided}` |
-| `@image` | Inserts a single image or a multi-image row. Single images support `image`/`src`, `width`, `height`, `alt`, `caption`, and `label`. Multiple images use `image(1)`, `image(2)`, ...; they share one row with equal image heights and equal widths by default. `width(1)` can set the first image's share of the row, with the remaining space divided equally among the other images. `width(2)`, `width(3)`, etc. are ignored for multi-image rows. | `@image{image(1) = first.png, image(2) = second.png, width(1) = 40%, caption = A comparison.}` |
+| `@image` | Inserts a single image or a multi-image row. Single images support `image`/`src`, `width`, `height`, `alt`, `caption`, and `label`. Multiple images use `image(1)`, `image(2)`, ... and support independent `width(n)` and `height(n)` values. Unspecified widths share the remaining row space. | `@image{image(1) = first.png, image(2) = second.png, width(1) = 55%, width(2) = 35%, caption = A comparison.}` |
 | `@enumerate` | Creates an ordered list. | `@enumerate{color = green, @item{First}, @item{Second}}` |
 | `@itemize` | Creates an unordered list. | `@itemize{color = #8a3d91, @item{First}, @item{Second}}` |
 | `@item` | Creates an item inside `@enumerate` or `@itemize`; may have a title. | `@item{An item}` or `@item{title = "Step one", Details.}` |
@@ -185,7 +186,7 @@ For multiple images in one figure, use indexed image names:
 }
 ```
 
-All images are placed in the same row with equal heights. When `width(1)` is omitted, the available width is shared equally between all images. When `width(1)` is present, it controls only the first image, and the remaining width is divided equally between images 2, 3, and so on:
+All images are placed in the same row with equal widths by default. You can resize individual images with `width(n)` and individual heights with `height(n)`:
 
 ```text
 @image{
@@ -193,11 +194,14 @@ All images are placed in the same row with equal heights. When `width(1)` is omi
     image(2) = middle.png,
     image(3) = narrow.png,
     width(1) = 50%,
-    caption = One wide image and two smaller images.
+    width(2) = 25%,
+    height(1) = 240px,
+    height(2) = 180px,
+    caption = A custom-sized figure group.
 }
 ```
 
-For multi-image figures, `width(2)`, `width(3)`, etc. are ignored by design.
+Here image 1 occupies 50% of the row, image 2 occupies 25%, and image 3 receives the remaining space. Heights are independent; an image without `height(n)` uses the group's default height. CSS size values such as `px`, `%`, `rem`, and `vw` are accepted.
 
 Whenever an image or image group has a `caption`, Mark Two automatically formats it as **Figure N:** followed by the caption text, where the figure number counts image figures in document order. A multi-image row counts as one figure.
 
