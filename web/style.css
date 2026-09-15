@@ -29,8 +29,8 @@ html.dark-mode .nav-button:hover, html.dark-mode .nav-button:focus-visible { bac
 .theme-toggle[aria-pressed="true"] .theme-icon { transform: rotate(180deg); }
 .site-banner { position: relative; width: 100%; margin: 0 auto; overflow: hidden; border: 1px solid var(--border); border-radius: 13px; }
 .site-banner img { display: block; width: 100%; height: auto; max-height: 260px; object-fit: cover; }
-.banner-title { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 20px 30px; color: #ffffff; text-decoration: none; text-align: center; font-size: clamp(35px, 4.3vw, 53px); font-weight: 700; line-height: 1.05; text-shadow: 0 2px 5px rgba(0, 0, 0, 0.65), 0 0 18px rgba(0, 0, 0, 0.35); }
-.banner-title:hover, .banner-title:focus-visible { color: #ffffff; }
+.banner-title { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 20px 30px; color: var(--banner-title-color, #ffffff); text-decoration: none; text-align: center; font-size: clamp(35px, 4.3vw, 53px); font-weight: 700; line-height: 1.05; text-shadow: 0 2px 5px rgba(0, 0, 0, 0.65), 0 0 18px rgba(0, 0, 0, 0.35); }
+.banner-title:hover, .banner-title:focus-visible { color: var(--banner-title-color, #ffffff); }
 .page-layout { display: grid; grid-template-columns: minmax(0, var(--article-max)) var(--sidebar-width); justify-content: center; gap: 46px; align-items: start; padding-top: 25px; }
 .article { min-width: 0; }
 .article-title { margin: 0 auto 30px; max-width: 900px; text-align: center; font-size: clamp(29px, 3.1vw, 39px); line-height: 1.2; font-weight: 700; letter-spacing: -0.01em; }
@@ -123,8 +123,4 @@ html.dark-mode .math-environment.remark { --environment-border: #60666f; --envir
 html.dark-mode .math-environment.example { --environment-border: #8e7138; --environment-fill: #3a311d; }
 html.dark-mode .math-environment.conjecture { --environment-border: #88516f; --environment-fill: #3a2332; }
 html.dark-mode .math-environment.notation { --environment-border: #65588d; --environment-fill: #2d2940; }
-html.dark-mode .math-environment.warning { --environment-border: #98533f; --environment-fill: #3d2520; }
-@media (max-width: 1080px) { :root { --sidebar-width: 280px; --article-max: 820px; } .page-layout { gap: 30px; } .nav-button { min-width: 130px; } }
-@media (max-width: 850px) { .page-layout { grid-template-columns: 1fr; } .article { max-width: 900px; } .sidebar { position: static; order: -1; } .toc-card { max-height: 70vh; } .toc { overflow-y: auto; } }
-@media (max-width: 760px) { body { font-size: 16px; } .site-shell { padding-top: 10px; } .site-header { padding-bottom: 20px; } .navigation { gap: 8px; margin-top: 13px; } .nav-button { min-width: 0; min-height: 45px; padding: 7px 17px; font-size: 17px; } .page-layout { padding-top: 20px; } .site-banner { border-radius: 10px; } .site-banner img { max-height: 190px; } .banner-title { padding: 15px 20px; font-size: clamp(29px, 8vw, 42px); } }
-@media (max-width: 430px) { .navigation .nav-button { flex: 1 1 calc(50% - 8px); } .theme-toggle { margin-left: auto; } .math-environment { padding: 14px 17px; } }
+html.dark-mode .math-environment.warning { --environment-border: #a45b49; --environment-fill: #3a2520; }
