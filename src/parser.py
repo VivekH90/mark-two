@@ -164,7 +164,7 @@ def parse(source: str) -> Document:
             if target is None: raise ValueError("@image must appear after @section")
             values = _parse_key_values(argument); src = values.get("src", "")
             if not src: raise ValueError("@image requires src = ...")
-            target.content.append(Image(src=src, alt=values.get("alt", ""), caption=values.get("caption", ""), label=values.get("label", "")))
+            target.content.append(Image(src=src, alt=values.get("alt", ""), caption=values.get("caption", ""), label=values.get("label", ""), width=values.get("width", ""), height=values.get("height", "")))
         elif command == "label":
             target = current_environment or current_subsection or current_section
             if target is None: raise ValueError("@label must appear after @section")
