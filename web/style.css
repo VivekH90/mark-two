@@ -43,6 +43,8 @@ button, input, select, textarea { font-family: inherit; }
 .mark-list li::marker { color: var(--list-color, black); font-weight: 700; }
 ul.mark-list { list-style-type: disc; }
 ol.mark-list { list-style-type: decimal; }
+.list-item-title { display: block; color: var(--list-color, black); font-size: 1.08em; font-weight: 700; line-height: 1.35; margin-bottom: 3px; }
+.mark-list li.has-list-item-title::marker { font-size: 1.08em; }
 .mark-list .article-image { margin: 18px 0 22px; text-align: left; }
 .mark-list .article-image img { margin-left: 0; }
 .mark-list .article-image figcaption { margin-left: 0; text-align: left; }
