@@ -35,14 +35,66 @@
         <div class="page-layout">
             <main class="article">
                 <h1 class="article-title">A Test Article for Mark Two</h1>
-                <section class="article-section" id="introduction" style="--section-color: #1f4f91;"><h2><span class="section-symbol">§</span> 1. Introduction</h2><p>This section verifies that ordinary prose is parsed correctly and that the generated section numbering is not duplicated.</p><section class="article-subsection" id="goals"><h3>1.1. Goals</h3><p>The first goal is to verify section and subsection structure. The second goal is to verify that the table of contents points to the generated anchors.</p></section></section>
-                <section class="article-section" id="images" style="--section-color: #8a5a2c;"><h2><span class="section-symbol">§</span> 2. Images</h2><p>This image has a caption:</p><figure class="article-image"><img src="https://placehold.co/900x500/png" alt="A placeholder diagram" loading="lazy"><figcaption>Figure 1. An example image with a caption.</figcaption></figure><p>This image has no caption:</p><figure class="article-image"><img src="https://placehold.co/700x400/png" alt="A placeholder image without a caption" loading="lazy"></figure></section>
-                <section class="article-section" id="mathematics" style="--section-color: #6b3fa0;"><h2><span class="section-symbol">§</span> 3. Mathematics</h2><p>Inline mathematics should be processed by MathJax: \(x^2 + y^2 = z^2\).</p><p>The following display equation checks multi-line display mathematics:</p><p>\[ \\int_0^1 x^2\\,dx = \\frac{1}{3}. \]</p><section class="article-subsection" id="a-simple-example"><h3>3.1. A Simple Example</h3><p>Suppose \(f(x)=x^2\). This checks that mathematical expressions can appear naturally inside prose.</p><div class="math-environment definition"><div class="environment-heading">Definition 1 (A Simple Function)</div><div class="environment-content"><p>A function \(f : X \\to Y\) assigns to every \(x \\in X\) exactly one element \(f(x) \\in Y\).</p></div></div><div class="math-environment theorem"><div class="environment-heading">Theorem 1 (A Basic Identity)</div><div class="environment-content"><p>For every real number \(x\), we have</p><p>\[ (x+1)^2 = x^2 + 2x + 1. \]</p></div></div><div class="math-environment lemma"><div class="environment-heading">Lemma 1 (A Useful Observation)</div><div class="environment-content"><p>If \(a=b\), then \(a+c=b+c\) for every real number \(c\).</p></div></div><div class="math-environment corollary"><div class="environment-heading">Corollary 1 (Immediate Consequence)</div><div class="environment-content"><p>Taking \(c=-b\) gives \(a-b=0\) whenever \(a=b\).</p></div></div></section></section>
-                <section class="article-section" id="conclusion" style="--section-color: #9a3d3d;"><h2><span class="section-symbol">§</span> 4. Conclusion</h2><p>If this page renders correctly, the first stage of the Mark Two article pipeline is working.</p></section>
+                <section class="article-section" id="introduction" style="--section-color: #1f4f91;">
+                    <h2><span class="section-symbol">§</span> 1. Introduction</h2>
+                    <p>This section verifies that ordinary prose is parsed correctly and that the generated section numbering is not duplicated.</p>
+                    <section class="article-subsection" id="goals">
+                        <h3>1.1. Goals</h3>
+                        <p>The first goal is to verify section and subsection structure. The second goal is to verify that the table of contents points to the generated anchors.</p>
+                    </section>
+                </section>
+                <section class="article-section" id="images" style="--section-color: #8a5a2c;">
+                    <h2><span class="section-symbol">§</span> 2. Images</h2>
+                    <p>This image has a caption:</p>
+                    <figure class="article-image"><img src="https://placehold.co/900x500/png" alt="A placeholder diagram" loading="lazy"><figcaption>Figure 1. An example image with a caption.</figcaption></figure>
+                    <p>This image has no caption:</p>
+                    <figure class="article-image"><img src="https://placehold.co/700x400/png" alt="A placeholder image without a caption" loading="lazy"></figure>
+                </section>
+                <section class="article-section" id="mathematics" style="--section-color: #6b3fa0;">
+                    <h2><span class="section-symbol">§</span> 3. Mathematics</h2>
+                    <p>Inline mathematics should be processed by MathJax: \(x^2 + y^2 = z^2\).</p>
+                    <p>The following display equation checks multi-line display mathematics:</p>
+                    <div class="math-display">\[\int_0^1 x^2\,dx = \frac{1}{3}.\]</div>
+                    <section class="article-subsection" id="a-simple-example">
+                        <h3>3.1. A Simple Example</h3>
+                        <p>Suppose \(f(x)=x^2\). This checks that mathematical expressions can appear naturally inside prose.</p>
+                        <div class="math-environment definition">
+                            <div class="environment-heading">Definition 1 (A Simple Function)</div>
+                            <div class="environment-content"><p>A function \(f : X \to Y\) assigns to every \(x \in X\) exactly one element \(f(x) \in Y\).</p></div>
+                        </div>
+                        <div class="math-environment theorem">
+                            <div class="environment-heading">Theorem 1 (A Basic Identity)</div>
+                            <div class="environment-content"><p>For every real number \(x\), we have</p><div class="math-display">\[(x+1)^2 = x^2 + 2x + 1.\]</div></div>
+                        </div>
+                        <div class="math-environment lemma">
+                            <div class="environment-heading">Lemma 1 (A Useful Observation)</div>
+                            <div class="environment-content"><p>If \(a=b\), then \(a+c=b+c\) for every real number \(c\).</p></div>
+                        </div>
+                        <div class="math-environment corollary">
+                            <div class="environment-heading">Corollary 1 (Immediate Consequence)</div>
+                            <div class="environment-content"><p>Taking \(c=-b\) gives \(a-b=0\) whenever \(a=b\).</p></div>
+                        </div>
+                    </section>
+                </section>
+                <section class="article-section" id="conclusion" style="--section-color: #9a3d3d;">
+                    <h2><span class="section-symbol">§</span> 4. Conclusion</h2>
+                    <p>If this page renders correctly, the first stage of the Mark Two article pipeline is working.</p>
+                </section>
             </main>
             <aside class="sidebar" aria-label="Article information">
-                <section class="sidebar-card toc-card"><div class="sidebar-heading"><h2>Table of Contents</h2><button class="sidebar-toggle" type="button" aria-label="Toggle table of contents" aria-expanded="true">☷</button></div><nav class="toc" aria-label="Table of contents"><ol><li><a href="#introduction"><span class="toc-section-symbol">§</span> 1. Introduction</a><ol class="toc-subsections"><li><a href="#goals">1.1. Goals</a></li></ol></li><li><a href="#images"><span class="toc-section-symbol">§</span> 2. Images</a></li><li><a href="#mathematics"><span class="toc-section-symbol">§</span> 3. Mathematics</a><ol class="toc-subsections"><li><a href="#a-simple-example">3.1. A Simple Example</a></li></ol></li><li><a href="#conclusion"><span class="toc-section-symbol">§</span> 4. Conclusion</a></li></ol></nav></section>
-                <section class="sidebar-card related-card"><div class="sidebar-heading"><h2>Related Links</h2><span class="link-symbol" aria-hidden="true">↗</span></div><ul class="related-links"><li><a href="https://github.com/VivekH90/mark-two" target="_blank" rel="noopener noreferrer">Mark Two GitHub</a></li><li><a href="https://www.python.org" target="_blank" rel="noopener noreferrer">Python</a></li></ul></section>
+                <section class="sidebar-card toc-card">
+                    <div class="sidebar-heading"><h2>Table of Contents</h2><button class="sidebar-toggle" type="button" aria-label="Toggle table of contents" aria-expanded="true">☷</button></div>
+                    <nav class="toc" aria-label="Table of contents"><ol>
+                        <li><a href="#introduction"><span class="toc-section-symbol">§</span> 1. Introduction</a><ol class="toc-subsections"><li><a href="#goals">1.1. Goals</a></li></ol></li>
+                        <li><a href="#images"><span class="toc-section-symbol">§</span> 2. Images</a></li>
+                        <li><a href="#mathematics"><span class="toc-section-symbol">§</span> 3. Mathematics</a><ol class="toc-subsections"><li><a href="#a-simple-example">3.1. A Simple Example</a></li></ol></li>
+                        <li><a href="#conclusion"><span class="toc-section-symbol">§</span> 4. Conclusion</a></li>
+                    </ol></nav>
+                </section>
+                <section class="sidebar-card related-card">
+                    <div class="sidebar-heading"><h2>Related Links</h2><span class="link-symbol" aria-hidden="true">↗</span></div>
+                    <ul class="related-links"><li><a href="https://github.com/VivekH90/mark-two" target="_blank" rel="noopener noreferrer">Mark Two GitHub</a></li><li><a href="https://www.python.org" target="_blank" rel="noopener noreferrer">Python</a></li></ul>
+                </section>
             </aside>
         </div>
     </div>
