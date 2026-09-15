@@ -99,14 +99,19 @@ def _parse_image_group(argument: str, group_id: int):
     if len(indexes) < 2:
         raise ValueError("Use image = ... for a single image")
 
+    # Backward compatibility: in an indexed image group, `width = ...`
+    # historically controlled the first image. The newer width(n) form
+    # controls any individual image.
+    legacy_width = values.get("width", "")
+    legacy_height = values.get("height", "")
     return [
         Image(
             src=indexed_sources[index],
             alt=values.get(f"alt({index})", values.get("alt", "")),
             caption=values.get("caption", ""),
             label=values.get("label", ""),
-            width=indexed_widths.get(index, ""),
-            height=indexed_heights.get(index, ""),
+            width=indexed_widths.get(index, legacy_width if index == 1 else ""),
+            height=indexed_heights.get(index, legacy_height),
             group=group_id,
         )
         for index in range(1, len(indexes) + 1)
