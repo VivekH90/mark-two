@@ -190,7 +190,7 @@ button, input, select, textarea { font-family: inherit; }
 
 .toc { padding: 0 17px 15px; }
 .toc.collapsed { display: none; }
-.toc ol { margin: 0; padding: 0; list-style-position: inside; }
+.toc ol { margin: 0; padding: 0; list-style: none; }
 .toc > ol > li { padding: 8px 0; border-top: 1px solid rgba(40, 80, 130, 0.14); }
 .toc li { color: #173e80; }
 .toc a, .related-links a { color: #1553ad; text-decoration: none; }
@@ -201,7 +201,7 @@ button, input, select, textarea { font-family: inherit; }
 .toc-subsections {
     margin: 5px 0 0 23px !important;
     padding-left: 0 !important;
-    list-style-position: outside !important;
+    list-style: none !important;
 }
 
 .toc-subsections li { padding: 3px 0; }
@@ -224,12 +224,7 @@ button, input, select, textarea { font-family: inherit; }
     border: 1px solid var(--environment-border, #ccd6e5);
     border-left: 4px solid var(--environment-accent, #314a78);
     border-radius: 13px;
-    background: linear-gradient(
-        90deg,
-        var(--environment-fill, #edf2f8) 0%,
-        rgba(255, 255, 255, 0.78) 72%,
-        rgba(255, 255, 255, 0.18) 100%
-    );
+    background: linear-gradient(90deg, var(--environment-fill, #edf2f8) 0%, rgba(255, 255, 255, 0.78) 72%, rgba(255, 255, 255, 0.18) 100%);
 }
 
 .math-environment.theorem { --environment-accent: #2f5fa7; --environment-border: #b9cde9; --environment-fill: #eaf2ff; }
