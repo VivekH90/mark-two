@@ -1,4 +1,4 @@
-@documenttitle{Mark Two Test, banner = https://placehold.co/1400x260/png}
+@documenttitle{Mark Two Test, banner = https://upload.wikimedia.org/wikipedia/commons/3/31/Portal_Math_Banner_Background_ka.jpg}
 
 @button{Home, href = /, color = black}
 @button{GitHub, href = https://github.com/VivekH90/mark-two, color = #4f6fd8}
@@ -40,7 +40,7 @@ Suppose $f(x)=x^2$. This checks that mathematical expressions can appear natural
 
 @definition{A Simple Function}
 
-A function $f : X \to Y$ assigns to every $x \in X$ exactly one element $f(x) \in Y$.
+A function $f : X \to Y$ assigns to every $x \in X exactly one element $f(x) \in Y$.
 
 @theorem{A Basic Identity}
 
