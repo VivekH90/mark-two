@@ -94,6 +94,15 @@ def render(document: Document, template_path: str | Path) -> str:
             f'style="--button-color: {color};">{escape(button.name)}</a>'
         )
 
+    banner = ""
+    if document.banner:
+        banner_src = escape(document.banner, quote=True)
+        banner = (
+            '<div class="site-banner">'
+            f'<img src="{banner_src}" alt="" loading="eager">'
+            '</div>'
+        )
+
     toc = []
     article = []
     environment_counters = {}
@@ -123,6 +132,7 @@ def render(document: Document, template_path: str | Path) -> str:
     replacements = {
         "{{DOCUMENT_TITLE}}": escape(document.document_title),
         "{{ARTICLE_TITLE}}": escape(document.article_title),
+        "{{BANNER}}": banner,
         "{{BUTTONS}}": "\n".join(buttons),
         "{{TOC}}": "\n".join(toc),
         "{{ARTICLE}}": "\n".join(article),
