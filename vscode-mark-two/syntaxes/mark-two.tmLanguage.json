@@ -3,54 +3,122 @@
   "name": "Mark Two",
   "scopeName": "source.mark-two",
   "patterns": [
-    { "include": "#comments" },
-    { "include": "#math-display" },
-    { "include": "#math-inline" },
-    { "include": "#directives" },
-    { "include": "#strings" },
-    { "include": "#numbers" },
-    { "include": "#urls" }
+    {
+      "include": "#comments"
+    },
+    {
+      "include": "#math-display"
+    },
+    {
+      "include": "#math-inline"
+    },
+    {
+      "include": "#directives"
+    },
+    {
+      "include": "#braces"
+    },
+    {
+      "include": "#metadata-arguments"
+    },
+    {
+      "include": "#strings"
+    },
+    {
+      "include": "#numbers"
+    },
+    {
+      "include": "#urls"
+    }
   ],
   "repository": {
-    "comments": { "patterns": [{ "name": "comment.line.percent.mark-two", "match": "%.*$" }] },
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.percent.mark-two",
+          "match": "%.*$"
+        }
+      ]
+    },
     "math-display": {
       "name": "markup.math.display.mark-two",
-      "begin": "\\\\\\[", "end": "\\\\\\]",
-      "patterns": [{ "include": "#math-common" }]
+      "begin": "\\\\\\[",
+      "end": "\\\\\\]",
+      "patterns": [
+        {
+          "include": "#math-common"
+        }
+      ]
     },
     "math-inline": {
       "name": "markup.math.inline.mark-two",
-      "begin": "\\\\\\(", "end": "\\\\\\)",
-      "patterns": [{ "include": "#math-common" }]
+      "begin": "\\\\\\(",
+      "end": "\\\\\\)",
+      "patterns": [
+        {
+          "include": "#math-common"
+        }
+      ]
     },
     "math-common": {
       "patterns": [
-        { "name": "constant.numeric.math.mark-two", "match": "\\b\\d+(?:\\.\\d+)?\\b" },
-        { "name": "keyword.operator.math.mark-two", "match": "[+\\-*/=<>^_]" },
-        { "name": "support.function.math.mark-two", "match": "\\\\(?:frac|sqrt|sum|prod|int|lim|sin|cos|tan|log|ln|exp|infty|cdot|times|to|in|notin|leq|geq)\\b" },
-        { "name": "variable.parameter.math.mark-two", "match": "\\b[a-zA-Z]\\b" }
+        {
+          "name": "constant.numeric.math.mark-two",
+          "match": "\\b\\d+(?:\\.\\d+)?\\b"
+        },
+        {
+          "name": "keyword.operator.math.mark-two",
+          "match": "[+\\-*/=<>^_]"
+        },
+        {
+          "name": "support.function.math.mark-two",
+          "match": "\\\\(?:frac|sqrt|sum|prod|int|lim|sin|cos|tan|log|ln|exp|infty|cdot|times|to|in|notin|leq|geq)\\b"
+        },
+        {
+          "name": "variable.parameter.math.mark-two",
+          "match": "\\b[a-zA-Z]\\b"
+        }
       ]
     },
     "directives": {
       "patterns": [
         {
           "name": "keyword.control.directive.mark-two",
-          "match": "@(documenttitle|button|title|section|subsection|image|text|bold|italic|color|label|ref|enumerate|itemize|item|theorem|lemma|definition|corollary|axiom|proposition|remark|example|conjecture|notation|warning|proof|relatedlinks|relatedlink)\\b"
+          "match": "@[A-Za-z][\\w]*\\b"
+        },
+        {
+          "name": "entity.name.function.directive.mark-two",
+          "match": "(@(?:documenttitle|button|title|section|subsection|image|text|bold|italic|color|label|ref|enumerate|itemize|item|theorem|lemma|definition|corollary|axiom|proposition|remark|example|conjecture|notation|warning|proof|relatedlinks|relatedlink))(?=\\s*\\{)"
         },
         {
           "name": "variable.other.parameter.mark-two",
           "match": "\\b(?:href|color|src|alt|caption|title|label|text|banner|bold|italic|width|height)\\b(?=\\s*=)"
         },
-        { "name": "constant.language.boolean.mark-two", "match": "\\b(?:true|false|yes|no|on|off)\\b" }
+        {
+          "name": "constant.language.boolean.mark-two",
+          "match": "\\b(?:true|false|yes|no|on|off)\\b"
+        }
       ]
     },
     "strings": {
       "name": "string.quoted.double.mark-two",
-      "begin": "\"", "end": "\"",
-      "patterns": [{ "name": "constant.character.escape.mark-two", "match": "\\\\\\.|\\\\$" }]
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [
+        {
+          "name": "constant.character.escape.mark-two",
+          "match": "\\\\\\.|\\\\$"
+        }
+      ]
     },
-    "numbers": { "name": "constant.numeric.mark-two", "match": "\\b\\d+(?:\\.\\d+)?\\b" },
-    "urls": { "name": "markup.underline.link.mark-two", "match": "https?://[^\\s,}]+" },
+    "numbers": {
+      "name": "constant.numeric.mark-two",
+      "match": "\\b\\d+(?:\\.\\d+)?\\b"
+    },
+    "urls": {
+      "name": "markup.underline.link.mark-two",
+      "match": "https?://[^\\s,}]+"
+    },
     "cross-reference": {
       "name": "markup.underline.link.mark-two",
       "match": "@ref\\{[^{}]+\\}"
@@ -58,6 +126,34 @@
     "label": {
       "name": "entity.name.label.mark-two",
       "match": "\\blabel\\s*=\\s*(?:\"[^\"]+\"|'[^']+'|[^,}\\s]+)"
+    },
+    "metadata-arguments": {
+      "patterns": [
+        {
+          "name": "entity.other.attribute-name.mark-two",
+          "match": "\\b(?:href|color|src|alt|caption|title|label|text|banner|bold|italic|width|height)\\b(?=\\s*=)"
+        },
+        {
+          "name": "keyword.operator.assignment.mark-two",
+          "match": "="
+        },
+        {
+          "name": "constant.other.color.mark-two",
+          "match": "#[0-9A-Fa-f]{3,8}\\b"
+        }
+      ]
+    },
+    "braces": {
+      "patterns": [
+        {
+          "name": "punctuation.section.braces.begin.mark-two",
+          "match": "\\{"
+        },
+        {
+          "name": "punctuation.section.braces.end.mark-two",
+          "match": "\\}"
+        }
+      ]
     }
   }
 }
