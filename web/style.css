@@ -335,3 +335,51 @@ html.dark-mode .math-environment.warning { --environment-border: #805b70; --envi
     .banner-title { padding: 18px; font-size: clamp(38px, 12vw, 58px); }
     .article { padding: 28px 20px 34px; border-radius: 18px; }
 }
+/* --- Explicit LIGHT reading surfaces -------------------------------------
+   The banner remains visible around the content, but the text-reading
+   surfaces are fully opaque and light. This prevents the background image
+   from bleeding through and making the "light" theme look dark. */
+html:not(.dark-mode) body {
+    background-color: #eee7f6;
+    color: #24152f;
+}
+
+html:not(.dark-mode) .article {
+    background: #fcf9ff;
+    background-color: #fcf9ff;
+    color: #24152f;
+    border-color: #d8c9e3;
+}
+
+html:not(.dark-mode) .sidebar-card {
+    background-color: #f8f1fd;
+}
+
+html:not(.dark-mode) .toc-card {
+    background: #f8f1fd;
+}
+
+html:not(.dark-mode) .related-card {
+    background: #f6eefb;
+}
+
+html:not(.dark-mode) .math-environment {
+    background: #f3e9fa;
+    color: #24152f;
+}
+
+html:not(.dark-mode) .math-environment.theorem { background: #eee3f8; }
+html:not(.dark-mode) .math-environment.lemma { background: #f0e7fa; }
+html:not(.dark-mode) .math-environment.definition { background: #f0e7f5; }
+html:not(.dark-mode) .math-environment.corollary { background: #f2e8f7; }
+html:not(.dark-mode) .math-environment.axiom { background: #f3e5f7; }
+html:not(.dark-mode) .math-environment.proposition { background: #ede7f7; }
+html:not(.dark-mode) .math-environment.remark { background: #f1edf4; }
+html:not(.dark-mode) .math-environment.example { background: #f2e8f8; }
+html:not(.dark-mode) .math-environment.conjecture { background: #f5e5f2; }
+html:not(.dark-mode) .math-environment.notation { background: #eee8f7; }
+html:not(.dark-mode) .math-environment.warning { background: #f5e7f0; }
+
+html:not(.dark-mode) .environment-label {
+    background: color-mix(in srgb, var(--environment-accent) 16%, var(--environment-fill));
+}
