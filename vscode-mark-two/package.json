@@ -2,7 +2,7 @@
   "name": "mark-two-language",
   "displayName": "Mark Two Language Support",
   "description": "Syntax highlighting, snippets, and directive completions for Mark Two documents.",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "publisher": "VivekH90",
   "license": "MIT",
   "engines": { "vscode": "^1.85.0" },
@@ -22,7 +22,12 @@
     "snippets": [{
       "language": "mark-two",
       "path": "./snippets/mark-two.code-snippets.json"
-    }]
+    }],
+    "configurationDefaults": {
+      "[mark-two]": {
+        "editor.semanticHighlighting.enabled": false
+      }
+    }
   },
   "activationEvents": ["onLanguage:mark-two"],
   "main": "./extension.js",
