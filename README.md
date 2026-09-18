@@ -290,3 +290,53 @@ mark-two/
 ├── vscode-mark-two/     # VS Code language support
 └── pyproject.toml       # Python package and CLI configuration
 ```
+
+
+### Editor Support
+
+Mark Two includes an optional VS Code language extension under `vscode-mark-two/`. It provides:
+
+- automatic language detection for `.mt` files
+- syntax highlighting for Mark Two directives, arguments, strings, URLs, numbers, comments, and TeX-style mathematics
+- directive completion after `@`
+- snippets
+- automatic bracket and parenthesis closing
+- indentation support
+
+The extension is separate from the Mark Two compiler. Installing the extension changes how `.mt` files look and behave in VS Code; it is not required to compile Mark Two documents to HTML.
+
+#### Permanent installation
+
+From the root of the Mark Two repository:
+
+```bash
+cd vscode-mark-two
+npx @vscode/vsce package
+code --install-extension ./mark-two-language-0.3.0.vsix
+```
+
+Reload VS Code after installation:
+
+1. Open the Command Palette with `Ctrl+Shift+P`.
+2. Run **Developer: Reload Window**.
+3. Open any `.mt` file.
+
+The language indicator in the bottom-right of VS Code should show **Mark Two**, and syntax highlighting will be applied automatically to `.mt` files.
+
+If `npx @vscode/vsce package` reports that the `repository` field is missing from `package.json`, that warning can be ignored when packaging the extension locally.
+
+#### Development / testing
+
+To work on the extension itself, open the Mark Two repository in VS Code and press `F5`. The included `.vscode/launch.json` starts an Extension Development Host with the local Mark Two extension loaded.
+
+After changing files under `vscode-mark-two/`, reload or restart the Extension Development Host to test the changes.
+
+#### Using Mark Two as a Git submodule
+
+If Mark Two is included in another repository as a Git submodule, update it from the parent repository with:
+
+```bash
+git submodule update --remote resources/templates/mark-two
+```
+
+Then install or repackage the extension from the updated submodule as described above.
