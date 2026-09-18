@@ -27,13 +27,13 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     if (themeToggle) {
-        const savedTheme = localStorage.getItem("mark-two-theme");
+        const savedTheme = localStorage.getItem("mark-two-theme-v2");
         applyTheme(savedTheme === "dark");
 
         themeToggle.addEventListener("click", () => {
             const dark = !document.documentElement.classList.contains("dark-mode");
             applyTheme(dark);
-            localStorage.setItem("mark-two-theme", dark ? "dark" : "light");
+            localStorage.setItem("mark-two-theme-v2", dark ? "dark" : "light");
         });
     }
 
