@@ -77,9 +77,7 @@ FUNCTION PARSE(source):
             # so restart the main loop.
             CONTINUE
 
-        # ------------------------------------------------
-        # DIRECTIVE DETECTION
-        # ------------------------------------------------
+        # directive detection
 
         # Try to determine whether the current line begins
         # a Mark Two directive such as:
@@ -93,11 +91,7 @@ FUNCTION PARSE(source):
         # multiple lines and balanced braces.
         directive = EXTRACT_DIRECTIVE(lines, index)
 
-
-
-        # ------------------------------------------------
-        # NORMAL TEXT
-        # ------------------------------------------------
+        # normal text
 
         # If no Mark Two directive was found,
         # the line is treated as ordinary article text.
