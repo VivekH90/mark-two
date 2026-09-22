@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const applyTheme = (dark) => {
         document.documentElement.classList.toggle("dark-mode", dark);
+        document.documentElement.style.colorScheme = dark ? "dark" : "light";
         themeToggle?.setAttribute("aria-pressed", String(dark));
         themeToggle?.setAttribute("aria-label", dark ? "Disable dark mode" : "Enable dark mode");
         if (themeIcon) themeIcon.textContent = dark ? "☀" : "☾";
