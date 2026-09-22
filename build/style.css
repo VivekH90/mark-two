@@ -6,24 +6,24 @@
 
     --text: #3a2923;
     --muted-text: #7a6258;
-    --page-bg: #f3dfd2;
-    --border: #d9b9aa;
+    --page-bg: #fff0e3;
+    --border: #e8c5aa;
 
-    --panel-blue: #f0d8ca;
-    --panel-green: #f1d8cb;
-    --accent: #9a604c;
+    --panel-blue: #ffe3cc;
+    --panel-green: #ffe8d8;
+    --accent: #FFD3AC;
 
-    --content-surface: #fff6ef;
-    --violet-deep: #754738;
-    --violet: #9b5f4c;
-    --violet-mid: #b47762;
-    --violet-soft: #e6c7ba;
-    --nav-surface: #f9e9df;
-    --nav-border: #dfc5b7;
-    --nav-shadow: 0 10px 34px rgba(111, 69, 53, 0.12);
-    --surface-border: #dfc7bb;
-    --surface-shadow: 0 18px 55px rgba(111, 69, 53, 0.14);
-    --banner-title-shadow: 0 2px 4px rgba(255, 246, 239, 0.82), 0 0 14px rgba(255, 225, 211, 0.28);
+    --content-surface: #fffaf5;
+    --violet-deep: #9a5b32;
+    --violet: #c87542;
+    --violet-mid: #df9967;
+    --violet-soft: #f3c9a5;
+    --nav-surface: #fff3e8;
+    --nav-border: #ebc9ac;
+    --nav-shadow: 0 10px 34px rgba(145, 86, 42, 0.10);
+    --surface-border: #ebcdb7;
+    --surface-shadow: 0 18px 55px rgba(145, 86, 42, 0.10);
+    --banner-title-shadow: 0 2px 4px rgba(255, 250, 245, 0.88), 0 0 12px rgba(255, 211, 172, 0.22);
 }
 html.dark-mode {
     --text: #eee7f4;
@@ -247,8 +247,8 @@ html.dark-mode .list-item-title { color: var(--list-color-dark, var(--text)); }
 
 .sidebar { position: sticky; top: 20px; display: flex; flex-direction: column; gap: 17px; min-width: 0; }
 .sidebar-card { border: 1.4px solid var(--border); border-radius: 16px; overflow: hidden; }
-.toc-card { border-color: #d4ad9d; background: #f8e8de; }
-.related-card { border-color: #d2b3a6; background: #f6e5db; }
+.toc-card { border-color: #e7bf9f; background: #fff0e3; }
+.related-card { border-color: #d2b3a6; background: #ffebdc; }
 .sidebar-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 15px 18px 11px; }
 .sidebar-heading h2 { margin: 0; font-size: 23px; line-height: 1.2; font-weight: 700; color: var(--violet-deep); }
 .sidebar-toggle, .link-symbol { flex: 0 0 auto; color: var(--accent); font: inherit; font-size: 22px; line-height: 1; }
