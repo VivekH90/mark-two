@@ -6,45 +6,20 @@
 
 FUNCTION PARSE(source):
 
-    # Create the root of the AST.
-    # Every part of the parsed document will eventually live somewhere
-    # inside this Document object.
+    # create a root
     document = new Document
 
-
-    # These variables keep track of where we currently are
-    # inside the document structure.
+    # initialisation
     current_section = NONE
     current_subsection = NONE
     current_environment = NONE
-
-
-    # Keep track of all slugs that have already been used.
-    # This prevents duplicate section/subsection URLs.
     used_slugs = EMPTY SET
-
-
-    # NONE means that we are not currently inside display mathematics.
-    # When we encounter "\[", this becomes a list containing the
-    # lines of the mathematical expression.
     math_buffer = NONE
-
-
-    # Each @image block gets its own group id.
-    # This lets multiple images from the same block be associated.
     image_group_id = 0
-
-
-    # Break the entire source file into individual lines.
     lines = SPLIT source INTO lines
-
-    # index tells us which line we are currently processing.
     index = 0
 
 
-    # ------------------------------------------------
-    # MAIN PARSER LOOP
-    # ------------------------------------------------
 
     # Continue until every line of the source has been processed.
     WHILE index < number_of(lines):
@@ -52,45 +27,23 @@ FUNCTION PARSE(source):
         # Get the current line.
         line = lines[index]
 
-        # ------------------------------------------------
-        # MATH MODE
-        # ------------------------------------------------
+        # math mode
 
         # "\[" starts a display-math block.
         IF STRIP(line) == "\[":
 
-            # Start an empty buffer.
-            # Every following line will be stored here until the closing "\]" is found.
             math_buffer = EMPTY LIST
 
-            # Move to the next line.
             index = index + 1
             CONTINUE
 
-        # If math_buffer is not NONE, then we are currently
-        # inside a display-math block.
         IF math_buffer IS NOT NONE:
 
             # "\]" marks the end of the display-math block.
             IF STRIP(line) == "\]":
 
-                # Decide where the math belongs.
-                # The parser always chooses the deepest active container:
-                #
-                # environment
-                #     ↓
-                # subsection
-                #     ↓
-                # section
-                #
-                # So mathematics inside a theorem goes into the theorem,
-                # mathematics inside a subsection goes into the subsection,
-                # otherwise it goes into the current section.
-                target =
-                    current_environment
-                    OR current_subsection
-                    OR current_section
-
+                # puts the math_buffer[] into the environment, subsection or section.
+                target = current_environment OR current_subsection OR current_section
 
                 # Display mathematics cannot exist before
                 # a section/subsection/environment exists.
@@ -104,22 +57,18 @@ FUNCTION PARSE(source):
                     JOIN math_buffer WITH newline
                 )
 
-
                 # Store the MathBlock in the current AST container.
                 APPEND math TO target.content
-
 
                 # We have reached the end of the math block,
                 # so leave math mode.
                 math_buffer = NONE
-
 
             ELSE:
 
                 # This line is part of the current mathematical expression.
                 # Keep collecting it until "\]" appears.
                 APPEND line TO math_buffer
-
 
             # Move to the next line.
             index = index + 1
