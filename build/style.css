@@ -4,26 +4,26 @@
     --sidebar-width: 310px;
     --page-pad: clamp(22px, 4vw, 54px);
 
-    --text: #24152f;
-    --muted-text: #725f7f;
-    --page-bg: #eee7f6;
-    --border: #cdbbdd;
+    --text: #3a2923;
+    --muted-text: #7a6258;
+    --page-bg: #f3dfd2;
+    --border: #d9b9aa;
 
-    --panel-blue: #e9e0f7;
-    --panel-green: #e8ddf0;
-    --accent: #6d3fa2;
+    --panel-blue: #f0d8ca;
+    --panel-green: #f1d8cb;
+    --accent: #9a604c;
 
-    --content-surface: rgba(250, 247, 253, 0.92);
-    --violet-deep: #4b2675;
-    --violet: #7544a8;
-    --violet-mid: #8f62bd;
-    --violet-soft: #d9c8e9;
-    --nav-surface: rgba(249, 245, 252, 0.82);
-    --nav-border: rgba(255, 255, 255, 0.76);
-    --nav-shadow: 0 10px 34px rgba(76, 39, 104, 0.16);
-    --surface-border: rgba(255, 255, 255, 0.7);
-    --surface-shadow: 0 18px 55px rgba(76, 43, 97, 0.18);
-    --banner-title-shadow: 0 2px 4px rgba(255, 255, 255, 0.72), 0 0 26px rgba(255, 255, 255, 0.48);
+    --content-surface: #fff6ef;
+    --violet-deep: #754738;
+    --violet: #9b5f4c;
+    --violet-mid: #b47762;
+    --violet-soft: #e6c7ba;
+    --nav-surface: #f9e9df;
+    --nav-border: #dfc5b7;
+    --nav-shadow: 0 10px 34px rgba(111, 69, 53, 0.12);
+    --surface-border: #dfc7bb;
+    --surface-shadow: 0 18px 55px rgba(111, 69, 53, 0.14);
+    --banner-title-shadow: 0 2px 4px rgba(255, 246, 239, 0.82), 0 0 14px rgba(255, 225, 211, 0.28);
 }
 html.dark-mode {
     --text: #eee7f4;
@@ -123,7 +123,7 @@ button, input, select, textarea { font-family: inherit; }
 .nav-button:hover, .nav-button:focus-visible {
     transform: translateY(-1px);
     box-shadow: none;
-    background: color-mix(in srgb, var(--button-color, var(--violet)) 14%, white);
+    background: color-mix(in srgb, var(--button-color, var(--violet)) 10%, #fff6ef);
 }
 html.dark-mode .nav-button {
     color: color-mix(in srgb, var(--button-color-dark, var(--button-color, #ddd)) 92%, white);
@@ -164,7 +164,7 @@ html.dark-mode .nav-button:hover, html.dark-mode .nav-button:focus-visible {
     object-fit: cover;
     object-position: center top;
     border-radius: 0;
-    opacity: 0.9;
+    opacity: 0.42;
     pointer-events: none;
 }
 .banner-title {
@@ -247,8 +247,8 @@ html.dark-mode .list-item-title { color: var(--list-color-dark, var(--text)); }
 
 .sidebar { position: sticky; top: 20px; display: flex; flex-direction: column; gap: 17px; min-width: 0; }
 .sidebar-card { border: 1.4px solid var(--border); border-radius: 16px; overflow: hidden; }
-.toc-card { border-color: #b99bda; background: linear-gradient(180deg, rgba(238, 229, 248, 0.94), rgba(250, 247, 253, 0.9) 52%); }
-.related-card { border-color: #bda5c7; background: linear-gradient(180deg, rgba(237, 226, 245, 0.94), rgba(250, 247, 253, 0.9) 52%); }
+.toc-card { border-color: #d4ad9d; background: #f8e8de; }
+.related-card { border-color: #bda5c7; background: #f6e5db; }
 .sidebar-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 15px 18px 11px; }
 .sidebar-heading h2 { margin: 0; font-size: 23px; line-height: 1.2; font-weight: 700; color: var(--violet-deep); }
 .sidebar-toggle, .link-symbol { flex: 0 0 auto; color: var(--accent); font: inherit; font-size: 22px; line-height: 1; }
@@ -256,20 +256,20 @@ html.dark-mode .list-item-title { color: var(--list-color-dark, var(--text)); }
 .toc { padding: 0 17px 15px; }
 .toc.collapsed { display: none; }
 .toc ol { margin: 0; padding: 0; list-style: none; }
-.toc > ol > li { padding: 8px 0; border-top: 1px solid rgba(108, 65, 145, 0.14); }
-.toc li { color: #5d3d79; }
-.toc a, .related-links a { color: #7041a0; text-decoration: none; }
+.toc > ol > li { padding: 8px 0; border-top: 1px solid rgba(126, 78, 62, 0.14); }
+.toc li { color: #6f4d42; }
+.toc a, .related-links a { color: #8e5847; text-decoration: none; }
 .toc a:hover, .related-links a:hover { text-decoration: underline; }
 .toc a.active { font-weight: 700; }
 .toc-section-symbol { margin-right: 2px; }
 .toc-subsections { margin: 5px 0 0 23px !important; padding-left: 0 !important; list-style: none !important; }
 .toc-subsections li { padding: 3px 0; }
 .related-links { list-style: none; margin: 0; padding: 0 18px 15px; }
-.related-links li { padding: 8px 0; border-top: 1px solid rgba(108, 65, 145, 0.14); }
+.related-links li { padding: 8px 0; border-top: 1px solid rgba(126, 78, 62, 0.14); }
 .related-links li::before { content: "↗"; display: inline-block; margin-right: 9px; color: var(--muted-text); font-family: Arial, sans-serif; }
-.cross-reference { color: #7041a0; font-weight: 600; text-decoration: none; border-bottom: 1px dotted currentColor; }
+.cross-reference { color: #8e5847; font-weight: 600; text-decoration: none; border-bottom: 1px dotted currentColor; }
 .cross-reference:hover, .cross-reference:focus-visible { text-decoration: underline; }
-.unresolved-reference { color: #a85b00; }
+.unresolved-reference { color: #9b5b31; }
 .mark-label { display: block; width: 0; height: 0; scroll-margin-top: 24px; }
 
 .math-environment {
@@ -277,23 +277,23 @@ html.dark-mode .list-item-title { color: var(--list-color-dark, var(--text)); }
     margin: 22px 0;
     padding: 17px 24px 16px;
     border: 1px solid var(--environment-border, #cdbbdd);
-    border-left: 4px solid var(--environment-accent, #7544a8);
+    border-left: 4px solid var(--environment-accent, #965c4b);
     border-radius: 13px;
-    background: linear-gradient(90deg, var(--environment-fill, #eee5f7) 0%, rgba(255, 255, 255, 0.8) 72%, rgba(255, 255, 255, 0.2) 100%);
+    background: var(--environment-fill, #f1ddd2);
     color: var(--text);
     scroll-margin-top: 24px;
 }
-.math-environment.theorem { --environment-accent: #6d3fa2; --environment-border: #b99bda; --environment-fill: #efe5fa; }
-.math-environment.lemma { --environment-accent: #7544a8; --environment-border: #c0a9dc; --environment-fill: #f1e8f9; }
-.math-environment.definition { --environment-accent: #7a5194; --environment-border: #c5a8d2; --environment-fill: #f0e5f5; }
-.math-environment.corollary { --environment-accent: #8b5ca8; --environment-border: #cbb3d8; --environment-fill: #f3eaf8; }
-.math-environment.axiom { --environment-accent: #8a4aa2; --environment-border: #c99bd6; --environment-fill: #f4e5f7; }
-.math-environment.proposition { --environment-accent: #714a9c; --environment-border: #baa8d0; --environment-fill: #eee8f7; }
-.math-environment.remark { --environment-accent: #76657e; --environment-border: #c4b8cc; --environment-fill: #f2eef4; }
-.math-environment.example { --environment-accent: #8657a8; --environment-border: #cbb0db; --environment-fill: #f3eaf8; }
-.math-environment.conjecture { --environment-accent: #9a4a91; --environment-border: #d39bc7; --environment-fill: #f6e5f3; }
-.math-environment.notation { --environment-accent: #684797; --environment-border: #b7a4d0; --environment-fill: #eee9f7; }
-.math-environment.warning { --environment-accent: #945274; --environment-border: #d0abc0; --environment-fill: #f5e8f1; }
+.math-environment.theorem { --environment-accent: #8e5546; --environment-border: #d4ad9d; --environment-fill: #f1d9ce; }
+.math-environment.lemma { --environment-accent: #965c4b; --environment-border: #d8b5a6; --environment-fill: #f3ddd3; }
+.math-environment.definition { --environment-accent: #966454; --environment-border: #d7b6a9; --environment-fill: #f2ddd4; }
+.math-environment.corollary { --environment-accent: #9a6655; --environment-border: #d8b9ac; --environment-fill: #f4e1d9; }
+.math-environment.axiom { --environment-accent: #93584c; --environment-border: #d9aea1; --environment-fill: #f4dfd7; }
+.math-environment.proposition { --environment-accent: #8d5e4f; --environment-border: #d1b2a5; --environment-fill: #f0dfd8; }
+.math-environment.remark { --environment-accent: #7d6258; --environment-border: #d3c0b7; --environment-fill: #f3eae6; }
+.math-environment.example { --environment-accent: #955f51; --environment-border: #d7b7aa; --environment-fill: #f4e1d9; }
+.math-environment.conjecture { --environment-accent: #96586c; --environment-border: #d6aeba; --environment-fill: #f3e0e7; }
+.math-environment.notation { --environment-accent: #765b93; --environment-border: #c7b4cb; --environment-fill: #efe6ec; }
+.math-environment.warning { --environment-accent: #955a67; --environment-border: #d7b6bd; --environment-fill: #f4e4e8; }
 .environment-heading { margin-bottom: 8px; font-size: 18px; font-weight: 700; }
 .environment-label { display: inline-block; padding: 2px 11px 3px; border-radius: 999px; background: color-mix(in srgb, var(--environment-accent) 20%, var(--environment-fill)); font-weight: 700; }
 .environment-number { font-weight: 700; }
