@@ -180,7 +180,7 @@
     4. Return both.
 
 
-# Parse Function
+## Parse Function
 
 1. Create an empty `Document` object.
 
