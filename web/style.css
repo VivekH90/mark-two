@@ -248,7 +248,7 @@ html.dark-mode .list-item-title { color: var(--list-color-dark, var(--text)); }
 .sidebar { position: sticky; top: 20px; display: flex; flex-direction: column; gap: 17px; min-width: 0; }
 .sidebar-card { border: 1.4px solid var(--border); border-radius: 16px; overflow: hidden; }
 .toc-card { border-color: #d4ad9d; background: #f8e8de; }
-.related-card { border-color: #bda5c7; background: #f6e5db; }
+.related-card { border-color: #d2b3a6; background: #f6e5db; }
 .sidebar-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 15px 18px 11px; }
 .sidebar-heading h2 { margin: 0; font-size: 23px; line-height: 1.2; font-weight: 700; color: var(--violet-deep); }
 .sidebar-toggle, .link-symbol { flex: 0 0 auto; color: var(--accent); font: inherit; font-size: 22px; line-height: 1; }
