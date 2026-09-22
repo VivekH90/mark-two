@@ -1,729 +1,727 @@
 # Parser
 
-## slug
+## Helper Functions
+
+1. `_slugify(text)`
+   1. Take the supplied text.
+   2. Remove whitespace from both ends.
+   3. Convert it to lowercase.
+   4. Replace every sequence of non-alphanumeric characters with `-`.
+   5. Remove `-` from the beginning and end.
+   6. If the result is empty, return `"section"`.
+   7. Otherwise return the resulting slug.
+
+2. `_split_top_level(text)`
+   1. Create an empty list called `parts`.
+   2. Create an empty list called `current`.
+   3. Set `quote = None`.
+   4. Set `depth = 0`.
+   5. Set `escaped = False`.
+   6. Read the text one character at a time.
+   7. If the previous character was escaped:
+      1. Set `escaped = False`.
+      2. Add the current character to `current`.
+      3. Continue to the next character.
+   8. If the current character is `\`:
+      1. Set `escaped = True`.
+      2. Add `\` to `current`.
+      3. Continue.
+   9. If the current character is `"`:
+      1. Open the quote if no quote is active.
+      2. Close the quote if a quote is already active.
+   10. If no quote is active:
+       1. Increase `depth` when `{`, `[` or `(` is found.
+       2. Decrease `depth` when `}`, `]` or `)` is found.
+       3. If `,` is found while `depth = 0`, treat it as a separator.
+   11. When a top-level comma is found:
+       1. Join the characters in `current`.
+       2. Remove surrounding whitespace.
+       3. Add the result to `parts` if it is not empty.
+       4. Clear `current`.
+   12. After all characters have been processed:
+       1. Join the remaining characters.
+       2. Remove surrounding whitespace.
+       3. Add the final part if it is not empty.
+   13. Return `parts`.
+
+3. `_strip_quotes(value)`
+   1. Remove surrounding whitespace.
+   2. Remove surrounding single or double quotation marks.
+   3. Return the resulting value.
+
+4. `_parse_key_values(text)`
+   1. Create an empty dictionary called `values`.
+   2. Split `text` using `_split_top_level()`.
+   3. For every resulting part:
+      1. If `=` exists:
+         1. Split at the first `=`.
+         2. Treat the left side as the key.
+         3. Remove whitespace from the key.
+         4. Convert the key to lowercase.
+         5. Remove surrounding quotes from the value.
+         6. Store the key/value pair.
+      2. Otherwise:
+         1. If `"name"` has not been assigned yet, use this part as `"name"`.
+   4. Return `values`.
+
+5. `_unique_slug(base, used)`
+   1. Check whether `base` already exists in `used`.
+   2. If it does not:
+      1. Add it to `used`.
+      2. Return it.
+   3. If it already exists:
+      1. Start with number `2`.
+      2. Try `base-2`.
+      3. Keep increasing the number until an unused slug is found.
+      4. Add the new slug to `used`.
+      5. Return it.
+
+6. `_extract_directive(lines, start_index)`
+   1. Check whether `lines[start_index]` starts with a Mark Two directive.
+   2. If not, return `None`.
+   3. Extract the command name.
+   4. Find the opening `{`.
+   5. Set brace `depth = 0`.
+   6. Set `quote = None`.
+   7. Set `escaped = False`.
+   8. Create an empty list called `argument_parts`.
+   9. Read from `start_index` onward.
+   10. Track escaped characters and quotation marks.
+   11. Increase brace depth when an unquoted `{` is found.
+   12. Decrease brace depth when an unquoted `}` is found.
+   13. When depth returns to `0`:
+       1. The directive is complete.
+       2. Check that there is no unexpected text after the closing `}`.
+       3. Join the argument parts.
+       4. Return the command, argument, and final line index.
+   14. If the end of the file is reached first, raise an unclosed-directive error.
+
+7. `_extract_directive_blocks(text, command)`
+   1. Search for occurrences of the requested directive.
+   2. For each occurrence:
+      1. Find its opening `{`.
+      2. Track brace depth.
+      3. Track quotation marks.
+      4. Track escaped characters.
+      5. Find its matching closing `}`.
+      6. Extract the complete block.
+   3. If no matching `}` exists, raise an error.
+   4. Continue searching after the block.
+   5. Return all extracted blocks.
+
+8. `_parse_image_group(argument, group_id)`
+   1. Parse the argument using `_parse_key_values()`.
+   2. Check for indexed image entries such as `image(1)`, `image(2)`, etc.
+   3. Store indexed sources, widths and heights separately.
+   4. If no indexed sources exist:
+      1. Look for `src`.
+      2. Otherwise look for `image`.
+      3. If neither exists, raise an error.
+      4. Create one `Image`.
+      5. Return it in a list.
+   5. If indexed sources exist:
+      1. Sort their indexes.
+      2. Require indexes to be `1, 2, 3, ...`.
+      3. Require at least two indexed images.
+      4. Otherwise raise an error.
+      5. Create one `Image` for every indexed source.
+      6. Give them the same `group_id`.
+      7. Return the images.
+
+9. `_parse_list_item_content(body)`
+   1. Create a temporary section containing `body`.
+   2. Call `parse()` on that temporary source.
+   3. Extract the temporary section's content.
+   4. Return that content.
+   5. This allows list items to contain normal Mark Two content and nested structures.
+
+10. `_parse_list(argument, ordered)`
+    1. Set the default list color to `"black"`.
+    2. Separate list-level properties from `@item` entries.
+    3. Read the optional `color`.
+    4. Extract every `@item{...}` block.
+    5. For each item:
+       1. Make sure there is no unexpected content outside `@item`.
+       2. Check for an optional item title.
+       3. Remove the title from the item body.
+       4. Parse the remaining body using `_parse_list_item_content()`.
+       5. Create a `ListItem`.
+    6. Ensure at least one item exists.
+    7. Create a `ListBlock`.
+    8. Set its ordered/unordered state.
+    9. Set its color.
+    10. Return the `ListBlock`.
+
+11. `_parse_text(argument)`
+    1. Check whether `=` exists.
+    2. If it does not:
+       1. Use the entire argument as the text.
+       2. Create a `TextBlock`.
+       3. Return it.
+    3. Otherwise parse the key/value pairs.
+    4. Obtain the text from `text`, or from `name`.
+    5. Raise an error if the text is empty.
+    6. Determine whether bold is enabled.
+    7. Determine whether italic is enabled.
+    8. Obtain the optional color.
+    9. Create the `TextBlock`.
+    10. Return it.
 
-~~~text
+12. `_add_content(container, line)`
+    1. Remove whitespace from the line.
+    2. If the resulting line is not empty:
+       1. Append it to `container.content`.
+    3. Otherwise do nothing.
 
-FUNCTION PARSE(source):
+13. `_title_and_label(argument)`
+    1. Parse the argument using `_parse_key_values()`.
+    2. Extract the `name`.
+    3. Extract the `label`.
+    4. Return both.
 
-    # create a root
-    document = new Document
 
-    # initialisation
-    current_section = NONE
-    current_subsection = NONE
-    current_environment = NONE
-    used_slugs = EMPTY SET
-    math_buffer = NONE
-    image_group_id = 0
-    lines = SPLIT source INTO lines
-    index = 0
+# Parse Function
 
+1. Create an empty `Document` object.
 
+2. Set `current_section = None`.
 
-    # Continue until every line of the source has been processed.
-    WHILE index < number_of(lines):
+3. Set `current_subsection = None`.
 
-        # Get the current line.
-        line = lines[index]
+4. Set `current_environment = None`.
 
-        # math mode
+5. Set `used_slugs = {}` as an empty set.
+   This stores the slugs that have already been used.
 
-        # "\[" starts a display-math block.
-        IF STRIP(line) == "\[":
+6. Set `display_math_lines = None`.
+   This means the parser is initially not inside a display-math block.
 
-            math_buffer = EMPTY LIST
+7. Split `source` into individual lines:
+   
+       lines = source.splitlines()
 
-            index = index + 1
-            CONTINUE
+8. Set `index = 0`.
+   This is the position of the current line in `lines`.
 
-        IF math_buffer IS NOT NONE:
+9. Set `image_group_id = 0`.
 
-            # "\]" marks the end of the display-math block.
-            IF STRIP(line) == "\]":
+10. While `index < number of lines`:
 
-                # puts the math_buffer[] into the environment, subsection or section.
-                target = current_environment OR current_subsection OR current_section
+    a. Read the current line:
+       
+           raw_line = lines[index]
 
-                # Display mathematics cannot exist before
-                # a section/subsection/environment exists.
-                IF target == NONE:
 
-                    ERROR "display math must appear after @section"
+    b. Check whether `display_math_lines` is not `None`.
 
+       i. If `display_math_lines` is not `None`, the parser is currently
+          inside a display-math block.
 
-                # Convert all collected math lines into one MathBlock.
-                math = new MathBlock(
-                    JOIN math_buffer WITH newline
-                )
+          1. Remove whitespace from the beginning and end of `raw_line`.
 
-                # Store the MathBlock in the current AST container.
-                APPEND math TO target.content
+          2. Check whether the resulting line is `\]`.
 
-                # We have reached the end of the math block,
-                # so leave math mode.
-                math_buffer = NONE
+             a. If the current line is `\]`:
 
-            ELSE:
+                1. Determine the target where the completed
+                   mathematical expression will be stored.
 
-                # This line is part of the current mathematical expression.
-                # Keep collecting it until "\]" appears.
-                APPEND line TO math_buffer
+                   Priority is:
 
-            # Move to the next line.
-            index = index + 1
+                   - `current_environment`
+                   - otherwise `current_subsection`
+                   - otherwise `current_section`
 
-            # The current line has already been handled,
-            # so restart the main loop.
-            CONTINUE
+                2. If all three are `None`:
 
-        # directive detection
+                       raise error:
+                       "display math must appear after @section"
 
-        # Try to determine whether the current line begins
-        # a Mark Two directive such as:
-        #
-        # @section{...}
-        # @text{...}
-        # @image{...}
-        # @theorem{...}
-        #
-        # EXTRACT_DIRECTIVE also handles directives spanning
-        # multiple lines and balanced braces.
-        directive = EXTRACT_DIRECTIVE(lines, index)
+                3. Join all lines currently stored in
+                   `display_math_lines` using newline characters.
 
-        # normal text
+                4. Create a `MathBlock` from the joined mathematical text.
 
-        # If no Mark Two directive was found,
-        # the line is treated as ordinary article text.
-        IF directive == NONE:
+                5. Append the new `MathBlock` to `target.content`.
 
-            # Again choose the deepest active container.
-            target =
-                current_environment
-                OR current_subsection
-                OR current_section
+                6. Set `display_math_lines = None`.
 
+                   This means the parser has now left math mode.
 
-            # Text can only be stored if we are inside
-            # a section/subsection/environment.
-            IF target IS NOT NONE:
+             b. Otherwise, if the current line is not `\]`:
 
-                # Add the line to the current content.
-                # Empty lines are ignored.
-                ADD_NONEMPTY_LINE(target, line)
+                1. Append `raw_line` to `display_math_lines`.
 
+                2. Continue collecting mathematical lines.
 
-            # Move forward one line.
-            index = index + 1
-            CONTINUE
+          3. Increase `index` by `1`.
 
+          4. Use `continue` to immediately start the next
+             iteration of the main loop.
 
 
-        # ------------------------------------------------
-        # DIRECTIVE FOUND
-        # ------------------------------------------------
+    c. If the parser is not currently in math mode, check whether
+       the current line starts a display-math block.
 
-        # Extract the information returned by EXTRACT_DIRECTIVE.
-        #
-        # command    = directive name
-        # argument   = everything inside {...}
-        # end_index  = final source line occupied by the directive
-        command = directive.command
-        argument = directive.argument
-        end_index = directive.end_index
+       i. Remove whitespace from `raw_line`.
 
+       ii. Check whether it is `\[ `.
 
-        # Normalize the command name.
-        #
-        # Lowercase:
-        #     @Section -> @section
-        #
-        # Remove spaces:
-        #     @document title -> @documenttitle
-        command = LOWERCASE(command)
-        REMOVE SPACES FROM command
+       iii. If the line is `\[`:
 
+            1. Set `display_math_lines = []`.
 
+               This creates an empty buffer for the mathematical lines
+               that will follow.
 
-        # ------------------------------------------------
-        # SOME DIRECTIVES CLOSE CURRENT ENVIRONMENT STATE
-        # ------------------------------------------------
+            2. This also changes the parser into math mode because
+               `display_math_lines` is no longer `None`.
 
-        # These commands indicate that we are starting
-        # a new structural element or document-level element.
-        #
-        # Therefore the parser stops treating later content
-        # as belonging to the previous environment.
-        IF command is one of:
+            3. Increase `index` by `1`.
 
-            documenttitle
-            title
-            button
-            section
-            subsection
-            image
-            relatedlinks
-            relatedlink
+            4. Use `continue` to start processing the next line.
 
-        THEN:
 
-            current_environment = NONE
+    d. If the line was not the beginning of a math block,
+       try to extract a Mark Two directive:
 
+           directive = _extract_directive(lines, index)
 
+       `directive` can contain:
 
-        # ------------------------------------------------
-        # DOCUMENT TITLE
-        # ------------------------------------------------
+       - the command name
+       - the command argument
+       - the final line occupied by the directive
 
-        IF command == documenttitle:
 
-            # Convert the argument into key/value pairs.
-            #
-            # For example:
-            #
-            # name = "Mathematics",
-            # banner = "background.png",
-            # color = "#FFD3AC"
-            #
-            # becomes a dictionary of values.
-            values = PARSE_KEY_VALUES(argument)
+    e. Check whether `directive` is `None`.
 
+       i. If `directive` is `None`, the current line is not
+          a Mark Two directive.
 
-            # Store the document title.
-            #
-            # It can either be written explicitly as:
-            #
-            # name = "Mathematics"
-            #
-            # or simply as:
-            #
-            # @documenttitle{Mathematics}
-            document.document_title =
-                values["name"] OR argument
+          1. Determine where this ordinary text should be stored.
 
+             Priority is:
 
-            # Optional banner image/path.
-            document.banner =
-                values["banner"] OR ""
+             - `current_environment`
+             - otherwise `current_subsection`
+             - otherwise `current_section`
 
+          2. If a target exists:
 
-            # Optional banner color.
-            document.banner_color =
-                values["color"] OR ""
+                 add `raw_line` to the target's content
 
+             using `_add_content()`.
 
+          3. If no target exists, do nothing with the line.
 
-        # ------------------------------------------------
-        # ARTICLE TITLE
-        # ------------------------------------------------
+          4. Increase `index` by `1`.
 
-        ELSE IF command == title:
+          5. Use `continue` to start the next iteration.
 
-            # Store the title of the article.
-            document.article_title = argument
 
+    f. If a directive was found:
 
+       i. Extract its three returned values:
 
-        # ------------------------------------------------
-        # BUTTON
-        # ------------------------------------------------
+          1. `command`
+          2. `argument`
+          3. `end_index`
 
-        ELSE IF command == button:
+       ii. Normalize the command:
 
-            # Parse button properties.
-            values = PARSE_KEY_VALUES(argument)
+           1. Remove whitespace from the command.
+           2. Convert the command to lowercase.
+           3. Remove spaces from inside the command name.
 
 
-            # Construct a Button AST node.
-            button = new Button(
+    g. Check whether the command is one of:
 
-                # Use "Button" if no name was supplied.
-                name = values["name"] OR "Button",
+           documenttitle
+           title
+           button
+           section
+           subsection
+           image
+           relatedlinks
+           relatedlink
 
-                # Use "#" if no destination was supplied.
-                href = values["href"] OR "#",
+       i. If it is one of these commands:
 
-                # Use black as the default color.
-                color = values["color"] OR "black"
+          1. Set `current_environment = None`.
 
-            )
+          This ends the current environment context before
+          processing the new command.
 
 
-            # Buttons belong directly to the Document.
-            APPEND button TO document.buttons
+    h. If `command == "documenttitle"`:
 
+       i. Parse the argument using `_parse_key_values()`.
 
+       ii. Set `document.document_title` to:
 
-        # ------------------------------------------------
-        # SECTION
-        # ------------------------------------------------
+           1. `values["name"]` if it exists,
+           2. otherwise the complete `argument`.
 
-        ELSE IF command == section:
+       iii. Set `document.banner` to `values["banner"]`
+            or an empty string.
 
-            # Parse section properties such as:
-            #
-            # name
-            # color
-            # label
-            values = PARSE_KEY_VALUES(argument)
+       iv. Set `document.banner_color` to `values["color"]`
+           or an empty string.
 
 
-            # If no explicit name= was given,
-            # use the whole argument as the title.
-            title =
-                values["name"] OR argument
+    i. Else if `command == "title"`:
 
+       i. Set `document.article_title = argument`.
 
-            # Turn the human-readable title into a URL-friendly slug.
-            #
-            # Example:
-            #
-            # "Real Analysis"
-            #
-            # becomes:
-            #
-            # "real-analysis"
-            base_slug = SLUGIFY(title)
 
+    j. Else if `command == "button"`:
 
-            # Make sure this slug has not already been used.
-            #
-            # If "real-analysis" already exists,
-            # this might produce "real-analysis-2".
-            slug = UNIQUE_SLUG(
-                base_slug,
-                used_slugs
-            )
+       i. Parse the argument using `_parse_key_values()`.
 
+       ii. Create a `Button` using:
 
-            # Create the Section AST node.
-            section = new Section(
+           1. `name = values["name"]` or `"Button"`
+           2. `href = values["href"]` or `"#"`
+           3. `color = values["color"]` or `"black"`
 
-                # Human-readable section title.
-                title = title,
+       iii. Append the `Button` to `document.buttons`.
 
-                # Optional section color.
-                # Default = "#111111".
-                color = values["color"] OR "#111111",
 
-                # URL-friendly identifier.
-                slug = slug,
+    k. Else if `command == "section"`:
 
-                # Optional reference label.
-                label = values["label"] OR ""
+       i. Parse the argument using `_parse_key_values()`.
 
-            )
+       ii. Determine the section title:
 
+           1. Use `values["name"]` if available.
+           2. Otherwise use the complete `argument`.
 
-            # Add the new section to the Document.
-            APPEND section TO document.sections
+       iii. Convert the title into a base slug using `_slugify()`.
 
+       iv. Pass the base slug to `_unique_slug()` together with
+           `used_slugs` to guarantee that the slug is unique.
 
-            # This newly created section becomes
-            # the current section.
-            current_section = section
+       v. Create a `Section` using:
 
+           1. the title
+           2. `values["color"]` or `"#111111"`
+           3. the unique slug
+           4. `values["label"]` or an empty string
 
-            # A new section means we are no longer
-            # inside the previous subsection.
-            current_subsection = NONE
+       vi. Append the new `Section` to `document.sections`.
 
+       vii. Set `current_section` to this new section.
 
+       viii. Set `current_subsection = None`.
 
-        # ------------------------------------------------
-        # SUBSECTION
-        # ------------------------------------------------
+            This clears the previous subsection because a new
+            section has started.
 
-        ELSE IF command == subsection:
 
-            # A subsection must belong to some section.
-            IF current_section == NONE:
+    l. Else if `command == "subsection"`:
 
-                ERROR "@subsection must appear after @section"
+       i. Check whether `current_section` is `None`.
 
+          1. If it is `None`, raise:
 
-            # Extract the subsection title and optional label.
-            title, label =
-                PARSE_TITLE_AND_LABEL(argument)
+                 "@subsection must appear after @section"
 
+       ii. Extract the subsection title and label using
+           `_title_and_label()`.
 
-            # If no explicit title was found,
-            # use the complete argument as the title.
-            IF title is empty:
+       iii. If the extracted title is empty:
 
-                title = argument
+            1. Use the complete `argument` as the title.
 
+       iv. Convert the title into a slug using `_slugify()`.
 
-            # Generate a unique URL slug.
-            slug = UNIQUE_SLUG(
+       v. Make the slug unique using `_unique_slug()`.
 
-                SLUGIFY(title),
+       vi. Create a `Subsection` containing:
 
-                used_slugs
+           1. the title
+           2. the unique slug
+           3. the label
 
-            )
+       vii. Append the `Subsection` to `current_section.subsections`.
 
+       viii. Set `current_subsection` to the new subsection.
 
-            # Create the Subsection AST node.
-            subsection = new Subsection(
 
-                title = title,
+    m. Else if `command == "image"`:
 
-                slug = slug,
+       i. Determine the target:
 
-                label = label
+          Priority is:
 
-            )
+          - `current_environment`
+          - otherwise `current_subsection`
+          - otherwise `current_section`
 
+       ii. If the target is `None`, raise:
 
-            # Attach the subsection to the current section.
-            APPEND subsection
-            TO current_section.subsections
+              "@image must appear after @section"
 
+       iii. Increase `image_group_id` by `1`.
 
-            # This subsection becomes the current content location.
-            current_subsection = subsection
+       iv. Pass the argument and new `image_group_id`
+           to `_parse_image_group()`.
 
+       v. Receive one or more `Image` objects.
 
+       vi. Append all returned images to `target.content`.
 
-        # ------------------------------------------------
-        # IMAGE
-        # ------------------------------------------------
 
-        ELSE IF command == image:
+    n. Else if `command == "text"`:
 
-            # Images can appear inside:
-            #
-            # 1. an environment
-            # 2. a subsection
-            # 3. a section
-            #
-            # Choose the deepest active one.
-            target =
-                current_environment
-                OR current_subsection
-                OR current_section
+       i. Determine the target:
 
+          Priority is:
 
-            # An image cannot exist outside the document structure.
-            IF target == NONE:
+          - `current_environment`
+          - otherwise `current_subsection`
+          - otherwise `current_section`
 
-                ERROR "@image must appear after @section"
+       ii. If the target is `None`, raise:
 
+              "@text must appear after @section"
 
-            # Every @image directive gets a new group id.
-            image_group_id += 1
+       iii. Parse the argument using `_parse_text()`.
 
+       iv. Receive a `TextBlock`.
 
-            # Parse the image arguments.
-            #
-            # This may produce one Image node,
-            # or several Image nodes for a multi-image group.
-            images =
-                PARSE_IMAGE_GROUP(
-                    argument,
-                    image_group_id
-                )
+       v. Append the `TextBlock` to `target.content`.
 
 
-            # Add all resulting Image nodes to the current content.
-            APPEND all images TO target.content
+    o. Else if `command == "label"`:
 
+       i. Determine the target:
 
+          Priority is:
 
-        # ------------------------------------------------
-        # TEXT
-        # ------------------------------------------------
+          - `current_environment`
+          - otherwise `current_subsection`
+          - otherwise `current_section`
 
-        ELSE IF command == text:
+       ii. If the target is `None`, raise:
 
-            # Determine where the text belongs.
-            target =
-                current_environment
-                OR current_subsection
-                OR current_section
+              "@label must appear after @section"
 
+       iii. Remove surrounding quotes from the argument
+            using `_strip_quotes()`.
 
-            # Text must appear inside a section/subsection/environment.
-            IF target == NONE:
+       iv. Store the result as `label`.
 
-                ERROR "@text must appear after @section"
+       v. If the label is empty, raise:
 
+              "@label requires a label name"
 
-            # Parse the @text arguments.
-            #
-            # This converts things like:
-            #
-            # bold = true
-            # italic = true
-            # color = red
-            #
-            # into a TextBlock AST node.
-            text_block =
-                PARSE_TEXT(argument)
+       vi. Create a `Label`.
 
+       vii. Append the `Label` to `target.content`.
 
-            # Add it to the current content.
-            APPEND text_block
-            TO target.content
 
+    p. Else if `command == "ref"`:
 
+       i. Determine the target:
 
-        # ------------------------------------------------
-        # LABEL
-        # ------------------------------------------------
+          Priority is:
 
-        ELSE IF command == label:
+          - `current_environment`
+          - otherwise `current_subsection`
+          - otherwise `current_section`
 
-            # Find the deepest active container.
-            target =
-                current_environment
-                OR current_subsection
-                OR current_section
+       ii. If the target is `None`, raise:
 
+              "@ref must appear after @section"
 
-            # A label needs somewhere to attach.
-            IF target == NONE:
+       iii. Parse the argument using `_parse_key_values()`.
 
-                ERROR "@label must appear after @section"
+       iv. Create a `Reference` using:
 
+           1. `values["name"]` as the target if available,
+              otherwise the complete `argument`
+           2. `values["text"]` as the visible text,
+              otherwise an empty string
 
-            # Remove surrounding quotes.
-            label_name =
-                STRIP_QUOTES(argument)
+       v. Append the `Reference` to `target.content`.
 
 
-            # Empty labels are invalid.
-            IF label_name is empty:
+    q. Else if `command` is one of the known environments:
 
-                ERROR "@label requires a label name"
+       Supported environments are:
 
+           theorem
+           lemma
+           definition
+           corollary
+           axiom
+           proposition
+           remark
+           example
+           conjecture
+           notation
+           warning
+           proof
 
-            # Create and store the Label AST node.
-            APPEND new Label(label_name)
-            TO target.content
+       i. Determine the target:
 
+          Priority is:
 
+          - `current_subsection`
+          - otherwise `current_section`
 
-        # ------------------------------------------------
-        # REFERENCE
-        # ------------------------------------------------
+       ii. If the target is `None`, raise:
 
-        ELSE IF command == ref:
+              "@<environment> must appear after @section"
 
-            # Choose the deepest active content container.
-            target =
-                current_environment
-                OR current_subsection
-                OR current_section
+       iii. Extract the environment title and label
+            using `_title_and_label()`.
 
+       iv. Create an `Environment` containing:
 
-            IF target == NONE:
+           1. `kind = command`
+           2. `title = extracted title`
+           3. `label = extracted label`
 
-                ERROR "@ref must appear after @section"
+       v. If the title is empty and the environment is not `proof`:
 
+          1. Use the complete `argument` as the environment title.
 
-            # Parse the target and optional visible text.
-            values =
-                PARSE_KEY_VALUES(argument)
+       vi. Append the new `Environment` to `target.content`.
 
+       vii. Set `current_environment` to the new environment.
 
-            # Construct the Reference AST node.
-            reference = new Reference(
+            This means that subsequent ordinary content,
+            mathematics, text, labels, references, and lists
+            can be stored inside this environment.
 
-                # Which label are we referencing?
-                target = values["name"] OR argument,
 
-                # What should the reader see?
-                text = values["text"] OR ""
+    r. Else if `command` is `enumerate` or `itemize`:
 
-            )
+       i. Determine the target:
 
+          Priority is:
 
-            # Store the reference.
-            APPEND reference
-            TO target.content
+          - `current_environment`
+          - otherwise `current_subsection`
+          - otherwise `current_section`
 
+       ii. If the target is `None`, raise:
 
+              "@enumerate or @itemize must appear after @section"
 
-        # ------------------------------------------------
-        # ENVIRONMENT
-        # ------------------------------------------------
+       iii. Call `_parse_list()`.
 
-        # Check whether the command is one of the
-        # supported semantic environments:
-        #
-        # theorem
-        # lemma
-        # definition
-        # proof
-        # example
-        # etc.
-        ELSE IF command IS A KNOWN ENVIRONMENT:
+       iv. Set `ordered` to:
 
-            # Environments themselves live inside
-            # sections or subsections.
-            target =
-                current_subsection
-                OR current_section
+           1. `True` when the command is `enumerate`
+           2. `False` when the command is `itemize`
 
+       v. Receive a `ListBlock`.
 
-            IF target == NONE:
+       vi. Append the `ListBlock` to `target.content`.
 
-                ERROR "environment must appear after @section"
 
+    s. Else if `command` is `relatedlinks` or `relatedlink`:
 
-            # Extract optional title and label.
-            title, label =
-                PARSE_TITLE_AND_LABEL(argument)
+       i. Parse the argument using `_parse_key_values()`.
 
+       ii. Check whether `"href"` exists.
 
-            # Create the semantic Environment node.
-            environment = new Environment(
+       iii. If `"href"` does not exist, raise:
 
-                # Store what kind of environment this is.
-                kind = command,
+              "@relatedlinks requires href = ..."
 
-                # Optional title.
-                title = title,
+       iv. Create a `RelatedLink` using:
 
-                # Optional cross-reference label.
-                label = label
+           1. `values["name"]` or `"Related link"`
+           2. `values["href"]`
 
-            )
+       v. Append the `RelatedLink` to `document.related_links`.
 
 
-            # If no explicit title was given,
-            # use the raw argument as the title.
-            #
-            # Proof is treated specially and does not
-            # automatically receive the argument as a title.
-            IF title is empty AND command != proof:
+    t. Else:
 
-                environment.title = argument
+       i. The command is not recognized.
 
+       ii. Raise:
 
-            # Attach the environment to the section/subsection.
-            APPEND environment
-            TO target.content
+              "Unknown Mark Two directive: @<command>"
 
 
-            # From this point onward, new content is considered
-            # part of this environment.
-            current_environment = environment
+    u. After successfully handling the directive:
 
+       i. Set:
 
+              index = end_index + 1
 
-        # ------------------------------------------------
-        # LIST
-        # ------------------------------------------------
+       ii. This moves the parser directly to the line
+           immediately after the complete directive.
 
-        ELSE IF command == enumerate
-             OR command == itemize:
+       iii. This is necessary because a directive can span
+            multiple lines.
 
-            # Lists can be placed inside:
-            #
-            # environment
-            # subsection
-            # section
-            target =
-                current_environment
-                OR current_subsection
-                OR current_section
 
+11. When the `while` loop reaches the end of the source:
 
-            IF target == NONE:
+    a. Check whether `display_math_lines` is still not `None`.
 
-                ERROR "list must appear after @section"
+    b. If it is not `None`, the parser entered math mode but
+       never encountered the closing `\]`.
 
+    c. Raise:
 
-            # Parse the list.
-            #
-            # enumerate = ordered list
-            # itemize   = unordered list
-            list = PARSE_LIST(
+           "Unclosed display math block: expected \]"
 
-                argument,
 
-                ordered = (command == enumerate)
+12. If no error occurred:
 
-            )
+    a. Return the completed `Document`.
 
+---
 
-            # Add the ListBlock to the current content.
-            APPEND list
-            TO target.content
+# Overall flow
 
+1. Read one source line.
 
+2. Check whether the parser is already in math mode.
 
-        # ------------------------------------------------
-        # RELATED LINKS
-        # ------------------------------------------------
+3. If in math mode:
+   
+   a. If the line is `\]`, finish the `MathBlock`.
+   
+   b. Otherwise, add the line to the math buffer.
 
-        ELSE IF command == relatedlinks
-             OR command == relatedlink:
+4. If not in math mode, check whether the line is `\[`.
+   
+   a. If yes, create `display_math_lines = []`.
+   
+   b. This enters math mode.
 
-            # Parse link properties.
-            values =
-                PARSE_KEY_VALUES(argument)
+5. If it is not math, try to find a Mark Two directive.
 
+6. If there is no directive:
+   
+   a. Find the current target.
+   
+   b. Add the line as ordinary content.
 
-            # Every related link must have a destination.
-            IF "href" NOT IN values:
+7. If there is a directive:
+   
+   a. Identify the command.
+   
+   b. Parse its arguments.
+   
+   c. Create or modify the appropriate AST object.
+   
+   d. Attach it to the appropriate location.
 
-                ERROR "@relatedlinks requires href"
+8. Move to the next unprocessed source line.
 
+9. Repeat until the entire source has been processed.
 
-            # Create the RelatedLink AST node.
-            link = new RelatedLink(
+10. Check for an unclosed math block.
 
-                # Use a default name when necessary.
-                name = values["name"] OR "Related link",
-
-                # Destination URL.
-                href = values["href"]
-
-            )
-
-
-            # Related links belong directly to the Document.
-            APPEND link
-            TO document.related_links
-
-
-
-        # ------------------------------------------------
-        # UNKNOWN COMMAND
-        # ------------------------------------------------
-
-        ELSE:
-
-            # Anything that reached this point
-            # was not recognized by the parser.
-            ERROR "Unknown Mark Two directive"
-
-
-
-        # Move to the first line after the complete directive.
-        #
-        # This matters because a directive may span many lines.
-        # We do not want to process those lines again.
-        index = end_index + 1
-
-
-
-    # ------------------------------------------------
-    # END OF SOURCE
-    # ------------------------------------------------
-
-    # If math_buffer still contains something,
-    # the file ended before "\]" appeared.
-    IF math_buffer IS NOT NONE:
-
-        ERROR "Unclosed display math block"
-
-
-    # The entire source has now been converted
-    # into one complete Document AST.
-    RETURN document
-~~~
+11. Return the completed `Document`.
