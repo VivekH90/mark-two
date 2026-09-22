@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const applyTheme = (dark) => {
         document.documentElement.classList.toggle("dark-mode", dark);
+        document.documentElement.style.colorScheme = dark ? "dark" : "light";
         themeToggle?.setAttribute("aria-pressed", String(dark));
         themeToggle?.setAttribute("aria-label", dark ? "Disable dark mode" : "Enable dark mode");
         if (themeIcon) themeIcon.textContent = dark ? "☀" : "☾";
@@ -27,13 +28,13 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     if (themeToggle) {
-        const savedTheme = localStorage.getItem("mark-two-theme");
+        const savedTheme = localStorage.getItem("mark-two-theme-v2");
         applyTheme(savedTheme === "dark");
 
         themeToggle.addEventListener("click", () => {
             const dark = !document.documentElement.classList.contains("dark-mode");
             applyTheme(dark);
-            localStorage.setItem("mark-two-theme", dark ? "dark" : "light");
+            localStorage.setItem("mark-two-theme-v2", dark ? "dark" : "light");
         });
     }
 
