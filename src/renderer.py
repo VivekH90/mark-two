@@ -396,7 +396,7 @@ def render(document: Document, template_path: str | Path) -> str:
     if document.banner:
         banner_color = escape(document.banner_color or "#ffffff", quote=True)
         banner_dark_color = escape(_dark_mode_color(document.banner_color or "#ffffff"), quote=True)
-        banner = f'<div class="site-banner"><img src="{escape(document.banner, quote=True)}" alt="" loading="eager"><a class="banner-title" href="#" style="color: {banner_color}; --banner-title-color: {banner_color}; --banner-title-color-dark: {banner_dark_color};">{escape(document.document_title)}</a></div>'
+        banner = f'<div class="site-banner"><img src="{escape(document.banner, quote=True)}" alt="" loading="eager"><a class="banner-title" href="#" style="--banner-title-color: {banner_color}; --banner-title-color-dark: {banner_dark_color};">{escape(document.document_title)}</a></div>'
     else:
         banner = f'<a class="document-title" href="#">{escape(document.document_title)}</a>'
     references = _build_reference_index(document)
