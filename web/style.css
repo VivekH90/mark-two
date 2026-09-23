@@ -217,12 +217,6 @@ html.dark-mode .nav-button:hover, html.dark-mode .nav-button:focus-visible {
     transform: translateY(-18px);
 }
 
-/* Deliberately empty: no subtitle, no decorative title line. */
-.banner-title::before,
-.banner-title::after {
-    display: none;
-}
-
 html.dark-mode .site-banner img {
     opacity: 0.46;
     filter: brightness(0.54) saturate(0.74) contrast(1.05) blur(0.2px);
@@ -267,10 +261,6 @@ html.dark-mode .banner-title {
     box-shadow: var(--nav-shadow);
     backdrop-filter: blur(18px) saturate(120%);
     -webkit-backdrop-filter: blur(18px) saturate(120%);
-}
-
-.navigation::before {
-    display: none;
 }
 
 .nav-button {
