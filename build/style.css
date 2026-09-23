@@ -6,7 +6,7 @@
 
     --text: #3a2923;
     --muted-text: #7a6258;
-    --page-bg: #fff0e3;
+    --page-bg: #fff0e304;
     --border: #e8c5aa;
 
     --panel-blue: #ffe3cc;
@@ -164,7 +164,7 @@ html.dark-mode .nav-button:hover, html.dark-mode .nav-button:focus-visible {
     object-fit: cover;
     object-position: center top;
     border-radius: 0;
-    opacity: 0.42;
+    opacity: 0.99;
     pointer-events: none;
 }
 .banner-title {
