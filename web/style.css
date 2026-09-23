@@ -18,12 +18,12 @@
     --violet: #c87542;
     --violet-mid: #df9967;
     --violet-soft: #f3c9a5;
-    --nav-surface: #fff3e8;
-    --nav-border: #ebc9ac;
-    --nav-shadow: 0 10px 34px rgba(145, 86, 42, 0.10);
+    --nav-surface: rgba(17, 15, 21, 0.58);
+    --nav-border: rgba(255, 255, 255, 0.24);
+    --nav-shadow: 0 16px 42px rgba(0, 0, 0, 0.24);
     --surface-border: #ebcdb7;
     --surface-shadow: 0 18px 55px rgba(145, 86, 42, 0.10);
-    --banner-title-shadow: 0 2px 4px rgba(255, 250, 245, 0.88), 0 0 12px rgba(255, 211, 172, 0.22);
+    --banner-title-shadow: 0 6px 24px rgba(0,0,0,0.32);
 }
 html.dark-mode {
     --text: #eee7f4;
@@ -40,12 +40,12 @@ html.dark-mode {
     --violet: #b77be5;
     --violet-mid: #9b6fc0;
     --violet-soft: #4b3a59;
-    --nav-surface: rgba(24, 19, 30, 0.86);
-    --nav-border: rgba(255, 255, 255, 0.12);
-    --nav-shadow: 0 10px 34px rgba(0, 0, 0, 0.32);
+    --nav-surface: rgba(13, 11, 17, 0.62);
+    --nav-border: rgba(216, 194, 238, 0.28);
+    --nav-shadow: 0 16px 44px rgba(0, 0, 0, 0.46);
     --surface-border: rgba(255, 255, 255, 0.10);
     --surface-shadow: 0 18px 55px rgba(0, 0, 0, 0.30);
-    --banner-title-shadow: 0 2px 5px rgba(0, 0, 0, 0.7), 0 0 22px rgba(0, 0, 0, 0.42);
+    --banner-title-shadow: 0 6px 28px rgba(0,0,0,0.48);
 }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; color-scheme: light; }
@@ -135,22 +135,53 @@ html.dark-mode .nav-button:hover, html.dark-mode .nav-button:focus-visible {
 .theme-icon { display: inline-block; font-size: 22px; line-height: 1; margin-right: 8px; }
 .theme-toggle[aria-pressed="true"] .theme-icon { transform: rotate(180deg); }
 
-/* Banner image remains the page background layer. */
-.site-banner {
-    order: 2;
+/* ======================================================================
+   HERO
+   This replaces only the old banner/navigation styling.
+   ====================================================================== */
+
+.site-header {
     position: relative;
     z-index: 0;
-    flex: 1;
-    min-height: 300px;
-    width: 100%;
-    margin: 0;
+    min-height: 550px;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
+    isolation: isolate;
+}
+
+.site-banner {
+    position: relative;
+    z-index: 0;
+    min-height: 550px;
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    padding: 0 clamp(22px, 6vw, 84px) 124px;
     overflow: visible;
     border: 0;
-    border-radius: 0;
 }
+
+.site-banner::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background:
+        linear-gradient(
+            180deg,
+            rgba(7, 6, 10, 0.02) 0%,
+            rgba(7, 6, 10, 0.06) 45%,
+            rgba(7, 6, 10, 0.66) 100%
+        ),
+        linear-gradient(
+            90deg,
+            rgba(7, 6, 10, 0.30),
+            transparent 48%
+        );
+}
+
 .site-banner img {
     position: fixed;
     inset: 0;
@@ -164,29 +195,215 @@ html.dark-mode .nav-button:hover, html.dark-mode .nav-button:focus-visible {
     object-fit: cover;
     object-position: center top;
     border-radius: 0;
-    opacity: 0.99;
+    opacity: 0.98;
+    filter: saturate(0.80) contrast(1.03) blur(0.2px);
+    transform: scale(1.003);
     pointer-events: none;
 }
+
 .banner-title {
     position: relative;
     z-index: 2;
     display: block;
-    max-width: min(100%, 1050px);
-    padding: 30px;
-    color: var(--banner-title-color, var(--violet-deep));
+    padding: 0;
+    color: var(--banner-title-color, #f9f5f8);
     text-decoration: none;
-    text-align: center;
-    font-size: clamp(48px, 7vw, 82px);
+    text-align: left;
+    font-size: clamp(72px, 13vw, 174px);
     font-weight: 700;
-    line-height: 1.03;
-    letter-spacing: -0.025em;
+    line-height: 0.82;
+    letter-spacing: -0.075em;
     text-shadow: var(--banner-title-shadow);
-}
-html.dark-mode .site-banner img { opacity: 0.58; filter: brightness(0.62) saturate(0.84); }
-html.dark-mode .banner-title {
-    color: var(--banner-title-color-dark, var(--banner-title-color, var(--text)));
+    transform: translateY(-18px);
 }
 
+/* Deliberately empty: no subtitle, no decorative title line. */
+.banner-title::before,
+.banner-title::after {
+    display: none;
+}
+
+html.dark-mode .site-banner img {
+    opacity: 0.46;
+    filter: brightness(0.54) saturate(0.74) contrast(1.05) blur(0.2px);
+}
+
+html.dark-mode .site-banner::after {
+    background:
+        linear-gradient(
+            180deg,
+            rgba(5,4,7,0.04),
+            rgba(5,4,7,0.76)
+        ),
+        linear-gradient(
+            90deg,
+            rgba(5,4,7,0.36),
+            transparent 50%
+        );
+}
+
+html.dark-mode .banner-title {
+    color: var(--banner-title-color-dark, var(--banner-title-color, #f3ebf8));
+}
+
+/* ======================================================================
+   NAVBAR
+   ====================================================================== */
+
+.navigation {
+    position: absolute;
+    left: clamp(22px, 6vw, 84px);
+    right: clamp(22px, 6vw, 84px);
+    bottom: 42px;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 48px;
+    padding: 0;
+    background: var(--nav-surface);
+    border: 1px solid var(--nav-border);
+    border-radius: 22px;
+    box-shadow: var(--nav-shadow);
+    backdrop-filter: blur(18px) saturate(120%);
+    -webkit-backdrop-filter: blur(18px) saturate(120%);
+}
+
+.navigation::before {
+    display: none;
+}
+
+.nav-button {
+    position: relative;
+    min-width: 0;
+    min-height: 47px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 7px 18px;
+    border: 1px solid rgba(255,255,255,0.30);
+    border-radius: 14px;
+    background: rgba(255,255,255,0.035);
+    color: rgba(255,255,255,0.94);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.045em;
+    text-transform: uppercase;
+    transition:
+        background 160ms ease,
+        color 160ms ease,
+        border-color 160ms ease,
+        transform 160ms ease,
+        box-shadow 160ms ease;
+}
+
+.nav-button:last-child {
+    border-right: 1px solid rgba(255,255,255,0.30);
+}
+
+.nav-button:hover,
+.nav-button:focus-visible {
+    background: rgba(255,255,255,0.105);
+    border-color: rgba(255,255,255,0.56);
+    color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 7px 20px rgba(0,0,0,0.16);
+}
+
+html.dark-mode .nav-button {
+    color: #f4edf8;
+    border-color: rgba(216,194,238,0.36);
+    background: rgba(255,255,255,0.04);
+}
+
+html.dark-mode .nav-button:last-child {
+    border-right: 1px solid rgba(216,194,238,0.36);
+}
+
+html.dark-mode .nav-button:hover,
+html.dark-mode .nav-button:focus-visible {
+    color: #ffffff;
+    border-color: rgba(235,220,248,0.66);
+    background: rgba(203,176,232,0.13);
+    box-shadow: 0 8px 22px rgba(0,0,0,0.28);
+}
+
+.theme-toggle {
+    cursor: pointer;
+    margin-left: auto;
+}
+
+.theme-icon {
+    display: inline-block;
+    width: 1em;
+    margin-right: 8px;
+    font-size: 17px;
+    line-height: 1;
+    transition: transform 180ms ease;
+}
+
+.theme-toggle[aria-pressed="true"] .theme-icon {
+    transform: rotate(180deg);
+}
+
+@media (max-width: 980px) {
+    .site-header,
+    .site-banner {
+        min-height: 485px;
+    }
+
+    .site-banner {
+        padding-bottom: 105px;
+    }
+
+    .navigation {
+        left: 3%;
+        right: 3%;
+    }
+}
+
+@media (max-width: 640px) {
+    .site-shell {
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+
+    .site-header,
+    .site-banner {
+        min-height: 390px;
+    }
+
+    .site-banner {
+        padding: 0 7vw 88px;
+    }
+
+    .banner-title {
+        font-size: clamp(55px, 18vw, 86px);
+        letter-spacing: -0.065em;
+        transform: translateY(-12px);
+    }
+
+    .navigation {
+        left: 7vw;
+        right: 7vw;
+        bottom: 25px;
+        border-radius: 18px;
+        flex-wrap: wrap;
+        padding: 0;
+    }
+
+    .nav-button {
+        min-height: 39px;
+        padding: 6px 10px;
+        font-size: 11px;
+        letter-spacing: 0.035em;
+    }
+
+    .theme-toggle {
+        margin-left: 0;
+    }
+}
 .page-layout {
     position: relative;
     z-index: 1;
@@ -341,4 +558,68 @@ html.dark-mode .math-environment.warning { --environment-border: #805b70; --envi
     .site-banner { min-height: 205px; }
     .banner-title { padding: 18px; font-size: clamp(38px, 12vw, 58px); }
     .article { padding: 28px 20px 34px; border-radius: 18px; }
+}
+
+
+/* ======================================================================
+   FINAL HERO/NAV RESPONSIVE OVERRIDES
+   Keeps the article/environment styling above untouched.
+   ====================================================================== */
+
+@media (max-width: 980px) {
+    .site-header {
+        min-height: 485px;
+    }
+
+    .site-banner {
+        min-height: 485px;
+        padding-bottom: 105px;
+    }
+
+    .navigation {
+        width: auto;
+        left: 3%;
+        right: 3%;
+        border-radius: 22px;
+    }
+}
+
+@media (max-width: 640px) {
+    .site-header {
+        min-height: 390px;
+    }
+
+    .site-banner {
+        min-height: 390px;
+        padding: 0 7vw 88px;
+    }
+
+    .banner-title {
+        font-size: clamp(55px, 18vw, 86px);
+        letter-spacing: -0.065em;
+        transform: translateY(-12px);
+    }
+
+    .navigation {
+        width: auto;
+        left: 7vw;
+        right: 7vw;
+        bottom: 25px;
+        border-radius: 18px;
+        padding: 0;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .nav-button {
+        min-height: 39px;
+        padding: 6px 10px;
+        font-size: 11px;
+        letter-spacing: 0.035em;
+        border-radius: 12px;
+    }
+
+    .theme-toggle {
+        margin-left: 0;
+    }
 }
