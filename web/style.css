@@ -209,7 +209,7 @@ html.dark-mode .nav-button:hover, html.dark-mode .nav-button:focus-visible {
     color: var(--banner-title-color, #f9f5f8);
     text-decoration: none;
     text-align: left;
-    font-size: clamp(72px, 13vw, 174px);
+    font-size: clamp(72px, 9vw, 150px);
     font-weight: 700;
     line-height: 0.82;
     letter-spacing: -0.075em;
