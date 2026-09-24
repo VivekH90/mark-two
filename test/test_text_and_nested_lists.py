@@ -1,4 +1,4 @@
-from src.ast import ListBlock, TextBlock
+from src.ast import Environment, ListBlock, MathBlock, TextBlock
 from src.parser import parse
 from src.renderer import render
 
@@ -95,3 +95,29 @@ def test_text_block_can_appear_inside_an_environment(tmp_path):
     assert '<div class="math-environment lemma">' in html
     assert "This text belongs to the lemma." in html
     assert '<div class="environment-content">' in html
+
+
+def test_text_is_a_free_standing_environment_and_owns_following_math(tmp_path):
+    source = '''@documenttitle{Mathematics}
+@section{Test}
+@axiom{Maxwell's equations}
+\\[
+\\nabla \\cdot \\mathbf{E} = \\frac{\\rho}{\\epsilon_0}.
+\\]
+@text{text = "These equations describe the fields."}
+\\[
+F = ma.
+\\]
+'''
+    document, html = _render_source(source, tmp_path)
+    content = document.sections[0].content
+
+    assert isinstance(content[0], Environment)
+    assert isinstance(content[1], TextBlock)
+    assert len(content[0].content) == 1
+    assert isinstance(content[0].content[0], MathBlock)
+    assert content[1].text == "These equations describe the fields."
+    assert len(content[1].content) == 1
+    assert isinstance(content[1].content[0], MathBlock)
+    assert '<div class="text-environment">' in html
+    assert html.index('</div>') > html.index('Maxwell\'s equations')
