@@ -81,3 +81,17 @@ def test_inline_formatting_works_inside_text_blocks(tmp_path):
     _, html = _render_source(source, tmp_path)
     assert '<strong>important</strong>' in html
     assert '<em>emphasized</em>' in html
+
+
+def test_text_block_can_appear_inside_an_environment(tmp_path):
+    source = '''@documenttitle{Mathematics}
+@section{Test}
+@lemma{A Useful Lemma}
+@text{This text belongs to the lemma.}
+'''
+    document, html = _render_source(source, tmp_path)
+    environment = document.sections[0].content[0]
+    assert environment.content[0].text == "This text belongs to the lemma."
+    assert '<div class="math-environment lemma">' in html
+    assert "This text belongs to the lemma." in html
+    assert '<div class="environment-content">' in html
