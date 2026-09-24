@@ -552,9 +552,10 @@ html.dark-mode .math-environment.warning { --environment-border: #805b70; --envi
         display: contents;
     }
 
-    .toc-card { order: -1; }
-    .article { order: 0; }
-    .related-card { order: 1; }
+    /* Mobile/tablet reading order: TOC → article → related links. */
+    .toc-card { order: -1; width: 100%; }
+    .article { order: 0; width: 100%; }
+    .related-card { order: 1; width: 100%; }
 }
 
 @media (max-width: 640px) {
