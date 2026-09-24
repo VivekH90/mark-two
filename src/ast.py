@@ -33,12 +33,13 @@ class MathBlock:
 
 @dataclass
 class TextBlock:
-    """A formatted prose block."""
+    """A free-standing formatted prose environment."""
 
     text: str
     bold: bool = False
     italic: bool = False
     color: str = ""
+    content: List["ContentItem"] = field(default_factory=list)
 
 
 @dataclass
