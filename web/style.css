@@ -535,8 +535,26 @@ html.dark-mode .math-environment.warning { --environment-border: #805b70; --envi
     .site-header { min-height: 300px; }
     .navigation { width: 100%; border-radius: 22px; }
     .site-banner { min-height: 240px; }
-    .page-layout { grid-template-columns: 1fr; gap: 24px; }
-    .sidebar { position: static; }
+
+    /*
+       Compact/mobile reading order:
+       banner/navigation → table of contents → article → related links.
+       The desktop two-column layout is unchanged above this breakpoint.
+    */
+    .page-layout {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .sidebar {
+        position: static;
+        display: contents;
+    }
+
+    .toc-card { order: -1; }
+    .article { order: 0; }
+    .related-card { order: 1; }
 }
 
 @media (max-width: 640px) {
