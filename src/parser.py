@@ -275,6 +275,7 @@ def parse(source: str) -> Document:
     current_section = None
     current_subsection = None
     current_environment = None
+    current_text = None
     used_slugs = set()
     display_math_lines = None
     lines = source.splitlines()
@@ -285,7 +286,7 @@ def parse(source: str) -> Document:
         raw_line = lines[index]
         if display_math_lines is not None:
             if raw_line.strip() == r"\]":
-                target = current_environment or current_subsection or current_section
+                target = current_text or current_environment or current_subsection or current_section
                 if target is None:
                     raise ValueError("display math must appear after @section")
                 target.content.append(MathBlock("\n".join(display_math_lines)))
@@ -302,7 +303,7 @@ def parse(source: str) -> Document:
 
         directive = _extract_directive(lines, index)
         if directive is None:
-            target = current_environment or current_subsection or current_section
+            target = current_text or current_environment or current_subsection or current_section
             if target is not None:
                 _add_content(target, raw_line)
             index += 1
@@ -310,8 +311,9 @@ def parse(source: str) -> Document:
 
         command, argument, end_index = directive
         command = command.strip().lower().replace(" ", "")
-        if command in {"documenttitle", "title", "button", "section", "subsection", "image", "relatedlinks", "relatedlink"}:
+        if command in {"documenttitle", "title", "button", "section", "subsection", "image", "relatedlinks", "relatedlink", "text"}:
             current_environment = None
+            current_text = None
 
         if command == "documenttitle":
             values = _parse_key_values(argument)
@@ -337,18 +339,20 @@ def parse(source: str) -> Document:
             current_subsection = Subsection(title=title, slug=_unique_slug(_slugify(title), used_slugs), label=label)
             current_section.subsections.append(current_subsection)
         elif command == "image":
-            target = current_environment or current_subsection or current_section
+            target = current_text or current_environment or current_subsection or current_section
             if target is None:
                 raise ValueError("@image must appear after @section")
             image_group_id += 1
             target.content.extend(_parse_image_group(argument, image_group_id))
         elif command == "text":
-            target = current_environment or current_subsection or current_section
+            target = current_subsection or current_section
             if target is None:
                 raise ValueError("@text must appear after @section")
-            target.content.append(_parse_text(argument))
+            text_block = _parse_text(argument)
+            target.content.append(text_block)
+            current_text = text_block
         elif command == "label":
-            target = current_environment or current_subsection or current_section
+            target = current_text or current_environment or current_subsection or current_section
             if target is None:
                 raise ValueError("@label must appear after @section")
             label = _strip_quotes(argument)
@@ -356,7 +360,7 @@ def parse(source: str) -> Document:
                 raise ValueError("@label requires a label name")
             target.content.append(Label(name=label))
         elif command == "ref":
-            target = current_environment or current_subsection or current_section
+            target = current_text or current_environment or current_subsection or current_section
             if target is None:
                 raise ValueError("@ref must appear after @section")
             values = _parse_key_values(argument)
@@ -370,7 +374,7 @@ def parse(source: str) -> Document:
             target.content.append(environment)
             current_environment = environment
         elif command in _LIST_ENVIRONMENTS:
-            target = current_environment or current_subsection or current_section
+            target = current_text or current_environment or current_subsection or current_section
             if target is None:
                 raise ValueError(f"@{command} must appear after @section")
             target.content.append(_parse_list(argument, ordered=(command == "enumerate")))
