@@ -366,6 +366,7 @@ def parse(source: str) -> Document:
             values = _parse_key_values(argument)
             target.content.append(Reference(target=values.get("name", argument), text=values.get("text", "")))
         elif command in _ENVIRONMENTS:
+            current_text = None
             target = current_subsection or current_section
             if target is None:
                 raise ValueError(f"@{command} must appear after @section")
