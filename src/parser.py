@@ -343,7 +343,7 @@ def parse(source: str) -> Document:
             image_group_id += 1
             target.content.extend(_parse_image_group(argument, image_group_id))
         elif command == "text":
-            target = current_subsection or current_section
+            target = current_environment or current_subsection or current_section
             if target is None:
                 raise ValueError("@text must appear after @section")
             target.content.append(_parse_text(argument))
