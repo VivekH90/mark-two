@@ -219,7 +219,7 @@ def _paragraphs(lines, references):
     return "\n".join(f"<p>{_inline_text(p, references)}</p>" for p in paragraphs)
 
 
-def _text_html(text: TextBlock, references) -> str:
+def _text_html(text: TextBlock, references, environment_counters, figure_counter) -> str:
     styles = []
     if text.bold:
         styles.append("font-weight: 700")
@@ -229,7 +229,11 @@ def _text_html(text: TextBlock, references) -> str:
         styles.append(f"--text-color: {escape(text.color, quote=True)}")
         styles.append(f"--text-color-dark: {escape(_dark_mode_color(text.color), quote=True)}")
     style = f' style="{"; ".join(styles)}"' if styles else ""
-    return f'<p class="mark-text"{style}>{_inline_text(text.text, references)}</p>'
+    text_html = f'<p class="mark-text"{style}>{_inline_text(text.text, references)}</p>'
+    content = _content_html(text.content, environment_counters, references, figure_counter, 0)
+    if content:
+        return f'<div class="text-environment">{text_html}<div class="text-content">{content}</div></div>'
+    return f'<div class="text-environment">{text_html}</div>'
 
 
 def _math_html(math: MathBlock) -> str:
@@ -335,7 +339,7 @@ def _content_html(items, environment_counters, references, figure_counter, list_
         elif isinstance(item, MathBlock):
             html.append(_math_html(item))
         elif isinstance(item, TextBlock):
-            html.append(_text_html(item, references))
+            html.append(_text_html(item, references, environment_counters, figure_counter))
         elif isinstance(item, ListBlock):
             html.append(_list_html(item, environment_counters, references, figure_counter, list_depth))
         elif isinstance(item, Label):
