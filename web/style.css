@@ -5,45 +5,45 @@
     --right-sidebar-width: 300px;
     --page-pad: 0px;
 
-    --text: #29232D;
+    --text: #38313A;
     --muted-text: #7d746f;
-    --page-bg: #FFF7ED;
-    --surface: #FFFDF9;
-    --surface-soft: #FFF1E3;
+    --page-bg: #FFF9F4;
+    --surface: #FFFCF9;
+    --surface-soft: #FFF6EE;
     --border: #cfc0b7;
     --line: #d4c8c1;
 
-    --accent: #F05A5A;
-    --accent-deep: #C94D55;
-    --accent-soft: #FBE0DE;
-    --accent-pale: #FDEBE8;
+    --accent: #E98282;
+    --accent-deep: #B96870;
+    --accent-soft: #FBE9E7;
+    --accent-pale: #FFF0EE;
 
-    --accent-violet: #7657E8;
-    --accent-violet-deep: #5F47C2;
-    --accent-violet-soft: #EAE4FC;
+    --accent-violet: #9A83EA;
+    --accent-violet-deep: #7462B8;
+    --accent-violet-soft: #F1EDFD;
 
-    --accent-yellow: #F2C94C;
-    --accent-yellow-deep: #B28C16;
-    --accent-yellow-soft: #FAF1CD;
+    --accent-yellow: #E5CF78;
+    --accent-yellow-deep: #9F8932;
+    --accent-yellow-soft: #FBF5DF;
 
-    --accent-cyan: #35A7C8;
-    --accent-cyan-deep: #237A95;
-    --accent-cyan-soft: #DDF2F7;
+    --accent-cyan: #72BDD3;
+    --accent-cyan-deep: #4D879B;
+    --accent-cyan-soft: #E8F6F9;
 
-    --accent-orange: #F47B3A;
-    --accent-orange-deep: #B95822;
-    --accent-orange-soft: #FBE6D8;
+    --accent-orange: #E99A67;
+    --accent-orange-deep: #A66A43;
+    --accent-orange-soft: #FDF0E8;
 
     --nav-surface: #fffaf5;
     --nav-border: #cfc0b7;
-    --nav-hover: #FDEBE8;
+    --nav-hover: #FFF0EE;
 
     --shadow-soft: 0 10px 28px rgba(126, 87, 66, 0.07);
     --shadow-card: 0 16px 42px rgba(126, 87, 66, 0.09);
 
-    --environment-accent: #F05A5A;
-    --environment-border: #C94D55;
-    --environment-fill: #FCE2DF;
+    --environment-accent: #E98282;
+    --environment-border: #B96870;
+    --environment-fill: #FCEAE8;
 }
 
 html.dark-mode {
@@ -506,9 +506,9 @@ html.dark-mode .gallery-item figcaption {
     min-height: 52px;
     margin: 0 -27px 28px;
     padding: 8px 16px;
-    border: 1px solid #F2A3A0;
+    border: 1px solid #E6A6A4;
     border-radius: 22px;
-    background: #FFF0EE;
+    background: #FFF4F2;
     color: #6d6461;
 }
 
@@ -527,7 +527,7 @@ html.dark-mode .gallery-item figcaption {
     flex: 0 0 32px;
     align-items: center;
     justify-content: center;
-    color: #C94D55;
+    color: #B96870;
     text-decoration: none;
 }
 
@@ -538,7 +538,7 @@ html.dark-mode .gallery-item figcaption {
 
 .breadcrumb-home:hover,
 .breadcrumb-home:focus-visible {
-    color: #A83E46;
+    color: #A95A63;
 }
 
 .breadcrumb-separator {
@@ -620,37 +620,37 @@ html.dark-mode .breadcrumb-date {
     align-items: center;
     min-height: 38px;
     padding: 7px 16px;
-    border: 1px solid #f0c7c5;
+    border: 1px solid #E6A6A4;
     border-radius: 15px;
-    background: #FCE2DF;
-    color: #A83E46;
+    background: #FCEAE8;
+    color: #A95A63;
     font-size: 15px;
     line-height: 1.2;
     font-weight: 600;
 }
 
 .article-tag:nth-child(5n + 2) {
-    border-color: #C9BBF1;
-    background: #EAE4FC;
-    color: #5F47C2;
+    border-color: #CDBFE8;
+    background: #F1EDFD;
+    color: #7462B8;
 }
 
 .article-tag:nth-child(5n + 3) {
-    border-color: #E1D38B;
-    background: #FAF1CD;
+    border-color: #DED39B;
+    background: #FBF5DF;
     color: #8D7012;
 }
 
 .article-tag:nth-child(5n + 4) {
-    border-color: #9FD4E2;
-    background: #DDF2F7;
-    color: #237A95;
+    border-color: #A9D6E2;
+    background: #E8F6F9;
+    color: #4D879B;
 }
 
 .article-tag:nth-child(5n + 5) {
-    border-color: #E9B28F;
-    background: #FBE6D8;
-    color: #B95822;
+    border-color: #DEBEA9;
+    background: #FDF0E8;
+    color: #A66A43;
 }
 
 html.dark-mode .article-tag {
@@ -686,9 +686,9 @@ html.dark-mode .article-tag:nth-child(5n + 5) {
 .article-section {
     scroll-margin-top: 24px;
     margin-top: 34px;
-    --section-fill: #FCE2DF;
-    --section-border: #F2A3A0;
-    --section-text: #A83E46;
+    --section-fill: #FCEAE8;
+    --section-border: #E6A6A4;
+    --section-text: #A95A63;
 }
 
 .article-section h2 {
@@ -741,62 +741,62 @@ html.dark-mode .article-tag:nth-child(5n + 5) {
 
 /* Section palettes follow the same energetic five-color identity as the site accents. */
 .article-section:nth-of-type(5n + 1) {
-    --section-fill: #FCE2DF;
-    --section-border: #F05A5A;
-    --section-text: #A83E46;
+    --section-fill: #FCEAE8;
+    --section-border: #E98282;
+    --section-text: #A95A63;
 }
 
 .article-section:nth-of-type(5n + 2) {
-    --section-fill: #EAE4FC;
-    --section-border: #7657E8;
-    --section-text: #5F47C2;
+    --section-fill: #F1EDFD;
+    --section-border: #9A83EA;
+    --section-text: #7462B8;
 }
 
 .article-section:nth-of-type(5n + 3) {
-    --section-fill: #FAF1CD;
+    --section-fill: #FBF5DF;
     --section-border: #E7B93A;
-    --section-text: #8D7012;
+    --section-text: #9A7F2A;
 }
 
 .article-section:nth-of-type(5n + 4) {
-    --section-fill: #DDF2F7;
-    --section-border: #35A7C8;
-    --section-text: #237A95;
+    --section-fill: #E8F6F9;
+    --section-border: #72BDD3;
+    --section-text: #4D879B;
 }
 
 .article-section:nth-of-type(5n + 5) {
-    --section-fill: #FBE6D8;
-    --section-border: #F47B3A;
-    --section-text: #B95822;
+    --section-fill: #FDF0E8;
+    --section-border: #E99A67;
+    --section-text: #A66A43;
 }
 
 html.dark-mode .article-section {
     --section-fill: #3B2228;
-    --section-border: #F05A5A;
+    --section-border: #E98282;
     --section-text: #FFC2C2;
 }
 
 html.dark-mode .article-section:nth-of-type(5n + 2) {
     --section-fill: #292342;
-    --section-border: #7657E8;
+    --section-border: #9A83EA;
     --section-text: #CEC5FF;
 }
 
 html.dark-mode .article-section:nth-of-type(5n + 3) {
     --section-fill: #3B341A;
-    --section-border: #F2C94C;
+    --section-border: #E5CF78;
     --section-text: #F8DE78;
 }
 
 html.dark-mode .article-section:nth-of-type(5n + 4) {
     --section-fill: #193640;
-    --section-border: #35A7C8;
+    --section-border: #72BDD3;
     --section-text: #9FE2F5;
 }
 
 html.dark-mode .article-section:nth-of-type(5n + 5) {
     --section-fill: #3B261B;
-    --section-border: #F47B3A;
+    --section-border: #E99A67;
     --section-text: #FFBE98;
 }
 
@@ -1140,17 +1140,17 @@ html.dark-mode .math-environment {
     background: var(--environment-fill);
 }
 
-html.dark-mode .math-environment.theorem { --environment-accent: #F05A5A; --environment-border: #4A242A; --environment-fill: #4A242A; }
-html.dark-mode .math-environment.lemma { --environment-accent: #7657E8; --environment-border: #30284A; --environment-fill: #30284A; }
-html.dark-mode .math-environment.definition { --environment-accent: #35A7C8; --environment-border: #193640; --environment-fill: #193640; }
-html.dark-mode .math-environment.corollary { --environment-accent: #F47B3A; --environment-border: #4A2D1E; --environment-fill: #4A2D1E; }
-html.dark-mode .math-environment.axiom { --environment-accent: #F05A5A; --environment-border: #4A242A; --environment-fill: #4A242A; }
-html.dark-mode .math-environment.proposition { --environment-accent: #7657E8; --environment-border: #30284A; --environment-fill: #30284A; }
-html.dark-mode .math-environment.remark { --environment-accent: #35A7C8; --environment-border: #193640; --environment-fill: #193640; }
-html.dark-mode .math-environment.example { --environment-accent: #F47B3A; --environment-border: #4A2D1E; --environment-fill: #4A2D1E; }
-html.dark-mode .math-environment.conjecture { --environment-accent: #7657E8; --environment-border: #30284A; --environment-fill: #30284A; }
-html.dark-mode .math-environment.notation { --environment-accent: #35A7C8; --environment-border: #193640; --environment-fill: #193640; }
-html.dark-mode .math-environment.warning { --environment-accent: #F47B3A; --environment-border: #4A2D1E; --environment-fill: #4A2D1E; }
+html.dark-mode .math-environment.theorem { --environment-accent: #E98282; --environment-border: #4A242A; --environment-fill: #4A242A; }
+html.dark-mode .math-environment.lemma { --environment-accent: #9A83EA; --environment-border: #30284A; --environment-fill: #30284A; }
+html.dark-mode .math-environment.definition { --environment-accent: #72BDD3; --environment-border: #193640; --environment-fill: #193640; }
+html.dark-mode .math-environment.corollary { --environment-accent: #E99A67; --environment-border: #4A2D1E; --environment-fill: #4A2D1E; }
+html.dark-mode .math-environment.axiom { --environment-accent: #E98282; --environment-border: #4A242A; --environment-fill: #4A242A; }
+html.dark-mode .math-environment.proposition { --environment-accent: #9A83EA; --environment-border: #30284A; --environment-fill: #30284A; }
+html.dark-mode .math-environment.remark { --environment-accent: #72BDD3; --environment-border: #193640; --environment-fill: #193640; }
+html.dark-mode .math-environment.example { --environment-accent: #E99A67; --environment-border: #4A2D1E; --environment-fill: #4A2D1E; }
+html.dark-mode .math-environment.conjecture { --environment-accent: #9A83EA; --environment-border: #30284A; --environment-fill: #30284A; }
+html.dark-mode .math-environment.notation { --environment-accent: #72BDD3; --environment-border: #193640; --environment-fill: #193640; }
+html.dark-mode .math-environment.warning { --environment-accent: #E99A67; --environment-border: #4A2D1E; --environment-fill: #4A2D1E; }
 
 @media (max-width: 1180px) {
     .site-header {
