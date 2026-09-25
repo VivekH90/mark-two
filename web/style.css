@@ -1,5 +1,5 @@
 :root {
-    --page-max: calc(100% - 10px);
+    --page-max: calc(100% - 30px);
     --article-max: 1042px;
     --left-sidebar-width: 252px;
     --right-sidebar-width: 300px;
@@ -890,7 +890,8 @@ html.dark-mode .math-environment.warning { --environment-accent: #c08c98; --envi
 
 @media (max-width: 820px) {
     .site-shell {
-        padding: 12px 12px 40px;
+        width: 100%;
+        padding: 12px 15px 40px;
     }
 
     .site-header {
