@@ -686,8 +686,8 @@ html.dark-mode .article-tag:nth-child(5n + 5) {
     min-width: 66px;
     padding: 10px 14px;
     border-radius: 12px;
-    background: #c7907a;
-    color: #33231f;
+    background: #f0c7c5;
+    color: #7e3f50;
     line-height: 1;
     font-size: 0.82em;
     font-weight: 700;
@@ -705,22 +705,104 @@ html.dark-mode .article-tag:nth-child(5n + 5) {
     min-width: 0;
     padding: 10px 17px;
     border-radius: 12px;
-    background: #e5c0b1;
-    color: #3a2924;
+    background: #fde8e5;
+    color: #7e3f50;
+}
+
+/* Section title colors follow the same five-color cycle as article tags. */
+.article-section:nth-of-type(5n + 1) .section-heading-text {
+    background: #fde8e5;
+    color: #7e3f50;
+}
+.article-section:nth-of-type(5n + 1) .section-number {
+    background: #f0c7c5;
+    color: #7e3f50;
+}
+
+.article-section:nth-of-type(5n + 2) .section-heading-text {
+    background: #f1eaf7;
+    color: #67507f;
+}
+.article-section:nth-of-type(5n + 2) .section-number {
+    background: #ddd0ea;
+    color: #67507f;
+}
+
+.article-section:nth-of-type(5n + 3) .section-heading-text {
+    background: #f8f2d7;
+    color: #75652d;
+}
+.article-section:nth-of-type(5n + 3) .section-number {
+    background: #e8dfb8;
+    color: #75652d;
+}
+
+.article-section:nth-of-type(5n + 4) .section-heading-text {
+    background: #e8f1f8;
+    color: #466681;
+}
+.article-section:nth-of-type(5n + 4) .section-number {
+    background: #c9dced;
+    color: #466681;
+}
+
+.article-section:nth-of-type(5n + 5) .section-heading-text {
+    background: #f4ece6;
+    color: #765a46;
+}
+.article-section:nth-of-type(5n + 5) .section-number {
+    background: #e2d0c3;
+    color: #765a46;
 }
 
 html.dark-mode .article-section h2 {
     color: #f0ddd5;
 }
 
-html.dark-mode .section-number {
-    background: #71483d;
-    color: #f2ddd5;
+/* Dark-mode section title colors follow the dark article-tag palette. */
+html.dark-mode .article-section:nth-of-type(5n + 1) .section-heading-text {
+    background: #31232b;
+    color: #e8b7c5;
+}
+html.dark-mode .article-section:nth-of-type(5n + 1) .section-number {
+    background: #5c3a46;
+    color: #e8b7c5;
 }
 
-html.dark-mode .section-heading-text {
-    background: #4a302a;
-    color: #f0ddd5;
+html.dark-mode .article-section:nth-of-type(5n + 2) .section-heading-text {
+    background: #2b2534;
+    color: #cfb8e2;
+}
+html.dark-mode .article-section:nth-of-type(5n + 2) .section-number {
+    background: #4c3f5b;
+    color: #cfb8e2;
+}
+
+html.dark-mode .article-section:nth-of-type(5n + 3) .section-heading-text {
+    background: #322f22;
+    color: #d8c98a;
+}
+html.dark-mode .article-section:nth-of-type(5n + 3) .section-number {
+    background: #575037;
+    color: #d8c98a;
+}
+
+html.dark-mode .article-section:nth-of-type(5n + 4) .section-heading-text {
+    background: #24303a;
+    color: #aac9de;
+}
+html.dark-mode .article-section:nth-of-type(5n + 4) .section-number {
+    background: #3d5264;
+    color: #aac9de;
+}
+
+html.dark-mode .article-section:nth-of-type(5n + 5) .section-heading-text {
+    background: #302a26;
+    color: #d5b7a1;
+}
+html.dark-mode .article-section:nth-of-type(5n + 5) .section-number {
+    background: #56473b;
+    color: #d5b7a1;
 }
 
 .article-subsection {
