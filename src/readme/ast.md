@@ -87,7 +87,7 @@ DEFINE RelatedLink
 END RelatedLink
 
 DEFINE Document
-    document_title = ""
+    document_tag = ""
     banner = ""
     banner_color = ""
     author = ""
