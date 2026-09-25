@@ -398,11 +398,9 @@ def render(document: Document, template_path: str | Path) -> str:
         dark_color = escape(_dark_mode_color(button.color), quote=True)
         buttons.append(f'<a class="nav-button" href="{escape(button.href, quote=True)}" style="--button-color: {color}; --button-color-dark: {dark_color};">{escape(button.name)}</a>')
     if document.banner:
-        banner_color = escape(document.banner_color or "#ffffff", quote=True)
-        banner_dark_color = escape(_dark_mode_color(document.banner_color or "#ffffff"), quote=True)
-        banner = f'<div class="site-banner"><img src="{escape(document.banner, quote=True)}" alt="" loading="eager"><a class="banner-title" href="#" style="--banner-title-color: {banner_color}; --banner-title-color-dark: {banner_dark_color};">{escape(document.document_title)}</a></div>'
+        banner = f'<div class="site-banner"><img src="{escape(document.banner, quote=True)}" alt="" loading="eager"></div>'
     else:
-        banner = f'<a class="document-title" href="#">{escape(document.document_title)}</a>'
+        banner = f'<div class="site-banner site-banner-empty"><span>{escape(document.document_title)}</span></div>'
     references = _build_reference_index(document)
     toc, article, environment_counters = [], [], {}
     figure_counter = {"number": 0}
@@ -416,7 +414,7 @@ def render(document: Document, template_path: str | Path) -> str:
         toc.append('</li>')
         article.append(_section_html(section, number, environment_counters, references, figure_counter))
     related = [f'<li><a href="{escape(link.href, quote=True)}" target="_blank" rel="noopener noreferrer">{escape(link.name)}</a></li>' for link in document.related_links]
-    replacements = {"{{DOCUMENT_TITLE}}": escape(document.document_title), "{{ARTICLE_TITLE}}": escape(document.article_title), "{{BANNER}}": banner, "{{BUTTONS}}": "\n".join(buttons), "{{TOC}}": "\n".join(toc), "{{ARTICLE}}": "\n".join(article), "{{RELATED_LINKS}}": "\n".join(related)}
+    replacements = {"{{DOCUMENT_TITLE}}": escape(document.document_title), "{{ARTICLE_TITLE}}": escape(document.article_title), "{{AUTHOR}}": escape(document.author), "{{BANNER}}": banner, "{{BUTTONS}}": "\n".join(buttons), "{{TOC}}": "\n".join(toc), "{{ARTICLE}}": "\n".join(article), "{{RELATED_LINKS}}": "\n".join(related)}
     for key, value in replacements.items():
         template = template.replace(key, value)
     return template
