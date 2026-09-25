@@ -2,7 +2,7 @@
   "Document title": {"prefix":"documenttitle","body":["@documenttitle{${1:Document Title}}","","${0}"],"description":"Create a Mark Two document title"},
   "Button": {"prefix":"button","body":["@button{${1:Home}, href = ${2:/}, color = ${3:black}}","${0}"],"description":"Create a navigation button"},
   "Article title": {"prefix":"title","body":["@title{${1:Article Title}}","","${0}"],"description":"Create an article title"},
-  "Section": {"prefix":"section","body":["@section{${1:Section Title}, color = ${2:#1f4f91}, label = ${3:section-label}}","","${0}"],"description":"Create a numbered section"},
+  "Section": {"prefix":"section","body":["@section{${1:Section Title}, label = ${2:section-label}}","","${0}"],"description":"Create a numbered section"},
   "Subsection": {"prefix":"subsection","body":["@subsection{${1:Subsection Title}, label = ${2:subsection-label}}","","${0}"],"description":"Create a subsection"},
   "Image": {"prefix":"image","body":["@image{src = ${1:https://example.com/image.png}, alt = ${2:Description}, caption = ${3:Figure caption}, label = ${4:figure-label}}","${0}"],"description":"Insert an image"},
   "Enumeration": {"prefix":"enumerate","body":["@enumerate{color = ${1:green},","    @item{${2:First item}},","    @item{${3:Second item}},","    @item{${4:Third item}}","}","${0}"],"description":"Create a numbered list"},
