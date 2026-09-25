@@ -1,9 +1,9 @@
 :root {
-    --page-max: 1480px;
-    --article-max: 900px;
-    --left-sidebar-width: 222px;
-    --right-sidebar-width: 270px;
-    --page-pad: clamp(16px, 2vw, 30px);
+    --page-max: calc(100% - 10px);
+    --article-max: 1022px;
+    --left-sidebar-width: 232px;
+    --right-sidebar-width: 280px;
+    --page-pad: 0px;
 
     --text: #3f3a38;
     --muted-text: #7d746f;
@@ -83,7 +83,7 @@ button, input, select, textarea {
 .site-shell {
     width: min(100%, var(--page-max));
     margin: 0 auto;
-    padding: var(--page-pad) var(--page-pad) 54px;
+    padding: 5px var(--page-pad) 54px;
 }
 
 .site-header {
