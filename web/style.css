@@ -83,7 +83,7 @@ button, input, select, textarea {
 .site-shell {
     width: min(100%, var(--page-max));
     margin: 0 auto;
-    padding: 5px var(--page-pad) 54px;
+    padding: 20px var(--page-pad) 54px;
 }
 
 .site-header {
@@ -96,6 +96,7 @@ button, input, select, textarea {
     border-radius: 22px;
     background: var(--surface);
     box-shadow: var(--shadow-soft);
+    margin-inline: 20px;
 }
 
 .hero-author {
@@ -1106,7 +1107,7 @@ html.dark-mode .math-environment.warning { --environment-accent: #c08c98; --envi
 @media (max-width: 820px) {
     .site-shell {
         width: 100%;
-        padding: 12px 15px 40px;
+        padding: 20px 0 40px;
     }
 
     .site-header {
