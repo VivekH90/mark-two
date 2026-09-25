@@ -230,11 +230,13 @@ html.dark-mode .site-search:focus-within {
 }
 
 .theme-toggle {
-    position: absolute;
-    top: 50%;
-    right: 16px;
-    transform: translateY(-50%);
-    z-index: 3;
+    position: fixed;
+    top: auto;
+    right: auto;
+    bottom: 20px;
+    left: 20px;
+    transform: none;
+    z-index: 10;
     display: inline-flex;
     align-items: center;
     min-height: 38px;
@@ -1136,8 +1138,10 @@ html.dark-mode .math-environment.warning { --environment-accent: #c08c98; --envi
     }
 
     .theme-toggle {
-        top: 62px;
-        right: 12px;
+        top: auto;
+        right: auto;
+        bottom: 20px;
+        left: 15px;
         transform: none;
     }
 
