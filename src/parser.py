@@ -317,7 +317,7 @@ def parse(source: str) -> Document:
 
         if command == "documenttitle":
             values = _parse_key_values(argument)
-            document.document_title = values.get("name", argument)
+            document.document_tag = values.get("name", argument)
             document.banner = values.get("banner", "")
             document.banner_color = values.get("color", "")
         elif command == "author":
