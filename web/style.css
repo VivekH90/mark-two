@@ -372,7 +372,7 @@ html.dark-mode .nav-button:focus-visible {
 }
 
 .article-title {
-    margin: 0 auto 32px;
+    margin: 0 auto 14px;
     max-width: var(--article-max);
     color: var(--text);
     text-align: left;
@@ -380,6 +380,81 @@ html.dark-mode .nav-button:focus-visible {
     line-height: 1.08;
     font-weight: 700;
     letter-spacing: -0.035em;
+}
+
+.article-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 0 0 30px;
+}
+
+.article-tag {
+    display: inline-flex;
+    align-items: center;
+    min-height: 38px;
+    padding: 7px 16px;
+    border: 1px solid #f0c7c5;
+    border-radius: 15px;
+    background: #fde8e5;
+    color: #7e3f50;
+    font-size: 15px;
+    line-height: 1.2;
+    font-weight: 600;
+}
+
+.article-tag:nth-child(5n + 2) {
+    border-color: #ddd0ea;
+    background: #f1eaf7;
+    color: #67507f;
+}
+
+.article-tag:nth-child(5n + 3) {
+    border-color: #e8dfb8;
+    background: #f8f2d7;
+    color: #75652d;
+}
+
+.article-tag:nth-child(5n + 4) {
+    border-color: #c9dced;
+    background: #e8f1f8;
+    color: #466681;
+}
+
+.article-tag:nth-child(5n + 5) {
+    border-color: #e2d0c3;
+    background: #f4ece6;
+    color: #765a46;
+}
+
+html.dark-mode .article-tag {
+    border-color: #5c3a46;
+    background: #31232b;
+    color: #e8b7c5;
+}
+
+html.dark-mode .article-tag:nth-child(5n + 2) {
+    border-color: #4c3f5b;
+    background: #2b2534;
+    color: #cfb8e2;
+}
+
+html.dark-mode .article-tag:nth-child(5n + 3) {
+    border-color: #575037;
+    background: #322f22;
+    color: #d8c98a;
+}
+
+html.dark-mode .article-tag:nth-child(5n + 4) {
+    border-color: #3d5264;
+    background: #24303a;
+    color: #aac9de;
+}
+
+html.dark-mode .article-tag:nth-child(5n + 5) {
+    border-color: #56473b;
+    background: #302a26;
+    color: #d5b7a1;
 }
 
 .article-section {
