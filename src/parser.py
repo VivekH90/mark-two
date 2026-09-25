@@ -311,7 +311,7 @@ def parse(source: str) -> Document:
 
         command, argument, end_index = directive
         command = command.strip().lower().replace(" ", "")
-        if command in {"documenttitle", "author", "title", "button", "section", "subsection", "image", "relatedlinks", "relatedlink", "text", "tags"}:
+        if command in {"documenttitle", "author", "title", "button", "section", "subsection", "image", "gallery", "relatedlinks", "relatedlink", "text", "tags"}:
             current_environment = None
             current_text = None
 
