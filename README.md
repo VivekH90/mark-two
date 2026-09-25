@@ -172,6 +172,7 @@ The single-line form remains valid too.
 | `@section` | Creates a numbered section. Supports `label`. | `@section{Limits, label = limits}` |
 | `@subsection` | Creates a numbered subsection. Supports `label`. | `@subsection{One-sided limits, label = one-sided}` |
 | `@image` | Inserts a single image or a multi-image row. Single images support `image`/`src`, `width`, `height`, `alt`, `caption`, and `label`. Multiple images use `image(1)`, `image(2)`, ... and support independent `width(n)` and `height(n)` values. Unspecified widths share the remaining row space. | `@image{image(1) = first.png, image(2) = second.png, width(1) = 55%, width(2) = 35%, caption = A comparison.}` |
+| `@gallery` | Builds a remote image gallery at compile time. Currently supports NASA with `source`, `query`, `count`, and optional `seed`; image files are not downloaded into the repository. | `@gallery{source = NASA, query = black holes, count = 7}` |
 | `@enumerate` | Creates an ordered list. | `@enumerate{color = green, @item{First}, @item{Second}}` |
 | `@itemize` | Creates an unordered list. | `@itemize{color = #8a3d91, @item{First}, @item{Second}}` |
 | `@item` | Creates an item inside `@enumerate` or `@itemize`; may have a title. | `@item{An item}` or `@item{title = "Step one", Details.}` |
