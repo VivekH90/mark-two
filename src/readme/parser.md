@@ -358,7 +358,7 @@
 
        i. Parse the argument using `_parse_key_values()`.
 
-       ii. Set `document.document_title` to:
+       ii. Set `document.document_tag` to:
 
            1. `values["name"]` if it exists,
            2. otherwise the complete `argument`.
