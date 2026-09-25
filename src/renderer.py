@@ -137,6 +137,18 @@ def _extract_inline_block(text: str, start: int):
     return None
 
 
+def _navigation_icon(name: str) -> str:
+    """Return a small inline icon for known site navigation buttons."""
+    key = re.sub(r"\\s+", " ", name.strip().lower())
+    icons = {
+        "home": '<svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.8 12 3l9 7.8v9.2a1 1 0 0 1-1 1h-5.5v-6h-5v6H4a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8.5 21v-6h7v6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>',
+        "archives": '<svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4h13A1.5 1.5 0 0 1 20 5.5v14A1.5 1.5 0 0 1 18.5 21h-13A1.5 1.5 0 0 1 4 19.5z" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 4v17M8 8h7M11 12h5M11 16h5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
+        "thoughts": '<svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 19.5c-1.7-.8-3-2-3.6-3.7C5.2 14.7 5 13.4 5 12a7 7 0 1 1 14 0c0 1.4-.2 2.7-.9 3.8-.6 1.3-1.4 2.5-2.8 3.7H9.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 21h6M9.5 17.5h5M9.7 11.5c.7-.9 1.5-.9 2.3 0 .7-.9 1.5-.9 2.3 0 .5.6.9 1.2.8 2M12 8.5v3" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>',
+        "github": '<svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .7a11.3 11.3 0 0 0-3.6 22c.6.1.8-.3.8-.6v-2.1c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.2-1.6-1.2-1.6-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 .1 1.5-.7 1.8-1.1.1-.7.4-1.1.6-1.4-2.5-.3-5.2-1.2-5.2-5.6 0-1.2.4-2.2 1.1-3-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.1 1.1a10.7 10.7 0 0 1 5.6 0c2.2-1.4 3.1-1.1 3.1-1.1.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3 0 4.4-2.7 5.3-5.2 5.6.4.3.7.9.7 1.8v2.7c0 .3.2.7.8.6A11.3 11.3 0 0 0 12 .7Z"/></svg>'
+    }
+    return icons.get(key, "")
+
+
 def _looks_like_url(target: str) -> bool:
     return bool(re.match(r"^(?:https?://|/|(?:\.?\.?/)?[^#]+\.html(?:#.*)?$)", target, re.IGNORECASE)) or "#" in target
 
@@ -396,7 +408,9 @@ def render(document: Document, template_path: str | Path) -> str:
     for button in document.buttons:
         color = escape(button.color, quote=True)
         dark_color = escape(_dark_mode_color(button.color), quote=True)
-        buttons.append(f'<a class="nav-button" href="{escape(button.href, quote=True)}" style="--button-color: {color}; --button-color-dark: {dark_color};">{escape(button.name)}</a>')
+        icon = _navigation_icon(button.name)
+        icon_html = f'<span class="nav-icon-wrap">{icon}</span>' if icon else ''
+        buttons.append(f'<a class="nav-button" href="{escape(button.href, quote=True)}" style="--button-color: {color}; --button-color-dark: {dark_color};">{icon_html}<span class="nav-label">{escape(button.name)}</span></a>')
     if document.banner:
         banner = f'<div class="site-banner"><img src="{escape(document.banner, quote=True)}" alt="" loading="eager"></div>'
     else:
