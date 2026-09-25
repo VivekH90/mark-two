@@ -406,7 +406,7 @@ html.dark-mode .nav-button:focus-visible {
     display: flex;
     flex-wrap: nowrap;
     gap: 10px;
-    margin: -30px -38px 10px;
+    margin: -24px -32px 15px;
     padding: 6px;
     border: 1px solid #a9c5ad;
     border-radius: 22px;
@@ -1221,7 +1221,7 @@ html.dark-mode .math-environment.warning { --environment-accent: #c08c98; --envi
 
     .article-gallery {
         gap: 8px;
-        margin: -23px -16px 10px;
+        margin: -17px -10px 15px;
         padding: 5px;
         border-radius: 18px;
     }
