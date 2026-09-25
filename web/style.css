@@ -1,8 +1,8 @@
 :root {
     --page-max: calc(100% - 10px);
-    --article-max: 1022px;
-    --left-sidebar-width: 232px;
-    --right-sidebar-width: 280px;
+    --article-max: 1042px;
+    --left-sidebar-width: 252px;
+    --right-sidebar-width: 300px;
     --page-pad: 0px;
 
     --text: #3f3a38;
@@ -278,10 +278,10 @@ html.dark-mode .theme-toggle:focus-visible {
 
 .page-layout {
     display: grid;
-    grid-template-columns: var(--left-sidebar-width) minmax(0, var(--article-max)) var(--right-sidebar-width);
-    justify-content: center;
+    grid-template-columns: var(--left-sidebar-width) minmax(0, 1fr) var(--right-sidebar-width);
+    justify-content: stretch;
     align-items: start;
-    gap: 28px;
+    gap: 10px;
     margin-top: 26px;
 }
 
