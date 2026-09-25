@@ -712,7 +712,7 @@ html.dark-mode .article-tag:nth-child(5n + 5) {
     padding: 10px 14px;
     border-radius: 12px;
     background: var(--section-border);
-    color: var(--section-text);
+    color: #000000;
     line-height: 1;
     font-size: 0.82em;
     font-weight: 700;
@@ -1091,12 +1091,19 @@ html.dark-mode .list-item-title {
     padding: 2px 10px 3px;
     border-radius: 999px;
     background: var(--section-border);
-    color: var(--section-text);
+    color: #000000;
     font-weight: 700;
 }
 
-.environment-number { font-weight: 700; }
-.environment-title { font-weight: 600; }
+.environment-number { 
+    color: #000000;
+    font-weight: 700;
+}
+
+.environment-title { 
+    color: #000000;
+    font-weight: 600;
+}
 
 .proof-environment {
     position: relative;
