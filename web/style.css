@@ -89,26 +89,27 @@ button, input, select, textarea {
 .site-header {
     display: grid;
     grid-template-columns: 260px minmax(0, 1fr);
+    gap: 15px;
     height: 120px;
     min-height: 120px;
-    overflow: hidden;
-    border: 1px solid var(--border);
-    border-radius: 22px;
-    background: var(--surface);
-    box-shadow: var(--shadow-soft);
 }
 
 .hero-author {
     display: flex;
     flex-direction: column;
+    align-items: center;
     justify-content: center;
     padding: 12px 20px;
-    border-right: 1px solid var(--border);
+    border: 1px solid var(--border);
+    border-radius: 22px;
     background: linear-gradient(180deg, var(--surface) 0%, var(--surface-soft) 100%);
+    box-shadow: var(--shadow-soft);
+    text-align: center;
 }
 
 .author-kicker {
-    margin-bottom: 4px;
+    margin-top: 8px;
+    margin-bottom: 0;
     color: var(--muted-text);
     font-size: 10px;
     font-weight: 600;
@@ -127,6 +128,10 @@ button, input, select, textarea {
 .hero-banner {
     position: relative;
     min-width: 0;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    box-shadow: var(--shadow-soft);
 }
 
 .site-banner {
@@ -1155,14 +1160,14 @@ html.dark-mode .math-environment.warning { --environment-accent: #c08c98; --envi
 
     .site-header {
         grid-template-columns: 1fr;
+        gap: 15px;
         height: auto;
         min-height: 0;
     }
 
     .hero-author {
+        min-height: 120px;
         padding: 20px 22px;
-        border-right: 0;
-        border-bottom: 1px solid var(--border);
     }
 
     .author-name {
