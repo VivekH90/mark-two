@@ -311,7 +311,7 @@ def parse(source: str) -> Document:
 
         command, argument, end_index = directive
         command = command.strip().lower().replace(" ", "")
-        if command in {"documenttitle", "author", "title", "button", "section", "subsection", "image", "relatedlinks", "relatedlink", "text"}:
+        if command in {"documenttitle", "author", "title", "button", "section", "subsection", "image", "relatedlinks", "relatedlink", "text", "tags"}:
             current_environment = None
             current_text = None
 
@@ -325,6 +325,9 @@ def parse(source: str) -> Document:
             document.author = values.get("name", argument)
         elif command == "title":
             document.article_title = argument
+        elif command == "tags":
+            tags = [_strip_quotes(part).strip() for part in _split_top_level(argument) if _strip_quotes(part).strip()]
+            document.tags.extend(tags)
         elif command == "button":
             values = _parse_key_values(argument)
             document.buttons.append(Button(name=values.get("name", "Button"), href=values.get("href", "#"), color=values.get("color", "black")))
