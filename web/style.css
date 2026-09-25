@@ -108,6 +108,7 @@ button, input, select, textarea {
 }
 
 .author-kicker {
+    order: 2;
     margin-top: 8px;
     margin-bottom: 0;
     color: var(--muted-text);
@@ -118,6 +119,7 @@ button, input, select, textarea {
 }
 
 .author-name {
+    order: 1;
     color: var(--text);
     font-size: 32px;
     font-weight: 700;
