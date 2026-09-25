@@ -118,6 +118,7 @@ class Document:
     banner_color: str = ""
     author: str = ""
     article_title: str = ""
+    tags: List[str] = field(default_factory=list)
     buttons: List[Button] = field(default_factory=list)
     sections: List[Section] = field(default_factory=list)
     related_links: List[RelatedLink] = field(default_factory=list)
