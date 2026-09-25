@@ -169,7 +169,7 @@ The single-line form remains valid too.
 | `@author` | Sets the author name shown beside the top banner. | `@author{Vivek}` |
 | `@title` | Sets the article title. | `@title{Introduction to Analysis}` |
 | `@tags` | Adds page tags shown directly below the article title. Multiple tags are comma-separated. | `@tags{general relativity, cosmology}` |
-| `@section` | Creates a numbered section. Supports `color` and `label`. | `@section{Limits, color = #315a9b, label = limits}` |
+| `@section` | Creates a numbered section. Supports `label`. | `@section{Limits, label = limits}` |
 | `@subsection` | Creates a numbered subsection. Supports `label`. | `@subsection{One-sided limits, label = one-sided}` |
 | `@image` | Inserts a single image or a multi-image row. Single images support `image`/`src`, `width`, `height`, `alt`, `caption`, and `label`. Multiple images use `image(1)`, `image(2)`, ... and support independent `width(n)` and `height(n)` values. Unspecified widths share the remaining row space. | `@image{image(1) = first.png, image(2) = second.png, width(1) = 55%, width(2) = 35%, caption = A comparison.}` |
 | `@enumerate` | Creates an ordered list. | `@enumerate{color = green, @item{First}, @item{Second}}` |
