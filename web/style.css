@@ -83,7 +83,7 @@ button, input, select, textarea {
 .site-shell {
     width: min(100%, var(--page-max));
     margin: 0 auto;
-    padding: 20px var(--page-pad) 54px;
+    padding: 20px 30px 54px;
 }
 
 .site-header {
@@ -96,7 +96,6 @@ button, input, select, textarea {
     border-radius: 22px;
     background: var(--surface);
     box-shadow: var(--shadow-soft);
-    margin-inline: 20px;
 }
 
 .hero-author {
@@ -235,7 +234,7 @@ html.dark-mode .site-search:focus-within {
     top: auto;
     right: auto;
     bottom: 20px;
-    left: 20px;
+    left: 30px;
     transform: none;
     z-index: 10;
     display: inline-flex;
@@ -290,7 +289,7 @@ html.dark-mode .theme-toggle:focus-visible {
     align-items: start;
     gap: 10px;
     margin-top: 26px;
-    margin-inline: 15px;
+    margin-inline: 0;
 }
 
 .left-sidebar,
@@ -1151,7 +1150,7 @@ html.dark-mode .math-environment.warning { --environment-accent: #c08c98; --envi
 @media (max-width: 820px) {
     .site-shell {
         width: 100%;
-        padding: 20px 0 40px;
+        padding: 20px 30px 40px;
     }
 
     .site-header {
@@ -1194,7 +1193,7 @@ html.dark-mode .math-environment.warning { --environment-accent: #c08c98; --envi
         grid-template-columns: 1fr;
         gap: 18px;
         margin-top: 18px;
-        margin-inline: 15px;
+        margin-inline: 0;
     }
 
     .left-sidebar,
