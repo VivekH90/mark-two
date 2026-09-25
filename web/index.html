@@ -27,26 +27,40 @@
 <body>
     <div class="site-shell">
         <header class="site-header">
-            {{BANNER}}
-            <nav class="navigation" aria-label="Site navigation">
-                {{BUTTONS}}
-                <button class="nav-button theme-toggle" type="button" aria-label="Enable dark mode" aria-pressed="false">
+            <div class="hero-author">
+                <div class="author-kicker">Author</div>
+                <div class="author-name">{{AUTHOR}}</div>
+            </div>
+            <div class="hero-banner">
+                {{BANNER}}
+                <button class="theme-toggle" type="button" aria-label="Enable dark mode" aria-pressed="false">
                     <span class="theme-icon" aria-hidden="true">☾</span>
                     <span class="theme-label">Dark Mode</span>
                 </button>
-            </nav>
+            </div>
         </header>
 
         <div class="page-layout">
+            <aside class="left-sidebar" aria-label="Site navigation">
+                <section class="sidebar-card navigation-card">
+                    <div class="sidebar-heading">
+                        <h2>Navigation</h2>
+                    </div>
+                    <nav class="site-navigation">
+                        {{BUTTONS}}
+                    </nav>
+                </section>
+            </aside>
+
             <main class="article">
                 <h1 class="article-title">{{ARTICLE_TITLE}}</h1>
                 {{ARTICLE}}
             </main>
 
-            <aside class="sidebar" aria-label="Article information">
+            <aside class="right-sidebar" aria-label="Article information">
                 <section class="sidebar-card toc-card">
                     <div class="sidebar-heading">
-                        <h2>Table of Contents</h2>
+                        <h2>On this page</h2>
                         <button class="sidebar-toggle" type="button" aria-label="Toggle table of contents" aria-expanded="true">☷</button>
                     </div>
                     <nav class="toc" aria-label="Table of contents">
