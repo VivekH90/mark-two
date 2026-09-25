@@ -409,7 +409,7 @@ def _breadcrumb_html(document: Document) -> str:
         '<path d="M8.5 21v-6h7v6" fill="none" stroke="currentColor" stroke-width="1.8" '
         'stroke-linejoin="round"/></svg>'
     )
-    tag = escape(document.document_tag) if document.document_tag else ""
+    tag = escape(document.document_title) if document.document_title else ""
     title = escape(document.article_title)
     tag_html = (
         f'<span class="breadcrumb-text">{tag}</span>'
