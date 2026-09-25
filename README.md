@@ -250,6 +250,37 @@ Here image 1 occupies 50% of the row, image 2 occupies 25%, and image 3 receives
 
 Whenever an image or image group has a `caption`, Mark Two automatically formats it as **Figure N:** followed by the caption text, where the figure number counts image figures in document order. A multi-image row counts as one figure.
 
+### Remote Image Galleries
+
+Mark Two can build a document-level image gallery from remote scientific-image providers. The compiler fetches image metadata at build time, but **does not download the image files into the repository**. The generated HTML keeps the remote image URLs, so the browser loads the images when the page is viewed.
+
+NASA is currently supported:
+
+```text
+@gallery{
+    source = NASA,
+    query = black holes,
+    count = 7
+}
+```
+
+Optional deterministic selection is available with `seed`:
+
+```text
+@gallery{source = NASA, query = gravitational waves, count = 6, seed = 42}
+```
+
+The compiler searches NASA's public Image and Video Library API, resolves usable image assets, and renders each image with:
+
+- the remote image URL
+- descriptive `alt` text from NASA metadata
+- a link back to the NASA image record
+- the NASA-provided center/credit metadata when available
+
+The gallery is rendered above the article breadcrumb and is responsive. Image files are not copied into the generated article directory.
+
+Because remote providers and individual images can have different reuse conditions, check the source/credit information for the images you publish. The gallery preserves a source link and credit in the generated page to make that review possible.
+
 ## Cross References
 
 Give a section or environment a `label`, then reference it elsewhere:
