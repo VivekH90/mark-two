@@ -393,6 +393,69 @@ html.dark-mode .nav-button:focus-visible {
     box-shadow: var(--shadow-card);
 }
 
+.article-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 10px;
+    margin: -30px -38px 18px;
+    padding: 6px;
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    background: var(--surface);
+    overflow: hidden;
+}
+
+.gallery-item {
+    position: relative;
+    min-width: 0;
+    height: 108px;
+    margin: 0;
+    overflow: hidden;
+    border-radius: 15px;
+    background: var(--surface-soft);
+}
+
+.gallery-item a {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.gallery-item img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 180ms ease;
+}
+
+.gallery-item:hover img,
+.gallery-item:focus-within img {
+    transform: scale(1.035);
+}
+
+.gallery-item figcaption {
+    position: absolute;
+    right: 7px;
+    bottom: 6px;
+    max-width: calc(100% - 14px);
+    padding: 2px 7px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.78);
+    color: #514a47;
+    font-size: 10px;
+    line-height: 1.25;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    backdrop-filter: blur(6px);
+}
+
+html.dark-mode .gallery-item figcaption {
+    background: rgba(25, 21, 30, 0.78);
+    color: #eee8f3;
+}
+
 .article-breadcrumb {
     display: flex;
     align-items: center;
@@ -1082,6 +1145,19 @@ html.dark-mode .math-environment.warning { --environment-accent: #c08c98; --envi
     .article {
         padding: 27px 20px 34px;
         border-radius: 18px;
+    }
+
+    .article-gallery {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+        margin: -23px -16px 16px;
+        padding: 5px;
+        border-radius: 18px;
+    }
+
+    .gallery-item {
+        height: 88px;
+        border-radius: 13px;
     }
 
     .article-breadcrumb {
