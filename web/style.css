@@ -664,6 +664,9 @@ html.dark-mode .article-tag:nth-child(5n + 5) {
 .article-section {
     scroll-margin-top: 24px;
     margin-top: 34px;
+    --section-fill: #fde8e5;
+    --section-border: #f0c7c5;
+    --section-text: #7e3f50;
 }
 
 .article-section h2 {
@@ -686,8 +689,8 @@ html.dark-mode .article-tag:nth-child(5n + 5) {
     min-width: 66px;
     padding: 10px 14px;
     border-radius: 12px;
-    background: #f0c7c5;
-    color: #7e3f50;
+    background: var(--section-border);
+    color: var(--section-text);
     line-height: 1;
     font-size: 0.82em;
     font-weight: 700;
@@ -710,104 +713,69 @@ html.dark-mode .article-tag:nth-child(5n + 5) {
     min-width: 0;
     padding: 10px 17px;
     border-radius: 12px;
-    background: #fde8e5;
-    color: #7e3f50;
+    background: var(--section-fill);
+    color: var(--section-text);
 }
 
-/* Section title colors follow the same five-color cycle as article tags. */
-.article-section:nth-of-type(5n + 1) .section-heading-text {
-    background: #fde8e5;
-    color: #7e3f50;
-}
-.article-section:nth-of-type(5n + 1) .section-number {
-    background: #f0c7c5;
-    color: #7e3f50;
+/* Section palettes repeat in the same five-color cycle as article tags. */
+.article-section:nth-of-type(5n + 1) {
+    --section-fill: #fde8e5;
+    --section-border: #f0c7c5;
+    --section-text: #7e3f50;
 }
 
-.article-section:nth-of-type(5n + 2) .section-heading-text {
-    background: #f1eaf7;
-    color: #67507f;
-}
-.article-section:nth-of-type(5n + 2) .section-number {
-    background: #ddd0ea;
-    color: #67507f;
+.article-section:nth-of-type(5n + 2) {
+    --section-fill: #f1eaf7;
+    --section-border: #ddd0ea;
+    --section-text: #67507f;
 }
 
-.article-section:nth-of-type(5n + 3) .section-heading-text {
-    background: #f8f2d7;
-    color: #75652d;
-}
-.article-section:nth-of-type(5n + 3) .section-number {
-    background: #e8dfb8;
-    color: #75652d;
+.article-section:nth-of-type(5n + 3) {
+    --section-fill: #f8f2d7;
+    --section-border: #e8dfb8;
+    --section-text: #75652d;
 }
 
-.article-section:nth-of-type(5n + 4) .section-heading-text {
-    background: #e8f1f8;
-    color: #466681;
-}
-.article-section:nth-of-type(5n + 4) .section-number {
-    background: #c9dced;
-    color: #466681;
+.article-section:nth-of-type(5n + 4) {
+    --section-fill: #e8f1f8;
+    --section-border: #c9dced;
+    --section-text: #466681;
 }
 
-.article-section:nth-of-type(5n + 5) .section-heading-text {
-    background: #f4ece6;
-    color: #765a46;
-}
-.article-section:nth-of-type(5n + 5) .section-number {
-    background: #e2d0c3;
-    color: #765a46;
+.article-section:nth-of-type(5n + 5) {
+    --section-fill: #f4ece6;
+    --section-border: #e2d0c3;
+    --section-text: #765a46;
 }
 
-html.dark-mode .article-section h2 {
-    color: #f0ddd5;
+html.dark-mode .article-section {
+    --section-fill: #31232b;
+    --section-border: #5c3a46;
+    --section-text: #e8b7c5;
 }
 
-/* Dark-mode section title colors follow the dark article-tag palette. */
-html.dark-mode .article-section:nth-of-type(5n + 1) .section-heading-text {
-    background: #31232b;
-    color: #e8b7c5;
-}
-html.dark-mode .article-section:nth-of-type(5n + 1) .section-number {
-    background: #5c3a46;
-    color: #e8b7c5;
+html.dark-mode .article-section:nth-of-type(5n + 2) {
+    --section-fill: #2b2534;
+    --section-border: #4c3f5b;
+    --section-text: #cfb8e2;
 }
 
-html.dark-mode .article-section:nth-of-type(5n + 2) .section-heading-text {
-    background: #2b2534;
-    color: #cfb8e2;
-}
-html.dark-mode .article-section:nth-of-type(5n + 2) .section-number {
-    background: #4c3f5b;
-    color: #cfb8e2;
+html.dark-mode .article-section:nth-of-type(5n + 3) {
+    --section-fill: #322f22;
+    --section-border: #575037;
+    --section-text: #d8c98a;
 }
 
-html.dark-mode .article-section:nth-of-type(5n + 3) .section-heading-text {
-    background: #322f22;
-    color: #d8c98a;
-}
-html.dark-mode .article-section:nth-of-type(5n + 3) .section-number {
-    background: #575037;
-    color: #d8c98a;
+html.dark-mode .article-section:nth-of-type(5n + 4) {
+    --section-fill: #24303a;
+    --section-border: #3d5264;
+    --section-text: #aac9de;
 }
 
-html.dark-mode .article-section:nth-of-type(5n + 4) .section-heading-text {
-    background: #24303a;
-    color: #aac9de;
-}
-html.dark-mode .article-section:nth-of-type(5n + 4) .section-number {
-    background: #3d5264;
-    color: #aac9de;
-}
-
-html.dark-mode .article-section:nth-of-type(5n + 5) .section-heading-text {
-    background: #302a26;
-    color: #d5b7a1;
-}
-html.dark-mode .article-section:nth-of-type(5n + 5) .section-number {
-    background: #56473b;
-    color: #d5b7a1;
+html.dark-mode .article-section:nth-of-type(5n + 5) {
+    --section-fill: #302a26;
+    --section-border: #56473b;
+    --section-text: #d5b7a1;
 }
 
 .article-subsection {
@@ -1082,37 +1050,26 @@ html.dark-mode .list-item-title {
     position: relative;
     margin: 22px 0;
     padding: 17px 24px 16px;
-    border: 1px solid var(--environment-border);
-    border-left: 4px solid var(--environment-accent);
+    border: 2px solid var(--section-border);
     border-radius: 13px;
-    background: var(--environment-fill);
+    background: var(--section-fill);
     color: var(--text);
     scroll-margin-top: 24px;
 }
-
-.math-environment.theorem { --environment-accent: #b86660; --environment-border: #e0c6bd; --environment-fill: #f7e7e2; }
-.math-environment.lemma { --environment-accent: #b86d64; --environment-border: #e2cbc1; --environment-fill: #f8eae6; }
-.math-environment.definition { --environment-accent: #a96f62; --environment-border: #dfcbc2; --environment-fill: #f5ebe7; }
-.math-environment.corollary { --environment-accent: #c07168; --environment-border: #e4c7c1; --environment-fill: #f9ebe7; }
-.math-environment.axiom { --environment-accent: #b65f58; --environment-border: #dfc2bc; --environment-fill: #f7e5e2; }
-.math-environment.proposition { --environment-accent: #af7267; --environment-border: #ded0c9; --environment-fill: #f6efeb; }
-.math-environment.remark { --environment-accent: #8c7269; --environment-border: #d8ccc5; --environment-fill: #f3efeb; }
-.math-environment.example { --environment-accent: #ad786d; --environment-border: #dfd0c9; --environment-fill: #f7efeb; }
-.math-environment.conjecture { --environment-accent: #a86776; --environment-border: #dfcbd1; --environment-fill: #f6eaef; }
-.math-environment.notation { --environment-accent: #816fa1; --environment-border: #d2c8dc; --environment-fill: #f0ecf2; }
-.math-environment.warning { --environment-accent: #a96874; --environment-border: #e0ccd1; --environment-fill: #f8ecef; }
 
 .environment-heading {
     margin-bottom: 8px;
     font-size: 18px;
     font-weight: 700;
+    color: var(--section-text);
 }
 
 .environment-label {
     display: inline-block;
     padding: 2px 10px 3px;
     border-radius: 999px;
-    background: color-mix(in srgb, var(--environment-accent) 18%, var(--environment-fill));
+    background: var(--section-border);
+    color: var(--section-text);
     font-weight: 700;
 }
 
@@ -1123,13 +1080,13 @@ html.dark-mode .list-item-title {
     position: relative;
     margin: 24px 0;
     padding: 4px 0 30px;
-    border-bottom: 1px solid var(--line);
+    border-bottom: 1px solid var(--section-border, var(--line));
     scroll-margin-top: 24px;
 }
 
 .proof-heading {
     margin-bottom: 9px;
-    color: var(--accent-deep);
+    color: var(--section-text, var(--accent-deep));
     font-size: 18px;
     font-weight: 700;
 }
