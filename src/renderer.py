@@ -400,6 +400,42 @@ def _section_html(section: Section, number: int, environment_counters, reference
     return "\n".join(html)
 
 
+def _breadcrumb_html(document: Document) -> str:
+    """Render the compact metadata breadcrumb above the article title."""
+    home_icon = (
+        '<svg class="breadcrumb-home-icon" viewBox="0 0 24 24" aria-hidden="true">'
+        '<path d="M3 10.8 12 3l9 7.8v9.2a1 1 0 0 1-1 1h-5.5v-6h-5v6H4a1 1 0 0 1-1-1z" '
+        'fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>'
+        '<path d="M8.5 21v-6h7v6" fill="none" stroke="currentColor" stroke-width="1.8" '
+        'stroke-linejoin="round"/></svg>'
+    )
+    tag = escape(document.document_tag) if document.document_tag else ""
+    title = escape(document.article_title)
+    tag_html = (
+        f'<span class="breadcrumb-text">{tag}</span>'
+        if tag
+        else ""
+    )
+    separator = '<span class="breadcrumb-separator" aria-hidden="true">›</span>'
+    middle = (
+        f'{separator}{tag_html}{separator}'
+        if tag
+        else f'{separator}'
+    )
+    return (
+        '<div class="article-breadcrumb" aria-label="Breadcrumb">'
+        '<div class="breadcrumb-trail">'
+        f'<a class="breadcrumb-home" href="/" aria-label="Home">{home_icon}</a>'
+        f'{middle}'
+        '<span class="breadcrumb-text">Electromagnetism</span>'
+        f'{separator}'
+        f'<span class="breadcrumb-current">{title}</span>'
+        '</div>'
+        '<time class="breadcrumb-date" datetime="2026-09-25">25 Sept, 2026</time>'
+        '</div>'
+    )
+
+
 def render(document: Document, template_path: str | Path) -> str:
     template = Path(template_path).read_text(encoding="utf-8")
     buttons = []
@@ -430,7 +466,7 @@ def render(document: Document, template_path: str | Path) -> str:
         f'<span class="article-tag">{escape(tag)}</span>' for tag in document.tags
     )
     tag_block = f'<div class="article-tags" aria-label="Tags">{"".join([tags])}</div>' if tags else ""
-    replacements = {"{{ARTICLE_TITLE}}": escape(document.article_title), "{{AUTHOR}}": escape(document.author), "{{TAGS}}": tag_block, "{{BANNER}}": banner, "{{BUTTONS}}": "\n".join(buttons), "{{TOC}}": "\n".join(toc), "{{ARTICLE}}": "\n".join(article), "{{RELATED_LINKS}}": "\n".join(related)}
+    replacements = {"{{ARTICLE_TITLE}}": escape(document.article_title), "{{AUTHOR}}": escape(document.author), "{{TAGS}}": tag_block, "{{BREADCRUMB}}": _breadcrumb_html(document), "{{BANNER}}": banner, "{{BUTTONS}}": "\n".join(buttons), "{{TOC}}": "\n".join(toc), "{{ARTICLE}}": "\n".join(article), "{{RELATED_LINKS}}": "\n".join(related)}
     for key, value in replacements.items():
         template = template.replace(key, value)
     return template
