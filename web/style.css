@@ -1,5 +1,5 @@
 :root {
-    --page-max: calc(100% - 30px);
+    --page-max: 100%;
     --article-max: 1042px;
     --left-sidebar-width: 252px;
     --right-sidebar-width: 300px;
@@ -287,6 +287,7 @@ html.dark-mode .theme-toggle:focus-visible {
     align-items: start;
     gap: 10px;
     margin-top: 26px;
+    margin-inline: 15px;
 }
 
 .left-sidebar,
@@ -932,6 +933,7 @@ html.dark-mode .math-environment.warning { --environment-accent: #c08c98; --envi
         grid-template-columns: 1fr;
         gap: 18px;
         margin-top: 18px;
+        margin-inline: 15px;
     }
 
     .left-sidebar,
