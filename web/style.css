@@ -809,3 +809,16 @@ html.dark-mode .math-environment.warning { --environment-accent: #c08c98; --envi
         margin-bottom: 24px;
     }
 }
+
+
+.nav-static {
+    cursor: default;
+    pointer-events: none;
+}
+
+.nav-static:hover,
+.nav-static:focus-visible {
+    background: transparent;
+    color: var(--text);
+    transform: none;
+}
