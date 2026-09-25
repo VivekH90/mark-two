@@ -75,7 +75,6 @@ END Subsection
 
 DEFINE Section
     title
-    color = "#111111"
     content = EMPTY LIST
     subsections = EMPTY LIST
     slug = NONE
