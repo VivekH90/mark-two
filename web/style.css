@@ -698,6 +698,11 @@ html.dark-mode .article-tag:nth-child(5n + 5) {
     font-weight: 600;
 }
 
+/* Keep section content aligned with the section-title box, not the number box. */
+.article-section > :not(h2):not(.article-subsection) {
+    margin-left: 76px;
+}
+
 .section-heading-text {
     display: flex;
     flex: 1 1 auto;
@@ -1295,6 +1300,10 @@ html.dark-mode .math-environment.warning { --environment-accent: #c08c98; --envi
 
     .article-section h2 {
         padding: 9px 11px;
+    }
+
+    .article-section > :not(h2):not(.article-subsection) {
+        margin-left: 0;
     }
 }
 
