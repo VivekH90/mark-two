@@ -394,25 +394,42 @@ html.dark-mode .nav-button:focus-visible {
 }
 
 .article-gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    display: flex;
+    flex-wrap: nowrap;
     gap: 10px;
-    margin: -30px -38px 18px;
+    margin: -30px -38px 10px;
     padding: 6px;
-    border: 1px solid var(--border);
+    border: 1px solid #cfe3d2;
     border-radius: 22px;
-    background: var(--surface);
-    overflow: hidden;
+    background: #edf7ef;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: #b8cfbc transparent;
+}
+
+.article-gallery::-webkit-scrollbar {
+    height: 7px;
+}
+
+.article-gallery::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.article-gallery::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    background: #b8cfbc;
 }
 
 .gallery-item {
     position: relative;
-    min-width: 0;
+    flex: 0 0 180px;
+    min-width: 180px;
     height: 108px;
     margin: 0;
     overflow: hidden;
     border-radius: 15px;
-    background: var(--surface-soft);
+    background: #dfeee2;
 }
 
 .gallery-item a {
@@ -462,7 +479,7 @@ html.dark-mode .gallery-item figcaption {
     justify-content: space-between;
     gap: 18px;
     min-height: 52px;
-    margin: -30px -38px 28px;
+    margin: 0 -38px 28px;
     padding: 8px 16px;
     border: 1px solid #eed8d7;
     border-radius: 22px;
@@ -1148,14 +1165,15 @@ html.dark-mode .math-environment.warning { --environment-accent: #c08c98; --envi
     }
 
     .article-gallery {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 8px;
-        margin: -23px -16px 16px;
+        margin: -23px -16px 10px;
         padding: 5px;
         border-radius: 18px;
     }
 
     .gallery-item {
+        flex-basis: 150px;
+        min-width: 150px;
         height: 88px;
         border-radius: 13px;
     }
