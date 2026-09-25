@@ -1195,9 +1195,9 @@ This function walks through the AST content and chooses how each AST node should
 
 ## 22. `_section_html(section, number, environment_counters, references, figure_counter)`
 
-1. Escape the section color.
+1. Escape the section slug.
 
-2. Calculate its dark-mode color.
+2. Render the section number and title as separate rounded heading blocks with fixed theme colors.
 
 3. Obtain the section slug.
 
