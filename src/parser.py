@@ -333,8 +333,11 @@ def parse(source: str) -> Document:
             document.buttons.append(Button(name=values.get("name", "Button"), href=values.get("href", "#"), color=values.get("color", "black")))
         elif command == "section":
             values = _parse_key_values(argument)
-            title = values.get("name", argument)
-            current_section = Section(title=title, color=values.get("color", "#111111"), slug=_unique_slug(_slugify(title), used_slugs), label=values.get("label", ""))
+            if "color" in values:
+                raise ValueError("@section no longer supports color")
+            title, label = _title_and_label(argument)
+            title = title or argument
+            current_section = Section(title=title, slug=_unique_slug(_slugify(title), used_slugs), label=label)
             document.sections.append(current_section)
             current_subsection = None
         elif command == "subsection":
