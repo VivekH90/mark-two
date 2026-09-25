@@ -405,7 +405,7 @@
        v. Create a `Section` using:
 
            1. the title
-           2. `values["color"]` or `"#111111"`
+           2. the label
            3. the unique slug
            4. `values["label"]` or an empty string
 
