@@ -400,6 +400,32 @@ def _section_html(section: Section, number: int, environment_counters, reference
     return "\n".join(html)
 
 
+def _gallery_html(document: Document) -> str:
+    """Render resolved remote gallery images with source links and credits."""
+    if not document.gallery_items:
+        return ""
+    items = []
+    for item in document.gallery_items:
+        title = escape(item.title or "NASA image", quote=True)
+        alt = escape(item.alt or item.title or "NASA image", quote=True)
+        url = escape(item.url, quote=True)
+        source_url = escape(item.source_url or item.url, quote=True)
+        credit = escape(item.credit or "NASA")
+        items.append(
+            f'<figure class="gallery-item">'
+            f'<a href="{source_url}" target="_blank" rel="noopener noreferrer">'
+            f'<img src="{url}" alt="{alt}" title="{title}" loading="lazy" referrerpolicy="no-referrer">'
+            f'</a>'
+            f'<figcaption>{credit}</figcaption>'
+            f'</figure>'
+        )
+    return (
+        '<section class="article-gallery" aria-label="Article image gallery">'
+        f'{"".join(items)}'
+        '</section>'
+    )
+
+
 def _breadcrumb_html(document: Document) -> str:
     """Render the compact metadata breadcrumb above the article title."""
     home_icon = (
@@ -466,7 +492,7 @@ def render(document: Document, template_path: str | Path) -> str:
         f'<span class="article-tag">{escape(tag)}</span>' for tag in document.tags
     )
     tag_block = f'<div class="article-tags" aria-label="Tags">{"".join([tags])}</div>' if tags else ""
-    replacements = {"{{ARTICLE_TITLE}}": escape(document.article_title), "{{AUTHOR}}": escape(document.author), "{{TAGS}}": tag_block, "{{BREADCRUMB}}": _breadcrumb_html(document), "{{BANNER}}": banner, "{{BUTTONS}}": "\n".join(buttons), "{{TOC}}": "\n".join(toc), "{{ARTICLE}}": "\n".join(article), "{{RELATED_LINKS}}": "\n".join(related)}
+    replacements = {"{{GALLERY}}": _gallery_html(document), "{{ARTICLE_TITLE}}": escape(document.article_title), "{{AUTHOR}}": escape(document.author), "{{TAGS}}": tag_block, "{{BREADCRUMB}}": _breadcrumb_html(document), "{{BANNER}}": banner, "{{BUTTONS}}": "\n".join(buttons), "{{TOC}}": "\n".join(toc), "{{ARTICLE}}": "\n".join(article), "{{RELATED_LINKS}}": "\n".join(related)}
     for key, value in replacements.items():
         template = template.replace(key, value)
     return template
