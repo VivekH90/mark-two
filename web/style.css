@@ -88,9 +88,9 @@ button, input, select, textarea {
 
 .site-header {
     display: grid;
-    grid-template-columns: 250px minmax(0, 1fr);
-    height: 80px;
-    min-height: 80px;
+    grid-template-columns: 260px minmax(0, 1fr);
+    height: 120px;
+    min-height: 120px;
     overflow: hidden;
     border: 1px solid var(--border);
     border-radius: 22px;
@@ -102,15 +102,15 @@ button, input, select, textarea {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 8px 20px;
+    padding: 12px 20px;
     border-right: 1px solid var(--border);
     background: linear-gradient(180deg, var(--surface) 0%, var(--surface-soft) 100%);
 }
 
 .author-kicker {
-    margin-bottom: 3px;
+    margin-bottom: 4px;
     color: var(--muted-text);
-    font-size: 9px;
+    font-size: 10px;
     font-weight: 600;
     letter-spacing: 0.14em;
     text-transform: uppercase;
@@ -118,7 +118,7 @@ button, input, select, textarea {
 
 .author-name {
     color: var(--text);
-    font-size: 28px;
+    font-size: 32px;
     font-weight: 700;
     line-height: 1;
     letter-spacing: -0.045em;
@@ -895,6 +895,7 @@ html.dark-mode .math-environment.warning { --environment-accent: #c08c98; --envi
 
     .site-header {
         grid-template-columns: 1fr;
+        height: auto;
         min-height: 0;
     }
 
