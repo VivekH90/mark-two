@@ -80,7 +80,12 @@ Mark Two's default HTML template produces a three-part page layout beneath the t
 
 On desktop-sized screens, the left and right sidebars are sticky while the article scrolls. The layout collapses progressively on smaller screens.
 
-The top of the page contains an author panel beside the banner image. The author is set with `@author` and appears to the left of the banner. `@documenttitle` stores a document classification tag for future use, but that tag does not currently affect the generated page:
+The top of the page contains an author panel beside the banner image. The author is set with `@author` and appears to the left of the banner. `@documenttitle` stores a document classification tag for future use, but that tag does not currently affect the generated page. Page tags are supplied separately with `@tags` and appear directly below the article title:
+
+```text
+@tags{general relativity, cosmology}
+```
+
 
 ```text
 @documenttitle{Physics, banner = images/banner.jpg}
@@ -163,6 +168,7 @@ The single-line form remains valid too.
 | `@button` | Adds a navigation button. | `@button{Home, href = /, color = black}` |
 | `@author` | Sets the author name shown beside the top banner. | `@author{Vivek}` |
 | `@title` | Sets the article title. | `@title{Introduction to Analysis}` |
+| `@tags` | Adds page tags shown directly below the article title. Multiple tags are comma-separated. | `@tags{general relativity, cosmology}` |
 | `@section` | Creates a numbered section. Supports `color` and `label`. | `@section{Limits, color = #315a9b, label = limits}` |
 | `@subsection` | Creates a numbered subsection. Supports `label`. | `@subsection{One-sided limits, label = one-sided}` |
 | `@image` | Inserts a single image or a multi-image row. Single images support `image`/`src`, `width`, `height`, `alt`, `caption`, and `label`. Multiple images use `image(1)`, `image(2)`, ... and support independent `width(n)` and `height(n)` values. Unspecified widths share the remaining row space. | `@image{image(1) = first.png, image(2) = second.png, width(1) = 55%, width(2) = 35%, caption = A comparison.}` |
