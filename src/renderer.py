@@ -391,10 +391,8 @@ def _build_reference_index(document: Document):
 
 
 def _section_html(section: Section, number: int, environment_counters, references, figure_counter) -> str:
-    color = escape(section.color, quote=True)
-    dark_color = escape(_dark_mode_color(section.color), quote=True)
     identifier = escape(section.slug or "section", quote=True)
-    html = [f'<section class="article-section" id="{identifier}" style="--section-color: {color}; --section-color-dark: {dark_color};">', f'<h2><span class="section-symbol">§</span> {number}. {escape(section.title)}</h2>', _content_html(section.content, environment_counters, references, figure_counter)]
+    html = [f'<section class="article-section" id="{identifier}">', f'<h2><span class="section-number"><span class="section-symbol">§</span> {number}</span><span class="section-heading-text">{escape(section.title)}</span></h2>', _content_html(section.content, environment_counters, references, figure_counter)]
     for sub_number, subsection in enumerate(section.subsections, 1):
         sub_identifier = escape(subsection.slug or "subsection", quote=True)
         html.extend([f'<section class="article-subsection" id="{sub_identifier}">', f'<h3>{number}.{sub_number}. {escape(subsection.title)}</h3>', _content_html(subsection.content, environment_counters, references, figure_counter), "</section>"])
