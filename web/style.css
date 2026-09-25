@@ -167,9 +167,68 @@ button, input, select, textarea {
     font-weight: 700;
 }
 
-.theme-toggle {
+.site-search {
     position: absolute;
     top: 16px;
+    right: 16px;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    width: min(280px, calc(100% - 32px));
+    min-height: 40px;
+    padding: 0 12px;
+    border: 1px solid rgba(255, 255, 255, 0.60);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.66);
+    color: #453f3b;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.10);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.search-icon {
+    flex: 0 0 auto;
+    margin-right: 8px;
+    font-size: 20px;
+    line-height: 1;
+}
+
+.site-search input {
+    min-width: 0;
+    width: 100%;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.site-search input::placeholder {
+    color: currentColor;
+    opacity: 0.72;
+}
+
+.site-search:focus-within {
+    border-color: rgba(255, 255, 255, 0.88);
+    background: rgba(255, 255, 255, 0.82);
+}
+
+html.dark-mode .site-search {
+    border-color: rgba(236, 222, 244, 0.32);
+    background: rgba(25, 21, 30, 0.68);
+    color: #eee8f3;
+}
+
+html.dark-mode .site-search:focus-within {
+    border-color: rgba(236, 222, 244, 0.52);
+    background: rgba(25, 21, 30, 0.84);
+}
+
+.theme-toggle {
+    position: absolute;
+    top: 64px;
     right: 16px;
     z-index: 3;
     display: inline-flex;
@@ -758,8 +817,14 @@ html.dark-mode .math-environment.warning { --environment-accent: #c08c98; --envi
         min-height: 210px;
     }
 
-    .theme-toggle {
+    .site-search {
         top: 12px;
+        right: 12px;
+        width: min(260px, calc(100% - 24px));
+    }
+
+    .theme-toggle {
+        top: 62px;
         right: 12px;
     }
 
