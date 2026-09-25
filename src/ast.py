@@ -98,7 +98,6 @@ class Subsection:
 @dataclass
 class Section:
     title: str
-    color: str = "#111111"
     content: List[ContentItem] = field(default_factory=list)
     subsections: List[Subsection] = field(default_factory=list)
     slug: Optional[str] = None
