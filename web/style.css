@@ -393,6 +393,105 @@ html.dark-mode .nav-button:focus-visible {
     box-shadow: var(--shadow-card);
 }
 
+.article-breadcrumb {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    min-height: 52px;
+    margin: -30px -38px 28px;
+    padding: 8px 16px;
+    border: 1px solid #eed8d7;
+    border-radius: 22px;
+    background: #fdf1f0;
+    color: #6d6461;
+}
+
+.breadcrumb-trail {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 12px;
+    overflow: hidden;
+}
+
+.breadcrumb-home {
+    display: inline-flex;
+    width: 32px;
+    height: 32px;
+    flex: 0 0 32px;
+    align-items: center;
+    justify-content: center;
+    color: #b35f63;
+    text-decoration: none;
+}
+
+.breadcrumb-home-icon {
+    width: 21px;
+    height: 21px;
+}
+
+.breadcrumb-home:hover,
+.breadcrumb-home:focus-visible {
+    color: #93484e;
+}
+
+.breadcrumb-separator {
+    flex: 0 0 auto;
+    color: #b4aaa6;
+    font-size: 25px;
+    line-height: 1;
+}
+
+.breadcrumb-text,
+.breadcrumb-current {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.breadcrumb-current {
+    color: var(--text);
+}
+
+.breadcrumb-date {
+    flex: 0 0 auto;
+    color: #7b716d;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+html.dark-mode .article-breadcrumb {
+    border-color: #4a3945;
+    background: #28212a;
+    color: #bdb1bf;
+}
+
+html.dark-mode .breadcrumb-home {
+    color: #df9bb0;
+}
+
+html.dark-mode .breadcrumb-home:hover,
+html.dark-mode .breadcrumb-home:focus-visible {
+    color: #efb2c4;
+}
+
+html.dark-mode .breadcrumb-separator {
+    color: #766b79;
+}
+
+html.dark-mode .breadcrumb-current {
+    color: var(--text);
+}
+
+html.dark-mode .breadcrumb-date {
+    color: #b2a6b5;
+}
+
 .article-title {
     margin: 0 auto 14px;
     max-width: var(--article-max);
@@ -983,6 +1082,29 @@ html.dark-mode .math-environment.warning { --environment-accent: #c08c98; --envi
     .article {
         padding: 27px 20px 34px;
         border-radius: 18px;
+    }
+
+    .article-breadcrumb {
+        margin: -23px -16px 22px;
+        min-height: 48px;
+        padding: 7px 12px;
+        gap: 12px;
+        border-radius: 18px;
+    }
+
+    .breadcrumb-trail {
+        gap: 8px;
+    }
+
+    .breadcrumb-text,
+    .breadcrumb-current,
+    .breadcrumb-date {
+        font-size: 13px;
+    }
+
+    .breadcrumb-date {
+        white-space: normal;
+        text-align: right;
     }
 
     .article-title {
