@@ -113,7 +113,7 @@ class RelatedLink:
 
 @dataclass
 class Document:
-    document_title: str = ""
+    document_tag: str = ""
     banner: str = ""
     banner_color: str = ""
     author: str = ""
