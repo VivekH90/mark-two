@@ -70,6 +70,29 @@ A custom HTML template can be selected with:
 mark-two completeness.mt --template path/to/index.html
 ```
 
+## Generated Web Layout
+
+Mark Two's default HTML template produces a three-part page layout beneath the top banner:
+
+- a **left navigation sidebar** for document or site navigation
+- the **main article** in the center
+- a **right sidebar** containing the table of contents and related links
+
+On desktop-sized screens, the left and right sidebars are sticky while the article scrolls. The layout collapses progressively on smaller screens.
+
+The top of the page contains an author panel beside the banner image. The author is set with `@author` and appears to the left of the banner:
+
+```text
+@documenttitle{My Notes, banner = images/banner.jpg}
+@author{Vivek}
+```
+
+The default template also places a search field over the upper-right of the banner. The field is part of the generated frontend UI and is currently presentation-only unless custom search behaviour is added to `web/script.js`.
+
+Navigation buttons can be added with `@button`. The default template also includes static navigation entries for Physics, Mathematics, Computer Science, and Thoughts.
+
+The generated page is responsive and supports the built-in light/dark mode toggle.
+
 For compatibility, Mark Two can also be run as a Python module:
 
 ```bash
