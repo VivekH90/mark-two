@@ -80,11 +80,12 @@ Mark Two's default HTML template produces a three-part page layout beneath the t
 
 On desktop-sized screens, the left and right sidebars are sticky while the article scrolls. The layout collapses progressively on smaller screens.
 
-The top of the page contains an author panel beside the banner image. The author is set with `@author` and appears to the left of the banner:
+The top of the page contains an author panel beside the banner image. The author is set with `@author` and appears to the left of the banner. `@documenttitle` stores a document classification tag for future use, but that tag does not currently affect the generated page:
 
 ```text
-@documenttitle{My Notes, banner = images/banner.jpg}
+@documenttitle{Physics, banner = images/banner.jpg}
 @author{Vivek}
+@title{Introduction to Analysis}
 ```
 
 The default template also places a search field over the upper-right of the banner. The field is part of the generated frontend UI and is currently presentation-only unless custom search behaviour is added to `web/script.js`.
@@ -158,7 +159,7 @@ The single-line form remains valid too.
 
 | Command | Purpose | Example |
 | --- | --- | --- |
-| `@documenttitle` | Sets the document/site title and optional top banner image. | `@documenttitle{My Notes, banner = images/banner.jpg}` |
+| `@documenttitle` | Stores a document classification tag. The tag is currently non-functional. The optional `banner` argument still sets the top banner image. | `@documenttitle{Physics, banner = images/banner.jpg}` |
 | `@button` | Adds a navigation button. | `@button{Home, href = /, color = black}` |
 | `@author` | Sets the author name shown beside the top banner. | `@author{Vivek}` |
 | `@title` | Sets the article title. | `@title{Introduction to Analysis}` |
