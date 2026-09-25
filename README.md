@@ -135,8 +135,9 @@ The single-line form remains valid too.
 
 | Command | Purpose | Example |
 | --- | --- | --- |
-| `@documenttitle` | Sets the document/site title and optional banner. Supports `color` for the banner title text. | `@documenttitle{My Notes, banner = images/banner.jpg, color = #ffcc00}` |
+| `@documenttitle` | Sets the document/site title and optional top banner image. | `@documenttitle{My Notes, banner = images/banner.jpg}` |
 | `@button` | Adds a navigation button. | `@button{Home, href = /, color = black}` |
+| `@author` | Sets the author name shown beside the top banner. | `@author{Vivek}` |
 | `@title` | Sets the article title. | `@title{Introduction to Analysis}` |
 | `@section` | Creates a numbered section. Supports `color` and `label`. | `@section{Limits, color = #315a9b, label = limits}` |
 | `@subsection` | Creates a numbered subsection. Supports `label`. | `@subsection{One-sided limits, label = one-sided}` |
