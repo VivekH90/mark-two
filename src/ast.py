@@ -116,6 +116,7 @@ class Document:
     document_title: str = ""
     banner: str = ""
     banner_color: str = ""
+    author: str = ""
     article_title: str = ""
     buttons: List[Button] = field(default_factory=list)
     sections: List[Section] = field(default_factory=list)
