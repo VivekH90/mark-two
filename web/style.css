@@ -83,7 +83,7 @@ button, input, select, textarea {
 .site-shell {
     width: min(100%, var(--page-max));
     margin: 0 auto;
-    padding: 20px 30px 54px;
+    padding: 20px 80px 54px;
 }
 
 .site-header {
@@ -234,7 +234,7 @@ html.dark-mode .site-search:focus-within {
     top: auto;
     right: auto;
     bottom: 20px;
-    left: 30px;
+    left: 80px;
     transform: none;
     z-index: 10;
     display: inline-flex;
@@ -1150,7 +1150,7 @@ html.dark-mode .math-environment.warning { --environment-accent: #c08c98; --envi
 @media (max-width: 820px) {
     .site-shell {
         width: 100%;
-        padding: 20px 30px 40px;
+        padding: 20px 80px 40px;
     }
 
     .site-header {
