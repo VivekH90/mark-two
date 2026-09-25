@@ -4,6 +4,7 @@ import argparse
 import shutil
 from pathlib import Path
 
+from .gallery import resolve_gallery
 from .parser import parse_file
 from .renderer import render
 
@@ -24,6 +25,8 @@ def compile_document(
     template_path = Path(template_path).resolve()
 
     document = parse_file(source_path)
+    if document.gallery is not None:
+        document.gallery_items = resolve_gallery(document.gallery)
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
     output = render(document, template_path)
