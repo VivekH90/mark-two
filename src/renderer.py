@@ -400,7 +400,7 @@ def render(document: Document, template_path: str | Path) -> str:
     if document.banner:
         banner = f'<div class="site-banner"><img src="{escape(document.banner, quote=True)}" alt="" loading="eager"></div>'
     else:
-        banner = f'<div class="site-banner site-banner-empty"><span>{escape(document.document_title)}</span></div>'
+        banner = '<div class="site-banner site-banner-empty"></div>'
     references = _build_reference_index(document)
     toc, article, environment_counters = [], [], {}
     figure_counter = {"number": 0}
@@ -414,7 +414,7 @@ def render(document: Document, template_path: str | Path) -> str:
         toc.append('</li>')
         article.append(_section_html(section, number, environment_counters, references, figure_counter))
     related = [f'<li><a href="{escape(link.href, quote=True)}" target="_blank" rel="noopener noreferrer">{escape(link.name)}</a></li>' for link in document.related_links]
-    replacements = {"{{DOCUMENT_TITLE}}": escape(document.document_title), "{{ARTICLE_TITLE}}": escape(document.article_title), "{{AUTHOR}}": escape(document.author), "{{BANNER}}": banner, "{{BUTTONS}}": "\n".join(buttons), "{{TOC}}": "\n".join(toc), "{{ARTICLE}}": "\n".join(article), "{{RELATED_LINKS}}": "\n".join(related)}
+    replacements = {"{{ARTICLE_TITLE}}": escape(document.article_title), "{{AUTHOR}}": escape(document.author), "{{BANNER}}": banner, "{{BUTTONS}}": "\n".join(buttons), "{{TOC}}": "\n".join(toc), "{{ARTICLE}}": "\n".join(article), "{{RELATED_LINKS}}": "\n".join(related)}
     for key, value in replacements.items():
         template = template.replace(key, value)
     return template
