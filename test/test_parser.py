@@ -50,7 +50,7 @@ def test_multiline_image_and_documenttitle():
 }
 '''
     document = parse(source)
-    assert document.document_title == 'Mathematics'
+    assert document.document_tag == 'Mathematics'
     assert document.banner == 'com_int_banner.png'
     assert document.banner_color == '#112233'
     image = document.sections[0].content[0]
