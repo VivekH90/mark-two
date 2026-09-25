@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import List
 
 from .ast import (
-    Button, Document, Environment, Image, Label, ListBlock, ListItem,
+    Button, Document, Environment, GallerySpec, Image, Label, ListBlock, ListItem,
     MathBlock, Reference, RelatedLink, Section, Subsection, TextBlock,
 )
 
@@ -320,6 +320,29 @@ def parse(source: str) -> Document:
             document.document_tag = values.get("name", argument)
             document.banner = values.get("banner", "")
             document.banner_color = values.get("color", "")
+        elif command == "gallery":
+            values = _parse_key_values(argument)
+            source = values.get("source", "NASA").strip()
+            query = values.get("query", "").strip()
+            count_raw = values.get("count", "7").strip()
+            seed_raw = values.get("seed", "").strip()
+            if not query:
+                raise ValueError("@gallery requires query = ...")
+            try:
+                count = int(count_raw)
+            except ValueError as exc:
+                raise ValueError("@gallery count must be an integer") from exc
+            if count < 1 or count > 20:
+                raise ValueError("@gallery count must be between 1 and 20")
+            seed = None
+            if seed_raw:
+                try:
+                    seed = int(seed_raw)
+                except ValueError as exc:
+                    raise ValueError("@gallery seed must be an integer") from exc
+            if source.lower() != "nasa":
+                raise ValueError("Unsupported gallery source. Currently supported: NASA")
+            document.gallery = GallerySpec(source=source, query=query, count=count, seed=seed)
         elif command == "author":
             values = _parse_key_values(argument)
             document.author = values.get("name", argument)
