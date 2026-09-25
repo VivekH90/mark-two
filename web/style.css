@@ -41,9 +41,9 @@
     --shadow-soft: 0 10px 28px rgba(126, 87, 66, 0.07);
     --shadow-card: 0 16px 42px rgba(126, 87, 66, 0.09);
 
-    --environment-accent: #b86660;
-    --environment-border: #c9b1a8;
-    --environment-fill: #f7e7e2;
+    --environment-accent: #F05A5A;
+    --environment-border: #C94D55;
+    --environment-fill: #FCE2DF;
 }
 
 html.dark-mode {
@@ -506,9 +506,9 @@ html.dark-mode .gallery-item figcaption {
     min-height: 52px;
     margin: 0 -27px 28px;
     padding: 8px 16px;
-    border: 1px solid #d5b8b5;
+    border: 1px solid #F2A3A0;
     border-radius: 22px;
-    background: #fdf1f0;
+    background: #FFF0EE;
     color: #6d6461;
 }
 
@@ -527,7 +527,7 @@ html.dark-mode .gallery-item figcaption {
     flex: 0 0 32px;
     align-items: center;
     justify-content: center;
-    color: #b35f63;
+    color: #C94D55;
     text-decoration: none;
 }
 
@@ -538,7 +538,7 @@ html.dark-mode .gallery-item figcaption {
 
 .breadcrumb-home:hover,
 .breadcrumb-home:focus-visible {
-    color: #93484e;
+    color: #A83E46;
 }
 
 .breadcrumb-separator {
@@ -623,7 +623,7 @@ html.dark-mode .breadcrumb-date {
     border: 1px solid #f0c7c5;
     border-radius: 15px;
     background: #FCE2DF;
-    color: #7e3f50;
+    color: #A83E46;
     font-size: 15px;
     line-height: 1.2;
     font-weight: 600;
@@ -632,25 +632,25 @@ html.dark-mode .breadcrumb-date {
 .article-tag:nth-child(5n + 2) {
     border-color: #C9BBF1;
     background: #EAE4FC;
-    color: #67507f;
+    color: #5F47C2;
 }
 
 .article-tag:nth-child(5n + 3) {
     border-color: #E1D38B;
     background: #FAF1CD;
-    color: #75652d;
+    color: #8D7012;
 }
 
 .article-tag:nth-child(5n + 4) {
     border-color: #9FD4E2;
     background: #DDF2F7;
-    color: #466681;
+    color: #237A95;
 }
 
 .article-tag:nth-child(5n + 5) {
     border-color: #E9B28F;
     background: #FBE6D8;
-    color: #765a46;
+    color: #B95822;
 }
 
 html.dark-mode .article-tag {
@@ -688,7 +688,7 @@ html.dark-mode .article-tag:nth-child(5n + 5) {
     margin-top: 34px;
     --section-fill: #FCE2DF;
     --section-border: #F2A3A0;
-    --section-text: #7e3f50;
+    --section-text: #A83E46;
 }
 
 .article-section h2 {
@@ -1140,17 +1140,17 @@ html.dark-mode .math-environment {
     background: var(--environment-fill);
 }
 
-html.dark-mode .math-environment.theorem { --environment-accent: #c8877e; --environment-border: #604b58; --environment-fill: #30232e; }
-html.dark-mode .math-environment.lemma { --environment-accent: #cc8d84; --environment-border: #604d5d; --environment-fill: #302431; }
-html.dark-mode .math-environment.definition { --environment-accent: #bd9084; --environment-border: #5b4f5f; --environment-fill: #2d2730; }
-html.dark-mode .math-environment.corollary { --environment-accent: #d09187; --environment-border: #644d61; --environment-fill: #332530; }
-html.dark-mode .math-environment.axiom { --environment-accent: #c87c73; --environment-border: #5f4956; --environment-fill: #30222b; }
-html.dark-mode .math-environment.proposition { --environment-accent: #c3988f; --environment-border: #5a505c; --environment-fill: #2e2a30; }
-html.dark-mode .math-environment.remark { --environment-accent: #aa978f; --environment-border: #554f54; --environment-fill: #29262b; }
-html.dark-mode .math-environment.example { --environment-accent: #bf9b90; --environment-border: #5d505b; --environment-fill: #2e292e; }
-html.dark-mode .math-environment.conjecture { --environment-accent: #be8c9b; --environment-border: #654e5b; --environment-fill: #30242c; }
-html.dark-mode .math-environment.notation { --environment-accent: #aa9ac8; --environment-border: #5b526d; --environment-fill: #2c2831; }
-html.dark-mode .math-environment.warning { --environment-accent: #c08c98; --environment-border: #654e59; --environment-fill: #2f252a; }
+html.dark-mode .math-environment.theorem { --environment-accent: #F05A5A; --environment-border: #4A242A; --environment-fill: #4A242A; }
+html.dark-mode .math-environment.lemma { --environment-accent: #7657E8; --environment-border: #30284A; --environment-fill: #30284A; }
+html.dark-mode .math-environment.definition { --environment-accent: #35A7C8; --environment-border: #193640; --environment-fill: #193640; }
+html.dark-mode .math-environment.corollary { --environment-accent: #F47B3A; --environment-border: #4A2D1E; --environment-fill: #4A2D1E; }
+html.dark-mode .math-environment.axiom { --environment-accent: #F05A5A; --environment-border: #4A242A; --environment-fill: #4A242A; }
+html.dark-mode .math-environment.proposition { --environment-accent: #7657E8; --environment-border: #30284A; --environment-fill: #30284A; }
+html.dark-mode .math-environment.remark { --environment-accent: #35A7C8; --environment-border: #193640; --environment-fill: #193640; }
+html.dark-mode .math-environment.example { --environment-accent: #F47B3A; --environment-border: #4A2D1E; --environment-fill: #4A2D1E; }
+html.dark-mode .math-environment.conjecture { --environment-accent: #7657E8; --environment-border: #30284A; --environment-fill: #30284A; }
+html.dark-mode .math-environment.notation { --environment-accent: #35A7C8; --environment-border: #193640; --environment-fill: #193640; }
+html.dark-mode .math-environment.warning { --environment-accent: #F47B3A; --environment-border: #4A2D1E; --environment-fill: #4A2D1E; }
 
 @media (max-width: 1180px) {
     .site-header {
