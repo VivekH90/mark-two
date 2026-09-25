@@ -333,8 +333,6 @@ html.dark-mode .theme-toggle:focus-visible {
     min-height: 40px;
     align-items: center;
     padding: 8px 11px;
-    border: 1px solid transparent;
-    border-left: 3px solid var(--button-color, var(--accent));
     border-radius: 11px;
     background: transparent;
     color: var(--text);
@@ -342,6 +340,26 @@ html.dark-mode .theme-toggle:focus-visible {
     font-size: 15px;
     font-weight: 600;
     transition: background 150ms ease, color 150ms ease, border-color 150ms ease, transform 150ms ease;
+}
+
+.nav-icon-wrap {
+    display: inline-flex;
+    width: 19px;
+    height: 19px;
+    flex: 0 0 19px;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+}
+
+.nav-icon {
+    display: block;
+    width: 18px;
+    height: 18px;
+}
+
+.nav-label {
+    min-width: 0;
 }
 
 .nav-button:hover,
@@ -353,7 +371,6 @@ html.dark-mode .theme-toggle:focus-visible {
 
 html.dark-mode .nav-button {
     color: var(--text);
-    border-left-color: var(--button-color-dark, var(--accent));
 }
 
 html.dark-mode .nav-button:hover,
