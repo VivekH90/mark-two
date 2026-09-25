@@ -91,6 +91,7 @@ DEFINE Document
     document_title = ""
     banner = ""
     banner_color = ""
+    author = ""
     article_title = ""
 
     buttons = EMPTY LIST
