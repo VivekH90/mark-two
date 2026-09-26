@@ -474,7 +474,8 @@ def render(document: Document, template_path: str | Path) -> str:
         f'<span class="article-tag">{escape(tag)}</span>' for tag in document.tags
     )
     tag_block = f'<div class="article-tags" aria-label="Tags">{"".join([tags])}</div>' if tags else ""
-    replacements = {"{{GALLERY}}": _gallery_html(document), "{{ARTICLE_TITLE}}": escape(document.article_title), "{{AUTHOR}}": escape(document.author), "{{TAGS}}": tag_block, "{{BREADCRUMB}}": _breadcrumb_html(document), "{{BANNER}}": banner, "{{BUTTONS}}": "\n".join(buttons), "{{TOC}}": "\n".join(toc), "{{ARTICLE}}": "\n".join(article), "{{RELATED_LINKS}}": "\n".join(related)}
+    date_meta = f' · <time>{escape(document.date)}</time>' if document.date else ""
+    replacements = {"{{GALLERY}}": _gallery_html(document), "{{ARTICLE_TITLE}}": escape(document.article_title), "{{AUTHOR}}": escape(document.author), "{{ARTICLE_DATE_META}}": date_meta, "{{ARTICLE_READ_META}}": "", "{{TAGS}}": tag_block, "{{BREADCRUMB}}": _breadcrumb_html(document), "{{BANNER}}": banner, "{{BUTTONS}}": "\n".join(buttons), "{{TOC}}": "\n".join(toc), "{{ARTICLE}}": "\n".join(article), "{{RELATED_LINKS}}": "\n".join(related)}
     for key, value in replacements.items():
         template = template.replace(key, value)
     return template
