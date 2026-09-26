@@ -84,7 +84,7 @@
       "patterns": [
         {
           "name": "keyword.control.directive.mark-two",
-          "match": "@(?:begin|end|[A-Za-z][\\w-]*)\\b"
+          "match": "@[A-Za-z][\\w-]*\\b"
         },
         {
           "name": "entity.name.function.directive.mark-two",
@@ -92,14 +92,33 @@
         },
         {
           "name": "keyword.control.environment.begin.mark-two",
-          "match": "@begin(?=\\s*\\()"
-        },
-        {
-          "include": "#environment-name"
+          "match": "(@begin)(\\s*\\()(\\s*)([A-Za-z][\\w-]*)(?=\\s*(?:=|\\)))",
+          "captures": {
+            "1": {
+              "name": "keyword.control.directive.mark-two"
+            },
+            "2": {
+              "name": "punctuation.definition.parameters.begin.mark-two"
+            },
+            "4": {
+              "name": "entity.name.type.environment.mark-two"
+            }
+          }
         },
         {
           "name": "keyword.control.environment.end.mark-two",
-          "match": "@end(?=\\s*\\()"
+          "match": "(@end)(\\s*\\()(\\s*)([A-Za-z][\\w-]*)(?=\\s*\\))",
+          "captures": {
+            "1": {
+              "name": "keyword.control.directive.mark-two"
+            },
+            "2": {
+              "name": "punctuation.definition.parameters.begin.mark-two"
+            },
+            "4": {
+              "name": "entity.name.type.environment.mark-two"
+            }
+          }
         },
         {
           "name": "variable.other.parameter.mark-two",
@@ -163,18 +182,6 @@
         {
           "name": "punctuation.section.braces.end.mark-two",
           "match": "\\}"
-        }
-      ]
-    },
-    "environment-name": {
-      "patterns": [
-        {
-          "name": "entity.name.type.environment.mark-two",
-          "match": "(?<=@begin\\s*\\(\\s*)[A-Za-z][\\w-]*(?=\\s*(?:=|\\)))"
-        },
-        {
-          "name": "entity.name.type.environment.mark-two",
-          "match": "(?<=@end\\s*\\(\\s*)[A-Za-z][\\w-]*(?=\\s*\\))"
         }
       ]
     }
