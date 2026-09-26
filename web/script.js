@@ -1,64 +1,64 @@
 "use strict";
 
-// Mark Two frontend behavior. The compiler generates the document structure;
-// JavaScript only handles small interactive enhancements.
-
 document.addEventListener("DOMContentLoaded", () => {
-    const toggle = document.querySelector(".sidebar-toggle");
-    const toc = document.querySelector(".toc");
+    const headings = document.querySelectorAll("#article h2, #article h3");
+    const lists = [
+        document.getElementById("toc-desktop"),
+        document.getElementById("toc-mobile")
+    ].filter(Boolean);
 
-    if (toggle && toc) {
-        toggle.addEventListener("click", () => {
-            const collapsed = toc.classList.toggle("collapsed");
-            toggle.setAttribute("aria-expanded", String(!collapsed));
+    const links = [];
+
+    lists.forEach((root) => {
+        const ul = document.createElement("ul");
+
+        headings.forEach((heading) => {
+            const li = document.createElement("li");
+            if (heading.tagName === "H3") li.className = "sub";
+
+            const a = document.createElement("a");
+            a.href = "#" + heading.id;
+            a.textContent = heading.textContent
+                .replace(/^§\s*\d+\s*/, "")
+                .replace(/^\d+(?:\.\d+)?\.?\s*/, "")
+                .trim();
+
+            li.appendChild(a);
+            ul.appendChild(li);
+            links.push(a);
         });
-    }
 
-    const themeToggle = document.querySelector(".theme-toggle");
-    const themeIcon = themeToggle?.querySelector(".theme-icon");
-    const themeLabel = themeToggle?.querySelector(".theme-label");
+        root.replaceChildren(ul);
+    });
 
-    const applyTheme = (dark) => {
-        document.documentElement.classList.toggle("dark-mode", dark);
-        document.documentElement.style.colorScheme = dark ? "dark" : "light";
-        themeToggle?.setAttribute("aria-pressed", String(dark));
-        themeToggle?.setAttribute("aria-label", dark ? "Disable dark mode" : "Enable dark mode");
-        if (themeIcon) themeIcon.textContent = dark ? "☀" : "☾";
-        if (themeLabel) themeLabel.textContent = dark ? "Light Mode" : "Dark Mode";
-    };
+    const byId = {};
+    links.forEach((link) => {
+        const id = link.getAttribute("href").slice(1);
+        (byId[id] ??= []).push(link);
+    });
 
-    if (themeToggle) {
-        const savedTheme = localStorage.getItem("mark-two-theme-v2");
-        applyTheme(savedTheme === "dark");
-
-        themeToggle.addEventListener("click", () => {
-            const dark = !document.documentElement.classList.contains("dark-mode");
-            applyTheme(dark);
-            localStorage.setItem("mark-two-theme-v2", dark ? "dark" : "light");
-        });
-    }
-
-    // Keep the active table-of-contents entry in sync with the article.
-    const tocLinks = [...document.querySelectorAll(".toc a")];
-    const headings = tocLinks
-        .map((link) => document.getElementById(link.getAttribute("href")?.slice(1)))
-        .filter(Boolean);
-
-    if ("IntersectionObserver" in window && headings.length) {
+    if ("IntersectionObserver" in window) {
         const observer = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
                     if (!entry.isIntersecting) return;
-                    tocLinks.forEach((link) => link.classList.remove("active"));
-                    const active = document.querySelector(
-                        `.toc a[href="#${CSS.escape(entry.target.id)}"]`
-                    );
-                    active?.classList.add("active");
+                    links.forEach((link) => link.classList.remove("active"));
+                    (byId[entry.target.id] || []).forEach((link) => {
+                        link.classList.add("active");
+                    });
                 });
             },
             { rootMargin: "-15% 0px -70% 0px" }
         );
 
         headings.forEach((heading) => observer.observe(heading));
+    }
+
+    const mobileDetails = document.querySelector(".side-mobile");
+    if (mobileDetails) {
+        mobileDetails.addEventListener("toggle", () => {
+            if (!mobileDetails.open) return;
+            mobileDetails.scrollIntoView({ block: "nearest", behavior: "smooth" });
+        });
     }
 });
