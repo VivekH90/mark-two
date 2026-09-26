@@ -427,39 +427,21 @@ def _gallery_html(document: Document) -> str:
 
 
 def _breadcrumb_html(document: Document) -> str:
-    """Render the compact metadata breadcrumb above the article title."""
     home_icon = (
         '<svg class="breadcrumb-home-icon" viewBox="0 0 24 24" aria-hidden="true">'
-        '<path d="M3 10.8 12 3l9 7.8v9.2a1 1 0 0 1-1 1h-5.5v-6h-5v6H4a1 1 0 0 1-1-1z" '
-        'fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>'
-        '<path d="M8.5 21v-6h7v6" fill="none" stroke="currentColor" stroke-width="1.8" '
-        'stroke-linejoin="round"/></svg>'
+        '<path d="M3 10.8 12 3l9 7.8v9.2a1 1 0 0 1-1 1h-5.5v-6h-5v6H4a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>'
+        '<path d="M8.5 21v-6h7v6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>'
     )
-    tag = escape(document.document_tag) if document.document_tag else ""
-    title = escape(document.article_title)
-    tag_html = (
-        f'<span class="breadcrumb-text">{tag}</span>'
-        if tag
-        else ""
-    )
-    separator = '<span class="breadcrumb-separator" aria-hidden="true">›</span>'
-    middle = (
-        f'{separator}{tag_html}{separator}'
-        if tag
-        else f'{separator}'
-    )
-    return (
-        '<div class="article-breadcrumb" aria-label="Breadcrumb">'
-        '<div class="breadcrumb-trail">'
-        f'<a class="breadcrumb-home" href="/" aria-label="Home">{home_icon}</a>'
-        f'{middle}'
-        '<span class="breadcrumb-text">Electromagnetism</span>'
-        f'{separator}'
-        f'<span class="breadcrumb-current">{title}</span>'
-        '</div>'
-        '<time class="breadcrumb-date" datetime="2026-09-25">25 Sept, 2026</time>'
-        '</div>'
-    )
+    chunks = [f'<a class="breadcrumb-home" href="/" aria-label="Home">{home_icon}</a>']
+    for index, value in enumerate((document.document_tag, document.folder, document.article_title)):
+        if not value:
+            continue
+        chunks.append('<span class="breadcrumb-separator" aria-hidden="true">›</span>')
+        cls = "breadcrumb-current" if index == 2 else "breadcrumb-text"
+        chunks.append(f'<span class="{cls}">{escape(value)}</span>')
+    date_html = f'<time class="breadcrumb-date">{escape(document.date)}</time>' if document.date else ""
+    return '<div class="article-breadcrumb" aria-label="Breadcrumb"><div class="breadcrumb-trail">' + "".join(chunks) + '</div>' + date_html + '</div>'
+
 
 
 def render(document: Document, template_path: str | Path) -> str:
