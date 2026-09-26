@@ -285,3 +285,11 @@ figure.diagram{max-width:100%;overflow:hidden;}
 figure.diagram img,figure.diagram svg{max-width:100%;height:auto;}
 .rail-card ul{max-width:100%;}
 .rail-card li{overflow-wrap:anywhere;}
+
+/* Final responsive hardening */
+.navbox nav{min-width:0}.navbox nav ul{min-width:0}.brand{overflow-wrap:anywhere}
+.mobile-related{margin-top:16px}.mobile-related h4{margin:0 0 10px;font-size:12.5px;color:var(--nav-brand-sub);font-weight:700}
+.mobile-related ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:11px}
+.mobile-related li{background:var(--card-white);border-radius:11px;padding:11px 13px;border:2px solid var(--cyan-b);overflow-wrap:anywhere}
+.mobile-related a{text-decoration:none;font-size:13px;font-weight:700;line-height:1.4;display:block;color:var(--related-text)}
+.mobile-related a:hover{color:var(--related-hover)}
