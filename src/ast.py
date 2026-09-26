@@ -132,8 +132,10 @@ class Document:
     document_tag: str = ""
     banner: str = ""
     banner_color: str = ""
+    folder: str = ""
     author: str = ""
     article_title: str = ""
+    date: str = ""
     tags: List[str] = field(default_factory=list)
     buttons: List[Button] = field(default_factory=list)
     sections: List[Section] = field(default_factory=list)
