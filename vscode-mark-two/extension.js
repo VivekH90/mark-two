@@ -45,7 +45,7 @@ function activate(context) {
       provideCompletionItems(document, position) {
         const line = document.lineAt(position.line).text.slice(0, position.character);
 
-        const environmentMatch = line.match(/@(begin|end)\\(\\s*([A-Za-z]*)$/);
+        const environmentMatch = line.match(/@(begin|end)\(\s*([A-Za-z]*)$/);
         if (environmentMatch) {
           const typed = environmentMatch[2];
           const start = position.character - typed.length;
