@@ -396,15 +396,15 @@ def _build_reference_index(document: Document):
 def _section_html(section: Section, number: int, environment_counters, references, figure_counter) -> str:
     identifier = escape(section.slug or "section", quote=True)
     html = [
-        f'<section class="article-section" id="{identifier}">',
-        f'<h2><span class="num">{number}</span>{escape(section.title)}</h2>',
+        f'<section class="article-section">',
+        f'<h2 id="{identifier}"><span class="num">{number}</span>{escape(section.title)}</h2>',
         _content_html(section.content, environment_counters, references, figure_counter),
     ]
     for sub_number, subsection in enumerate(section.subsections, 1):
         sub_identifier = escape(subsection.slug or "subsection", quote=True)
         html.extend([
-            f'<section class="article-subsection" id="{sub_identifier}">',
-            f'<h3><span class="num">{number}.{sub_number}</span>{escape(subsection.title)}</h3>',
+            f'<section class="article-subsection">',
+            f'<h3 id="{sub_identifier}"><span class="num">{number}.{sub_number}</span>{escape(subsection.title)}</h3>',
             _content_html(subsection.content, environment_counters, references, figure_counter),
             "</section>",
         ])
@@ -479,20 +479,10 @@ def render(document: Document, template_path: str | Path) -> str:
         )
 
     references = _build_reference_index(document)
-    toc, article, environment_counters = [], [], {}
+    article, environment_counters = [], {}
     figure_counter = {"number": 0}
 
     for number, section in enumerate(document.sections, 1):
-        section_id = escape(section.slug or "section", quote=True)
-        toc.append(
-            f'<li><a href="#{section_id}">{number}. {escape(section.title)}</a></li>'
-        )
-        for sub_number, subsection in enumerate(section.subsections, 1):
-            subsection_id = escape(subsection.slug or "subsection", quote=True)
-            toc.append(
-                f'<li class="sub"><a href="#{subsection_id}">'
-                f'{number}.{sub_number}. {escape(subsection.title)}</a></li>'
-            )
         article.append(_section_html(section, number, environment_counters, references, figure_counter))
 
     related = [
@@ -514,7 +504,6 @@ def render(document: Document, template_path: str | Path) -> str:
         "{{TAGS}}": tag_block,
         "{{BREADCRUMB}}": _breadcrumb_html(document),
         "{{BUTTONS}}": "\n".join(buttons),
-        "{{TOC}}": "\n".join(toc),
         "{{ARTICLE}}": "\n".join(article),
         "{{RELATED_LINKS}}": "\n".join(related),
     }
