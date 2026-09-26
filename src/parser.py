@@ -574,8 +574,7 @@ def _parse_block_source(source: str) -> Document:
     return document
 
 def parse(source: str) -> Document:
-    if re.search(r"^\s*@(?:begin|end)\s*\(", source, re.IGNORECASE | re.MULTILINE):
-        return _parse_block_source(source)
+    return _parse_block_source(source)
     document = Document()
     current_section = None
     current_subsection = None
