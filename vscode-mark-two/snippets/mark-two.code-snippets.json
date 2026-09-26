@@ -16,7 +16,7 @@
   "Author": {
     "prefix": "author",
     "body": [
-      "@author{${1:Vivek Sharma}}",
+      "@author{${1:Author}}",
       "${0}"
     ]
   },
@@ -34,26 +34,31 @@
       "${0}"
     ]
   },
+  "Tags": {
+    "prefix": "tags",
+    "body": [
+      "@tags{${1:topic one}, ${2:topic two}}",
+      "${0}"
+    ]
+  },
   "Section": {
     "prefix": "section",
     "body": [
-      "@begin(section){${1:Section Title}, label = ${2:section-label}}",
-      "${0}",
-      "@end(section)"
+      "@section{${1:Section Title}, label = ${2:section-label}}",
+      "${0}"
     ]
   },
   "Subsection": {
     "prefix": "subsection",
     "body": [
-      "@begin(subsection){${1:Subsection Title}, label = ${2:subsection-label}}",
-      "${0}",
-      "@end(subsection)"
+      "@subsection{${1:Subsection Title}, label = ${2:subsection-label}}",
+      "${0}"
     ]
   },
   "Theorem": {
     "prefix": "theorem",
     "body": [
-      "@begin(theorem){${1:Theorem Title}, label = ${2:theorem-label}}",
+      "@begin(theorem = ${1:Theorem Title}, label = ${2:theorem-label})",
       "${0}",
       "@end(theorem)"
     ]
@@ -61,7 +66,7 @@
   "Lemma": {
     "prefix": "lemma",
     "body": [
-      "@begin(lemma){${1:Lemma Title}, label = ${2:lemma-label}}",
+      "@begin(lemma = ${1:Lemma Title}, label = ${2:lemma-label})",
       "${0}",
       "@end(lemma)"
     ]
@@ -69,7 +74,7 @@
   "Definition": {
     "prefix": "definition",
     "body": [
-      "@begin(definition){${1:Definition Title}, label = ${2:definition-label}}",
+      "@begin(definition = ${1:Definition Title}, label = ${2:definition-label})",
       "${0}",
       "@end(definition)"
     ]
@@ -77,7 +82,7 @@
   "Corollary": {
     "prefix": "corollary",
     "body": [
-      "@begin(corollary){${1:Corollary Title}, label = ${2:corollary-label}}",
+      "@begin(corollary = ${1:Corollary Title}, label = ${2:corollary-label})",
       "${0}",
       "@end(corollary)"
     ]
@@ -85,7 +90,7 @@
   "Axiom": {
     "prefix": "axiom",
     "body": [
-      "@begin(axiom){${1:Axiom Title}, label = ${2:axiom-label}}",
+      "@begin(axiom = ${1:Axiom Title}, label = ${2:axiom-label})",
       "${0}",
       "@end(axiom)"
     ]
@@ -93,7 +98,7 @@
   "Proposition": {
     "prefix": "proposition",
     "body": [
-      "@begin(proposition){${1:Proposition Title}, label = ${2:proposition-label}}",
+      "@begin(proposition = ${1:Proposition Title}, label = ${2:proposition-label})",
       "${0}",
       "@end(proposition)"
     ]
@@ -101,7 +106,7 @@
   "Remark": {
     "prefix": "remark",
     "body": [
-      "@begin(remark){${1:Remark Title}, label = ${2:remark-label}}",
+      "@begin(remark = ${1:Remark Title}, label = ${2:remark-label})",
       "${0}",
       "@end(remark)"
     ]
@@ -109,7 +114,7 @@
   "Example": {
     "prefix": "example",
     "body": [
-      "@begin(example){${1:Example Title}, label = ${2:example-label}}",
+      "@begin(example = ${1:Example Title}, label = ${2:example-label})",
       "${0}",
       "@end(example)"
     ]
@@ -117,7 +122,7 @@
   "Conjecture": {
     "prefix": "conjecture",
     "body": [
-      "@begin(conjecture){${1:Conjecture Title}, label = ${2:conjecture-label}}",
+      "@begin(conjecture = ${1:Conjecture Title}, label = ${2:conjecture-label})",
       "${0}",
       "@end(conjecture)"
     ]
@@ -125,7 +130,7 @@
   "Notation": {
     "prefix": "notation",
     "body": [
-      "@begin(notation){${1:Notation Title}, label = ${2:notation-label}}",
+      "@begin(notation = ${1:Notation Title}, label = ${2:notation-label})",
       "${0}",
       "@end(notation)"
     ]
@@ -133,7 +138,7 @@
   "Warning": {
     "prefix": "warning",
     "body": [
-      "@begin(warning){${1:Warning Title}, label = ${2:warning-label}}",
+      "@begin(warning = ${1:Warning Title}, label = ${2:warning-label})",
       "${0}",
       "@end(warning)"
     ]
@@ -173,6 +178,13 @@
       "${0}"
     ]
   },
+  "Gallery": {
+    "prefix": "gallery",
+    "body": [
+      "@gallery{source = ${1:NASA}, query = ${2:black holes}, count = ${3:7}}",
+      "${0}"
+    ]
+  },
   "Reference": {
     "prefix": "ref",
     "body": [
@@ -189,6 +201,34 @@
     "prefix": "relatedlink",
     "body": [
       "@relatedlinks{${1:Link name}, href = ${2:https://example.com}}",
+      "${0}"
+    ]
+  },
+  "Bold": {
+    "prefix": "bold",
+    "body": [
+      "@bold{${1:text}}",
+      "${0}"
+    ]
+  },
+  "Italic": {
+    "prefix": "italic",
+    "body": [
+      "@italic{${1:text}}",
+      "${0}"
+    ]
+  },
+  "Color": {
+    "prefix": "color",
+    "body": [
+      "@color{${1:blue}, ${2:text}}",
+      "${0}"
+    ]
+  },
+  "Button": {
+    "prefix": "button",
+    "body": [
+      "@button{${1:Home}, href = ${2:/}, color = ${3:black}}",
       "${0}"
     ]
   }
