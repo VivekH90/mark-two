@@ -473,8 +473,9 @@ def render(document: Document, template_path: str | Path) -> str:
 
     buttons = []
     for button in document.buttons:
+        color = escape(button.color or "black", quote=True)
         buttons.append(
-            f'<li><a href="{escape(button.href, quote=True)}">{escape(button.name)}</a></li>'
+            f'<li><a href="{escape(button.href, quote=True)}" style="--button-color: {color};">{escape(button.name)}</a></li>'
         )
 
     references = _build_reference_index(document)
