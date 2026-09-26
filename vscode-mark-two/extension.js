@@ -44,6 +44,24 @@ function activate(context) {
     {
       provideCompletionItems(document, position) {
         const line = document.lineAt(position.line).text.slice(0, position.character);
+
+        const environmentMatch = line.match(/@(begin|end)\\(\\s*([A-Za-z]*)$/);
+        if (environmentMatch) {
+          const typed = environmentMatch[2];
+          const start = position.character - typed.length;
+          const range = new vscode.Range(position.line, start, position.line, position.character);
+          return ["theorem","lemma","definition","corollary","axiom","proposition","remark","example","conjecture","notation","warning","proof","enumerate","itemize"]
+            .filter(name => name.startsWith(typed.toLowerCase()))
+            .map(name => {
+              const item = new vscode.CompletionItem(name, vscode.CompletionItemKind.Struct);
+              item.insertText = name;
+              item.filterText = name;
+              item.detail = environmentMatch[1] === "begin" ? "Mark Two environment" : "Mark Two environment end";
+              item.range = range;
+              return item;
+            });
+        }
+
         const match = line.match(/@([A-Za-z]*)$/);
         if (!match) return undefined;
 
