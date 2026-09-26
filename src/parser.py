@@ -10,6 +10,11 @@ from .ast import (
 )
 
 _DIRECTIVE_START = re.compile(r"^\s*@([A-Za-z][\w ]*)\s*\{")
+_BLOCK_START = re.compile(r"^\s*@begin\s*\(\s*([A-Za-z][\w-]*)\s*\)\s*(?:\{(.*)\})?\s*$", re.IGNORECASE)
+_BLOCK_END = re.compile(r"^\s*@end\s*\(\s*([A-Za-z][\w-]*)\s*\)\s*$", re.IGNORECASE)
+_ENVIRONMENTS = {"theorem","lemma","definition","corollary","axiom","proposition","remark","example","conjecture","notation","warning","proof"}
+_LIST_ENVIRONMENTS = {"enumerate","itemize"}
+_BLOCK_KINDS = {"section","subsection",*_ENVIRONMENTS,*_LIST_ENVIRONMENTS}
 _ENVIRONMENTS = {
     "theorem", "lemma", "definition", "corollary", "axiom", "proposition",
     "remark", "example", "conjecture", "notation", "warning", "proof",
@@ -270,7 +275,158 @@ def _title_and_label(argument: str):
     return values.get("name", ""), values.get("label", "")
 
 
+
+def _block_title_label(argument: str):
+    values = _parse_key_values(argument)
+    title = values.get("name", "")
+    label = values.get("label", "")
+    if not title and "=" not in argument:
+        title = argument.strip()
+    return title, label
+
+
+def _parse_block_source(source: str) -> Document:
+    document = Document()
+    stack = []
+    pending = []
+    used_slugs = set()
+    lines = source.splitlines()
+    index = 0
+    math_lines = None
+
+    def target():
+        return stack[-1][1] if stack else None
+
+    def flush():
+        item = target()
+        text = "\n".join(pending).strip()
+        pending.clear()
+        if item is not None and text:
+            item.content.append(TextBlock(text=text))
+
+    def add_block(kind, argument):
+        kind = kind.lower()
+        if kind not in _BLOCK_KINDS:
+            raise ValueError(f"Unknown block type: {kind}")
+        if kind == "section":
+            if stack:
+                raise ValueError("@begin(section) cannot be nested")
+            title, label = _block_title_label(argument)
+            if not title:
+                raise ValueError("@begin(section) requires a title")
+            node = Section(title=title, slug=_unique_slug(_slugify(title), used_slugs), label=label)
+            document.sections.append(node)
+        elif kind == "subsection":
+            parent = target()
+            if not isinstance(parent, Section):
+                raise ValueError("@begin(subsection) must be directly inside a section")
+            title, label = _block_title_label(argument)
+            if not title:
+                raise ValueError("@begin(subsection) requires a title")
+            node = Subsection(title=title, slug=_unique_slug(_slugify(title), used_slugs), label=label)
+            parent.subsections.append(node)
+        else:
+            parent = target()
+            if parent is None or not hasattr(parent, "content"):
+                raise ValueError(f"@begin({kind}) must be inside a block")
+            if kind in _LIST_ENVIRONMENTS:
+                values = _parse_key_values(argument)
+                unknown = set(values) - {"color"}
+                if unknown:
+                    raise ValueError(f"@begin({kind}) only accepts color = ...")
+                node = ListBlock(ordered=(kind == "enumerate"), color=values.get("color","black"))
+            else:
+                title, label = _block_title_label(argument)
+                node = Environment(kind=kind, title=title, label=label)
+            parent.content.append(node)
+        stack.append((kind, document.sections[-1] if kind=="section" else node))
+
+    while index < len(lines):
+        raw = lines[index]
+        stripped = raw.strip()
+        if math_lines is not None:
+            if stripped == r"\]":
+                flush()
+                target().content.append(MathBlock("\n".join(math_lines)))
+                math_lines = None
+            else:
+                math_lines.append(raw)
+            index += 1
+            continue
+        if stripped == r"\[":
+            flush()
+            math_lines = []
+            index += 1
+            continue
+        end_match = _BLOCK_END.match(raw)
+        if end_match:
+            flush()
+            if not stack or stack[-1][0] != end_match.group(1).lower():
+                actual = stack[-1][0] if stack else "nothing"
+                raise ValueError(f"Mismatched block: @end({end_match.group(1)}) closes @begin({actual})")
+            stack.pop()
+            index += 1
+            continue
+        begin_match = _BLOCK_START.match(raw)
+        if begin_match:
+            flush()
+            add_block(begin_match.group(1), (begin_match.group(2) or "").strip())
+            index += 1
+            continue
+        directive = _extract_directive(lines, index)
+        if directive:
+            flush()
+            command, argument, end_index = directive
+            command = command.strip().lower().replace(" ","")
+            if command == "documenttitle":
+                values = _parse_key_values(argument); document.document_tag = values.get("name",argument); document.banner = values.get("banner","")
+            elif command == "folder":
+                document.folder = argument
+            elif command == "author":
+                document.author = _parse_key_values(argument).get("name",argument)
+            elif command == "date":
+                document.date = argument
+            elif command == "title":
+                document.article_title = argument
+            elif command == "tags":
+                document.tags.extend([_strip_quotes(x).strip() for x in _split_top_level(argument) if _strip_quotes(x).strip()])
+            elif command == "button":
+                values=_parse_key_values(argument); document.buttons.append(Button(name=values.get("name","Button"),href=values.get("href","#"),color=values.get("color","black")))
+            elif command == "gallery":
+                values=_parse_key_values(argument); query=values.get("query","").strip()
+                if not query: raise ValueError("@gallery requires query = ...")
+                document.gallery=GallerySpec(source=values.get("source","NASA"),query=query,count=int(values.get("count","7")))
+            elif command == "relatedlinks" or command == "relatedlink":
+                values=_parse_key_values(argument)
+                if "href" not in values: raise ValueError("@relatedlinks requires href = ...")
+                document.related_links.append(RelatedLink(name=values.get("name","Related link"),href=values["href"]))
+            elif command in _ENVIRONMENTS or command in _LIST_ENVIRONMENTS:
+                raise ValueError(f"Use @begin({command}) ... @end({command})")
+            elif command == "text":
+                raise ValueError("@text is no longer needed; write prose directly inside blocks")
+            else:
+                raise ValueError(f"Unknown Mark Two directive: @{command}")
+            index=end_index+1
+            continue
+        if stack:
+            if stripped:
+                pending.append(raw)
+            else:
+                flush()
+            index += 1
+            continue
+        if stripped:
+            raise ValueError("Text must appear inside @begin/@end blocks")
+        index += 1
+    flush()
+    if math_lines is not None: raise ValueError("Unclosed display math")
+    if stack: raise ValueError(f"Unclosed @begin({stack[-1][0]}) block")
+    return document
+
+
 def parse(source: str) -> Document:
+    if re.search(r"^\s*@(?:begin|end)\s*\(", source, re.IGNORECASE | re.MULTILINE):
+        return _parse_block_source(source)
     document = Document()
     current_section = None
     current_subsection = None
