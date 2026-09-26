@@ -1,35 +1,6 @@
 "use strict";
 document.addEventListener("DOMContentLoaded", function(){
 (function(){
-  const gallery=document.getElementById('nasa-gallery');
-  const lightbox=document.getElementById('gallery-lightbox');
-  const large=document.getElementById('gallery-large');
-  const caption=document.getElementById('gallery-caption');
-  const close=document.getElementById('gallery-close');
-  if(!gallery || !lightbox || !large) return;
-
-  function openImage(button){
-    large.src=button.dataset.full || button.querySelector('img')?.src || '';
-    large.alt=button.dataset.title || button.querySelector('img')?.alt || 'Image';
-    caption.textContent=button.dataset.caption || large.alt;
-    lightbox.classList.add('open');
-    lightbox.setAttribute('aria-hidden','false');
-    document.body.style.overflow='hidden';
-  }
-  function closeImage(){
-    lightbox.classList.remove('open');
-    lightbox.setAttribute('aria-hidden','true');
-    large.src='';
-    document.body.style.overflow='';
-  }
-  gallery.querySelectorAll('.thumb').forEach(button=>{
-    button.addEventListener('click',()=>openImage(button));
-  });
-  close?.addEventListener('click',closeImage);
-  lightbox.addEventListener('click',e=>{ if(e.target===lightbox) closeImage(); });
-  document.addEventListener('keydown',e=>{ if(e.key==='Escape' && lightbox.classList.contains('open')) closeImage(); });
-})();
-(function(){
   var headings=document.querySelectorAll('#article h2, #article h3');
   var lists=[document.getElementById('toc-desktop'),document.getElementById('toc-mobile')];
   var links=[];
