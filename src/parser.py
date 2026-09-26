@@ -300,7 +300,7 @@ def _parse_begin_header(inner: str, legacy_argument: str | None):
         raise ValueError("@begin(...) requires an environment name")
 
     first = parts[0].strip()
-    match = re.fullmatch(r"([A-Za-z][\\w-]*)\\s*=\\s*(.*)", first, re.DOTALL)
+    match = re.fullmatch(r"([A-Za-z][\w-]*)\s*=\s*(.*)", first, re.DOTALL)
     if match:
         kind = match.group(1).lower()
         title = match.group(2).strip()
@@ -338,7 +338,7 @@ def _parse_block_source(source: str) -> Document:
 
     def flush():
         item = target()
-        text = "\\n".join(pending).strip()
+        text = "\n".join(pending).strip()
         pending.clear()
         if item is not None and text:
             item.content.append(TextBlock(text=text))
@@ -378,19 +378,19 @@ def _parse_block_source(source: str) -> Document:
         stripped = raw.strip()
 
         if math_lines is not None:
-            if stripped == r"\\]":
+            if stripped == r"\]":
                 flush()
                 target_item = target()
                 if target_item is None:
                     raise ValueError("display math must appear after @section")
-                target_item.content.append(MathBlock("\\n".join(math_lines)))
+                target_item.content.append(MathBlock("\n".join(math_lines)))
                 math_lines = None
             else:
                 math_lines.append(raw)
             index += 1
             continue
 
-        if stripped == r"\\[":
+        if stripped == r"\[":
             flush()
             math_lines = []
             index += 1
