@@ -274,3 +274,14 @@
 
   footer{margin-top:24px;padding:14px 2px;font-size:12.5px;color:var(--sub);}
   :focus-visible{outline:2px solid var(--lav-b);outline-offset:2px;}
+/* Layout hardening */
+.outerbox,.innerbox,.reading,.box,.rail,.rail-card{min-width:0;}
+.reading{overflow-wrap:anywhere;}
+.reading mjx-container{max-width:100%;overflow-x:auto;overflow-y:hidden;}
+.reading .math-display{overflow-x:auto;}
+.box .math-display{overflow-x:auto;}
+.box-content,.proof-content{min-width:0;}
+figure.diagram{max-width:100%;overflow:hidden;}
+figure.diagram img,figure.diagram svg{max-width:100%;height:auto;}
+.rail-card ul{max-width:100%;}
+.rail-card li{overflow-wrap:anywhere;}
