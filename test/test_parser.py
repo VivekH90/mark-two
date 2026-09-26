@@ -76,3 +76,59 @@ def test_per_image_sizes_in_image_group():
     images = document.sections[0].content
     assert [image.width for image in images] == ['50%', '25%', '']
     assert [image.height for image in images] == ['240px', '180px', '']
+
+
+def test_latex_like_environments_with_title_and_label():
+    source = '''@documenttitle{Mathematics}
+@section{Test}
+Ordinary prose belongs directly to the section.
+
+@begin(axiom = Axiom of Choice, label = choice)
+This is the axiom.
+@end(axiom)
+
+@begin(theorem = Fundamental Theorem, label = fundamental)
+This is the theorem.
+@end(theorem)
+'''
+    document = parse(source)
+    content = document.sections[0].content
+    assert isinstance(content[0], TextBlock)
+    assert content[0].text == "Ordinary prose belongs directly to the section."
+    assert content[1].kind == "axiom"
+    assert content[1].title == "Axiom of Choice"
+    assert content[1].label == "choice"
+    assert content[2].kind == "theorem"
+    assert content[2].title == "Fundamental Theorem"
+    assert content[2].label == "fundamental"
+
+
+def test_environment_can_contain_nested_environment():
+    source = '''@documenttitle{Mathematics}
+@section{Test}
+@begin(theorem = Main Result)
+Statement of the theorem.
+
+@begin(proof)
+The proof is enclosed normally.
+@end(proof)
+@end(theorem)
+'''
+    document = parse(source)
+    theorem = document.sections[0].content[0]
+    assert theorem.kind == "theorem"
+    assert theorem.content[0].text == "Statement of the theorem."
+    assert theorem.content[1].kind == "proof"
+
+
+def test_text_directive_is_removed():
+    source = '''@documenttitle{Mathematics}
+@section{Test}
+@text{This should fail.}
+'''
+    try:
+        parse(source)
+    except ValueError as exc:
+        assert "@text is no longer supported" in str(exc)
+    else:
+        raise AssertionError("@text should not be supported")
