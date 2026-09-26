@@ -1,4 +1,5 @@
 from src.parser import parse
+from src.ast import TextBlock
 
 
 def test_multiline_enumerate_with_commas_inside_proof():
