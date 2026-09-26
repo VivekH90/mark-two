@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", function(){
       if(h.tagName==='H3') li.className='sub';
       var a=document.createElement('a');
       a.href='#'+h.id;
-      a.textContent=h.textContent.replace(/^\d+(\.\d+)?/, '').trim();
+      a.textContent=h.textContent.replace(/^\s*\d+(?:\.\d+)?\s*/,"").trim();
       li.appendChild(a); ul.appendChild(li); links.push(a);
     });
     root.replaceChildren(ul);
