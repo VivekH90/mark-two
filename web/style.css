@@ -185,11 +185,14 @@
   nav.crumbs .current{font-weight:700;color:var(--ink);}
   .metabar .icons{display:flex;gap:8px;}
   .metabar .icons button,.metabar .icons a{
-    width:32px;height:32px;border-radius:10px;border:2px solid var(--gray-b);background:var(--card-white);
+    width:34px;height:34px;border-radius:10px;border:2px solid var(--gray-b);background:var(--card-white);
     display:flex;align-items:center;justify-content:center;font-size:13px;text-decoration:none;color:var(--ink);
-    cursor:pointer;padding:0;
+    cursor:pointer;padding:0;transition:background .15s ease,border-color .15s ease,transform .15s ease;
   }
-  .metabar .icons svg{width:16px;height:16px;}
+  .metabar .icons button:hover,.metabar .icons a:hover{
+    background:var(--mint);border-color:var(--mint-b);transform:translateY(-1px);
+  }
+  .metabar .icons svg{width:18px;height:18px;display:block;}
   .metabar .icons .moon{display:none;}
   :root[data-theme="dark"] .metabar .icons .sun{display:none;}
   :root[data-theme="dark"] .metabar .icons .moon{display:flex;}
