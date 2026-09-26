@@ -1,32 +1,24 @@
-<div align="center">
-
 # Mark Two
 
-A lightweight mathematical document language that compiles `.mt` source files into clean HTML articles.
+Mark Two is a lightweight mathematical document language that compiles `.mt` source files into clean HTML articles.
 
-[![HTML](https://img.shields.io/badge/HTML-MARK%20TWO-176c5b?style=for-the-badge)](https://github.com/VivekH90/mark-two)
-[![MathJax](https://img.shields.io/badge/MATHJAX-SUPPORTED-76547e?style=for-the-badge)](https://www.mathjax.org/)
-[![Commits](https://img.shields.io/github/commit-activity/t/VivekH90/mark-two?style=for-the-badge&label=COMMITS)](https://github.com/VivekH90/mark-two/commits/master)
-[![Last Commit](https://img.shields.io/github/last-commit/VivekH90/mark-two?style=for-the-badge&label=LAST%20COMMIT)](https://github.com/VivekH90/mark-two/commits/master)
-[![License](https://img.shields.io/badge/LICENSE-NOT%20SPECIFIED-999999?style=for-the-badge)](https://github.com/VivekH90/mark-two)
-
-</div>
+It is designed for notes, mathematical writing, physics articles, and other documents where normal prose, TeX mathematics, semantic environments, figures, references, and small pieces of metadata should live together in a readable source file.
 
 ## Installation
 
-Mark Two can be installed as an editable local Python package. This is useful when Mark Two lives inside another project, such as a blog repository.
-
-From the parent project:
+From the root of the Mark Two repository:
 
 ```bash
-python3 -m pip install -e resources/mark-two
+python3 -m pip install -e .
 ```
 
-After this one-time setup, the `mark-two` command can be used from any directory.
+This installs the `mark-two` command in editable mode, so source-code changes are picked up immediately.
+
+Mark Two requires Python 3.10 or newer.
 
 ## Usage
 
-Create a `.mt` file anywhere in your project:
+A document can be stored anywhere in a project:
 
 ```text
 mathematics/
@@ -35,14 +27,13 @@ mathematics/
         └── completeness.mt
 ```
 
-Then compile it from that directory:
+Compile it with:
 
 ```bash
-cd mathematics/real-analysis/completeness
-mark-two completeness.mt
+mark-two mathematics/real-analysis/completeness/completeness.mt
 ```
 
-By default, Mark Two creates a complete web bundle beside the source file:
+By default, the compiler writes a complete web bundle beside the source file:
 
 ```text
 completeness/
@@ -50,12 +41,6 @@ completeness/
 ├── index.html
 ├── style.css
 └── script.js
-```
-
-You can also give the source file as a path from anywhere in the project:
-
-```bash
-mark-two mathematics/real-analysis/completeness/completeness.mt
 ```
 
 A custom output path can be selected with:
@@ -70,36 +55,7 @@ A custom HTML template can be selected with:
 mark-two completeness.mt --template path/to/index.html
 ```
 
-## Generated Web Layout
-
-Mark Two's default HTML template produces a three-part page layout beneath the top banner:
-
-- a **left navigation sidebar** for document or site navigation
-- the **main article** in the center
-- a **right sidebar** containing the table of contents and related links
-
-On desktop-sized screens, the left and right sidebars are sticky while the article scrolls. The layout collapses progressively on smaller screens.
-
-The top of the page contains an author panel beside the banner image. The author is set with `@author` and appears to the left of the banner. `@documenttitle` stores a document classification tag for future use, but that tag does not currently affect the generated page. Page tags are supplied separately with `@tags` and appear directly below the article title:
-
-```text
-@tags{general relativity, cosmology}
-```
-
-
-```text
-@documenttitle{Physics, banner = images/banner.jpg}
-@author{Vivek}
-@title{Introduction to Analysis}
-```
-
-The default template also places a search field over the upper-right of the banner. The field is part of the generated frontend UI and is currently presentation-only unless custom search behaviour is added to `web/script.js`.
-
-Navigation buttons can be added with `@button`. The default template also includes static navigation entries for Physics, Mathematics, Computer Science, and Thoughts.
-
-The generated page is responsive and supports the built-in light/dark mode toggle.
-
-For compatibility, Mark Two can also be run as a Python module:
+Mark Two can also be invoked as a Python module:
 
 ```bash
 python3 -m mark_two completeness.mt
@@ -107,97 +63,204 @@ python3 -m mark_two completeness.mt
 
 ## Updating Mark Two
 
-If Mark Two is cloned into another repository, update it with Git instead of downloading it again:
+When Mark Two is installed with `pip install -e`, normal source changes do not require reinstallation.
+
+For a normal clone:
 
 ```bash
-cd resources/mark-two
+cd mark-two
 git pull
 ```
 
-Because Mark Two was installed with `pip install -e`, the command uses the updated source immediately. There is no need to reinstall the package after normal source-code updates.
+When Mark Two is used as a Git submodule:
+
+```bash
+git submodule update --remote resources/templates/mark-two
+```
 
 ## Mark Two Syntax
 
-Mark Two uses `@` directives for document structure and semantics.
+Mark Two has two kinds of syntax:
 
-### Multiline Directives
+- **directives**, such as `@section{...}` and `@image{...}`
+- **enclosed environments**, written with `@begin(...)` and `@end(...)`
 
-**Every Mark Two directive can span multiple lines.** The parser matches the opening `{` with its corresponding closing `}`, while respecting nested braces and quoted strings. This means formatting a directive across several lines is purely a matter of readability and does not change its meaning.
+Normal prose is written directly. There is no `@text` command.
 
-For example, an ordered list can be written naturally:
+### Document directives
 
-```text
-@enumerate{
-    color = green,
-    @item{
-        First item in the list.
-    },
-    @item{
-        Second item in the list.
-    }
-}
-```
+Common document-level directives are:
 
-The same applies to images:
-
-```text
-@image{
-    image(1) = first.png,
-    image(2) = second.png,
-    width(1) = 50%,
-    width(2) = 35%,
-    caption = Two related figures.
-}
-```
-
-And to document metadata:
-
-```text
-@documenttitle{
-    My Notes,
-    banner = images/banner.jpg,
-    color = #ffcc00
-}
-```
-
-The single-line form remains valid too.
-
-| Command | Purpose | Example |
+| Directive | Purpose | Example |
 | --- | --- | --- |
-| `@documenttitle` | Stores a document classification tag. The tag is currently non-functional. The optional `banner` argument still sets the top banner image. | `@documenttitle{Physics, banner = images/banner.jpg}` |
-| `@button` | Adds a navigation button. | `@button{Home, href = /, color = black}` |
-| `@author` | Sets the author name shown beside the top banner. | `@author{Vivek}` |
-| `@title` | Sets the article title. | `@title{Introduction to Analysis}` |
-| `@tags` | Adds page tags shown directly below the article title. Multiple tags are comma-separated. | `@tags{general relativity, cosmology}` |
-| `@section` | Creates a numbered section. Supports `label`. | `@section{Limits, label = limits}` |
-| `@subsection` | Creates a numbered subsection. Supports `label`. | `@subsection{One-sided limits, label = one-sided}` |
-| `@image` | Inserts a single image or a multi-image row. Single images support `image`/`src`, `width`, `height`, `alt`, `caption`, and `label`. Multiple images use `image(1)`, `image(2)`, ... and support independent `width(n)` and `height(n)` values. Unspecified widths share the remaining row space. | `@image{image(1) = first.png, image(2) = second.png, width(1) = 55%, width(2) = 35%, caption = A comparison.}` |
-| `@gallery` | Builds a remote image gallery at compile time. Currently supports NASA with `source`, `query`, `count`, and optional `seed`; image files are not downloaded into the repository. | `@gallery{source = NASA, query = black holes, count = 7}` |
-| `@enumerate` | Creates an ordered list. | `@enumerate{color = green, @item{First}, @item{Second}}` |
-| `@itemize` | Creates an unordered list. | `@itemize{color = #8a3d91, @item{First}, @item{Second}}` |
-| `@item` | Creates an item inside `@enumerate` or `@itemize`; may have a title. | `@item{An item}` or `@item{title = "Step one", Details.}` |
-| `@text` | Creates a text block with optional formatting applied to the whole block: `bold`, `italic`, and `color`. | `@text{bold = true, text = "Important."}` |
-| `@bold` | Makes only the enclosed text bold. Works inside normal prose, `@text`, lists, and other rendered text. | `This is @bold{important}.` |
-| `@italic` | Makes only the enclosed text italic. Works inside normal prose, `@text`, lists, and other rendered text. | `This is @italic{emphasized}.` |
-| `@color` | Changes only the enclosed text's color. Use `@color{red, text}` or a CSS color value such as `#315a9b`. | `This is @color{red, highlighted}.` |
-| `@theorem` | Creates a numbered theorem environment. | `@theorem{Fundamental Theorem, label = fundamental-theorem}` |
-| `@lemma` | Creates a numbered lemma environment. | `@lemma{A Useful Lemma, label = useful-lemma}` |
-| `@definition` | Creates a numbered definition environment. | `@definition{Continuity, label = continuity}` |
-| `@corollary` | Creates a numbered corollary environment. | `@corollary{Immediate Consequence}` |
-| `@axiom` | Creates a numbered axiom environment. | `@axiom{A Basic Axiom}` |
-| `@proposition` | Creates a numbered proposition environment. | `@proposition{A Small Proposition}` |
-| `@remark` | Creates a numbered remark environment. | `@remark{A Useful Remark}` |
-| `@example` | Creates a numbered example environment. | `@example{A Simple Example}` |
-| `@conjecture` | Creates a numbered conjecture environment. | `@conjecture{A Possible Pattern}` |
-| `@notation` | Creates a numbered notation environment. | `@notation{Standard Notation}` |
-| `@warning` | Creates a numbered warning environment. | `@warning{A Common Pitfall}` |
-| `@proof` | Creates a proof environment with a Q.E.D. marker. | `@proof{}` |
-| `@label` | Creates a named anchor at the current location. | `@label{important-point}` |
-| `@ref` | Creates a clickable cross-reference to a label or page anchor. | `@ref{fundamental-theorem}` |
-| `@relatedlinks` | Adds a related link to the sidebar. | `@relatedlinks{Python, href = https://www.python.org}` |
+| `@documenttitle` | Sets the document classification tag and can set the banner image/color. | `@documenttitle{Physics, banner = images/banner.jpg}` |
+| `@folder` | Sets the folder/category text used by the generated page metadata. | `@folder{Electromagnetism}` |
+| `@author` | Sets the author name. | `@author{Vivek}` |
+| `@date` | Sets the document date. | `@date{26 September 2026}` |
+| `@title` | Sets the article title. | `@title{Electromagnetic Lagrangian}` |
+| `@tags` | Adds comma-separated article tags. | `@tags{Electromagnetism, Classical Field Theory}` |
+| `@button` | Adds a navigation button. | `@button{GitHub, href = https://github.com/VivekH90/blog}` |
+| `@gallery` | Adds a remote image gallery. | `@gallery{source = NASA, query = black holes, count = 7}` |
+| `@relatedlinks` | Adds a related link to the page sidebar. | `@relatedlinks{Python, href = https://www.python.org}` |
 | `@relatedlink` | Alias for `@relatedlinks`. | `@relatedlink{Python, href = https://www.python.org}` |
 
-Inline formatting can be nested. For example:
+Directives can span multiple lines. Braces, parentheses, brackets, commas, quotes, and escaped characters are handled by the parser when determining directive boundaries.
+
+### Sections and subsections
+
+Sections remain ordinary directives:
+
+```text
+@section{Lagrange's equation for a single variable, label = single-variable}
+
+Ordinary prose goes directly here.
+```
+
+Subsections use the same form:
+
+```text
+@subsection{The 4-vector generalization, label = four-vector-generalization}
+
+More prose.
+```
+
+Sections and subsections create the numbered headings used by the generated Contents navigation.
+
+## Enclosed environments
+
+Semantic environments use an explicit opening and closing pair.
+
+The canonical form is:
+
+```text
+@begin(theorem = Fundamental Theorem, label = fundamental-theorem)
+
+The statement of the theorem.
+
+@end(theorem)
+```
+
+A proof has no title:
+
+```text
+@begin(proof)
+
+The proof goes here.
+
+@end(proof)
+```
+
+The supported semantic environments are:
+
+```text
+theorem
+lemma
+definition
+corollary
+axiom
+proposition
+remark
+example
+conjecture
+notation
+warning
+proof
+```
+
+The title and label are optional only where the environment permits them. Proofs normally omit both:
+
+```text
+@begin(proof)
+...
+@end(proof)
+```
+
+### Nested environments
+
+Environments can contain other environments:
+
+```text
+@begin(theorem = A Result, label = a-result)
+
+Statement of the theorem.
+
+@begin(proof)
+
+Proof of the result.
+
+@end(proof)
+
+@end(theorem)
+```
+
+This is useful for keeping a theorem and its proof structurally connected in the source.
+
+### Lists
+
+Ordered and unordered lists can also use enclosed environments:
+
+```text
+@begin(enumerate)
+
+@item{First item.}
+@item{Second item.}
+
+@end(enumerate)
+```
+
+and:
+
+```text
+@begin(itemize)
+
+@item{First item.}
+@item{Second item.}
+
+@end(itemize)
+```
+
+List markers can be colored:
+
+```text
+@begin(enumerate, color = green)
+
+@item{First item.}
+@item{Second item.}
+
+@end(enumerate)
+```
+
+List items can contain normal Mark Two content, including nested lists and semantic environments.
+
+## Inline formatting
+
+Inline formatting works directly inside ordinary prose and other rendered text.
+
+### Bold
+
+```text
+This is @bold{important}.
+```
+
+### Italic
+
+```text
+This is @italic{emphasized}.
+```
+
+### Color
+
+```text
+This is @color{red, highlighted}.
+```
+
+CSS colors may also be supplied explicitly:
+
+```text
+This is @color{#315a9b, highlighted}.
+```
+
+Inline formatting can be nested:
 
 ```text
 This is @bold{very @italic{important}}.
@@ -205,23 +268,62 @@ This is @bold{very @italic{important}}.
 This is @color{red, @bold{extremely important}}.
 ```
 
-`@text` formats the whole text block, while `@bold`, `@italic`, and `@color` format only the selected inline content.
+## Images
 
-### Images
+Article images are inserted with `@image`.
 
-Single-image figures can be written as:
+A basic image:
 
 ```text
 @image{
-    image = figure.png,
-    width = 65%,
-    caption = The completeness construction.
+    src = figure.png,
+    alt = A diagram of the construction,
+    caption = The construction used in the proof,
+    label = construction,
+    width = 65%
 }
 ```
 
-`src = figure.png` is also accepted for single images. Width and height accept CSS size values such as `300px`, `50%`, `20rem`, or `80vw`.
+`src` may be a local path or a remote image URL:
 
-For multiple images in one figure, use indexed image names:
+```text
+@image{
+    src = https://example.com/figure.png,
+    alt = Example remote figure,
+    caption = An externally hosted figure.
+}
+```
+
+### Image properties
+
+An image supports:
+
+| Property | Purpose |
+| --- | --- |
+| `src` | Local path or remote image URL. |
+| `alt` | Alternative text placed in the generated `<img>` element. |
+| `caption` | Visible figure caption. |
+| `label` | HTML anchor/id for the figure. |
+| `width` | CSS width such as `60%`, `300px`, or `20rem`. |
+| `height` | CSS height such as `240px`; `auto` leaves the height automatic. |
+
+When a caption is present, Mark Two automatically adds the figure number:
+
+```text
+caption = The construction used in the proof.
+```
+
+becomes a caption in the form:
+
+```text
+Figure 1: The construction used in the proof.
+```
+
+Figure numbering follows document order. A multi-image group counts as one figure.
+
+### Multiple images
+
+Multiple images can share one figure:
 
 ```text
 @image{
@@ -232,7 +334,7 @@ For multiple images in one figure, use indexed image names:
 }
 ```
 
-All images are placed in the same row with equal widths by default. You can resize individual images with `width(n)` and individual heights with `height(n)`:
+Individual widths and heights can be supplied with indexed properties:
 
 ```text
 @image{
@@ -247,13 +349,45 @@ All images are placed in the same row with equal widths by default. You can resi
 }
 ```
 
-Here image 1 occupies 50% of the row, image 2 occupies 25%, and image 3 receives the remaining space. Heights are independent; an image without `height(n)` uses the group's default height. CSS size values such as `px`, `%`, `rem`, and `vw` are accepted.
+An image without an explicit width receives the remaining space in the row.
 
-Whenever an image or image group has a `caption`, Mark Two automatically formats it as **Figure N:** followed by the caption text, where the figure number counts image figures in document order. A multi-image row counts as one figure.
+The caption belongs to the complete multi-image figure. The label of the first image is used as the figure anchor when a label is supplied.
 
-### Remote Image Galleries
+## References and labels
 
-Mark Two can build a document-level image gallery from remote scientific-image providers. The compiler fetches image metadata at build time, but **does not download the image files into the repository**. The generated HTML keeps the remote image URLs, so the browser loads the images when the page is viewed.
+A section, subsection, or semantic environment can have a label:
+
+```text
+@section{Main Result, label = main-result}
+
+@begin(theorem = Fundamental Theorem, label = fundamental-theorem)
+
+The statement.
+
+@end(theorem)
+```
+
+Reference it inline with:
+
+```text
+By @ref{fundamental-theorem}, the desired result follows.
+```
+
+Custom reference text is supported:
+
+```text
+By @ref{fundamental-theorem, text = "the theorem"}, the result follows.
+```
+
+A reference can also target a page/HTML URL:
+
+```text
+@ref{analysis.html#fundamental-theorem}
+```
+
+## Remote image galleries
+
+The `@gallery` directive can build a document-level remote image gallery at compile time.
 
 NASA is currently supported:
 
@@ -265,141 +399,118 @@ NASA is currently supported:
 }
 ```
 
-Optional deterministic selection is available with `seed`:
+An optional deterministic seed can be supplied:
 
 ```text
-@gallery{source = NASA, query = gravitational waves, count = 6, seed = 42}
+@gallery{
+    source = NASA,
+    query = gravitational waves,
+    count = 6,
+    seed = 42
+}
 ```
 
-The compiler searches NASA's public Image and Video Library API, resolves usable image assets, and renders each image with:
+The compiler resolves image metadata and keeps the resulting image URLs in the generated HTML. Image files are not copied into the repository.
 
-- the remote image URL
-- descriptive `alt` text from NASA metadata
-- a link back to the NASA image record
-- the NASA-provided center/credit metadata when available
+## Generated web page
 
-The gallery is rendered above the article breadcrumb and is responsive. Image files are not copied into the generated article directory.
+The built-in template provides:
 
-Because remote providers and individual images can have different reuse conditions, check the source/credit information for the images you publish. The gallery preserves a source link and credit in the generated page to make that review possible.
+- a rounded top navigation bar
+- a remote image gallery and lightbox when `@gallery` is used
+- a breadcrumb/metabar
+- Home, GitHub, and light/dark theme controls
+- a main article area
+- a right-hand Contents panel
+- a right-hand Related panel
+- a mobile Contents & related panel
+- responsive article, image, list, and environment styling
+- MathJax for TeX mathematics
 
-## Cross References
+The Contents navigation is generated from the actual section and subsection headings in the rendered article and highlights the section currently in view.
 
-Give a section or environment a `label`, then reference it elsewhere:
+## VS Code extension
 
-```text
-@section{Main Result, label = main-result}
+The optional extension lives under `vscode-mark-two/`.
 
-@theorem{Fundamental Theorem, label = fundamental-theorem}
+Current extension version: **0.4.0**.
 
-The statement of the theorem.
-
-@proof{}
-
-A proof goes here.
-```
-
-Later in the document:
-
-```text
-By @ref{fundamental-theorem}, the desired result follows from @ref{main-result}.
-```
-
-The generated references are clickable HTML links that jump to the corresponding labeled object.
-
-Custom link text is also supported:
-
-```text
-@ref{fundamental-theorem, text = "the theorem"}
-```
-
-A cross-page target can be written directly as an HTML page and anchor:
-
-```text
-@ref{analysis.html#fundamental-theorem}
-```
-
-## Mathematics
-
-Inline mathematics uses standard TeX delimiters:
-
-```text
-The identity is \(a^2 + b^2 = c^2\).
-```
-
-Display mathematics uses:
-
-```text
-\[
-\int_0^1 x^2\,dx = \frac{1}{3}.
-\]
-```
-
-MathJax processes the mathematical expressions in the generated page.
-
-## Editor Support
-
-Mark Two includes a VS Code language extension under `vscode-mark-two/` with syntax highlighting, directive completion, snippets, automatic bracket/parenthesis closing, and indentation support for `.mt` files.
-
-For extension development, open the repository in VS Code and press `F5`. This launches an Extension Development Host with Mark Two support enabled.
-
-## Project Layout
-
-```text
-mark-two/
-├── src/                 # Mark Two Python package source
-├── test/                # Example Mark Two source document
-├── web/                 # HTML template and frontend assets
-├── build/               # Generated example HTML bundle
-├── vscode-mark-two/     # VS Code language support
-└── pyproject.toml       # Python package and CLI configuration
-```
-
-
-### Editor Support
-
-Mark Two includes an optional VS Code language extension under `vscode-mark-two/`. It provides:
+It provides:
 
 - automatic language detection for `.mt` files
-- syntax highlighting for Mark Two directives, arguments, strings, URLs, numbers, comments, and TeX-style mathematics
-- directive completion after `@`
-- snippets
-- automatic bracket and parenthesis closing
-- indentation support
+- syntax highlighting for directives, environment delimiters, arguments, strings, URLs, numbers, comments, and TeX mathematics
+- completion after `@`
+- environment-name completion inside `@begin(...)` and `@end(...)`
+- snippets for document directives
+- snippets for all semantic environments
+- snippets for lists, images, galleries, references, related links, and inline formatting
+- automatic bracket/parenthesis closing
+- indentation based on `@begin(...)` and `@end(...)`
 
-The extension is separate from the Mark Two compiler. Installing the extension changes how `.mt` files look and behave in VS Code; it is not required to compile Mark Two documents to HTML.
+The environment snippets generate the canonical syntax. For example, the theorem snippet produces:
 
-#### Permanent installation
+```text
+@begin(theorem = Theorem Title, label = theorem-label)
 
-From the root of the Mark Two repository:
+@end(theorem)
+```
+
+The extension does not provide `@text` as a directive because ordinary prose is written directly.
+
+### Installing the extension
+
+From the repository root:
 
 ```bash
 cd vscode-mark-two
 npx @vscode/vsce package
-code --install-extension ./mark-two-language-0.3.0.vsix
+code --install-extension ./mark-two-language-0.4.0.vsix
 ```
 
-Reload VS Code after installation:
+After installation, reload VS Code and open a `.mt` file. The language indicator should show **Mark Two**.
 
-1. Open the Command Palette with `Ctrl+Shift+P`.
-2. Run **Developer: Reload Window**.
-3. Open any `.mt` file.
+For extension development, open the repository in VS Code and launch the Extension Development Host with `F5`.
 
-The language indicator in the bottom-right of VS Code should show **Mark Two**, and syntax highlighting will be applied automatically to `.mt` files.
+## Project layout
 
-If `npx @vscode/vsce package` reports that the `repository` field is missing from `package.json`, that warning can be ignored when packaging the extension locally.
-
-#### Development / testing
-
-To work on the extension itself, open the Mark Two repository in VS Code and press `F5`. The included `.vscode/launch.json` starts an Extension Development Host with the local Mark Two extension loaded.
-
-After changing files under `vscode-mark-two/`, reload or restart the Extension Development Host to test the changes.
-
-#### Using Mark Two as a Git submodule
-
-If Mark Two is included in another repository as a Git submodule, update it from the parent repository with:
-
-```bash
-git submodule update --remote resources/templates/mark-two
+```text
+mark-two/
+├── src/                 # Mark Two Python package source
+├── test/                # Tests and example source documents
+├── web/                 # HTML template and frontend assets
+├── build/               # Generated example HTML bundle
+├── vscode-mark-two/     # VS Code language support
+├── docs/                # Supporting documentation
+└── pyproject.toml       # Python package and CLI configuration
 ```
 
-Then install or repackage the extension from the updated submodule as described above.
+## Current language rules
+
+The current canonical language follows a simple rule:
+
+**Write normal prose normally. Use directives for document structure. Use `@begin(...)` and `@end(...)` for semantic environments.**
+
+The old standalone environment commands such as:
+
+```text
+@theorem{...}
+@definition{...}
+@axiom{...}
+@proof{...}
+```
+
+are no longer part of the canonical language.
+
+Likewise, `@text` is no longer used.
+
+Use:
+
+```text
+@begin(theorem = A Theorem, label = a-theorem)
+
+Normal prose goes here.
+
+@end(theorem)
+```
+
+instead.
