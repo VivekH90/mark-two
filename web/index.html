@@ -1,103 +1,358 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <title>{{ARTICLE_TITLE}}</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{{ARTICLE_TITLE}} — {{AUTHOR}}</title>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']], tags: 'ams' },
+    chtml: { fontURL: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/output/chtml/fonts/woff-v2' }
+  };
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js" defer></script>
+<script>
+  // Apply saved/system theme before paint to avoid flash
+  (function(){
+    try{
+      var saved = localStorage.getItem('theme');
+      var theme = saved || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      if(theme === 'dark') document.documentElement.setAttribute('data-theme','dark');
+    }catch(e){}
+  })();
+</script>
+<style>
+  :root{
+    --ink:#221F2C; --sub:#6B6353;
+    --lav:#D8C4F5; --lav-b:#6B3FA8;
+    --peach:#F5C2A8; --peach-b:#9E2A16;
+    --mint:#B9DEE5; --mint-b:#0A5A63;
+    --cyan:#B8E3DE; --cyan-b:#1E6E69;
+    --yellow:#F5DE8A; --yellow-b:#A87A0A;
+    --coral:#F5C4B0; --coral-b:#A8451C;
+    --gray:#F2E9D8; --gray-b:#7A6438;
+    --body-bg:#FFFDF6; --dots:#E4D8BD;
+    --card-white:#fff;
+    --def-text:#0A3E3A; --axiom-text:#4E3705; --theorem-text:#5C1B08;
+    --xlink:#4A2A82; --xlink-b:#B79AE0;
+    --crumb-text:#5A1608;
+    --article-text:#2B2730;
+    --nav-brand-sub:#3A2E52;
+    --related-text:#0A3E3A; --related-hover:#062A27; --related-cat:#3A6E68;
+    box-sizing:border-box;
+  }
+  :root[data-theme="dark"]{
+    --ink:#F0EAD9; --sub:#B8AE97;
+    --lav:#3A2A5C; --lav-b:#B090E6;
+    --peach:#4A2416; --peach-b:#F0916A;
+    --mint:#0F3A3E; --mint-b:#6FE0D6;
+    --cyan:#123B38; --cyan-b:#6FD8CE;
+    --yellow:#4A3A0A; --yellow-b:#F0C94A;
+    --coral:#4A2214; --coral-b:#F0916A;
+    --gray:#2A2419; --gray-b:#C9AD6E;
+    --body-bg:#171512; --dots:#2E2A22;
+    --card-white:#211D16;
+    --def-text:#B7EDE6; --axiom-text:#F0DE9E; --theorem-text:#F5C5AE;
+    --xlink:#D8C4F5; --xlink-b:#6B3FA8;
+    --crumb-text:#F0C0A2;
+    --article-text:#EDE6D4;
+    --nav-brand-sub:#D8C4F5;
+    --related-text:#B7EDE6; --related-hover:#EAFBF8; --related-cat:#7FC4BC;
+  }
+  *,*::before,*::after{box-sizing:inherit;}
+  body{
+    margin:0;color:var(--ink);
+    background:var(--body-bg) radial-gradient(var(--dots) 1.4px, transparent 1.4px);
+    background-size:20px 20px;
+    font-family:"Latin Modern Sans","Computer Modern Sans Serif","Computer Modern Sans",sans-serif;
+    -webkit-font-smoothing:antialiased;
+    transition:background-color .2s,color .2s;
+  }
+  a{color:inherit;}
+  .page{max-width:1220px;margin:0 auto;padding:20px 4vw 60px;}
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sugina-dev/latin-modern-web@1.0.1/style/latinmodern-sans.css">
-    <link rel="stylesheet" href="style.css">
+  /* nav box */
+  .navbox{
+    background:var(--lav);border:3px solid var(--lav-b);border-radius:18px;
+    padding:14px 24px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;
+    margin-bottom:16px;
+  }
+  .brand{display:flex;align-items:baseline;gap:10px;}
+  .brand b{font-size:16.5px;}
+  .brand span{font-size:12.5px;color:var(--nav-brand-sub);}
+  .navbox nav ul{list-style:none;display:flex;gap:8px;margin:0;padding:0;flex-wrap:wrap;}
+  .navbox nav a{
+    text-decoration:none;font-size:13.5px;font-weight:600;padding:7px 14px;border-radius:10px;
+    background:var(--card-white);border:2px solid var(--lav-b);color:var(--ink);
+  }
+  .navbox nav a:hover{background:var(--cyan);}
 
-    <script>
-        window.MathJax = {
-            tex: {
-                inlineMath: [['\\(', '\\)']],
-                displayMath: [['\\[', '\\]']],
-                processEscapes: true,
-                tags: 'ams'
-            },
-            options: {
-                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-            }
-        };
-    </script>
-    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+  /* NASA image gallery */
+  .strip{
+    background:var(--peach);
+    border:3px solid var(--peach-b);
+    border-radius:16px;
+    padding:10px;
+    margin-bottom:16px;
+    display:flex;
+    gap:10px;
+    flex-wrap:nowrap;
+    overflow-x:auto;
+    overflow-y:hidden;
+    scrollbar-width:thin;
+    scrollbar-color:var(--peach-b) transparent;
+  }
+  .strip::-webkit-scrollbar{height:8px;}
+  .strip::-webkit-scrollbar-track{background:transparent;}
+  .strip::-webkit-scrollbar-thumb{background:var(--peach-b);border-radius:999px;}
+  .strip .thumb{
+    position:relative;
+    width:170px;
+    height:105px;
+    background:var(--card-white);
+    border:2px solid var(--peach-b);
+    border-radius:10px;
+    display:block;
+    overflow:hidden;
+    flex:0 0 auto;
+    padding:0;
+    cursor:pointer;
+    transition:transform .16s ease,box-shadow .16s ease;
+  }
+  .strip .thumb:hover{
+    transform:translateY(-2px);
+    box-shadow:0 6px 14px rgba(0,0,0,.14);
+  }
+  .strip .thumb img{
+    display:block;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+  }
+  .strip .thumb::after{
+    content:"";
+    position:absolute;
+    inset:auto 0 0 0;
+    height:34%;
+    background:linear-gradient(transparent,rgba(0,0,0,.34));
+    pointer-events:none;
+  }
+  .gallery-status{
+    padding:10px 14px;
+    color:var(--sub);
+    font-size:12.5px;
+    flex:0 0 auto;
+  }
+
+  /* gallery lightbox */
+  .gallery-lightbox{
+    position:fixed;
+    inset:0;
+    z-index:1000;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    background:rgba(20,16,12,.78);
+  }
+  .gallery-lightbox.open{display:flex;}
+  .gallery-dialog{
+    position:relative;
+    width:min(1100px,96vw);
+    max-height:92vh;
+    padding:14px;
+    border:3px solid var(--peach-b);
+    border-radius:18px;
+    background:var(--card-white);
+    box-shadow:0 20px 70px rgba(0,0,0,.35);
+  }
+  .gallery-dialog img{
+    display:block;
+    width:100%;
+    max-height:78vh;
+    object-fit:contain;
+    background:var(--gray);
+    border-radius:10px;
+  }
+  .gallery-caption{
+    margin:10px 4px 2px;
+    color:var(--ink);
+    font-size:13px;
+    line-height:1.45;
+  }
+  .gallery-close{
+    position:absolute;
+    top:8px;
+    right:8px;
+    width:34px;
+    height:34px;
+    border:2px solid var(--peach-b);
+    border-radius:10px;
+    background:var(--card-white);
+    color:var(--ink);
+    font-size:18px;
+    font-weight:700;
+    cursor:pointer;
+  }
+
+  @media (max-width:560px){
+    .strip .thumb{width:140px;height:90px;}
+  }
+
+  /* metabar: now holds breadcrumb (left) + icons (right) */
+  .metabar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:22px;
+    background:var(--mint);border:2.5px solid var(--mint-b);border-radius:20px;padding:9px 18px;}
+  nav.crumbs{display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:13px;color:var(--crumb-text);}
+  nav.crumbs a{text-decoration:none;color:var(--crumb-text);}
+  nav.crumbs a:hover{text-decoration:underline;}
+  nav.crumbs .sep{color:var(--mint-b);}
+  nav.crumbs .current{font-weight:700;color:var(--ink);}
+  .metabar .icons{display:flex;gap:8px;}
+  .metabar .icons button,.metabar .icons a{
+    width:32px;height:32px;border-radius:10px;border:2px solid var(--gray-b);background:var(--card-white);
+    display:flex;align-items:center;justify-content:center;font-size:13px;text-decoration:none;color:var(--ink);
+    cursor:pointer;padding:0;
+  }
+  .metabar .icons svg{width:16px;height:16px;}
+  .metabar .icons .moon{display:none;}
+  :root[data-theme="dark"] .metabar .icons .sun{display:none;}
+  :root[data-theme="dark"] .metabar .icons .moon{display:flex;}
+
+  /* layout */
+  .layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:26px;align-items:start;}
+
+  .outerbox{background:var(--mint);border:3px solid var(--mint-b);border-radius:16px;padding:16px;}
+  .outerbox > h2.section-title{margin:2px 0 14px 4px;font-size:1.28rem;font-weight:800;color:var(--def-text);}
+  .innerbox{background:var(--gray);border:2.5px solid var(--gray-b);border-radius:12px;padding:24px 28px 32px;}
+
+  h1.title{font-size:clamp(1.8rem,3.6vw,2.5rem);line-height:1.16;font-weight:800;margin:0 0 14px;max-width:22ch;}
+  .article-meta{display:flex;flex-wrap:wrap;gap:14px;align-items:center;font-size:13.5px;color:var(--sub);}
+  .author b{color:var(--ink);font-weight:600;}
+  .tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;}
+  .tags span{font-size:12px;padding:4px 11px;border-radius:9px;font-weight:600;}
+  .tags span:nth-child(1){background:var(--coral);border:2px solid var(--coral-b);color:var(--theorem-text);}
+  .tags span:nth-child(2){background:var(--cyan);border:2px solid var(--cyan-b);color:var(--def-text);}
+  .tags span:nth-child(3){background:var(--yellow);border:2px solid var(--yellow-b);color:var(--axiom-text);}
+
+  article.reading{font-size:1.06rem;line-height:1.77;max-width:70ch;color:var(--article-text);margin-top:18px;}
+  article.reading .lede{font-size:1.15rem;}
+  article.reading h2{font-size:1.42rem;font-weight:700;margin:44px 0 12px;scroll-margin-top:24px;display:flex;gap:11px;align-items:center;color:var(--ink);}
+  article.reading h2 .num{
+    font-size:13px;font-weight:700;color:var(--theorem-text);background:var(--coral);border:2px solid var(--coral-b);
+    width:28px;height:28px;border-radius:9px;flex:none;display:flex;align-items:center;justify-content:center;
+  }
+  article.reading h3{font-size:1.1rem;font-weight:700;margin:28px 0 8px;scroll-margin-top:24px;color:var(--ink);}
+  article.reading h3 .num{color:var(--cyan-b);margin-right:6px;}
+  article.reading p{margin:0 0 19px;}
+  article.reading a.xlink{color:var(--xlink);text-decoration:none;border-bottom:2px solid var(--xlink-b);}
+  article.reading a.xlink:hover{background:var(--lav);}
+
+  figure.diagram{margin:28px 0;padding:20px;background:var(--card-white);border:2.5px solid var(--gray-b);border-radius:14px;text-align:center;}
+  figure.diagram svg{max-width:300px;margin:0 auto;display:block;}
+  figcaption{font-size:12.5px;color:var(--sub);margin-top:10px;}
+
+  .box{margin:24px 0;padding:18px 22px;border-radius:14px;border:2.5px solid var(--b);background:var(--bg);}
+  .box .label{font-weight:700;font-size:14px;margin-bottom:7px;}
+  .box p{margin:0;}
+  .box.definition{--bg:var(--cyan);--b:var(--cyan-b);color:var(--def-text);}
+  .box.definition .label{color:var(--def-text);}
+  .box.axiom{--bg:var(--yellow);--b:var(--yellow-b);color:var(--axiom-text);}
+  .box.axiom .label{color:var(--axiom-text);}
+  .box.theorem,.box.proposition{--bg:var(--coral);--b:var(--coral-b);color:var(--theorem-text);}
+  .box.theorem .label,.box.proposition .label{color:var(--theorem-text);}
+  .box.proof{--bg:var(--card-white);--b:var(--gray-b);color:var(--article-text);}
+  .box.proof .label{font-style:italic;font-weight:600;color:var(--sub);}
+  .qed{float:right;color:var(--coral-b);font-weight:700;}
+
+  ol.refs{padding-left:1.2em;font-size:0.95rem;color:var(--article-text);}
+  ol.refs li{margin-bottom:9px;}
+
+  /* sidebar */
+  aside.rail{position:sticky;top:20px;}
+  .rail-card{border-radius:16px;padding:18px 20px;margin-bottom:22px;}
+  .rail-card.toc-card{background:var(--lav);border:3px solid var(--lav-b);}
+  .rail-card h4{margin:0 0 12px;font-size:12.5px;color:var(--nav-brand-sub);font-weight:700;letter-spacing:.01em;}
+  nav.toc ul{list-style:none;margin:0;padding:0;}
+  nav.toc li a{display:block;padding:5px 0;font-size:13px;text-decoration:none;color:var(--ink);}
+  nav.toc li.sub a{padding-left:15px;font-size:12px;color:var(--sub);}
+  nav.toc li a.active{color:var(--theorem-text);font-weight:700;}
+
+  .rail-card.related-card{background:var(--cyan);border:2.5px solid var(--cyan-b);}
+  .related-card ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:11px;}
+  .related-card li{background:var(--card-white);border-radius:11px;padding:11px 13px;border:2px solid var(--cyan-b);}
+  .related-card a{text-decoration:none;font-size:13px;font-weight:700;line-height:1.4;display:block;color:var(--related-text);}
+  .related-card a:hover{color:var(--related-hover);}
+  .related-card .cat{display:block;font-size:10.5px;color:var(--related-cat);font-weight:400;margin-top:3px;}
+
+  details.side-mobile{display:none;}
+
+  @media (max-width:980px){
+    .layout{grid-template-columns:1fr;}
+    aside.rail{display:none;}
+    details.side-mobile{display:block;margin:0 0 22px;background:var(--lav);border:3px solid var(--lav-b);
+      border-radius:16px;padding:14px 18px;}
+    details.side-mobile summary{cursor:pointer;font-weight:700;font-size:14px;}
+    details.side-mobile .inner-mobile{margin-top:12px;}
+  }
+  @media (max-width:560px){article.reading{font-size:1rem;} .strip .thumb{width:52px;height:44px;}}
+
+  footer{margin-top:24px;padding:14px 2px;font-size:12.5px;color:var(--sub);}
+  :focus-visible{outline:2px solid var(--lav-b);outline-offset:2px;}
+</style>
 </head>
 <body>
-    <div class="page">
-        <header class="hero chunk">
-            <div class="id">
-                <div class="avatar" aria-hidden="true"></div>
-                <div>
-                    <h1>{{AUTHOR}}</h1>
-                    <p>math, physics, and whatever proof kept me up last night</p>
-                </div>
-            </div>
-            <div class="est">est. 2026<br>IISER Mohali</div>
-        </header>
+<div class="page">
+  <div class="navbox">
+    <div class="brand"><b>{{AUTHOR}}</b><span>notes on mathematics & physics</span></div>
+    <nav><ul>{{BUTTONS}}</ul></nav>
+  </div>
 
-        <div class="strip" aria-hidden="true">
-            <div class="tile chunk"><svg viewBox="0 0 40 40"><path d="M4 30 C 12 6, 28 6, 36 24" stroke="#1E1B2E" stroke-width="2.5" fill="none"/></svg><span>curves</span></div>
-            <div class="tile chunk"><svg viewBox="0 0 40 40"><text x="6" y="28" font-size="22" fill="#1E1B2E" font-family="serif">∮</text></svg><span>fields</span></div>
-            <div class="tile chunk"><svg viewBox="0 0 40 40"><rect x="6" y="6" width="10" height="10" fill="none" stroke="#1E1B2E" stroke-width="2"/><rect x="20" y="20" width="10" height="10" fill="none" stroke="#1E1B2E" stroke-width="2"/></svg><span>tensors</span></div>
-            <div class="tile chunk"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="14" fill="none" stroke="#1E1B2E" stroke-width="2"/><circle cx="20" cy="20" r="4" fill="#1E1B2E"/></svg><span>orbits</span></div>
+  {{GALLERY}}
+
+  <div class="gallery-lightbox" id="gallery-lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+    <div class="gallery-dialog">
+      <button class="gallery-close" id="gallery-close" type="button" aria-label="Close image">×</button>
+      <img id="gallery-large" alt="">
+      <div class="gallery-caption" id="gallery-caption"></div>
+    </div>
+  </div>
+
+  {{BREADCRUMB}}
+
+  <details class="side-mobile">
+    <summary>Contents & related</summary>
+    <div class="inner-mobile"><nav class="toc" id="toc-mobile"></nav></div>
+  </details>
+
+  <div class="layout">
+    <div class="outerbox">
+      <h2 class="section-title">Reading — {{ARTICLE_SECTION_LABEL}}</h2>
+      <div class="innerbox">
+        <h1 class="title">{{ARTICLE_TITLE}}</h1>
+        <div class="article-meta">
+          <div class="author"><b>{{AUTHOR}}</b></div>{{ARTICLE_DATE_META}}
         </div>
-
-        <nav class="panel" aria-label="Site navigation">
-            {{BUTTONS}}
-        </nav>
-
-        <details class="side-mobile">
-            <summary>Contents & links</summary>
-            <div class="inner-mobile">
-                <nav class="toc" id="toc-mobile" aria-label="Table of contents"></nav>
-            </div>
-        </details>
-
-        <div class="layout">
-            <main class="mainbox chunk">
-                {{GALLERY}}
-                {{BREADCRUMB}}
-                <div class="art-head">
-                    <h1 class="title">{{ARTICLE_TITLE}}</h1>
-                    <div class="article-meta">
-                        <strong>{{AUTHOR}}</strong>{{ARTICLE_DATE_META}}{{ARTICLE_READ_META}}
-                    </div>
-                    {{TAGS}}
-                </div>
-
-                <article class="reading" id="article">
-                    {{ARTICLE}}
-                </article>
-            </main>
-
-            <aside class="rail" aria-label="Article information">
-                <div class="rail-box toc chunk">
-                    <h4>Contents</h4>
-                    <nav class="toc" id="toc-desktop" aria-label="Table of contents"></nav>
-                </div>
-
-                <div class="rail-box topics chunk">
-                    <h4>Topics</h4>
-                    <ul>
-                        <li><a href="#">Physics</a></li>
-                        <li><a href="#">Math</a></li>
-                        <li><a href="#">Notes</a></li>
-                    </ul>
-                </div>
-
-                <div class="rail-box related chunk">
-                    <h4>Related</h4>
-                    <ul>
-                        {{RELATED_LINKS}}
-                    </ul>
-                </div>
-            </aside>
-        </div>
-
-        <footer>© 2026 {{AUTHOR}} — set in Latin Modern Sans. Best viewed with curiosity.</footer>
+        {{TAGS}}
+        <article class="reading" id="article">
+          {{ARTICLE}}
+        </article>
+      </div>
     </div>
 
-    <script src="script.js"></script>
+    <aside class="rail">
+      <div class="rail-card toc-card">
+        <h4>Contents</h4>
+        <nav class="toc" id="toc-desktop"></nav>
+      </div>
+      <div class="rail-card related-card">
+        <h4>Related</h4>
+        <ul>{{RELATED_LINKS}}</ul>
+      </div>
+    </aside>
+  </div>
+
+  <footer>© 2026 {{AUTHOR}} — set in Latin Modern Sans.</footer>
+</div>
+<script src="script.js"></script>
 </body>
 </html>
