@@ -95,16 +95,11 @@
           "match": "@begin(?=\\s*\\()"
         },
         {
+          "include": "#environment-name"
+        },
+        {
           "name": "keyword.control.environment.end.mark-two",
           "match": "@end(?=\\s*\\()"
-        },
-        {
-          "name": "entity.name.type.environment.mark-two",
-          "match": "(?<=@begin\\s*\\(\\s*)(?:theorem|lemma|definition|corollary|axiom|proposition|remark|example|conjecture|notation|warning|proof|enumerate|itemize)(?=\\s*(?:=|\\)))"
-        },
-        {
-          "name": "entity.name.type.environment.mark-two",
-          "match": "(?<=@end\\s*\\(\\s*)(?:theorem|lemma|definition|corollary|axiom|proposition|remark|example|conjecture|notation|warning|proof|enumerate|itemize)(?=\\s*\\))"
         },
         {
           "name": "variable.other.parameter.mark-two",
@@ -168,6 +163,18 @@
         {
           "name": "punctuation.section.braces.end.mark-two",
           "match": "\\}"
+        }
+      ]
+    },
+    "environment-name": {
+      "patterns": [
+        {
+          "name": "entity.name.type.environment.mark-two",
+          "match": "(?<=@begin\\s*\\(\\s*)[A-Za-z][\\w-]*(?=\\s*(?:=|\\)))"
+        },
+        {
+          "name": "entity.name.type.environment.mark-two",
+          "match": "(?<=@end\\s*\\(\\s*)[A-Za-z][\\w-]*(?=\\s*\\))"
         }
       ]
     }
