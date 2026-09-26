@@ -308,17 +308,30 @@ def _list_html(list_block: ListBlock, environment_counters, references, figure_c
 
 
 def _environment_html(environment: Environment, number: int, environment_counters, references, figure_counter) -> str:
-    kind = escape(environment.kind.lower())
+    kind = environment.kind.strip().lower()
     identifier = f' id="{escape(environment.label, quote=True)}"' if environment.label else ""
     content = _content_html(environment.content, environment_counters, references, figure_counter, 0)
+
     if kind == "proof":
-        return f'<div class="box proof"{identifier}><div class="label">Proof</div><div class="proof-content">{content}</div><div class="qed">□</div></div>'
-    label = environment.kind.capitalize()
+        return (
+            f'<div class="box proof"{identifier}>'
+            '<div class="label">Proof</div>'
+            f'<div class="proof-content">{content}</div>'
+            '<div class="qed" aria-label="Q.E.D.">□</div>'
+            '</div>'
+        )
+
+    label = kind.capitalize()
     label_text = f"{label} {number}"
     if environment.title:
         label_text += f" — {escape(environment.title)}"
-    return f'<div class="box {kind}"{identifier}><div class="label">{label_text}</div>{content}</div>'
 
+    return (
+        f'<div class="box {escape(kind, quote=True)}"{identifier}>'
+        f'<div class="label">{label_text}</div>'
+        f'<div class="box-content">{content}</div>'
+        '</div>'
+    )
 
 
 def _content_html(items, environment_counters, references, figure_counter, list_depth: int = 0) -> str:
@@ -457,35 +470,40 @@ def _breadcrumb_html(document: Document) -> str:
 
 def render(document: Document, template_path: str | Path) -> str:
     template = Path(template_path).read_text(encoding="utf-8")
+
     buttons = []
     for button in document.buttons:
         buttons.append(
             f'<li><a href="{escape(button.href, quote=True)}">{escape(button.name)}</a></li>'
         )
 
-        banner = f'<div class="site-banner"><img src="{escape(document.banner, quote=True)}" alt="" loading="eager"></div>'
-    else:
-        banner = '<div class="site-banner site-banner-empty"></div>'
     references = _build_reference_index(document)
     toc, article, environment_counters = [], [], {}
     figure_counter = {"number": 0}
+
     for number, section in enumerate(document.sections, 1):
-        toc.append(f'<li><a href="#{escape(section.slug or "section")}"><span class="toc-section-symbol">§</span> {number}. {escape(section.title)}</a>')
-        if section.subsections:
-            toc.append('<ol class="toc-subsections">')
-            for sub_number, subsection in enumerate(section.subsections, 1):
-                toc.append(f'<li><a href="#{escape(subsection.slug or "subsection")}">{number}.{sub_number}. {escape(subsection.title)}</a></li>')
-            toc.append('</ol>')
-        toc.append('</li>')
+        section_id = escape(section.slug or "section", quote=True)
+        toc.append(
+            f'<li><a href="#{section_id}">{number}. {escape(section.title)}</a></li>'
+        )
+        for sub_number, subsection in enumerate(section.subsections, 1):
+            subsection_id = escape(subsection.slug or "subsection", quote=True)
+            toc.append(
+                f'<li class="sub"><a href="#{subsection_id}">'
+                f'{number}.{sub_number}. {escape(subsection.title)}</a></li>'
+            )
         article.append(_section_html(section, number, environment_counters, references, figure_counter))
-    related = [f'<li><a href="{escape(link.href, quote=True)}" target="_blank" rel="noopener noreferrer">{escape(link.name)}</a></li>' for link in document.related_links]
-    tags = "\n".join(
-        f'<span class="article-tag">{escape(tag)}</span>' for tag in document.tags
-    )
-    tag_block = "\n".join(f'<span>{escape(tag)}</span>' for tag in document.tags)
-    tag_block = f'<div class="tags">{tag_block}</div>' if tag_block else ""
+
+    related = [
+        f'<li><a href="{escape(link.href, quote=True)}" target="_blank" rel="noopener noreferrer">{escape(link.name)}</a></li>'
+        for link in document.related_links
+    ]
+
+    tag_items = [f'<span>{escape(tag)}</span>' for tag in document.tags]
+    tag_block = f'<div class="tags">{"".join(tag_items)}</div>' if tag_items else ""
     date_meta = f'<span>·</span><time>{escape(document.date)}</time>' if document.date else ""
     section_label = escape(document.folder or document.document_tag or "Reading")
+
     replacements = {
         "{{GALLERY}}": _gallery_html(document),
         "{{ARTICLE_TITLE}}": escape(document.article_title),
@@ -499,6 +517,7 @@ def render(document: Document, template_path: str | Path) -> str:
         "{{ARTICLE}}": "\n".join(article),
         "{{RELATED_LINKS}}": "\n".join(related),
     }
+
     for key, value in replacements.items():
         template = template.replace(key, value)
     return template
