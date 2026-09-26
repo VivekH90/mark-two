@@ -270,7 +270,7 @@ def _caption_html(caption: str, figure_number: int) -> str:
 
 def _image_html(image: Image, figure_number: int) -> str:
     identifier = f' id="{escape(image.label, quote=True)}"' if image.label else ""
-    html = [f'<figure class="article-image"{identifier}>', _image_tag(image)]
+    html = [f'<figure class="diagram"{identifier}>', _image_tag(image)]
     if image.caption:
         html.append(_caption_html(image.caption, figure_number))
     html.append("</figure>")
@@ -279,29 +279,18 @@ def _image_html(image: Image, figure_number: int) -> str:
 
 def _multi_image_html(images, figure_number: int) -> str:
     identifier = f' id="{escape(images[0].label, quote=True)}"' if images[0].label else ""
-    widths = [image.width.strip() for image in images]
-    explicit = [i for i, width in enumerate(widths) if width]
-    if not explicit:
-        columns = " ".join("minmax(0, 1fr)" for _ in images)
-    elif len(explicit) == len(images):
-        columns = " ".join(escape(width, quote=True) for width in widths)
-    else:
-        total = " + ".join(escape(widths[i], quote=True) for i in explicit)
-        remaining = len(images) - len(explicit)
-        columns = " ".join(escape(width, quote=True) if width else f"minmax(0, calc((100% - ({total}) - {10 * (len(images) - 1)}px) / {remaining}))" for width in widths)
     image_html = []
     for image in images:
-        if image.height and image.height.lower() != "auto":
-            extra = f"width: 100%; height: {escape(image.height, quote=True)}; object-fit: cover; margin: 0;"
-        else:
-            extra = "width: 100%; height: auto; object-fit: contain; margin: 0;"
+        extra = "width: 100%; height: auto; object-fit: contain; margin: 0;"
         image_html.append(_image_tag(image, extra))
-    row_style = f"display: grid; grid-template-columns: {columns}; gap: 10px; align-items: start;"
-    html = [f'<figure class="article-image multi-image"{identifier}>', f'<div class="image-row" style="{row_style}">', "\n".join(image_html), "</div>"]
+    html = [f'<figure class="diagram"{identifier}>',
+            '<div class="image-row" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:10px;">',
+            "\n".join(image_html), "</div>"]
     if images[0].caption:
         html.append(_caption_html(images[0].caption, figure_number))
     html.append("</figure>")
     return "\n".join(html)
+
 
 
 def _list_html(list_block: ListBlock, environment_counters, references, figure_counter, depth: int) -> str:
@@ -323,12 +312,13 @@ def _environment_html(environment: Environment, number: int, environment_counter
     identifier = f' id="{escape(environment.label, quote=True)}"' if environment.label else ""
     content = _content_html(environment.content, environment_counters, references, figure_counter, 0)
     if kind == "proof":
-        return f'<div class="proof-environment"{identifier}><div class="proof-heading">Proof</div><div class="proof-content">{content}</div><div class="proof-qed" aria-label="Q.E.D.">□</div></div>'
+        return f'<div class="box proof"{identifier}><div class="label">Proof</div><div class="proof-content">{content}</div><div class="qed">□</div></div>'
     label = environment.kind.capitalize()
-    heading = f'<span class="environment-label"><span class="environment-kind">{label}</span> <span class="environment-number">{number}</span></span>'
+    label_text = f"{label} {number}"
     if environment.title:
-        heading += f' <span class="environment-title">({escape(environment.title)})</span>'
-    return f'<div class="math-environment {kind}"{identifier}><div class="environment-heading">{heading}</div><div class="environment-content">{content}</div></div>'
+        label_text += f" — {escape(environment.title)}"
+    return f'<div class="box {kind}"{identifier}><div class="label">{label_text}</div>{content}</div>'
+
 
 
 def _content_html(items, environment_counters, references, figure_counter, list_depth: int = 0) -> str:
@@ -392,55 +382,76 @@ def _build_reference_index(document: Document):
 
 def _section_html(section: Section, number: int, environment_counters, references, figure_counter) -> str:
     identifier = escape(section.slug or "section", quote=True)
-    html = [f'<section class="article-section" id="{identifier}">', f'<h2><span class="section-number"><span class="section-symbol">§</span> {number}</span><span class="section-heading-text">{escape(section.title)}</span></h2>', _content_html(section.content, environment_counters, references, figure_counter)]
+    html = [
+        f'<section class="article-section" id="{identifier}">',
+        f'<h2><span class="num">{number}</span>{escape(section.title)}</h2>',
+        _content_html(section.content, environment_counters, references, figure_counter),
+    ]
     for sub_number, subsection in enumerate(section.subsections, 1):
         sub_identifier = escape(subsection.slug or "subsection", quote=True)
-        html.extend([f'<section class="article-subsection" id="{sub_identifier}">', f'<h3>{number}.{sub_number}. {escape(subsection.title)}</h3>', _content_html(subsection.content, environment_counters, references, figure_counter), "</section>"])
+        html.extend([
+            f'<section class="article-subsection" id="{sub_identifier}">',
+            f'<h3><span class="num">{number}.{sub_number}</span>{escape(subsection.title)}</h3>',
+            _content_html(subsection.content, environment_counters, references, figure_counter),
+            "</section>",
+        ])
     html.append("</section>")
     return "\n".join(html)
 
 
+
 def _gallery_html(document: Document) -> str:
-    """Render resolved remote gallery images with source links and credits."""
     if not document.gallery_items:
         return ""
     items = []
     for item in document.gallery_items:
-        title = escape(item.title or "NASA image", quote=True)
-        alt = escape(item.alt or item.title or "NASA image", quote=True)
+        title = escape(item.title or "Image", quote=True)
+        alt = escape(item.alt or item.title or "Image", quote=True)
         url = escape(item.url, quote=True)
-        source_url = escape(item.source_url or item.url, quote=True)
-        credit = escape(item.credit or "NASA")
+        full_url = escape(item.source_url or item.url, quote=True)
+        caption = escape(item.title or item.credit or "Image", quote=True)
         items.append(
-            f'<figure class="gallery-item">'
-            f'<a href="{source_url}" target="_blank" rel="noopener noreferrer">'
-            f'<img src="{url}" alt="{alt}" title="{title}" loading="lazy" referrerpolicy="no-referrer">'
-            f'</a>'
-            f'<figcaption>{credit}</figcaption>'
-            f'</figure>'
+            f'<button class="thumb" type="button" data-full="{full_url}" data-title="{title}" data-caption="{caption}" aria-label="Open {title}">'
+            f'<img src="{url}" alt="{alt}" loading="lazy" referrerpolicy="no-referrer"></button>'
         )
-    return (
-        '<section class="article-gallery" aria-label="Article image gallery">'
-        f'{"".join(items)}'
-        '</section>'
-    )
+    return '<div class="strip" id="nasa-gallery" aria-label="Article image gallery">' + "".join(items) + '</div>'
+
 
 
 def _breadcrumb_html(document: Document) -> str:
-    home_icon = (
-        '<svg class="breadcrumb-home-icon" viewBox="0 0 24 24" aria-hidden="true">'
-        '<path d="M3 10.8 12 3l9 7.8v9.2a1 1 0 0 1-1 1h-5.5v-6h-5v6H4a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>'
-        '<path d="M8.5 21v-6h7v6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>'
+    github_href = "https://github.com"
+    home_href = "/"
+    for button in document.buttons:
+        key = button.name.strip().lower()
+        if key == "github":
+            github_href = button.href
+        elif key == "home":
+            home_href = button.href
+    chunks = [
+        f'<a href="{escape(home_href, quote=True)}">Home</a>',
+        '<span class="sep">›</span>',
+    ]
+    if document.document_tag:
+        chunks.extend([f'<a href="#">{escape(document.document_tag)}</a>', '<span class="sep">›</span>'])
+    if document.folder:
+        chunks.extend([f'<a href="#">{escape(document.folder)}</a>', '<span class="sep">›</span>'])
+    chunks.append(f'<span class="current">{escape(document.article_title)}</span>')
+    icon_html = (
+        '<a href="' + escape(home_href, quote=True) + '" aria-label="Home" title="Home">'
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11l9-7 9 7"/><path d="M5 10v9h14v-9"/></svg></a>'
+        '<a href="' + escape(github_href, quote=True) + '" aria-label="GitHub" title="GitHub">'
+        '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.58 2 12.17c0 4.49 2.87 8.3 6.84 9.65.5.1.68-.22.68-.49 0-.24-.01-1.03-.01-1.87-2.79.61-3.38-1.22-3.38-1.22-.46-1.19-1.11-1.5-1.11-1.5-.9-.63.07-.62.07-.62 1 .07 1.53 1.05 1.53 1.05.89 1.55 2.34 1.1 2.91.84.09-.66.35-1.1.63-1.35-2.23-.26-4.57-1.14-4.57-5.06 0-1.12.39-2.03 1.03-2.75.1-.26-.45-1.3.1-2.7 0 0 .84-.27 2.75 1.05a9.3 9.3 0 0 1 5 0c1.91-1.32 2.75-1.05 2.75-1.05.55 1.4.2 2.44.1 2.7-.64.72-1.03 1.63-1.03 2.75 0 3.93 2.34 4.79 4.58 5.05-.36.32-.68.94-.68 1.9v2.81c0 .34.18.6.69.49A10.02 10.02 0 0 0 22 12.17C22 6.58 17.52 2 12 2z"/></svg></a>'
+        '<button class="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">'
+        '<svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.2M12 19.8V22M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2 12h2.2M19.8 12H22M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/></svg>'
+        '<svg class="moon" viewBox="0 0 24 24" fill="currentColor"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>'
+        '</button>'
     )
-    chunks = [f'<a class="breadcrumb-home" href="/" aria-label="Home">{home_icon}</a>']
-    for index, value in enumerate((document.document_tag, document.folder, document.article_title)):
-        if not value:
-            continue
-        chunks.append('<span class="breadcrumb-separator" aria-hidden="true">›</span>')
-        cls = "breadcrumb-current" if index == 2 else "breadcrumb-text"
-        chunks.append(f'<span class="{cls}">{escape(value)}</span>')
-    date_html = f'<time class="breadcrumb-date">{escape(document.date)}</time>' if document.date else ""
-    return '<div class="article-breadcrumb" aria-label="Breadcrumb"><div class="breadcrumb-trail">' + "".join(chunks) + '</div>' + date_html + '</div>'
+    date_html = f'<time>{escape(document.date)}</time>' if document.date else ""
+    return (
+        '<div class="metabar"><nav class="crumbs">' + "".join(chunks) +
+        '</nav><div class="icons">' + icon_html + '</div></div>'
+    )
+
 
 
 
@@ -448,12 +459,10 @@ def render(document: Document, template_path: str | Path) -> str:
     template = Path(template_path).read_text(encoding="utf-8")
     buttons = []
     for button in document.buttons:
-        color = escape(button.color, quote=True)
-        dark_color = escape(_dark_mode_color(button.color), quote=True)
-        icon = _navigation_icon(button.name)
-        icon_html = f'<span class="nav-icon-wrap">{icon}</span>' if icon else ''
-        buttons.append(f'<a class="nav-button" href="{escape(button.href, quote=True)}" style="--button-color: {color}; --button-color-dark: {dark_color};">{icon_html}<span class="nav-label">{escape(button.name)}</span></a>')
-    if document.banner:
+        buttons.append(
+            f'<li><a href="{escape(button.href, quote=True)}">{escape(button.name)}</a></li>'
+        )
+
         banner = f'<div class="site-banner"><img src="{escape(document.banner, quote=True)}" alt="" loading="eager"></div>'
     else:
         banner = '<div class="site-banner site-banner-empty"></div>'
@@ -473,9 +482,23 @@ def render(document: Document, template_path: str | Path) -> str:
     tags = "\n".join(
         f'<span class="article-tag">{escape(tag)}</span>' for tag in document.tags
     )
-    tag_block = f'<div class="article-tags" aria-label="Tags">{"".join([tags])}</div>' if tags else ""
-    date_meta = f' · <time>{escape(document.date)}</time>' if document.date else ""
-    replacements = {"{{GALLERY}}": _gallery_html(document), "{{ARTICLE_TITLE}}": escape(document.article_title), "{{AUTHOR}}": escape(document.author), "{{ARTICLE_DATE_META}}": date_meta, "{{ARTICLE_READ_META}}": "", "{{TAGS}}": tag_block, "{{BREADCRUMB}}": _breadcrumb_html(document), "{{BANNER}}": banner, "{{BUTTONS}}": "\n".join(buttons), "{{TOC}}": "\n".join(toc), "{{ARTICLE}}": "\n".join(article), "{{RELATED_LINKS}}": "\n".join(related)}
+    tag_block = "\n".join(f'<span>{escape(tag)}</span>' for tag in document.tags)
+    tag_block = f'<div class="tags">{tag_block}</div>' if tag_block else ""
+    date_meta = f'<span>·</span><time>{escape(document.date)}</time>' if document.date else ""
+    section_label = escape(document.folder or document.document_tag or "Reading")
+    replacements = {
+        "{{GALLERY}}": _gallery_html(document),
+        "{{ARTICLE_TITLE}}": escape(document.article_title),
+        "{{AUTHOR}}": escape(document.author),
+        "{{ARTICLE_DATE_META}}": date_meta,
+        "{{ARTICLE_SECTION_LABEL}}": section_label,
+        "{{TAGS}}": tag_block,
+        "{{BREADCRUMB}}": _breadcrumb_html(document),
+        "{{BUTTONS}}": "\n".join(buttons),
+        "{{TOC}}": "\n".join(toc),
+        "{{ARTICLE}}": "\n".join(article),
+        "{{RELATED_LINKS}}": "\n".join(related),
+    }
     for key, value in replacements.items():
         template = template.replace(key, value)
     return template
