@@ -421,11 +421,10 @@ def _gallery_html(document: Document) -> str:
         title = escape(item.title or "Image", quote=True)
         alt = escape(item.alt or item.title or "Image", quote=True)
         url = escape(item.url, quote=True)
-        full_url = escape(item.source_url or item.url, quote=True)
-        caption = escape(item.title or item.credit or "Image", quote=True)
+        source_url = escape(item.source_url or item.url, quote=True)
         items.append(
-            f'<button class="thumb" type="button" data-full="{full_url}" data-title="{title}" data-caption="{caption}" aria-label="Open {title}">'
-            f'<img src="{url}" alt="{alt}" loading="lazy" referrerpolicy="no-referrer"></button>'
+            f'<a class="thumb" href="{source_url}" target="_blank" rel="noopener noreferrer" aria-label="Open {title} source">'
+            f'<img src="{url}" alt="{alt}" loading="lazy" referrerpolicy="no-referrer"></a>'
         )
     return '<div class="strip" id="nasa-gallery" aria-label="Article image gallery">' + "".join(items) + '</div>'
 
