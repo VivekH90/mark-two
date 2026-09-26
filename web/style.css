@@ -55,7 +55,6 @@
   }
   .brand{display:flex;align-items:baseline;gap:10px;}
   .brand b{font-size:16.5px;}
-  .brand span{font-size:12.5px;color:var(--nav-brand-sub);}
   .navbox nav ul{list-style:none;display:flex;gap:8px;margin:0;padding:0;flex-wrap:wrap;}
   .navbox nav a{
     text-decoration:none;font-size:13.5px;font-weight:600;padding:7px 14px;border-radius:10px;
@@ -275,8 +274,7 @@
   }
   @media (max-width:560px){article.reading{font-size:1rem;} .strip .thumb{width:52px;height:44px;}}
 
-  footer{margin-top:24px;padding:14px 2px;font-size:12.5px;color:var(--sub);}
-  :focus-visible{outline:2px solid var(--lav-b);outline-offset:2px;}
+    :focus-visible{outline:2px solid var(--lav-b);outline-offset:2px;}
 /* Layout hardening */
 .outerbox,.innerbox,.reading,.box,.rail,.rail-card{min-width:0;}
 .reading{overflow-wrap:anywhere;}
