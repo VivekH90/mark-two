@@ -450,13 +450,24 @@ def _breadcrumb_html(document: Document) -> str:
         chunks.extend([f'<a href="#">{escape(document.folder)}</a>', '<span class="sep">›</span>'])
     chunks.append(f'<span class="current">{escape(document.article_title)}</span>')
     icon_html = (
-        '<a href="' + escape(home_href, quote=True) + '" aria-label="Home" title="Home">'
-        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11l9-7 9 7"/><path d="M5 10v9h14v-9"/></svg></a>'
-        '<a href="' + escape(github_href, quote=True) + '" aria-label="GitHub" title="GitHub">'
-        '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.58 2 12.17c0 4.49 2.87 8.3 6.84 9.65.5.1.68-.22.68-.49 0-.24-.01-1.03-.01-1.87-2.79.61-3.38-1.22-3.38-1.22-.46-1.19-1.11-1.5-1.11-1.5-.9-.63.07-.62.07-.62 1 .07 1.53 1.05 1.53 1.05.89 1.55 2.34 1.1 2.91.84.09-.66.35-1.1.63-1.35-2.23-.26-4.57-1.14-4.57-5.06 0-1.12.39-2.03 1.03-2.75.1-.26-.45-1.3.1-2.7 0 0 .84-.27 2.75 1.05a9.3 9.3 0 0 1 5 0c1.91-1.32 2.75-1.05 2.75-1.05.55 1.4.2 2.44.1 2.7-.64.72-1.03 1.63-1.03 2.75 0 3.93 2.34 4.79 4.58 5.05-.36.32-.68.94-.68 1.9v2.81c0 .34.18.6.69.49A10.02 10.02 0 0 0 22 12.17C22 6.58 17.52 2 12 2z"/></svg></a>'
+        '<a class="icon-button" href="' + escape(home_href, quote=True) + '" aria-label="Home" title="Home">'
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+        '<path d="M5 12l-2 0l9 -9l9 9l-2 0"/>'
+        '<path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"/>'
+        '<path d="M10 12h4v4h-4l0 -4"/>'
+        '</svg></a>'
+        '<a class="icon-button" href="' + escape(github_href, quote=True) + '" aria-label="GitHub" title="GitHub">'
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+        '<path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5"/>'
+        '</svg></a>'
         '<button class="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">'
-        '<svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.2M12 19.8V22M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2 12h2.2M19.8 12H22M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/></svg>'
-        '<svg class="moon" viewBox="0 0 24 24" fill="currentColor"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>'
+        '<svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+        '<path d="M8 12a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/>'
+        '<path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7"/>'
+        '</svg>'
+        '<svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+        '<path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454l0 .008"/>'
+        '</svg>'
         '</button>'
     )
     date_html = f'<time>{escape(document.date)}</time>' if document.date else ""
