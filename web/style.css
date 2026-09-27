@@ -10,6 +10,13 @@
     --body-bg:#FFFDF6; --dots:#E4D8BD;
     --card-white:#fff;
     --def-text:#0A3E3A; --axiom-text:#4E3705; --theorem-text:#5C1B08;
+    --lemma:#C9E8D5; --lemma-b:#32764A; --lemma-text:#164025;
+    --corollary:#DCCCF6; --corollary-b:#6640A8; --corollary-text:#332052;
+    --remark:#F1D9C8; --remark-b:#9B5B2C; --remark-text:#5A3217;
+    --example:#C9E0F3; --example-b:#2E6290; --example-text:#183A55;
+    --conjecture:#F2C7D8; --conjecture-b:#9B3157; --conjecture-text:#5D1934;
+    --notation:#E0E6CC; --notation-b:#68763D; --notation-text:#39421F;
+    --warning:#F7D7A4; --warning-b:#B56000; --warning-text:#603300;
     --xlink:#4A2A82; --xlink-b:#B79AE0;
     --crumb-text:#5A1608;
     --article-text:#2B2730;
@@ -29,6 +36,13 @@
     --body-bg:#171512; --dots:#2E2A22;
     --card-white:#211D16;
     --def-text:#B7EDE6; --axiom-text:#F0DE9E; --theorem-text:#F5C5AE;
+    --lemma:#183D28; --lemma-b:#7ED39A; --lemma-text:#C6F2D3;
+    --corollary:#2E2149; --corollary-b:#B090E6; --corollary-text:#E6DBFA;
+    --remark:#432617; --remark-b:#F0AA73; --remark-text:#F2C5A2;
+    --example:#193348; --example-b:#76B4E1; --example-text:#C7E5F7;
+    --conjecture:#481C31; --conjecture-b:#E995B5; --conjecture-text:#F4C8D9;
+    --notation:#30351F; --notation-b:#AEBE6D; --notation-text:#E1E8BE;
+    --warning:#4A2D0A; --warning-b:#F0AE55; --warning-text:#F5D19B;
     --xlink:#D8C4F5; --xlink-b:#6B3FA8;
     --crumb-text:#F0C0A2;
     --article-text:#EDE6D4;
@@ -187,6 +201,20 @@
   .box.axiom .label{color:var(--axiom-text);}
   .box.theorem,.box.proposition{--bg:var(--coral);--b:var(--coral-b);color:var(--theorem-text);}
   .box.theorem .label,.box.proposition .label{color:var(--theorem-text);}
+  .box.lemma{--bg:var(--lemma);--b:var(--lemma-b);color:var(--lemma-text);}
+  .box.lemma .label{color:var(--lemma-text);}
+  .box.corollary{--bg:var(--corollary);--b:var(--corollary-b);color:var(--corollary-text);}
+  .box.corollary .label{color:var(--corollary-text);}
+  .box.remark{--bg:var(--remark);--b:var(--remark-b);color:var(--remark-text);}
+  .box.remark .label{color:var(--remark-text);}
+  .box.example{--bg:var(--example);--b:var(--example-b);color:var(--example-text);}
+  .box.example .label{color:var(--example-text);}
+  .box.conjecture{--bg:var(--conjecture);--b:var(--conjecture-b);color:var(--conjecture-text);}
+  .box.conjecture .label{color:var(--conjecture-text);}
+  .box.notation{--bg:var(--notation);--b:var(--notation-b);color:var(--notation-text);}
+  .box.notation .label{color:var(--notation-text);}
+  .box.warning{--bg:var(--warning);--b:var(--warning-b);color:var(--warning-text);}
+  .box.warning .label{color:var(--warning-text);}
   .box.proof{--bg:var(--card-white);--b:var(--gray-b);color:var(--article-text);}
   .box.proof .label{font-style:italic;font-weight:600;color:var(--sub);}
   .qed{float:right;color:var(--coral-b);font-weight:700;}
