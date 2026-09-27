@@ -4,6 +4,7 @@ import argparse
 import shutil
 from pathlib import Path
 
+from .catalog import update_catalog
 from .gallery import resolve_gallery
 from .parser import parse_file
 from .renderer import render
@@ -64,14 +65,26 @@ def main() -> None:
         default=str(default_template),
         help="HTML template path (default: Mark Two's built-in template)",
     )
+    parser.add_argument(
+        "--index",
+        help="Article catalog path (default: articles.json in the nearest project root)",
+    )
     args = parser.parse_args()
 
     source_path = Path(args.source).resolve()
     output_path = Path(args.output).resolve() if args.output else source_path.parent / "index.html"
 
     output_path = compile_document(source_path, output_path, args.template)
+    document = parse_file(source_path)
+    index_path = update_catalog(
+        document=document,
+        source_path=source_path,
+        output_path=output_path,
+        index_path=args.index,
+    )
     print(f"Mark Two: wrote {output_path}")
     print(f"Mark Two: assets copied to {output_path.parent}")
+    print(f"Mark Two: updated catalog {index_path}")
 
 
 if __name__ == "__main__":
