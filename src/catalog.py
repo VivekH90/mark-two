@@ -191,6 +191,8 @@ def update_catalog(
 
     if matching_indexes:
         first = matching_indexes[0]
+        if len(matching_indexes) == 1 and articles[first] == entry:
+            return catalog_path
         articles[first] = entry
         for index in reversed(matching_indexes[1:]):
             del articles[index]
