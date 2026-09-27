@@ -2,6 +2,7 @@
 
 import argparse
 import shutil
+import sys
 from pathlib import Path
 
 from .catalog import update_catalog
@@ -81,6 +82,10 @@ def main() -> None:
     )
     homepage_parser.add_argument("-o", "--output", help="Homepage output path")
     homepage_parser.add_argument("--template", help="Homepage template path")
+
+    known_commands = {"compile", "init", "config", "build", "-h", "--help"}
+    if len(sys.argv) > 1 and sys.argv[1] not in known_commands:
+        sys.argv.insert(1, "compile")
 
     args = parser.parse_args()
     root = find_project_root()
