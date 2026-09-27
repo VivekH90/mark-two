@@ -90,6 +90,16 @@ def _article_url(article: dict[str, Any]) -> str:
     return str(article.get("url") or "#")
 
 
+def _email_url(value: Any) -> str:
+    """Turn a configured email address into a mailto link."""
+    email = str(value or "").strip()
+    if not email:
+        return "#"
+    if email.casefold().startswith("mailto:"):
+        return email
+    return f"mailto:{email}"
+
+
 def _render_featured(article: dict[str, Any] | None) -> str:
     if article is None:
         return '<p class="empty-msg" style="display:block">No featured article configured.</p>'
@@ -216,7 +226,7 @@ def build_homepage(
         "BIO": escape(str(config.get("bio") or "")),
         "AVATAR": escape(avatar),
         "GITHUB_URL": escape(str(config.get("github") or "#"), quote=True),
-        "EMAIL_URL": escape(str(config.get("email") or "#"), quote=True),
+        "EMAIL_URL": escape(_email_url(config.get("email")), quote=True),
         "INSTAGRAM_URL": escape(str(config.get("instagram") or "#"), quote=True),
         "ABOUT_URL": escape(str(config.get("about") or "#"), quote=True),
         "ARCHIVE_URL": escape(str(config.get("archive") or "#"), quote=True),
