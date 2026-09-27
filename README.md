@@ -38,9 +38,7 @@ By default, the compiler writes a complete web bundle beside the source file:
 ```text
 completeness/
 ├── completeness.mt
-├── index.html
-├── style.css
-└── script.js
+└── index.html
 ```
 
 A custom output path can be selected with:
@@ -575,3 +573,16 @@ Normal prose goes here.
 ```
 
 instead.
+
+
+## Build output
+
+Mark Two keeps the homepage/article template assets separate in the source tree:
+
+- `web/index.html` for HTML
+- `web/style.css` for CSS
+- `web/script.js` for JavaScript
+
+During compilation, Mark Two inlines the local stylesheet and JavaScript into the generated `index.html`. External assets, such as the MathJax CDN script, remain external.
+
+The result is a single self-contained HTML page, which is convenient for static hosting and platforms that impose a page/file limit.
