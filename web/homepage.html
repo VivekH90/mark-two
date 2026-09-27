@@ -244,7 +244,7 @@
 
   <section id="archive">
     <div class="sec-head"><h2>Archive</h2><a href="#recent">Back to top ↑</a></div>
-    <p class="empty-msg" id="empty-msg">No notes match your search or filter.</p>
+    <p class="empty-msg" id="empty-msg">No documents match your search or filter.</p>
     {{ARCHIVE}}
     <a class="back-top" href="#recent">↑ Back to top</a>
   </section>  </div>
@@ -291,9 +291,10 @@
     var q = searchInput.value.trim().toLowerCase();
     var visible = 0;
     rows.forEach(function(r){
-      var title = r.querySelector('.ttl').textContent.toLowerCase();
-      var matchesTopic = !activeTopic || r.classList.contains(activeTopic);
-      var matchesQuery = !q || title.includes(q);
+      var tags = (r.dataset.tags || '').split('|').filter(Boolean);
+      var searchText = (r.dataset.search || r.querySelector('.ttl').textContent).toLowerCase();
+      var matchesTopic = !activeTopic || tags.includes(activeTopic);
+      var matchesQuery = !q || searchText.includes(q);
       var show = matchesTopic && matchesQuery;
       r.classList.toggle('is-hidden', !show);
       if(show) visible++;
