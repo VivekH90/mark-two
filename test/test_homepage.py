@@ -27,3 +27,19 @@ def test_email_address_becomes_mailto_url():
     assert _email_url("vkalita2006@gmail.com") == "mailto:vkalita2006@gmail.com"
     assert _email_url("mailto:vkalita2006@gmail.com") == "mailto:vkalita2006@gmail.com"
     assert _email_url("") == "#"
+
+
+
+def test_topic_list_is_limited_to_five():
+    articles = [
+        {"tags": ["Tag A"]},
+        {"tags": ["Tag B"]},
+        {"tags": ["Tag C"]},
+        {"tags": ["Tag D"]},
+        {"tags": ["Tag E"]},
+        {"tags": ["Tag F"]},
+    ]
+    html = _render_topics(articles)
+    assert "Tag A (1)" in html
+    assert "Tag E (1)" in html
+    assert "Tag F (1)" not in html

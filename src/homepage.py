@@ -21,7 +21,7 @@ DATE_FORMATS = (
     "%B %d, %Y",
     "%b %d, %Y",
 )
-TOPIC_LIMIT = 12
+TOPIC_LIMIT = 5
 RECENT_LIMIT = 4
 ARCHIVE_LIMIT = 12
 
