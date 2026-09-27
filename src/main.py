@@ -1,6 +1,7 @@
 """Command-line entry point for Mark Two."""
 
 import argparse
+import sys
 from pathlib import Path
 
 from .bundler import inline_web_assets
