@@ -1,4 +1,4 @@
-from src.homepage import _render_topics, _sort_key
+from src.homepage import _email_url, _render_topics, _sort_key
 
 
 def test_topic_counts_are_ordered_by_usage():
@@ -21,3 +21,9 @@ def test_article_dates_sort_newest_first():
     ]
     ordered = sorted(articles, key=_sort_key, reverse=True)
     assert [article["title"] for article in ordered] == ["New", "Old"]
+
+
+def test_email_address_becomes_mailto_url():
+    assert _email_url("vkalita2006@gmail.com") == "mailto:vkalita2006@gmail.com"
+    assert _email_url("mailto:vkalita2006@gmail.com") == "mailto:vkalita2006@gmail.com"
+    assert _email_url("") == "#"
