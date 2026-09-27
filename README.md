@@ -55,6 +55,67 @@ A custom HTML template can be selected with:
 mark-two completeness.mt --template path/to/index.html
 ```
 
+
+## Article catalog
+
+Each compilation also updates a generated `articles.json` catalog. The catalog is
+intended for a site's homepage, tag pages, and search index. It is generated from
+the metadata already present in the `.mt` source, so the source document remains
+the source of truth.
+
+For example:
+
+```text
+@documenttitle{Physics}
+@folder{Electromagnetism}
+@author{Vivek Sharma}
+@date{27 September 2026}
+@title{Field Equations}
+@tags{Electromagnetism, Classical Field Theory}
+```
+
+produces an article record containing fields such as:
+
+```json
+{
+  "id": "physics/electromagnetism/field_equations",
+  "title": "Field Equations",
+  "subject": "Physics",
+  "folder": "Electromagnetism",
+  "author": "Vivek Sharma",
+  "date": "27 September 2026",
+  "tags": ["Electromagnetism", "Classical Field Theory"],
+  "url": "/physics/electromagnetism/field_equations/",
+  "source": "physics/electromagnetism/field_equations.mt",
+  "sections": ["Maxwell's Equations"]
+}
+```
+
+By default, Mark Two places the catalog at `articles.json` in the nearest project
+root, detected from `.git` or `pyproject.toml`. A different catalog location can
+be selected with:
+
+```bash
+mark-two completeness.mt --index path/to/articles.json
+```
+
+When one article is compiled, Mark Two replaces only that article's logical record
+in the catalog. Existing article records keep their order and contents, while a new
+article is appended. If the record has not changed, the catalog is left untouched.
+The file is written atomically so an interrupted compile cannot leave a half-written
+JSON file.
+
+This makes the build model:
+
+```text
+.mt source
+   |
+   +--> HTML page
+   |
+   +--> articles.json metadata index
+```
+
+
 Mark Two can also be invoked as a Python module:
 
 ```bash
