@@ -1,9 +1,9 @@
 """Command-line entry point for Mark Two."""
 
 import argparse
-import shutil
 from pathlib import Path
 
+from .bundler import inline_web_assets
 from .catalog import update_catalog
 from .gallery import resolve_gallery
 from .parser import parse_file
@@ -31,16 +31,8 @@ def compile_document(
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
     output = render(document, template_path)
+    output = inline_web_assets(output, template_path.parent)
     output_path.write_text(output, encoding="utf-8")
-
-    asset_dir = template_path.parent
-    for asset_name in ("style.css", "script.js"):
-        source_asset = asset_dir / asset_name
-        if not source_asset.is_file():
-            raise FileNotFoundError(
-                f"Required template asset not found: {source_asset}"
-            )
-        shutil.copy2(source_asset, output_path.parent / asset_name)
 
     return output_path
 
