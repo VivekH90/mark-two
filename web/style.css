@@ -215,9 +215,9 @@
   .box.notation .label{color:var(--notation-text);}
   .box.warning{--bg:var(--warning);--b:var(--warning-b);color:var(--warning-text);}
   .box.warning .label{color:var(--warning-text);}
-  .box.proof{--bg:var(--card-white);--b:var(--gray-b);color:var(--article-text);border-style:dotted;}
+  .box.proof{--bg:var(--card-white);--b:var(--gray-b);color:var(--article-text);border-style:dotted;position:relative;padding-bottom:42px;}
   .box.proof .label{font-style:italic;font-weight:600;color:var(--sub);}
-  .qed{float:right;color:var(--coral-b);font-weight:700;}
+  .qed{position:absolute;right:18px;bottom:10px;color:var(--coral-b);font-weight:700;}
 
   ol.refs{padding-left:1.2em;font-size:0.95rem;color:var(--article-text);}
   ol.refs li{margin-bottom:9px;}
