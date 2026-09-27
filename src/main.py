@@ -6,8 +6,10 @@ from pathlib import Path
 
 from .catalog import update_catalog
 from .gallery import resolve_gallery
+from .homepage import build_homepage
 from .parser import parse_file
 from .renderer import render
+from .site_config import find_project_root, get_config, init_site, set_config
 
 
 def compile_document(
@@ -46,45 +48,86 @@ def compile_document(
 
 
 def main() -> None:
-    # main.py lives in <mark-two>/src/, so this remains valid even when the
-    # command is launched from a completely different working directory.
     mark_two_root = Path(__file__).resolve().parent.parent
     default_template = mark_two_root / "web" / "index.html"
 
     parser = argparse.ArgumentParser(
-        description="Compile a Mark Two article to a self-contained HTML bundle."
+        description="Build websites from Mark Two source files."
     )
-    parser.add_argument("source", help="Path to the Mark Two source file")
-    parser.add_argument(
-        "-o",
-        "--output",
-        help="Output HTML path (default: index.html beside the source file)",
+    subparsers = parser.add_subparsers(dest="command")
+
+    compile_parser = subparsers.add_parser("compile", help="Compile one Mark Two article into HTML.")
+    compile_parser.add_argument("source", help="Path to the Mark Two source file")
+    compile_parser.add_argument("-o", "--output", help="Output HTML path")
+    compile_parser.add_argument("--template", default=str(default_template), help="HTML template path")
+    compile_parser.add_argument("--index", help="Article catalog path")
+
+    init_parser = subparsers.add_parser("init", help="Initialize a Mark Two site configuration.")
+    init_parser.add_argument("--force", action="store_true", help="Replace an existing site.json")
+
+    config_parser = subparsers.add_parser("config", help="Read or change site configuration.")
+    config_subparsers = config_parser.add_subparsers(dest="config_command")
+    config_set = config_subparsers.add_parser("set", help="Set a configuration value")
+    config_set.add_argument("key", help="Configuration key")
+    config_set.add_argument("value", help="Configuration value")
+    config_get = config_subparsers.add_parser("get", help="Get a configuration value")
+    config_get.add_argument("key", nargs="?", help="Configuration key")
+
+    build_parser = subparsers.add_parser("build", help="Build generated site pages.")
+    build_subparsers = build_parser.add_subparsers(dest="build_target")
+    homepage_parser = build_subparsers.add_parser(
+        "homepage",
+        help="Build the homepage from site.json and articles.json.",
     )
-    parser.add_argument(
-        "--template",
-        default=str(default_template),
-        help="HTML template path (default: Mark Two's built-in template)",
-    )
-    parser.add_argument(
-        "--index",
-        help="Article catalog path (default: articles.json in the nearest project root)",
-    )
+    homepage_parser.add_argument("-o", "--output", help="Homepage output path")
+    homepage_parser.add_argument("--template", help="Homepage template path")
+
     args = parser.parse_args()
+    root = find_project_root()
 
-    source_path = Path(args.source).resolve()
-    output_path = Path(args.output).resolve() if args.output else source_path.parent / "index.html"
+    if args.command == "init":
+        path = init_site(root, force=args.force)
+        print(f"Mark Two: initialized {path}")
+        return
 
-    output_path = compile_document(source_path, output_path, args.template)
-    document = parse_file(source_path)
-    index_path = update_catalog(
-        document=document,
-        source_path=source_path,
-        output_path=output_path,
-        index_path=args.index,
-    )
-    print(f"Mark Two: wrote {output_path}")
-    print(f"Mark Two: assets copied to {output_path.parent}")
-    print(f"Mark Two: updated catalog {index_path}")
+    if args.command == "config":
+        if args.config_command == "set":
+            path = set_config(root, args.key, args.value)
+            print(f"Mark Two: updated {path}")
+            return
+        if args.config_command == "get":
+            value = get_config(root, args.key)
+            if isinstance(value, dict):
+                import json
+                print(json.dumps(value, indent=2, ensure_ascii=False))
+            else:
+                print(value)
+            return
+        config_parser.print_help()
+        return
+
+    if args.command == "build" and args.build_target == "homepage":
+        output = build_homepage(root, output=args.output, template=args.template)
+        print(f"Mark Two: wrote {output}")
+        return
+
+    if args.command == "compile":
+        source_path = Path(args.source).resolve()
+        output_path = Path(args.output).resolve() if args.output else source_path.parent / "index.html"
+        output_path = compile_document(source_path, output_path, args.template)
+        document = parse_file(source_path)
+        index_path = update_catalog(
+            document=document,
+            source_path=source_path,
+            output_path=output_path,
+            index_path=args.index,
+        )
+        print(f"Mark Two: wrote {output_path}")
+        print(f"Mark Two: assets copied to {output_path.parent}")
+        print(f"Mark Two: updated catalog {index_path}")
+        return
+
+    parser.print_help()
 
 
 if __name__ == "__main__":
