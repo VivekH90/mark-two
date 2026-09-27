@@ -188,7 +188,7 @@
   article.reading a.xlink{color:var(--xlink);text-decoration:none;border-bottom:2px solid var(--xlink-b);}
   article.reading a.xlink:hover{background:var(--lav);}
 
-  figure.diagram{margin:28px 0;padding:20px;background:var(--card-white);border:2.5px solid var(--gray-b);border-radius:14px;text-align:center;}
+  figure.diagram{margin:28px 0;padding:20px 0;background:transparent;border:0;border-radius:0;text-align:center;}
   figure.diagram svg{max-width:300px;margin:0 auto;display:block;}
   figcaption{font-size:12.5px;color:var(--sub);margin-top:10px;}
 
@@ -215,7 +215,7 @@
   .box.notation .label{color:var(--notation-text);}
   .box.warning{--bg:var(--warning);--b:var(--warning-b);color:var(--warning-text);}
   .box.warning .label{color:var(--warning-text);}
-  .box.proof{--bg:var(--card-white);--b:var(--gray-b);color:var(--article-text);}
+  .box.proof{--bg:var(--card-white);--b:var(--gray-b);color:var(--article-text);border-style:dotted;}
   .box.proof .label{font-style:italic;font-weight:600;color:var(--sub);}
   .qed{float:right;color:var(--coral-b);font-weight:700;}
 
