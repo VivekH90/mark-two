@@ -18,7 +18,7 @@ const DIRECTIVE_SNIPPETS = [
   ["italic", '@italic{${1:text}}'],
   ["color", '@color{${1:blue}, ${2:text}}'],
   ["button", '@button{${1:Home}, href = ${2:/}, color = ${3:black}}'],
-  ["gallery", '@gallery{source = ${1:NASA}, query = ${2:black holes}, count = ${3:7}}'],
+  ["gallery", '@gallery{source = ${1:Openverse}, query = ${2:black holes}, count = ${3:7}}'],
 ];
 
 const ENVIRONMENT_SNIPPETS = [
@@ -44,6 +44,30 @@ function activate(context) {
     {
       provideCompletionItems(document, position) {
         const line = document.lineAt(position.line).text.slice(0, position.character);
+
+        const gallerySourceMatch = line.match(/@gallery\{[^}]*\bsource\s*=\s*([A-Za-z\/]*)$/);
+        if (gallerySourceMatch) {
+          const typed = gallerySourceMatch[1];
+          const start = position.character - typed.length;
+          const range = new vscode.Range(position.line, start, position.line, position.character);
+          return [
+            "NASA",
+            "Openverse",
+            "Wikimedia",
+            "Met",
+            "Internet Archive",
+            "ESA/Hubble"
+          ]
+            .filter(name => name.toLowerCase().startsWith(typed.toLowerCase()))
+            .map(name => {
+              const item = new vscode.CompletionItem(name, vscode.CompletionItemKind.Value);
+              item.insertText = name;
+              item.filterText = name;
+              item.detail = "Mark Two gallery source";
+              item.range = range;
+              return item;
+            });
+        }
 
         const environmentMatch = line.match(/@(begin|end)\(\s*([A-Za-z]*)$/);
         if (environmentMatch) {
