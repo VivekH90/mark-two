@@ -448,7 +448,66 @@ A reference can also target a page/HTML URL:
 
 The `@gallery` directive can build a document-level remote image gallery at compile time.
 
-NASA is currently supported:
+The supported login-free providers are:
+
+- `NASA`
+- `Openverse`
+- `Wikimedia` (also accepts `Wikimedia Commons`)
+- `Met` (The Metropolitan Museum of Art)
+- `Internet Archive`
+- `ESA/Hubble` (also accepts `ESA`, `ESA Hubble`, or `esahubble`)
+
+For example:
+
+```text
+@gallery{
+    source = Openverse,
+    query = electromagnetic field,
+    count = 7
+}
+```
+
+Wikimedia Commons:
+
+```text
+@gallery{
+    source = Wikimedia,
+    query = James Clerk Maxwell,
+    count = 7
+}
+```
+
+The Met:
+
+```text
+@gallery{
+    source = Met,
+    query = astronomy,
+    count = 7
+}
+```
+
+Internet Archive:
+
+```text
+@gallery{
+    source = Internet Archive,
+    query = physics photographs,
+    count = 7
+}
+```
+
+ESA/Hubble:
+
+```text
+@gallery{
+    source = ESA/Hubble,
+    query = nebula,
+    count = 7
+}
+```
+
+NASA remains available:
 
 ```text
 @gallery{
@@ -458,18 +517,18 @@ NASA is currently supported:
 }
 ```
 
-An optional deterministic seed can be supplied:
+An optional deterministic seed can be supplied to every provider:
 
 ```text
 @gallery{
-    source = NASA,
+    source = Openverse,
     query = gravitational waves,
     count = 6,
     seed = 42
 }
 ```
 
-The compiler resolves image metadata and keeps the resulting image URLs in the generated HTML. Image files are not copied into the repository.
+The compiler resolves image metadata and keeps the resulting remote image URLs in the generated HTML. Image files are not copied into the repository.
 
 ## Generated web page
 
