@@ -38,6 +38,21 @@ const ENVIRONMENT_SNIPPETS = [
   ["itemize", '@begin(itemize)\n@item{\${1:First item}}\n@item{\${2:Second item}}\n@end(itemize)'],
 ];
 
+function makeCompletionRange(document, position, start, closingCharacter) {
+  const line = document.lineAt(position.line).text;
+  const endCharacter =
+    line[position.character] === closingCharacter
+      ? position.character + 1
+      : position.character;
+
+  return new vscode.Range(
+    position.line,
+    start,
+    position.line,
+    endCharacter
+  );
+}
+
 function activate(context) {
   const provider = vscode.languages.registerCompletionItemProvider(
     { language: "mark-two" },
@@ -62,11 +77,12 @@ function activate(context) {
           const typed = environmentMatch[3];
           const fullMatch = environmentMatch[0];
           const start = position.character - fullMatch.length;
-          const range = new vscode.Range(
-            position.line,
+          const closingCharacter = environmentMatch[2] === "(" ? ")" : "}";
+          const range = makeCompletionRange(
+            document,
+            position,
             start,
-            position.line,
-            position.character
+            closingCharacter
           );
 
           return ENVIRONMENT_SNIPPETS
