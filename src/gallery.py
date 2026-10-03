@@ -307,7 +307,7 @@ def fetch_met_gallery(spec: GallerySpec) -> list[GalleryItem]:
         title = _clean_text(item.get("title", ""))
         artist = _clean_text(item.get("artistDisplayName", ""))
         department = _clean_text(item.get("department", "The Met"))
-        source_url = f"https://www.metmuseum.org/art/collection/search/{quote(str(object_id), safe="")}"
+        source_url = f"https://www.metmuseum.org/art/collection/search/{quote(str(object_id), safe='')}"
 
         gallery.append(GalleryItem(
             url=url,
