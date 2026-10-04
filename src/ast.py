@@ -135,6 +135,7 @@ class Document:
     folder: str = ""
     author: str = ""
     article_title: str = ""
+    description: str = ""
     date: str = ""
     tags: List[str] = field(default_factory=list)
     buttons: List[Button] = field(default_factory=list)
