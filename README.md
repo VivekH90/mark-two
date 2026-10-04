@@ -69,6 +69,7 @@ For example:
 @author{Vivek Sharma}
 @date{27 September 2026}
 @title{Field Equations}
+@description{A derivation of the electromagnetic field equations from the Lagrangian formulation.}
 @tags{Electromagnetism, Classical Field Theory}
 ```
 
@@ -78,6 +79,7 @@ produces an article record containing fields such as:
 {
   "id": "physics/electromagnetism/field_equations",
   "title": "Field Equations",
+  "description": "A derivation of the electromagnetic field equations from the Lagrangian formulation.",
   "subject": "Physics",
   "folder": "Electromagnetism",
   "author": "Vivek Sharma",
@@ -157,6 +159,7 @@ Common document-level directives are:
 | `@author` | Sets the author name. | `@author{Vivek}` |
 | `@date` | Sets the document date. | `@date{26 September 2026}` |
 | `@title` | Sets the article title. | `@title{Electromagnetic Lagrangian}` |
+| `@description` | Sets the short description used by the homepage article cards. | `@description{A short description of the article.}` |
 | `@tags` | Adds comma-separated article tags. | `@tags{Electromagnetism, Classical Field Theory}` |
 | `@button` | Adds a navigation button. | `@button{GitHub, href = https://github.com/VivekH90/blog}` |
 | `@gallery` | Adds a remote image gallery. | `@gallery{source = NASA, query = black holes, count = 7}` |
