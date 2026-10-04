@@ -34,6 +34,13 @@
       "${0}"
     ]
   },
+  "Description": {
+    "prefix": "description",
+    "body": [
+      "@description{${1:Article description}}",
+      "${0}"
+    ]
+  },
   "Tags": {
     "prefix": "tags",
     "body": [
