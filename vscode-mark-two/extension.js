@@ -6,6 +6,7 @@ const DIRECTIVE_SNIPPETS = [
   ["author", '@author{${1:Author}}'],
   ["date", '@date{${1:26 September 2026}}'],
   ["title", '@title{${1:Article Title}}'],
+  ["description", '@description{${1:Article description}}'],
   ["tags", '@tags{${1:topic one}, ${2:topic two}}'],
   ["section", '@section{${1:Section Title}, label = ${2:section-label}}'],
   ["subsection", '@subsection{${1:Subsection Title}, label = ${2:subsection-label}}'],
