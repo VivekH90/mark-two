@@ -76,3 +76,16 @@ def test_per_image_sizes_in_image_group():
     images = document.sections[0].content
     assert [image.width for image in images] == ['50%', '25%', '']
     assert [image.height for image in images] == ['240px', '180px', '']
+
+
+def test_article_description_directive():
+    source = '''@documenttitle{Physics}
+@title{Quantized Electromagnetic Field}
+@description{A derivation of the quantization of the electromagnetic field, from classical Maxwell theory to photons.}
+@section{Test}
+'''
+    document = parse(source)
+    assert document.description == (
+        "A derivation of the quantization of the electromagnetic field, "
+        "from classical Maxwell theory to photons."
+    )
