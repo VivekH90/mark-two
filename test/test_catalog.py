@@ -14,6 +14,7 @@ def test_catalog_entry_contains_homepage_and_search_metadata(tmp_path):
         folder="Electromagnetism",
         author="Vivek Sharma",
         article_title="Field Equations",
+        description="A derivation of the electromagnetic field equations.",
         date="27 September 2026",
         tags=["Electromagnetism", " field theory ", "Electromagnetism"],
         sections=[Section(title="Maxwell's Equations")],
@@ -23,6 +24,7 @@ def test_catalog_entry_contains_homepage_and_search_metadata(tmp_path):
 
     assert entry["id"] == "physics/electromagnetism/fields"
     assert entry["title"] == "Field Equations"
+    assert entry["description"] == "A derivation of the electromagnetic field equations."
     assert entry["subject"] == "Physics"
     assert entry["folder"] == "Electromagnetism"
     assert entry["tags"] == ["Electromagnetism", "field theory"]
