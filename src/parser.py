@@ -439,6 +439,8 @@ def _parse_block_source(source: str) -> Document:
                 document.date = argument
             elif command == "title":
                 document.article_title = argument
+            elif command == "description":
+                document.description = argument
             elif command == "tags":
                 document.tags.extend(
                     [
