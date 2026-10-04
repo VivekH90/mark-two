@@ -93,6 +93,7 @@ def build_catalog_entry(
     return {
         "id": _article_id(source, project_root),
         "title": document.article_title,
+        "description": document.description,
         "subject": document.document_tag,
         "folder": document.folder,
         "author": document.author,
