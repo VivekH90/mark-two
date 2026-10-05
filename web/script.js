@@ -31,6 +31,22 @@ document.addEventListener("DOMContentLoaded", function(){
   }
 })();
 (function(){
+  var bar=document.getElementById('bar');
+  var article=document.getElementById('article');
+  function updateProgress(){
+    if(!bar || !article){ return; }
+    var rect=article.getBoundingClientRect();
+    var total=rect.height - window.innerHeight * 0.6;
+    var progress=total > 0 ? (-rect.top / total) * 100 : 0;
+    progress=Math.min(100,Math.max(0,progress));
+    bar.style.width=progress+'%';
+  }
+  updateProgress();
+  window.addEventListener('scroll',updateProgress,{passive:true});
+  window.addEventListener('resize',updateProgress);
+
+})();
+(function(){
   var btn=document.querySelector('.theme-toggle');
   if(btn){
     btn.addEventListener('click',function(){

@@ -1,12 +1,326 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Archive · {{SITE_TITLE}}</title>
-<script>(function(){try{var s=localStorage.getItem('mark-two-theme-v2'),t=s||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');if(t==='dark')document.documentElement.dataset.theme='dark'}catch(e){}})();</script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Archive · {{SITE_TITLE}}</title>
+<script>
+(function(){
+  try{
+    var saved=localStorage.getItem('mark-two-theme-v2');
+    var theme=saved||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+    if(theme==='dark') document.documentElement.setAttribute('data-theme','dark');
+  }catch(e){}
+})();
+</script>
 <style>
-:root{--bg:#fbfaf6;--fg:#1c1d24;--muted:#5c5f6b;--rule:#dcd8cc;--link:#3a43a8;--teal:#0f766e;--soft:#f1efe7;--blue:#eef0fb;--orange:#fffaf0;--sans:"CMU Sans Serif","Computer Modern Sans","Latin Modern Sans","LM Sans 10","Computer Modern Sans Serif",Helvetica,Arial,sans-serif}
-:root[data-theme=dark]{--bg:#12141a;--fg:#e8e6df;--muted:#a4a5ad;--rule:#2e313b;--link:#9aa3ff;--teal:#5fd0c0;--soft:#1b1e26;--blue:#1b1d33;--orange:#241f17;color-scheme:dark}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:1.05rem;line-height:1.75}a{color:var(--link);text-decoration:none}a:hover{text-decoration:underline}.wrap{width:min(58rem,calc(100% - 2.4rem));margin:auto}
-.top{border-bottom:1px solid var(--rule);background:var(--bg)}.top-wrap{min-height:4.4rem;display:flex;align-items:center;gap:1.6rem}.brand{display:flex;align-items:center;gap:.55rem;margin-right:auto;color:var(--fg);font-weight:700}.brand:hover{text-decoration:none}.brand-mark{width:1.8rem;height:1.8rem;border-radius:50%;display:grid;place-items:center;background:var(--fg);color:var(--bg)}.nav{display:flex;gap:1.15rem}.nav a{font-size:.88rem;color:var(--muted)}.nav a:hover{color:var(--fg);text-decoration:none}.theme{width:1.9rem;height:1.9rem;border:1px solid var(--rule);border-radius:50%;background:transparent;color:var(--fg);display:grid;place-items:center}.theme svg{width:14px}.theme .moon{display:none}:root[data-theme=dark] .theme .sun{display:none}:root[data-theme=dark] .theme .moon{display:block}
-main{padding:4rem 0 5rem}.head{max-width:48rem;margin:0 auto 2.2rem}.kicker{color:var(--teal);font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}h1{font-size:clamp(2.4rem,6vw,4rem);line-height:1.05;letter-spacing:-.03em;margin:.35rem 0 .6rem}.lead{color:var(--muted);margin:0}.tools{max-width:48rem;margin:0 auto 2rem;display:flex;gap:1rem;align-items:center}.search{flex:1;border:0;border-bottom:1.5px solid var(--fg);background:transparent;color:var(--fg);padding:.55rem 0;outline:0}.search:focus{border-bottom-color:var(--link)}.count{font-size:.78rem;color:var(--muted);white-space:nowrap}
-.archive{max-width:48rem;margin:auto}.year{color:var(--teal);font-size:.85rem;margin:2rem 0 .2rem;border-bottom:1.5px solid var(--fg);padding-bottom:.25rem}.year:first-child{margin-top:0}.archive-row{display:grid;grid-template-columns:6rem minmax(12rem,1.4fr) minmax(12rem,1fr) 7rem;gap:1rem;align-items:baseline;padding:.72rem .35rem;border-bottom:1px solid var(--rule)}.archive-row:hover{background:var(--soft)}.archive-row time,.category{color:var(--muted);font-size:.76rem}.archive-row>a{color:var(--fg);font-size:.94rem}.description{color:var(--muted);font-size:.78rem}.is-hidden,.year.is-hidden{display:none}.empty{color:var(--muted)}
-@media(max-width:760px){.nav{display:none}.archive-row{grid-template-columns:5rem minmax(0,1fr)}.description,.category{grid-column:2}}@media(max-width:480px){.wrap{width:min(100% - 2rem,58rem)}main{padding-top:3rem}.archive-row{grid-template-columns:1fr}.description,.category{grid-column:auto}}
-</style></head><body><header class="top"><div class="wrap top-wrap"><a class="brand" href="{{HOME_URL}}"><span class="brand-mark">∫</span><span>{{AUTHOR}}</span></a><nav class="nav"><a href="{{HOME_URL}}">Home</a><a href="{{ARCHIVE_URL}}">Archive</a><a href="{{ABOUT_URL}}">About</a><a href="{{GITHUB_URL}}" target="_blank" rel="noopener">GitHub</a></nav><button class="theme" type="button" aria-label="Toggle dark mode"><svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.2M12 19.8V22M2 12h2.2M19.8 12H22"/></svg><svg class="moon" viewBox="0 0 24 24" fill="currentColor"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4 8.5 8.5 0 0 0 20 14.5z"/></svg></button></div></header><main><div class="wrap"><section class="head"><div class="kicker">Archive</div><h1>All notes</h1><p class="lead">Every article, organized chronologically.</p></section><div class="tools"><input class="search" id="archive-search" type="search" placeholder="Search the archive…" autocomplete="off"><span class="count" id="count"></span></div><section class="archive" id="archive">{{ARCHIVE_ROWS}}</section></div></main>
-<script>(function(){var r=document.documentElement,t=document.querySelector('.theme');t.onclick=function(){var d=r.dataset.theme==='dark';if(d)delete r.dataset.theme;else r.dataset.theme='dark';try{localStorage.setItem('mark-two-theme-v2',d?'light':'dark')}catch(e){}};var i=document.getElementById('archive-search'),rows=document.querySelectorAll('.archive-row'),ys=document.querySelectorAll('.year'),c=document.getElementById('count');function f(){var q=i.value.toLowerCase().trim(),n=0;rows.forEach(function(x){var s=(x.dataset.search||x.textContent).toLowerCase(),v=!q||s.includes(q);x.classList.toggle('is-hidden',!v);if(v)n++});ys.forEach(function(y){var x=y.nextElementSibling,h=0;while(x&&x.classList.contains('archive-row')){if(!x.classList.contains('is-hidden'))h=1;x=x.nextElementSibling}y.classList.toggle('is-hidden',!h)});c.textContent=n+' article'+(n===1?'':'s')}i.oninput=f;f()})();</script></body></html>
+:root{
+  --bg:#fbfaf6;--fg:#1c1d24;--muted:#5c5f6b;--rule:#dcd8cc;
+  --link:#3a43a8;--green:#0f766e;--paper:#ffffff;--soft:#f1efe7;
+  --orange-border:#c9812b;
+  --sans:"Computer Modern Sans","CMU Sans Serif","Latin Modern Sans","LM Sans 10","Computer Modern Sans Serif",Helvetica,Arial,sans-serif;
+}
+:root[data-theme="dark"]{
+  --bg:#12141a;--fg:#e8e6df;--muted:#a4a5ad;--rule:#2e313b;
+  --link:#9aa3ff;--green:#5fd0c0;--paper:#1a1d25;--soft:#1b1e26;
+  --orange-border:#d99a52;color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:5rem}
+body{
+  margin:0;background:var(--bg);color:var(--fg);font-family:var(--sans);
+  font-size:1.05rem;line-height:1.75;-webkit-font-smoothing:antialiased
+}
+a{color:var(--link);text-decoration:none}
+a:hover{text-decoration:underline}
+button,input{font:inherit}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--link);outline-offset:3px}
+.wrap{width:min(58rem,calc(100% - 2.4rem));margin:0 auto}
+
+.top{border-bottom:1px solid var(--rule);background:var(--bg)}
+.top-wrap{min-height:4.4rem;display:flex;align-items:center;gap:1.6rem}
+.brand{display:flex;align-items:center;gap:.55rem;margin-right:auto;color:var(--fg);font-weight:700}
+.brand:hover{text-decoration:none}
+.brand-mark{
+  width:1.8rem;height:1.8rem;border-radius:50%;
+  display:grid;place-items:center;background:var(--fg);color:var(--bg);font-size:.95rem
+}
+.nav{display:flex;gap:1.15rem;align-items:center}
+.nav a{font-size:.88rem;color:var(--muted);padding:.15rem 0;border-bottom:2px solid transparent}
+.nav a:hover,.nav a.active{color:var(--fg);text-decoration:none}
+.nav a.active{border-bottom-color:var(--green)}
+.theme{
+  width:1.9rem;height:1.9rem;border:1px solid var(--rule);border-radius:50%;
+  background:transparent;color:var(--fg);display:grid;place-items:center;cursor:pointer
+}
+.theme svg{width:14px;height:14px}
+.theme .moon{display:none}
+:root[data-theme="dark"] .theme .sun{display:none}
+:root[data-theme="dark"] .theme .moon{display:block}
+
+main{padding:3rem 0 5rem}
+.runhead{
+  display:flex;justify-content:space-between;gap:1rem;font-size:.9rem;
+  color:var(--muted);border-bottom:1.5px solid var(--rule);
+  padding-bottom:.3rem;margin-bottom:1.8rem;position:relative
+}
+.runhead b{color:var(--fg)}
+.runhead::before,.runhead::after{
+  content:"";position:absolute;bottom:-4px;width:7px;height:7px;
+  border:1px solid var(--rule);background:var(--bg);transform:rotate(45deg)
+}
+.runhead::before{left:-3px}.runhead::after{right:-3px}
+
+.head{max-width:48rem;margin:0 auto 2rem}
+.kicker{
+  color:var(--green);font-size:.78rem;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;margin-bottom:.25rem
+}
+h1{
+  font-size:clamp(2.5rem,6vw,3.5rem);line-height:1.08;
+  letter-spacing:-.02em;margin:0 0 .55rem;font-weight:700
+}
+.lead{color:var(--muted);max-width:38rem;margin:0}
+
+/* Same bordered search bar design used on the Mark Two homepage. */
+.tools{max-width:48rem;margin:0 auto 1.15rem}
+.sbox{display:flex;gap:.5rem;margin:1.4rem 0}
+.sbox input{
+  flex:1;min-width:0;font:inherit;font-size:1.05rem;
+  padding:.7rem 1rem;border:1px solid var(--rule);border-radius:8px;
+  background:var(--paper);color:var(--fg)
+}
+.sbox input::placeholder{color:var(--muted)}
+.sbox input:focus{outline:2px solid var(--link);outline-offset:1px;border-color:var(--link)}
+.sbox button{
+  font:inherit;font-size:1rem;padding:0 1.2rem;border:0;border-radius:8px;
+  background:var(--link);color:var(--bg);cursor:pointer
+}
+.sbox button:hover{filter:brightness(.96)}
+
+.tag-filter{
+  max-width:48rem;margin:0 auto 2.7rem;
+  padding:.2rem 0 .9rem;border-bottom:1px solid var(--rule)
+}
+.tag-label{
+  display:block;color:var(--green);font-size:.78rem;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;margin-bottom:.35rem
+}
+.tags{display:flex;flex-wrap:wrap;gap:.2rem .35rem}
+.chip{
+  display:inline-block;font:inherit;font-size:.8rem;line-height:1;
+  padding:.34rem .72rem;margin:.25rem 0;
+  border:1px solid var(--rule);border-radius:999px;
+  background:var(--paper);color:var(--fg);cursor:pointer;text-decoration:none
+}
+.chip:hover{border-color:var(--link);color:var(--link);text-decoration:none}
+.chip.active{background:var(--link);border-color:var(--link);color:var(--bg)}
+.chip small{color:var(--muted);margin-left:.35rem;font-size:.75rem}
+.chip.active small{color:inherit}
+.filter-note{min-height:0;color:var(--muted);font-size:.78rem;margin-top:.45rem}
+.filter-note button{
+  border:0;background:none;padding:0;color:inherit;text-decoration:underline;cursor:pointer
+}
+
+/* The archive is a month-by-month editorial index, not a data table. */
+.archive{max-width:48rem;margin:0 auto}
+.month{
+  margin:2.5rem 0 .2rem;padding:0 0 .3rem;
+  border-bottom:1.5px solid var(--fg);
+  color:var(--green);font-size:1.1rem;font-weight:700
+}
+.month:first-child{margin-top:0}
+.month.is-hidden{display:none}
+.archive-row{
+  display:flex;gap:1.2rem;align-items:flex-start;
+  padding:.9rem .6rem 1rem;border-bottom:1px solid var(--rule);
+  border-radius:4px;color:var(--fg)
+}
+.archive-row:hover{background:var(--soft)}
+.archive-row.is-hidden{display:none}
+.archive-date{
+  color:var(--muted);font-size:.88rem;line-height:1.55;
+  min-width:7.4rem;padding-top:.25rem
+}
+.archive-body{min-width:0;flex:1}
+.archive-title{
+  display:block;color:var(--link);font-size:1.25rem;
+  font-weight:700;line-height:1.3
+}
+.archive-description{
+  margin:.18rem 0 0;color:var(--muted);
+  font-size:.98rem;line-height:1.55
+}
+.archive-tags{display:flex;flex-wrap:wrap;gap:.25rem .35rem;margin:.45rem 0 0}
+.archive-tags .chip{cursor:default;margin:0}
+.archive-tags .chip:hover{border-color:var(--rule);color:var(--fg)}
+.empty{display:none;color:var(--muted);font-size:.9rem;padding:1rem .6rem}
+.count{color:var(--muted);font-size:.8rem;text-align:right;margin:.55rem 0 0}
+
+footer{
+  border-top:1px solid var(--rule);padding:1rem 0 2rem;
+  color:var(--muted);font-size:.78rem
+}
+@media(max-width:700px){
+  .wrap{width:min(100% - 2rem,58rem)}
+  .nav{display:none}
+  .archive-row{gap:.8rem}
+  .archive-date{min-width:6rem;font-size:.8rem}
+}
+@media(max-width:480px){
+  body{font-size:1rem}
+  .sbox{gap:.4rem}.sbox button{padding:0 .9rem}
+  .archive-row{display:block}
+  .archive-date{min-width:0;margin-bottom:.15rem}
+  .archive-title{font-size:1.15rem}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap top-wrap">
+    <a class="brand" href="{{HOME_URL}}">
+      <span class="brand-mark">∫</span>
+      <span>{{AUTHOR}}</span>
+    </a>
+    <nav class="nav" aria-label="Site navigation">
+      <a href="{{HOME_URL}}">Home</a>
+      <a class="active" href="{{ARCHIVE_URL}}" aria-current="page">Archive</a>
+      <a href="{{ABOUT_URL}}">About</a>
+      <a href="{{GITHUB_URL}}" target="_blank" rel="noopener">GitHub</a>
+    </nav>
+    <button class="theme" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
+      <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.2M12 19.8V22M4.2 4.2l1.6 1.6M18.2 18.2l1.6-1.6M2 12h2.2M19.8 12H22"/></svg>
+      <svg class="moon" viewBox="0 0 24 24" fill="currentColor"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>
+    </button>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="runhead">
+      <b>{{SITE_TITLE}}</b>
+      <span>Archive</span>
+    </div>
+
+    <section class="head">
+      <div class="kicker">Archive</div>
+      <h1>All articles</h1>
+      <p class="lead">Every article, organized month by month. Search the collection or filter it by tag.</p>
+    </section>
+
+    <div class="tools">
+      <div class="sbox">
+        <input id="archive-search" type="search" placeholder="Search articles, topics and tags" aria-label="Search articles" autocomplete="off">
+        <button type="button" id="archive-search-button">Search</button>
+      </div>
+      <div class="count" id="count"></div>
+    </div>
+
+    <section class="tag-filter" aria-label="Filter by tag">
+      <span class="tag-label">Browse by tag</span>
+      <div class="tags" id="tag-list">{{TAG_FILTER}}</div>
+      <div class="filter-note" id="filter-note"></div>
+    </section>
+
+    <section class="archive" id="archive">
+      {{ARCHIVE_ROWS}}
+      <p class="empty" id="empty">No articles match the current search or tag filter.</p>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">© {{YEAR}} {{AUTHOR}}</div>
+</footer>
+
+<script>
+(function(){
+  var root=document.documentElement;
+  var theme=document.querySelector('.theme');
+  if(theme){
+    theme.addEventListener('click',function(){
+      var dark=root.getAttribute('data-theme')==='dark';
+      if(dark) root.removeAttribute('data-theme');
+      else root.setAttribute('data-theme','dark');
+      try{localStorage.setItem('mark-two-theme-v2',dark?'light':'dark')}catch(e){}
+    });
+  }
+
+  var input=document.getElementById('archive-search');
+  var searchButton=document.getElementById('archive-search-button');
+  var tags=document.querySelectorAll('#tag-list .chip');
+  var rows=document.querySelectorAll('#archive .archive-row');
+  var months=document.querySelectorAll('#archive .month');
+  var note=document.getElementById('filter-note');
+  var empty=document.getElementById('empty');
+  var count=document.getElementById('count');
+  var active=null;
+
+  function filter(){
+    var q=input.value.trim().toLowerCase(),visible=0;
+    rows.forEach(function(row){
+      var rowTags=(row.dataset.tags||'').split('|').filter(Boolean);
+      var hay=(row.dataset.search||row.textContent).toLowerCase();
+      var show=(!active||rowTags.indexOf(active)!==-1)&&(!q||hay.indexOf(q)!==-1);
+      row.classList.toggle('is-hidden',!show);
+      if(show) visible++;
+    });
+
+    months.forEach(function(month){
+      var n=month.nextElementSibling,has=false;
+      while(n&&n.classList.contains('archive-row')){
+        if(!n.classList.contains('is-hidden')){has=true;break}
+        n=n.nextElementSibling;
+      }
+      month.classList.toggle('is-hidden',!has);
+    });
+
+    empty.style.display=visible?'none':'block';
+    count.textContent=visible+' article'+(visible===1?'':'s');
+
+    if(active||q){
+      var bits=[];
+      if(active){
+        var activeButton=document.querySelector('#tag-list .chip[data-tag="'+CSS.escape(active)+'"]');
+        bits.push(activeButton?activeButton.firstChild.textContent.trim():active);
+      }
+      if(q)bits.push('“'+q+'”');
+      note.innerHTML='Showing '+bits.join(' · ')+' · <button type="button">clear</button>';
+      note.querySelector('button').onclick=function(){
+        active=null;input.value='';
+        tags.forEach(function(tag){tag.classList.remove('active')});
+        filter();
+      };
+    }else note.textContent='';
+  }
+
+  tags.forEach(function(tag){
+    tag.addEventListener('click',function(){
+      active=active===tag.dataset.tag?null:tag.dataset.tag;
+      tags.forEach(function(t){t.classList.toggle('active',t===tag&&!!active)});
+      filter();
+    });
+  });
+
+  input.addEventListener('input',filter);
+  input.addEventListener('keydown',function(e){
+    if(e.key==='Enter'){
+      e.preventDefault();
+      filter();
+      var archive=document.getElementById('archive');
+      if(archive)archive.scrollIntoView({behavior:'smooth',block:'start'});
+    }
+  });
+  if(searchButton)searchButton.addEventListener('click',function(){
+    filter();
+    var archive=document.getElementById('archive');
+    if(archive)archive.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+
+  filter();
+})();
+</script>
+</body>
+</html>
