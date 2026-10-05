@@ -287,12 +287,16 @@ footer{
         bits.push(activeButton?activeButton.firstChild.textContent.trim():active);
       }
       if(q)bits.push('“'+q+'”');
-      note.innerHTML='Showing '+bits.join(' · ')+' · <button type="button">clear</button>';
-      note.querySelector('button').onclick=function(){
+      note.replaceChildren(document.createTextNode('Showing '+bits.join(' · ')+' · '));
+      var clearButton=document.createElement('button');
+      clearButton.type='button';
+      clearButton.textContent='clear';
+      clearButton.addEventListener('click',function(){
         active=null;input.value='';
         tags.forEach(function(tag){tag.classList.remove('active')});
         filter();
-      };
+      });
+      note.appendChild(clearButton);
     }else note.textContent='';
   }
 
