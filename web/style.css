@@ -9,14 +9,15 @@
   --card:#ffffff;
   --glow:rgba(58,67,168,.08);
 
-  --teal-bg:#eef8f5;
-  --teal-border:#3a43a8;
-  --teal-title:#2f3690;
+  --primary-bg:#eef8f5;
+  --primary-border:#3a43a8;
+  --primary-title:#2f3690;
 
   --example-bg:#fffaf0;
   --example-border:#c9812b;
   --example-title:#94500a;
 
+  --axiom-border:#8f6d00;
   --warning-border:#b45f06;
 
   --sans:"CMU Sans Serif","Computer Modern Sans","Latin Modern Sans","LM Sans 10","Computer Modern Sans Serif",Helvetica,Arial,sans-serif;
@@ -35,14 +36,15 @@
   --card:#1a1d25;
   --glow:rgba(154,163,255,.10);
 
-  --teal-bg:#1b1d33;
-  --teal-border:#9aa3ff;
-  --teal-title:#b5baff;
+  --primary-bg:#1b1d33;
+  --primary-border:#9aa3ff;
+  --primary-title:#b5baff;
 
   --example-bg:#241f17;
   --example-border:#d99a52;
   --example-title:#f0b36a;
 
+  --axiom-border:#f0c94a;
   --warning-border:#f0a64a;
   color-scheme:dark;
 }
@@ -272,13 +274,13 @@ header.top{
 .box.theorem,
 .box.proposition,
 .box.corollary{
-  border:2px solid var(--teal-border);
+  border:2px solid var(--primary-border);
   border-radius:14px;
-  background:var(--teal-bg);
+  background:var(--primary-bg);
 }
 .box.theorem .label,
 .box.proposition .label,
-.box.corollary .label{color:var(--teal-title)}
+.box.corollary .label{color:var(--primary-title)}
 
 .box.lemma{
   border-left:4px solid var(--link);
@@ -301,11 +303,10 @@ header.top{
 .box.example .label{color:var(--example-title)}
 
 .box.axiom{
-  border-left:4px solid #a87a0a;
+  border-left:4px solid var(--axiom-border);
   padding-left:1.05rem;
 }
-:root[data-theme="dark"] .box.axiom{border-left-color:#f0c94a}
-.box.axiom .label{color:var(--accent2)}
+.box.axiom .label{color:var(--axiom-border)}
 
 .box.remark{
   border-left:3px solid var(--muted);
