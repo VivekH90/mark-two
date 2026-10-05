@@ -74,6 +74,13 @@ def _topic_class(subject: str) -> str:
     return f"topic-{sum(map(ord, normalized)) % 3}"
 
 
+def _long_display_date(value: Any) -> str:
+    parsed = _parse_date(value)
+    if parsed:
+        return f"{parsed.day} {parsed:%B} {parsed:%Y}"
+    return str(value or "Undated")
+
+
 def _display_date(value: Any) -> tuple[str, str]:
     parsed = _parse_date(value)
     if parsed:
@@ -122,22 +129,32 @@ def _render_featured(article: dict[str, Any] | None) -> str:
 def _render_recent(articles: list[dict[str, Any]]) -> str:
     cards = []
     for article in articles[:RECENT_LIMIT]:
-        subject = str(article.get("subject") or article.get("folder") or "Article")
         description = _description(article)
-        description_html = f"<p>{escape(description)}</p>" if description else ""
-        title = escape(str(article.get("title") or "Untitled"))
+        title_text = str(article.get("title") or "Untitled")
+        title = escape(title_text)
         url = escape(_article_url(article), quote=True)
-        display_date, _ = _display_date(article.get("date"))
+        tags = article.get("tags", [])
+        tags = tags if isinstance(tags, list) else []
+        tag_slugs = [_slug(str(tag)) for tag in tags if str(tag).strip()]
+        tag_data = "|".join(escape(slug, quote=True) for slug in tag_slugs)
+        search_fields = [title_text, description, *[str(tag) for tag in tags]]
+        search = escape(" ".join(search_fields), quote=True)
+        tag_html = "".join(
+            f'<span class="chip" data-topic="{escape(_slug(str(tag)), quote=True)}">{escape(str(tag))}</span>'
+            for tag in tags if str(tag).strip()
+        )
+        description_html = f"<p>{escape(description)}</p>" if description else ""
         cards.append(
-            f'<article class="recent-card {_topic_class(subject)}">'
-            f'<time class="date">{escape(display_date or "Undated")}</time>'
+            f'<article class="recent-card" data-tags="{tag_data}" data-search="{search}">'
+            f'<time class="date">{escape(_long_display_date(article.get("date")))}</time>'
+            f'<div class="recent-body">'
             f'<h3><a href="{url}">{title}</a></h3>'
             f'{description_html}'
-            f'<span class="cat">{escape(subject)}</span>'
+            f'<div class="recent-tags">{tag_html}</div>'
+            f'</div>'
             f'</article>'
         )
-    return "\n".join(cards) or '<p class="empty-msg" style="display:block">No articles found.</p>'
-
+    return "\n".join(cards) or '<p class="recent-empty" style="display:block">No articles found.</p>'
 
 def _render_topics(articles: list[dict[str, Any]]) -> str:
     counts: Counter[str] = Counter()
