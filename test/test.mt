@@ -8,7 +8,6 @@
 @button{Home, href = /, color = black}
 @button{GitHub, href = https://github.com/VivekH90/mark-two, color = #4f6fd8}
 @button{About, href = /about, color = #4f9d69}
-@gallery{source = NASA, query = electromagnetic fields, count = 7}
 
 @begin(section){Setting up the field, label = setting-up-the-field}
 We work in flat spacetime with metric signature ((+,-,-,-)), and treat the electromagnetic four-potential (A^mu) as the dynamical field.
