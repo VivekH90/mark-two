@@ -166,6 +166,7 @@ main{padding:4.4rem 0 5rem}
 .recent-card:hover{background:var(--soft);text-decoration:none}
 .recent-card .date{color:var(--muted);font-size:.78rem}
 .recent-card h3{margin:0;font-size:1rem;line-height:1.4;font-weight:650}
+.recent-card p{grid-column:2;margin:.15rem 0 0;color:var(--muted);font-size:.82rem;line-height:1.55}
 .recent-card .cat{color:var(--muted);font-size:.76rem;text-align:right}
 
 /* Archive */
@@ -199,13 +200,14 @@ footer{
   .intro p{margin-left:0}
   .recent-card,.row{grid-template-columns:5.5rem minmax(0,1fr)}
   .recent-card .cat,.row .cat{grid-column:2;text-align:left}
+  .recent-card p{grid-column:2}
 }
 @media(max-width:480px){
   body{font-size:1rem}
   .intro h1{font-size:2.75rem}
   .topic-row{gap:.5rem}
   .recent-card,.row{grid-template-columns:1fr;gap:.1rem}
-  .recent-card .cat,.row .cat{grid-column:auto}
+  .recent-card p{grid-column:auto}.recent-card .cat,.row .cat{grid-column:auto}
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
