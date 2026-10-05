@@ -445,6 +445,7 @@ figure.diagram figcaption{
 
 /* Footer */
 .article-footer{
+  display:none;
   margin-top:3rem;
   padding-top:.9rem;
   border-top:1px solid var(--rule);
@@ -475,6 +476,7 @@ figure.diagram figcaption{
     font-weight:700;
   }
   .mobile-contents .toc{margin-top:.8rem}
+  .article-footer{display:block}
 }
 
 @media (max-width:560px){
