@@ -18,8 +18,7 @@ window.MathJax={
 })();
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js" defer></script>
-<style>
-:root{
+<style>:root{
   --bg:#fbfaf6;
   --fg:#1c1d24;
   --muted:#5c5f6b;
@@ -30,18 +29,30 @@ window.MathJax={
   --card:#ffffff;
   --glow:rgba(58,67,168,.08);
 
-  --primary-bg:#eef8f5;
-  --primary-border:#3a43a8;
-  --primary-title:#2f3690;
+  /* Old article palette, carried into Mark Two's semantic environments. */
+  --blue-soft:#eef0fb;
+  --blue-ink:#2f3690;
+  --orange-soft:#fffaf0;
+  --orange-border:#c9812b;
+  --orange-ink:#94500a;
+  --question-soft:#ecf6f3;
+  --question-border:color-mix(in srgb,var(--accent2) 40%,transparent);
+  --axiom-ink:#8f6d00;
+  --warning-ink:#b45f06;
+  --citation-border:#4fb8c9;
 
-  --example-bg:#fffaf0;
-  --example-border:#c9812b;
-  --example-title:#94500a;
+  --primary-bg:var(--blue-soft);
+  --primary-border:var(--link);
+  --primary-title:var(--blue-ink);
 
-  --axiom-border:#8f6d00;
-  --warning-border:#b45f06;
+  --example-bg:var(--orange-soft);
+  --example-border:var(--orange-border);
+  --example-title:var(--orange-ink);
 
-  --sans:"CMU Sans Serif","Computer Modern Sans","Latin Modern Sans","LM Sans 10","Computer Modern Sans Serif",Helvetica,Arial,sans-serif;
+  --axiom-border:var(--axiom-ink);
+  --warning-border:var(--warning-ink);
+
+  --sans:"Computer Modern Sans","CMU Sans Serif","Latin Modern Sans","LM Sans 10","Computer Modern Sans Serif",Helvetica,Arial,sans-serif;
   --serif:var(--sans);
   color-scheme:light;
 }
@@ -57,16 +68,27 @@ window.MathJax={
   --card:#1a1d25;
   --glow:rgba(154,163,255,.10);
 
-  --primary-bg:#1b1d33;
-  --primary-border:#9aa3ff;
-  --primary-title:#b5baff;
+  --blue-soft:#1b1d33;
+  --blue-ink:#b5baff;
+  --orange-soft:#241f17;
+  --orange-border:#d99a52;
+  --orange-ink:#f0b36a;
+  --question-soft:#15262a;
+  --question-border:color-mix(in srgb,var(--accent2) 40%,transparent);
+  --axiom-ink:#f0c94a;
+  --warning-ink:#f0a64a;
+  --citation-border:#68c9d7;
 
-  --example-bg:#241f17;
-  --example-border:#d99a52;
-  --example-title:#f0b36a;
+  --primary-bg:var(--blue-soft);
+  --primary-border:var(--link);
+  --primary-title:var(--blue-ink);
 
-  --axiom-border:#f0c94a;
-  --warning-border:#f0a64a;
+  --example-bg:var(--orange-soft);
+  --example-border:var(--orange-border);
+  --example-title:var(--orange-ink);
+
+  --axiom-border:var(--axiom-ink);
+  --warning-border:var(--warning-ink);
   color-scheme:dark;
 }
 
@@ -175,6 +197,8 @@ header.top{
 }
 .article-column{min-width:0}
 .article-header{margin-bottom:2rem}
+
+/* Running head: a small piece of print-like ornament carried over from the old article. */
 .runhead{
   display:flex;
   justify-content:space-between;
@@ -256,9 +280,12 @@ header.top{
   scroll-margin-top:5.5rem;
 }
 .reading h2 .num{
+  display:inline-block;
   color:var(--link);
   font-weight:700;
-  margin-right:.65rem;
+  margin-right:.7rem;
+  padding-right:.7rem;
+  border-right:2px solid var(--rule);
 }
 .reading h3{
   font-size:1.1rem;
@@ -292,11 +319,13 @@ header.top{
 .box .box-content,.box .proof-content{min-width:0}
 .box p{margin:.45rem 0}
 
+/* Core theorem family: use the old article's blue-ink-on-paper look. */
 .box.theorem,
 .box.proposition,
 .box.corollary{
-  border:2px solid var(--primary-border);
-  border-radius:14px;
+  border:0;
+  border-left:5px solid var(--primary-border);
+  border-radius:0 10px 10px 0;
   background:var(--primary-bg);
 }
 .box.theorem .label,
@@ -371,6 +400,27 @@ header.top{
 }
 .box.proof::after{content:"";display:table;clear:both}
 
+/* Inline mathematical emphasis */
+.term{
+  color:var(--link);
+  font-weight:700;
+  border-bottom:2px dotted var(--link);
+}
+.cross-reference{
+  color:var(--fg);
+  border:1px solid var(--muted);
+  padding:0 .3em;
+  border-radius:2px;
+  text-decoration:none;
+}
+.cross-reference:hover{
+  color:var(--fg);
+  text-decoration:none;
+  border-color:var(--link);
+}
+.inline-color{color:var(--inline-color)}
+:root[data-theme="dark"] .inline-color{color:var(--inline-color-dark)}
+
 /* Math, figures, links */
 .math-display{
   overflow-x:auto;
@@ -383,14 +433,6 @@ header.top{
   overflow-x:auto;
   overflow-y:hidden;
 }
-.cross-reference{
-  color:var(--link);
-  border-bottom:1px solid color-mix(in srgb,var(--link) 35%,transparent);
-}
-.cross-reference:hover{text-decoration:none;border-bottom-color:var(--link)}
-.inline-color{color:var(--inline-color)}
-:root[data-theme="dark"] .inline-color{color:var(--inline-color-dark)}
-
 figure.diagram{
   margin:1.8rem 0;
   text-align:center;
@@ -460,10 +502,15 @@ figure.diagram figcaption{
 .related li{margin:.35rem 0}
 .mobile-contents{display:none}
 
-/* Keep legacy renderer classes harmless and light */
-.nav-icon,.icon-button,.metabar,.crumbs,.icons{font-size:inherit}
-.text-environment,.text-content{min-width:0}
-.article-section,.article-subsection{min-width:0}
+/* Q&A/exercise surfaces retain the old article's pale green accent. */
+.box.exercise,
+.box.question{
+  border:1px solid var(--question-border);
+  border-radius:6px;
+  background:var(--question-soft);
+}
+.box.exercise .label,
+.box.question .label{color:var(--accent2)}
 
 /* Footer */
 .article-footer{
@@ -515,9 +562,7 @@ figure.diagram figcaption{
 
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{scroll-behavior:auto!important;transition:none!important}
-}
-
-</style>
+}</style>
 </head>
 <body>
 <header class="top">
