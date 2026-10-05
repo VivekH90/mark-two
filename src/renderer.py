@@ -216,7 +216,14 @@ def _paragraphs(lines, references):
             current = []
     if current:
         paragraphs.append(" ".join(current))
-    return "\n".join(f"<p>{_inline_text(p, references)}</p>" for p in paragraphs)
+    rendered = []
+    for paragraph in paragraphs:
+        if re.match(r"^Running example:\s*", paragraph, re.IGNORECASE):
+            rest = re.sub(r"^Running example:\s*", "", paragraph, count=1, flags=re.IGNORECASE)
+            rendered.append(f'<p class="proto">Running example: <i>{_inline_text(rest, references)}</i></p>')
+        else:
+            rendered.append(f"<p>{_inline_text(paragraph, references)}</p>")
+    return "\n".join(rendered)
 
 
 def _text_html(text: TextBlock, references, environment_counters, figure_counter, section_number=None) -> str:
