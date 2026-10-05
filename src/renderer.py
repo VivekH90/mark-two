@@ -219,7 +219,7 @@ def _paragraphs(lines, references):
     return "\n".join(f"<p>{_inline_text(p, references)}</p>" for p in paragraphs)
 
 
-def _text_html(text: TextBlock, references, environment_counters, figure_counter) -> str:
+def _text_html(text: TextBlock, references, environment_counters, figure_counter, section_number=None) -> str:
     styles = []
     if text.bold:
         styles.append("font-weight: 700")
@@ -230,7 +230,7 @@ def _text_html(text: TextBlock, references, environment_counters, figure_counter
         styles.append(f"--text-color-dark: {escape(_dark_mode_color(text.color), quote=True)}")
     style = f' style="{"; ".join(styles)}"' if styles else ""
     text_html = f'<p class="mark-text"{style}>{_inline_text(text.text, references)}</p>'
-    content = _content_html(text.content, environment_counters, references, figure_counter, 0)
+    content = _content_html(text.content, environment_counters, references, figure_counter, 0, section_number)
     if content:
         return f'<div class="text-environment">{text_html}<div class="text-content">{content}</div></div>'
     return f'<div class="text-environment">{text_html}</div>'
@@ -281,7 +281,7 @@ def _multi_image_html(images, figure_number: int) -> str:
 
 
 
-def _list_html(list_block: ListBlock, environment_counters, references, figure_counter, depth: int) -> str:
+def _list_html(list_block: ListBlock, environment_counters, references, figure_counter, depth: int, section_number=None) -> str:
     tag = "ol" if list_block.ordered else "ul"
     type_attr = ' type="a"' if list_block.ordered and depth > 0 else ""
     color = escape(list_block.color, quote=True)
@@ -290,15 +290,15 @@ def _list_html(list_block: ListBlock, environment_counters, references, figure_c
     for item in list_block.items:
         title_html = f'<span class="list-item-title">{escape(item.title)}</span>' if item.title else ""
         item_class = ' class="has-list-item-title"' if item.title else ""
-        content = _content_html(item.content, environment_counters, references, figure_counter, depth + 1)
+        content = _content_html(item.content, environment_counters, references, figure_counter, depth + 1, section_number)
         items.append(f"<li{item_class}>{title_html}{content}</li>")
     return f'<{tag} class="mark-list"{type_attr} style="--list-color: {color}; --list-color-dark: {dark_color};">\n' + "\n".join(items) + f"\n</{tag}>"
 
 
-def _environment_html(environment: Environment, number: int, environment_counters, references, figure_counter) -> str:
+def _environment_html(environment: Environment, number: int, environment_counters, references, figure_counter, section_number=None) -> str:
     kind = environment.kind.strip().lower()
     identifier = f' id="{escape(environment.label, quote=True)}"' if environment.label else ""
-    content = _content_html(environment.content, environment_counters, references, figure_counter, 0)
+    content = _content_html(environment.content, environment_counters, references, figure_counter, 0, section_number)
 
     if kind == "proof":
         return (
@@ -331,7 +331,7 @@ def _content_html(items, environment_counters, references, figure_counter, list_
             environment_counters["__item__"] = environment_counters.get("__item__", 0) + 1
             item_number = environment_counters["__item__"]
             number = f"{section_number}.{item_number}" if section_number is not None else str(item_number)
-            html.append(_environment_html(item, number, environment_counters, references, figure_counter))
+            html.append(_environment_html(item, number, environment_counters, references, figure_counter, section_number))
         elif isinstance(item, Image):
             group = [item]
             next_index = index + 1
@@ -344,9 +344,9 @@ def _content_html(items, environment_counters, references, figure_counter, list_
         elif isinstance(item, MathBlock):
             html.append(_math_html(item))
         elif isinstance(item, TextBlock):
-            html.append(_text_html(item, references, environment_counters, figure_counter))
+            html.append(_text_html(item, references, environment_counters, figure_counter, section_number))
         elif isinstance(item, ListBlock):
-            html.append(_list_html(item, environment_counters, references, figure_counter, list_depth))
+            html.append(_list_html(item, environment_counters, references, figure_counter, list_depth, section_number))
         elif isinstance(item, Label):
             html.append(f'<span class="mark-label" id="{escape(item.name, quote=True)}"></span>')
         elif isinstance(item, Reference):
