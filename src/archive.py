@@ -87,12 +87,16 @@ def _render_rows(articles: list[dict[str, Any]]) -> str:
         )
 
         display_date, _ = _display_date(article.get("date"))
+        description_html = (
+            f'<p class="archive-description">{escape(description)}</p>'
+            if description else ""
+        )
         row = (
             f'<article class="archive-row" data-tags="{tag_data}" data-search="{search}">'
             f'<time class="archive-date">{escape(display_date or "Undated")}</time>'
             f'<div class="archive-body">'
             f'<a class="archive-title" href="{escape(_article_url(article), quote=True)}">{escape(title_text)}</a>'
-            f'{"<p class="archive-description">" + escape(description) + "</p>" if description else ""}'
+            f'{description_html}'
             f'<div class="archive-tags">{tag_html}</div>'
             f'</div>'
             f'</article>'
