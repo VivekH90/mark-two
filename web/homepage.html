@@ -87,27 +87,30 @@ main{padding:4.4rem 0 5rem}
   margin-top:.7rem;color:var(--fg);font-size:.9rem
 }
 
-/* Search is intentionally quiet. */
+/* Homepage search: bordered input with a separate action button. */
 .search{
-  max-width:39rem;margin:0 auto 3rem
+  max-width:48rem;margin:0 auto 3rem
 }
-.search-line{
-  display:flex;align-items:center;gap:.6rem;
-  border-bottom:1.5px solid var(--fg);padding:.45rem 0
+.sbox{
+  display:flex;gap:.5rem;margin:1.4rem 0
 }
-.search-line svg{width:16px;height:16px;color:var(--muted);flex:none}
-.search-line input{
-  width:100%;border:0;outline:0;background:transparent;color:var(--fg);
-  font-size:1rem;padding:.25rem 0
+.sbox input{
+  flex:1;min-width:0;font:inherit;font-size:1.05rem;
+  padding:.7rem 1rem;border:1px solid var(--rule);border-radius:8px;
+  background:var(--paper);color:var(--fg)
 }
-.search-line input::placeholder{color:var(--muted)}
-.search-hint{
-  display:flex;justify-content:space-between;margin-top:.45rem;
-  color:var(--muted);font-size:.75rem
+.sbox input::placeholder{color:var(--muted)}
+.sbox input:focus{
+  outline:2px solid var(--link);outline-offset:1px;border-color:var(--link)
 }
-.search-hint kbd{
-  border:1px solid var(--rule);padding:.05rem .3rem;border-radius:3px;
-  background:var(--soft);font-family:inherit
+.sbox button{
+  font:inherit;font-size:1rem;padding:0 1.2rem;border:0;border-radius:8px;
+  background:var(--link);color:var(--bg);cursor:pointer
+}
+.sbox button:hover{filter:brightness(.96)}
+@media(max-width:480px){
+  .sbox{gap:.4rem}
+  .sbox button{padding:0 .9rem}
 }
 
 /* Tags become a small index, not a row of UI pills. */
@@ -243,13 +246,9 @@ footer{
     </section>
 
     <section class="search" aria-label="Search">
-      <div class="search-line">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-        <input id="site-search" type="search" placeholder="Search the notes…" aria-label="Search articles" autocomplete="off">
-      </div>
-      <div class="search-hint">
-        <span>Search titles, descriptions and tags</span>
-        <span><kbd>/</kbd> focus search</span>
+      <div class="sbox">
+        <input id="site-search" type="search" placeholder="Search articles, topics and tags" aria-label="Search articles" autocomplete="off">
+        <button type="button" id="site-search-button">Search</button>
       </div>
     </section>
 
@@ -347,6 +346,14 @@ footer{
   });
 
   input.addEventListener('input',filter);
+  var searchButton=document.getElementById('site-search-button');
+  if(searchButton){
+    searchButton.addEventListener('click',function(){
+      filter();
+      var archive=document.getElementById('archive');
+      if(archive) archive.scrollIntoView({behavior:'smooth',block:'start'});
+    });
+  }
   document.addEventListener('keydown',function(e){
     if(e.key==='/'&&document.activeElement!==input){
       e.preventDefault();input.focus();
