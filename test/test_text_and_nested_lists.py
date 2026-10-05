@@ -52,3 +52,35 @@ This is <unsafe> & safe.
     assert '<strong>extremely important</strong>' in html
     assert 'color: #315a9b' in html
     assert '&lt;unsafe&gt; &amp; safe.' in html
+
+
+def test_environment_numbering_is_shared_within_each_section(tmp_path):
+    source = """@documenttitle{Mathematics}
+@section{First}
+@begin(theorem = A)
+Statement.
+@end(theorem)
+@begin(proposition = B)
+Statement.
+@end(proposition)
+
+@section{Second}
+@begin(definition = C)
+Definition.
+@end(definition)
+"""
+    _, html = _render_source(source, tmp_path)
+    assert "Theorem 1.1" in html
+    assert "Proposition 1.2" in html
+    assert "Definition 2.1" in html
+
+
+def test_article_template_contains_progress_bar(tmp_path):
+    from pathlib import Path
+    template = Path("web/index.html").read_text(encoding="utf-8")
+    script = Path("web/script.js").read_text(encoding="utf-8")
+    style = Path("web/style.css").read_text(encoding="utf-8")
+    assert '<div id="bar" aria-hidden="true"></div>' in template
+    assert "getElementById('bar')" in script
+    assert "background:var(--accent2)" in style
+    assert ".proto{" in style
