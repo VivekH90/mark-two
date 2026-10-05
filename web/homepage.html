@@ -35,6 +35,18 @@ a:hover{text-decoration:underline}
 button,input{font:inherit}
 button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--link);outline-offset:3px}
 .wrap{width:min(58rem,calc(100% - 2.4rem));margin:0 auto}
+.runhead{
+  display:flex;justify-content:space-between;gap:1rem;font-size:.9rem;
+  color:var(--muted);border-bottom:1.5px solid var(--rule);padding-bottom:.3rem;
+  margin-bottom:1.8rem;position:relative
+}
+.runhead b{color:var(--fg)}
+.runhead::before,.runhead::after{
+  content:"";position:absolute;bottom:-4px;width:7px;height:7px;
+  border:1px solid var(--rule);background:var(--bg);transform:rotate(45deg)
+}
+.runhead::before{left:-3px}.runhead::after{right:-3px}
+
 
 /* Header deliberately resembles a book's running head, not a web-app toolbar. */
 .top{
@@ -67,25 +79,23 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(-
 :root[data-theme="dark"] .theme .moon{display:block}
 
 /* Introduction */
-main{padding:4.4rem 0 5rem}
+main{padding:3rem 0 5rem}
 .intro{
-  max-width:43rem;margin:0 auto 3.8rem;text-align:center
+  max-width:43rem;margin:0 auto 3.2rem;text-align:left
 }
 .kicker{
   color:var(--green);font-size:.78rem;font-weight:700;
   letter-spacing:.12em;text-transform:uppercase;margin-bottom:.7rem
 }
 .intro h1{
-  margin:0;font-size:clamp(2.8rem,7vw,4.7rem);line-height:1.04;
-  letter-spacing:-.035em;font-weight:750
+  margin:0;font-size:clamp(2.5rem,6vw,3.5rem);line-height:1.08;
+  letter-spacing:-.02em;font-weight:700
 }
 .intro p{
-  max-width:38rem;margin:1rem auto 0;color:var(--muted);
-  font-size:1.1rem;line-height:1.7
+  max-width:38rem;margin:.65rem 0 0;color:var(--muted);
+  font-size:1.08rem;line-height:1.7
 }
-.author{
-  margin-top:.7rem;color:var(--fg);font-size:.9rem
-}
+.author{margin-top:.35rem;color:var(--muted);font-size:.92rem}
 
 /* Homepage search: bordered input with a separate action button. */
 .search{
@@ -133,15 +143,17 @@ main{padding:4.4rem 0 5rem}
 
 /* Content is a journal index. */
 .section{max-width:48rem;margin:0 auto 3.7rem}
-.section-head{
-  display:flex;align-items:baseline;justify-content:space-between;
-  border-bottom:1.5px solid var(--fg);padding-bottom:.3rem;margin-bottom:0
-}
+.section-head{margin-bottom:.7rem}
 .section-head h2{
-  margin:0;font-size:.82rem;letter-spacing:.08em;text-transform:uppercase;
-  font-weight:700
+  counter-increment:home-sec;
+  font-size:1.65rem;line-height:1.3;margin:2.8rem 0 .8rem;
+  padding:0;border:0;letter-spacing:-.005em;font-weight:700
 }
-.section-head a{font-size:.78rem;color:var(--muted)}
+.section-head h2::before{
+  content:counter(home-sec);color:var(--orange-border);margin-right:.7rem;
+  padding-right:.7rem;border-right:2px solid var(--rule);font-weight:700
+}
+.section-head a{float:right;margin-top:-2.7rem;font-size:.8rem;color:var(--muted)}
 
 /* Featured article */
 .featured-card{display:block;padding:1.25rem 1.1rem 1.35rem;border:0;border-left:5px solid var(--link);border-radius:0 10px 10px 0;background:var(--blue-soft);color:var(--fg)}
@@ -158,39 +170,33 @@ main{padding:4.4rem 0 5rem}
 .featured-card p{margin:0;max-width:39rem;color:var(--muted);font-size:.94rem;line-height:1.65}
 .featured-card .meta{margin-top:.65rem;color:var(--muted);font-size:.77rem}
 
-/* Recent posts: one clean row each. */
+/* Recent posts follow the original editorial article index. */
 .recent-list{border-bottom:1px solid var(--rule)}
 .recent-card{
-  display:grid;grid-template-columns:7.4rem minmax(0,1fr);
-  gap:.15rem 1.2rem;align-items:start;padding:.9rem .6rem 1rem;
+  display:flex;gap:1.2rem;align-items:flex-start;padding:.9rem .6rem 1rem;
   border-bottom:1px solid var(--rule);color:var(--fg);border-radius:4px
 }
 .recent-card:last-child{border-bottom:0}
 .recent-card:hover{background:var(--soft);text-decoration:none}
-.recent-card .date{color:var(--muted);font-size:.82rem;padding-top:.2rem}
-.recent-card h3{margin:0;font-size:1.12rem;line-height:1.35;font-weight:700}
-.recent-card p{grid-column:2;margin:.18rem 0 0;color:var(--muted);font-size:.9rem;line-height:1.55}
-.recent-card .cat{grid-column:2;color:var(--green);font-size:.76rem;margin-top:.45rem}
-.recent-tags{grid-column:2;display:flex;flex-wrap:wrap;gap:.2rem .35rem;margin-top:.35rem}
-.recent-tags span{font-size:.72rem;line-height:1;border:1px solid var(--rule);border-radius:999px;padding:.25rem .55rem;color:var(--muted);background:var(--paper)}
+.recent-card .date{
+  color:var(--muted);font-size:.88rem;line-height:1.55;
+  min-width:7.4rem;padding-top:.25rem
+}
+.recent-card .recent-body{min-width:0;flex:1}
+.recent-card h3{margin:0;line-height:1.3;font-size:1.25rem;font-weight:700}
+.recent-card h3 a{color:var(--link)}
+.recent-card p{margin:.18rem 0 0;color:var(--muted);font-size:.98rem;line-height:1.55}
+.recent-tags{display:flex;flex-wrap:wrap;gap:.25rem .35rem;margin:.45rem 0 0}
+.recent-tags .chip{
+  display:inline-block;font:inherit;font-size:.8rem;line-height:1;
+  padding:.34rem .72rem;border:1px solid var(--rule);border-radius:999px;
+  background:var(--paper);color:var(--fg);text-decoration:none
+}
+.recent-tags .chip:hover{border-color:var(--link);color:var(--link)}
+.recent-card.is-hidden{display:none}
+.recent-empty{display:none;color:var(--muted);font-size:.9rem;padding:1rem .6rem}
 
-/* Archive */
-.archive{margin-top:0}
-.archive .year-label{
-  margin:1.8rem 0 .15rem;color:var(--green);font-size:.78rem;font-weight:700
-}
-.archive .year-label:first-of-type{margin-top:0}
-.row{
-  display:grid;grid-template-columns:7rem minmax(0,1fr) auto;
-  gap:1rem;align-items:baseline;padding:.65rem .2rem;
-  border-bottom:1px solid var(--rule)
-}
-.row:hover{background:var(--soft)}
-.row time,.row .cat{color:var(--muted);font-size:.76rem}
-.row .ttl{font-size:.92rem;color:var(--fg)}
-.row.is-hidden,.year-label.is-hidden{display:none}
-.empty-msg{display:none;color:var(--muted);font-size:.88rem;padding:1.2rem 0}
-.back-top{display:block;margin-top:.9rem;color:var(--muted);font-size:.78rem}
+.recent-empty{display:none;color:var(--muted);font-size:.9rem;padding:1rem .6rem}
 
 footer{
   border-top:1px solid var(--rule);padding:1rem 0 2rem;
@@ -236,8 +242,13 @@ footer{
   </div>
 </header>
 
-<main>
+<main style="counter-reset:home-sec">
   <div class="wrap">
+    <div class="runhead">
+      <b>Notes on Mathematics and Physics</b>
+      <span>Home</span>
+    </div>
+
     <section class="intro">
       <div class="kicker">Notes · Essays · Mathematics · Physics</div>
       <h1>{{SITE_TITLE}}</h1>
@@ -265,20 +276,13 @@ footer{
 
     <section id="recent" class="section">
       <div class="section-head">
-        <h2>Recent</h2>
-        <a href="{{ARCHIVE_URL}}">Archive ↓</a>
+        <h2>Recent articles</h2>
+        <a href="{{ARCHIVE_URL}}">Full archive →</a>
       </div>
-      <div class="recent-list">{{RECENT}}</div>
-    </section>
-
-    <section id="archive" class="section archive">
-      <div class="section-head">
-        <h2>Archive</h2>
-        <a href="#recent">Recent ↑</a>
+      <div class="recent-list">
+        <p class="recent-empty" id="recent-empty">No recent articles match the current search.</p>
+        {{RECENT}}
       </div>
-      <p class="empty-msg" id="empty-msg">No articles match the current search.</p>
-      {{ARCHIVE}}
-      <a class="back-top" href="{{ARCHIVE_URL}}">Full archive →</a>
     </section>
   </div>
 </main>
@@ -300,9 +304,8 @@ footer{
   var input=document.getElementById('site-search');
   var topics=document.querySelectorAll('.ptopics button');
   var note=document.querySelector('.filter-note');
-  var empty=document.getElementById('empty-msg');
-  var rows=document.querySelectorAll('#archive .row');
-  var years=document.querySelectorAll('#archive .year-label');
+  var empty=document.getElementById('recent-empty');
+  var rows=document.querySelectorAll('#recent .recent-card');
   var active=null;
 
   function filter(){
@@ -313,14 +316,6 @@ footer{
       var show=(!active||tags.indexOf(active.toLowerCase())!==-1)&&(!q||hay.indexOf(q)!==-1);
       row.classList.toggle('is-hidden',!show);
       if(show) visible++;
-    });
-    years.forEach(function(label){
-      var n=label.nextElementSibling,has=false;
-      while(n&&n.classList.contains('row')){
-        if(!n.classList.contains('is-hidden')) has=true;
-        n=n.nextElementSibling;
-      }
-      label.classList.toggle('is-hidden',!has);
     });
     empty.style.display=visible?'none':'block';
 
@@ -334,7 +329,9 @@ footer{
         topics.forEach(function(b){b.classList.remove('active')});
         filter();
       };
-    }else note.textContent='';
+    }else{
+      note.textContent='';
+    }
   }
 
   topics.forEach(function(btn){
@@ -350,8 +347,8 @@ footer{
   if(searchButton){
     searchButton.addEventListener('click',function(){
       filter();
-      var archive=document.getElementById('archive');
-      if(archive) archive.scrollIntoView({behavior:'smooth',block:'start'});
+      var recent=document.getElementById('recent');
+      if(recent) recent.scrollIntoView({behavior:'smooth',block:'start'});
     });
   }
   document.addEventListener('keydown',function(e){
@@ -359,8 +356,7 @@ footer{
       e.preventDefault();input.focus();
     }
   });
-  filter();
-})();
+  filter();})();
 </script>
 </body>
 </html>
