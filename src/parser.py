@@ -12,9 +12,6 @@ from .ast import (
 _DIRECTIVE_START = re.compile(r"^\s*@([A-Za-z][\w ]*)\s*\{")
 _BLOCK_START = re.compile(r"^\s*@begin\s*\(\s*(.*?)\s*\)\s*(?:\{(.*)\})?\s*$", re.IGNORECASE)
 _BLOCK_END = re.compile(r"^\s*@end\s*\(\s*([A-Za-z][\w-]*)\s*\)\s*$", re.IGNORECASE)
-_ENVIRONMENTS = {"theorem","lemma","definition","corollary","axiom","proposition","remark","example","conjecture","notation","warning","proof"}
-_LIST_ENVIRONMENTS = {"enumerate","itemize"}
-_BLOCK_KINDS = {"section","subsection",*_ENVIRONMENTS,*_LIST_ENVIRONMENTS}
 _ENVIRONMENTS = {
     "theorem", "lemma", "definition", "corollary", "axiom", "proposition",
     "remark", "example", "conjecture", "notation", "warning", "proof",
