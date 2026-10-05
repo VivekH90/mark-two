@@ -250,18 +250,6 @@ def _parse_list(argument: str, ordered: bool) -> ListBlock:
     return ListBlock(ordered=ordered, items=items, color=color)
 
 
-def _parse_text(argument: str) -> TextBlock:
-    if "=" not in argument:
-        return TextBlock(text=argument.strip())
-    values = _parse_key_values(argument)
-    text = values.get("text", values.get("name", ""))
-    if not text:
-        raise ValueError("@text requires text = ... or plain text content")
-    bold = values.get("bold", "false").strip().lower() in {"true", "yes", "1", "on"}
-    italic = values.get("italic", "false").strip().lower() in {"true", "yes", "1", "on"}
-    return TextBlock(text=text, bold=bold, italic=italic, color=values.get("color", ""))
-
-
 def _add_content(container, line: str) -> None:
     if line.strip():
         container.content.append(line.strip())
