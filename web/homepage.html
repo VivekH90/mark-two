@@ -15,13 +15,13 @@
 </script>
 <style>
 :root{
-  --bg:#fbfaf6;--fg:#1c1d24;--muted:#676873;--rule:#d9d5ca;
-  --link:#3a43a8;--green:#0f766e;--paper:#fffefa;--soft:#f1efe7;
+  --bg:#fbfaf6;--fg:#1c1d24;--muted:#5c5f6b;--rule:#dcd8cc;
+  --link:#3a43a8;--green:#0f766e;--paper:#ffffff;--soft:#f1efe7;--blue-soft:#eef0fb;--orange-soft:#fffaf0;--orange-border:#c9812b;
   --sans:"CMU Sans Serif","Computer Modern Sans","Latin Modern Sans","LM Sans 10","Computer Modern Sans Serif",Helvetica,Arial,sans-serif;
 }
 :root[data-theme="dark"]{
-  --bg:#12141a;--fg:#e8e6df;--muted:#a4a5ad;--rule:#30333d;
-  --link:#a7afff;--green:#62d1c1;--paper:#191c23;--soft:#20232b;
+  --bg:#12141a;--fg:#e8e6df;--muted:#a4a5ad;--rule:#2e313b;
+  --link:#9aa3ff;--green:#5fd0c0;--paper:#1a1d25;--soft:#1b1e26;--blue-soft:#1b1d33;--orange-soft:#241f17;--orange-border:#d99a52;
   color-scheme:dark;
 }
 *{box-sizing:border-box}
@@ -141,11 +141,10 @@ main{padding:4.4rem 0 5rem}
 .section-head a{font-size:.78rem;color:var(--muted)}
 
 /* Featured article */
-.featured-card{
-  display:block;padding:1.35rem 0 1.45rem;
-  border-bottom:1px solid var(--rule);color:var(--fg)
-}
-.featured-card:hover{text-decoration:none;background:linear-gradient(90deg,var(--soft),transparent 75%)}
+.featured-card{display:block;padding:1.25rem 1.1rem 1.35rem;border:0;border-left:5px solid var(--link);border-radius:0 10px 10px 0;background:var(--blue-soft);color:var(--fg)}
+.featured-card:hover{text-decoration:none;background:linear-gradient(90deg,var(--blue-soft),var(--soft) 75%)}
+.featured-card:nth-of-type(2){border-left-color:var(--orange-border);background:var(--orange-soft)}
+.featured-card:nth-of-type(2):hover{background:linear-gradient(90deg,var(--orange-soft),var(--soft) 75%)}
 .featured-card .badge{
   color:var(--green);font-size:.76rem;font-weight:700;
   text-transform:uppercase;letter-spacing:.08em
@@ -220,7 +219,7 @@ footer{
     </a>
     <nav class="nav" aria-label="Site navigation">
       <a href="#recent">Recent</a>
-      <a href="#archive">Archive</a>
+      <a href="{{ARCHIVE_URL}}">Archive</a>
       <a href="{{ABOUT_URL}}">About</a>
       <a href="{{GITHUB_URL}}" target="_blank" rel="noopener">GitHub</a>
     </nav>
@@ -265,7 +264,7 @@ footer{
     <section id="recent" class="section">
       <div class="section-head">
         <h2>Recent</h2>
-        <a href="#archive">Archive ↓</a>
+        <a href="{{ARCHIVE_URL}}">Archive ↓</a>
       </div>
       <div class="recent-list">{{RECENT}}</div>
     </section>
@@ -277,7 +276,7 @@ footer{
       </div>
       <p class="empty-msg" id="empty-msg">No articles match the current search.</p>
       {{ARCHIVE}}
-      <a class="back-top" href="#recent">↑ back to recent</a>
+      <a class="back-top" href="{{ARCHIVE_URL}}">Full archive →</a>
     </section>
   </div>
 </main>
