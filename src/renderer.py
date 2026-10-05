@@ -322,14 +322,16 @@ def _environment_html(environment: Environment, number: int, environment_counter
     )
 
 
-def _content_html(items, environment_counters, references, figure_counter, list_depth: int = 0) -> str:
+def _content_html(items, environment_counters, references, figure_counter, list_depth: int = 0, section_number: int | None = None) -> str:
     html = []
     index = 0
     while index < len(items):
         item = items[index]
         if isinstance(item, Environment):
-            environment_counters[item.kind] = environment_counters.get(item.kind, 0) + 1
-            html.append(_environment_html(item, environment_counters[item.kind], environment_counters, references, figure_counter))
+            environment_counters["__item__"] = environment_counters.get("__item__", 0) + 1
+            item_number = environment_counters["__item__"]
+            number = f"{section_number}.{item_number}" if section_number is not None else str(item_number)
+            html.append(_environment_html(item, number, environment_counters, references, figure_counter))
         elif isinstance(item, Image):
             group = [item]
             next_index = index + 1
@@ -363,8 +365,9 @@ def _content_html(items, environment_counters, references, figure_counter, list_
 
 
 def _build_reference_index(document: Document):
-    references, counters = {}, {}
+    references = {}
     for number, section in enumerate(document.sections, 1):
+        item_number = 0
         if section.label:
             references[section.label] = (f"#{section.slug or 'section'}", f"Section {number}")
         for sub_number, subsection in enumerate(section.subsections, 1):
@@ -375,25 +378,26 @@ def _build_reference_index(document: Document):
             content.extend(subsection.content)
         for item in content:
             if isinstance(item, Environment):
-                counters[item.kind] = counters.get(item.kind, 0) + 1
+                item_number += 1
                 if item.label:
-                    references[item.label] = (f"#{item.label}", f"{item.kind.capitalize()} {counters[item.kind]}")
+                    references[item.label] = (f"#{item.label}", f"{item.kind.capitalize()} {number}.{item_number}")
     return references
 
 
 def _section_html(section: Section, number: int, environment_counters, references, figure_counter) -> str:
     identifier = escape(section.slug or "section", quote=True)
+    environment_counters["__item__"] = 0
     html = [
         f'<section class="article-section">',
         f'<h2 id="{identifier}"><span class="num">{number}</span>{escape(section.title)}</h2>',
-        _content_html(section.content, environment_counters, references, figure_counter),
+        _content_html(section.content, environment_counters, references, figure_counter, section_number=number),
     ]
     for sub_number, subsection in enumerate(section.subsections, 1):
         sub_identifier = escape(subsection.slug or "subsection", quote=True)
         html.extend([
             f'<section class="article-subsection">',
             f'<h3 id="{sub_identifier}"><span class="num">{number}.{sub_number}</span>{escape(subsection.title)}</h3>',
-            _content_html(subsection.content, environment_counters, references, figure_counter),
+            _content_html(subsection.content, environment_counters, references, figure_counter, section_number=number),
             "</section>",
         ])
     html.append("</section>")
