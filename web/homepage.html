@@ -130,12 +130,24 @@ main{padding:3rem 0 5rem}
   padding-bottom:.75rem;border-bottom:1px solid var(--rule)
 }
 .topic-label{font-size:.8rem;color:var(--green);font-weight:700}
-.ptopics{display:flex;flex-wrap:wrap;gap:.15rem .8rem}
-.ptopics button{
-  border:0;border-bottom:1px solid transparent;background:none;color:var(--muted);
-  padding:0;font-size:.84rem;cursor:pointer
+.ptopics{display:flex;flex-wrap:wrap;gap:.15rem .35rem}
+.chip{
+  display:inline-block;font:inherit;font-size:.8rem;line-height:1;
+  padding:.34rem .72rem;margin:.25rem 0;
+  border:1px solid var(--rule);border-radius:999px;
+  background:var(--paper);color:var(--fg);cursor:pointer;
+  text-decoration:none
 }
-.ptopics button:hover,.ptopics button.active{color:var(--link);border-bottom-color:currentColor}
+.chip:hover{
+  border-color:var(--link);color:var(--link);text-decoration:none
+}
+.chip.active{
+  background:var(--link);border-color:var(--link);color:var(--bg)
+}
+.chip small{
+  color:var(--muted);margin-left:.35rem;font-size:.75rem
+}
+.chip.active small{color:inherit}
 .filter-note{
   width:100%;font-size:.75rem;color:var(--muted);min-height:0
 }
@@ -188,11 +200,11 @@ main{padding:3rem 0 5rem}
 .recent-card p{margin:.18rem 0 0;color:var(--muted);font-size:.98rem;line-height:1.55}
 .recent-tags{display:flex;flex-wrap:wrap;gap:.25rem .35rem;margin:.45rem 0 0}
 .recent-tags .chip{
-  display:inline-block;font:inherit;font-size:.8rem;line-height:1;
-  padding:.34rem .72rem;border:1px solid var(--rule);border-radius:999px;
-  background:var(--paper);color:var(--fg);text-decoration:none
+  cursor:default;margin:0
 }
-.recent-tags .chip:hover{border-color:var(--link);color:var(--link)}
+.recent-tags .chip:hover{
+  border-color:var(--rule);color:var(--fg)
+}
 .recent-card.is-hidden{display:none}
 .recent-empty{display:none;color:var(--muted);font-size:.9rem;padding:1rem .6rem}
 
