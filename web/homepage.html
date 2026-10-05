@@ -7,7 +7,7 @@
 <script>
 (function(){
   try{
-    var saved=localStorage.getItem('theme');
+    var saved=localStorage.getItem('mark-two-theme-v2');
     var theme=saved||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
     if(theme==='dark') document.documentElement.setAttribute('data-theme','dark');
   }catch(e){}
@@ -293,7 +293,7 @@ footer{
   if(theme) theme.addEventListener('click',function(){
     var dark=root.getAttribute('data-theme')==='dark';
     if(dark) root.removeAttribute('data-theme'); else root.setAttribute('data-theme','dark');
-    try{localStorage.setItem('theme',dark?'light':'dark')}catch(e){}
+    try{localStorage.setItem('mark-two-theme-v2',dark?'light':'dark')}catch(e){}
   });
 
   var input=document.getElementById('site-search');
