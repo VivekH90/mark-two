@@ -328,9 +328,12 @@ def _content_html(items, environment_counters, references, figure_counter, list_
     while index < len(items):
         item = items[index]
         if isinstance(item, Environment):
-            environment_counters["__item__"] = environment_counters.get("__item__", 0) + 1
-            item_number = environment_counters["__item__"]
-            number = f"{section_number}.{item_number}" if section_number is not None else str(item_number)
+            if item.kind.strip().lower() == "proof":
+                number = ""
+            else:
+                environment_counters["__item__"] = environment_counters.get("__item__", 0) + 1
+                item_number = environment_counters["__item__"]
+                number = f"{section_number}.{item_number}" if section_number is not None else str(item_number)
             html.append(_environment_html(item, number, environment_counters, references, figure_counter, section_number))
         elif isinstance(item, Image):
             group = [item]
@@ -377,7 +380,7 @@ def _build_reference_index(document: Document):
         for subsection in section.subsections:
             content.extend(subsection.content)
         for item in content:
-            if isinstance(item, Environment):
+            if isinstance(item, Environment) and item.kind.strip().lower() != "proof":
                 item_number += 1
                 if item.label:
                     references[item.label] = (f"#{item.label}", f"{item.kind.capitalize()} {number}.{item_number}")
