@@ -172,8 +172,8 @@ def _render_topics(articles: list[dict[str, Any]]) -> str:
 
     ordered = sorted(counts, key=lambda key: (-counts[key], labels[key].casefold()))
     return "\n".join(
-        f'<button data-topic="{escape(_slug(labels[key]), quote=True)}">'
-        f'{escape(labels[key])} ({counts[key]})</button>'
+        f'<button type="button" class="chip" data-topic="{escape(_slug(labels[key]), quote=True)}">'
+        f'{escape(labels[key])}<small>{counts[key]}</small></button>'
         for key in ordered[:TOPIC_LIMIT]
     ) or '<span class="filter-note">No tags yet.</span>'
 
