@@ -4,8 +4,9 @@ from src.parser import parse
 def test_multiline_enumerate_with_commas_inside_proof():
     source = '''@documenttitle{Mathematics, banner = com_int_banner.png, color = #111111}
 @section{Test}
-@proof{}
-@enumerate{color = green,
+@begin(proof)
+@end(proof)
+@begin(enumerate, color = green)
     @item{
         First item.
     },
@@ -26,8 +27,9 @@ def test_multiline_enumerate_with_commas_inside_proof():
 def test_apostrophes_inside_directives():
     source = '''@documenttitle{Mathematics}
 @section{Test}
-@theorem{Cauchy's Theorem, label = cauchy}
-Cauchy's theorem is a test of ordinary apostrophes inside directive content.
+@begin(theorem = Cauchy's Theorem, label = cauchy)
+Cauchy's theorem
+@end(theorem) is a test of ordinary apostrophes inside directive content.
 '''
     document = parse(source)
     theorem = document.sections[0].content[0]
