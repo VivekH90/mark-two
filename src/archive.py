@@ -114,8 +114,7 @@ def _render_rows(articles: list[dict[str, Any]]) -> str:
         out.append(f'<h2 class="month" data-month="{escape(month, quote=True)}">{escape(month)}</h2>')
         out.extend(groups[month])
 
-    return "
-".join(out) or '<p class="empty" style="display:block">No articles found.</p>'
+    return "\n".join(out) or '<p class="empty" style="display:block">No articles found.</p>'
 
 
 def build_archive(
