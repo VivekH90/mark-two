@@ -88,7 +88,7 @@
         },
         {
           "name": "entity.name.function.directive.mark-two",
-          "match": "@(?:documenttitle|button|title|description|author|date|folder|tags|section|subsection|image|gallery|bold|italic|color|label|ref|enumerate|itemize|item|relatedlinks|relatedlink)(?=\\s*\\{)"
+          "match": "@(?:documenttitle|button|title|description|author|date|folder|tags|section|subsection|image|bold|italic|color|label|ref|enumerate|itemize|item|relatedlinks|relatedlink)(?=\\s*\\{)"
         },
         {
           "name": "keyword.control.environment.begin.mark-two",
@@ -122,7 +122,7 @@
         },
         {
           "name": "variable.other.parameter.mark-two",
-          "match": "\\b(?:href|color|src|alt|caption|title|label|banner|bold|italic|width|height|query|count|seed|image(?:\\(\\d+\\))?|width(?:\\(\\d+\\))?|height(?:\\(\\d+\\))?)\\b(?=\\s*=)"
+          "match": "\\b(?:href|color|src|alt|caption|title|label|banner|bold|italic|width|height|image(?:\\(\\d+\\))?|width(?:\\(\\d+\\))?|height(?:\\(\\d+\\))?)\\b(?=\\s*=)"
         },
         {
           "name": "constant.language.boolean.mark-two",
