@@ -110,22 +110,6 @@ class RelatedLink:
     href: str
 
 
-@dataclass
-class GallerySpec:
-    source: str = "NASA"
-    query: str = ""
-    count: int = 7
-    seed: Optional[int] = None
-
-
-@dataclass
-class GalleryItem:
-    url: str
-    title: str = ""
-    alt: str = ""
-    source_url: str = ""
-    credit: str = ""
-
 
 @dataclass
 class Document:
@@ -141,5 +125,3 @@ class Document:
     buttons: List[Button] = field(default_factory=list)
     sections: List[Section] = field(default_factory=list)
     related_links: List[RelatedLink] = field(default_factory=list)
-    gallery: Optional[GallerySpec] = None
-    gallery_items: List[GalleryItem] = field(default_factory=list)
