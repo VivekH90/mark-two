@@ -24,7 +24,7 @@ def _render_rows(articles):
 def build_archive(root=".",output=None,template=None):
     root=find_project_root(root); config=load_config(root); articles=sorted(_load_articles(root),key=_sort_key,reverse=True)
     template_path=Path(template).resolve() if template else DEFAULT_TEMPLATE.resolve()
-    output_path=Path(output).resolve() if output else root/"archive.html"
+    output_path=Path(output).resolve() if output else root/"archive"/"index.html"
     repl={"SITE_TITLE":escape(str(config.get("title") or "Notes")),"AUTHOR":escape(str(config.get("author") or "Author")),
           "GITHUB_URL":escape(str(config.get("github") or "#"),quote=True),"ABOUT_URL":escape(str(config.get("about") or "#"),quote=True),
           "HOME_URL":"/","ARCHIVE_URL":escape(str(config.get("archive") or "/archive/"),quote=True),"ARCHIVE_ROWS":_render_rows(articles)}
