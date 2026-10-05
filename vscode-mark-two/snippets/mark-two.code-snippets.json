@@ -185,13 +185,6 @@
       "${0}"
     ]
   },
-  "Gallery": {
-    "prefix": "gallery",
-    "body": [
-      "@gallery{source = ${1:Openverse}, query = ${2:black holes}, count = ${3:7}}",
-      "${0}"
-    ]
-  },
   "Reference": {
     "prefix": "ref",
     "body": [
