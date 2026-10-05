@@ -24,6 +24,7 @@ window.MathJax={
   --muted:#5c5f6b;
   --rule:#dcd8cc;
   --link:#3a43a8;
+  --crim:#b45f06;
   --accent2:#0f766e;
   --box:#f1efe7;
   --card:#ffffff;
@@ -63,6 +64,7 @@ window.MathJax={
   --muted:#a4a5ad;
   --rule:#2e313b;
   --link:#9aa3ff;
+  --crim:#f0a64a;
   --accent2:#5fd0c0;
   --box:#1b1e26;
   --card:#1a1d25;
@@ -187,6 +189,16 @@ header.top{
 :root[data-theme="dark"] .theme-toggle .sun{display:none}
 :root[data-theme="dark"] .theme-toggle .moon{display:block}
 
+#bar{
+  position:absolute;
+  left:0;
+  bottom:-1px;
+  height:3px;
+  width:0;
+  background:var(--accent2);
+  pointer-events:none;
+}
+
 /* Article layout */
 .article-shell{padding:3rem 0 4.5rem}
 .article-layout{
@@ -262,6 +274,13 @@ header.top{
   color:var(--fg);
 }
 
+/* Running example / prototype note, matching the original article treatment. */
+.proto{
+  color:var(--crim);
+  font-style:italic;
+  margin:.2rem 0 .9rem;
+}
+
 /* Main prose */
 .reading{
   max-width:44rem;
@@ -281,7 +300,7 @@ header.top{
 }
 .reading h2 .num{
   display:inline-block;
-  color:var(--link);
+  color:var(--crim);
   font-weight:700;
   margin-right:.7rem;
   padding-right:.7rem;
@@ -395,8 +414,13 @@ header.top{
 }
 .box.proof .qed{
   float:right;
-  margin-top:.4rem;
-  color:var(--muted);
+  display:inline-block;
+  width:.8em;
+  height:.8em;
+  margin-top:.55rem;
+  border:1.5px solid var(--accent2);
+  border-radius:2px;
+  color:transparent;
 }
 .box.proof::after{content:"";display:table;clear:both}
 
@@ -579,6 +603,7 @@ figure.diagram figcaption{
       <svg class="moon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>
     </button>
   </div>
+  <div id="bar" aria-hidden="true"></div>
 </header>
 
 <main class="article-shell">
@@ -690,6 +715,22 @@ document.addEventListener("DOMContentLoaded", function(){
     },{rootMargin:'-15% 0px -70% 0px'});
     headings.forEach(function(h){obs.observe(h);});
   }
+})();
+(function(){
+  var bar=document.getElementById('bar');
+  var article=document.getElementById('article');
+  function updateProgress(){
+    if(!bar || !article){ return; }
+    var rect=article.getBoundingClientRect();
+    var total=rect.height - window.innerHeight * 0.6;
+    var progress=total > 0 ? (-rect.top / total) * 100 : 0;
+    progress=Math.min(100,Math.max(0,progress));
+    bar.style.width=progress+'%';
+  }
+  updateProgress();
+  window.addEventListener('scroll',updateProgress,{passive:true});
+  window.addEventListener('resize',updateProgress);
+
 })();
 (function(){
   var btn=document.querySelector('.theme-toggle');
