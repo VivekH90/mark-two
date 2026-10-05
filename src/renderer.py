@@ -413,23 +413,6 @@ def _section_html(section: Section, number: int, environment_counters, reference
 
 
 
-def _gallery_html(document: Document) -> str:
-    if not document.gallery_items:
-        return ""
-    items = []
-    for item in document.gallery_items:
-        title = escape(item.title or "Image", quote=True)
-        alt = escape(item.alt or item.title or "Image", quote=True)
-        url = escape(item.url, quote=True)
-        source_url = escape(item.source_url or item.url, quote=True)
-        items.append(
-            f'<a class="thumb" href="{source_url}" target="_blank" rel="noopener noreferrer" aria-label="Open {title} source">'
-            f'<img src="{url}" alt="{alt}" loading="lazy" referrerpolicy="no-referrer"></a>'
-        )
-    return '<div class="strip" id="nasa-gallery" aria-label="Article image gallery">' + "".join(items) + '</div>'
-
-
-
 def _breadcrumb_html(document: Document) -> str:
     github_href = "https://github.com"
     home_href = "/"
@@ -506,8 +489,8 @@ def render(document: Document, template_path: str | Path) -> str:
     section_label = escape(document.folder or document.document_tag or "Reading")
 
     replacements = {
-        "{{GALLERY}}": _gallery_html(document),
         "{{ARTICLE_TITLE}}": escape(document.article_title),
+        "{{ARTICLE_DESCRIPTION}}": escape(document.description),
         "{{AUTHOR}}": escape(document.author),
         "{{ARTICLE_DATE_META}}": date_meta,
         "{{ARTICLE_SECTION_LABEL}}": section_label,
