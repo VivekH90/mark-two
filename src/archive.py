@@ -38,11 +38,15 @@ def _render_tag_filter(articles: list[dict[str, Any]]) -> str:
         tags = article.get("tags", [])
         if not isinstance(tags, list):
             continue
+        seen: set[str] = set()
         for raw in tags:
             tag = str(raw).strip()
             if not tag:
                 continue
             key = _slug(tag)
+            if key in seen:
+                continue
+            seen.add(key)
             counts[key] += 1
             labels.setdefault(key, tag)
 
@@ -65,8 +69,19 @@ def _render_rows(articles: list[dict[str, Any]]) -> str:
         parsed, month = _month_label(article.get("date"))
         tags = article.get("tags", [])
         tags = tags if isinstance(tags, list) else []
-        clean_tags = [str(tag).strip() for tag in tags if str(tag).strip()]
-        tag_slugs = [_slug(tag) for tag in clean_tags]
+        clean_tags: list[str] = []
+        tag_slugs: list[str] = []
+        seen_tags: set[str] = set()
+        for raw_tag in tags:
+            tag = str(raw_tag).strip()
+            if not tag:
+                continue
+            slug = _slug(tag)
+            if slug in seen_tags:
+                continue
+            seen_tags.add(slug)
+            clean_tags.append(tag)
+            tag_slugs.append(slug)
         tag_data = "|".join(escape(slug, quote=True) for slug in tag_slugs)
 
         title_text = str(article.get("title") or "Untitled")
