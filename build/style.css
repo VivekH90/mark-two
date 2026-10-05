@@ -32,7 +32,7 @@
   --axiom-border:var(--axiom-ink);
   --warning-border:var(--warning-ink);
 
-  --sans:"CMU Sans Serif","Computer Modern Sans","Latin Modern Sans","LM Sans 10","Computer Modern Sans Serif",Helvetica,Arial,sans-serif;
+  --sans:"Computer Modern Sans","CMU Sans Serif","Latin Modern Sans","LM Sans 10","Computer Modern Sans Serif",Helvetica,Arial,sans-serif;
   --serif:var(--sans);
   color-scheme:light;
 }
