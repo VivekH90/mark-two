@@ -137,18 +137,6 @@ def _extract_inline_block(text: str, start: int):
     return None
 
 
-def _navigation_icon(name: str) -> str:
-    """Return a small inline icon for known site navigation buttons."""
-    key = re.sub(r"\\s+", " ", name.strip().lower())
-    icons = {
-        "home": '<svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.8 12 3l9 7.8v9.2a1 1 0 0 1-1 1h-5.5v-6h-5v6H4a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8.5 21v-6h7v6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>',
-        "archives": '<svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4h13A1.5 1.5 0 0 1 20 5.5v14A1.5 1.5 0 0 1 18.5 21h-13A1.5 1.5 0 0 1 4 19.5z" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 4v17M8 8h7M11 12h5M11 16h5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
-        "thoughts": '<svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 19.5c-1.7-.8-3-2-3.6-3.7C5.2 14.7 5 13.4 5 12a7 7 0 1 1 14 0c0 1.4-.2 2.7-.9 3.8-.6 1.3-1.4 2.5-2.8 3.7H9.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 21h6M9.5 17.5h5M9.7 11.5c.7-.9 1.5-.9 2.3 0 .7-.9 1.5-.9 2.3 0 .5.6.9 1.2.8 2M12 8.5v3" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>',
-        "github": '<svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .7a11.3 11.3 0 0 0-3.6 22c.6.1.8-.3.8-.6v-2.1c-3.1.7-3.8-1.3-3.8-1.3-.5-1.3-1.2-1.6-1.2-1.6-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 .1 1.5-.7 1.8-1.1.1-.7.4-1.1.6-1.4-2.5-.3-5.2-1.2-5.2-5.6 0-1.2.4-2.2 1.1-3-.1-.3-.5-1.5.1-3 0 0 .9-.3 3.1 1.1a10.7 10.7 0 0 1 5.6 0c2.2-1.4 3.1-1.1 3.1-1.1.6 1.5.2 2.7.1 3 .7.8 1.1 1.8 1.1 3 0 4.4-2.7 5.3-5.2 5.6.4.3.7.9.7 1.8v2.7c0 .3.2.7.8.6A11.3 11.3 0 0 0 12 .7Z"/></svg>'
-    }
-    return icons.get(key, "")
-
-
 def _looks_like_url(target: str) -> bool:
     return bool(re.match(r"^(?:https?://|/|(?:\.?\.?/)?[^#]+\.html(?:#.*)?$)", target, re.IGNORECASE)) or "#" in target
 
@@ -413,71 +401,6 @@ def _section_html(section: Section, number: int, environment_counters, reference
 
 
 
-def _gallery_html(document: Document) -> str:
-    if not document.gallery_items:
-        return ""
-    items = []
-    for item in document.gallery_items:
-        title = escape(item.title or "Image", quote=True)
-        alt = escape(item.alt or item.title or "Image", quote=True)
-        url = escape(item.url, quote=True)
-        source_url = escape(item.source_url or item.url, quote=True)
-        items.append(
-            f'<a class="thumb" href="{source_url}" target="_blank" rel="noopener noreferrer" aria-label="Open {title} source">'
-            f'<img src="{url}" alt="{alt}" loading="lazy" referrerpolicy="no-referrer"></a>'
-        )
-    return '<div class="strip" id="nasa-gallery" aria-label="Article image gallery">' + "".join(items) + '</div>'
-
-
-
-def _breadcrumb_html(document: Document) -> str:
-    github_href = "https://github.com"
-    home_href = "/"
-    for button in document.buttons:
-        key = button.name.strip().lower()
-        if key == "github":
-            github_href = button.href
-        elif key == "home":
-            home_href = button.href
-    chunks = [
-        f'<a href="{escape(home_href, quote=True)}">Home</a>',
-        '<span class="sep">›</span>',
-    ]
-    if document.document_tag:
-        chunks.extend([f'<a href="#">{escape(document.document_tag)}</a>', '<span class="sep">›</span>'])
-    if document.folder:
-        chunks.extend([f'<a href="#">{escape(document.folder)}</a>', '<span class="sep">›</span>'])
-    chunks.append(f'<span class="current">{escape(document.article_title)}</span>')
-    icon_html = (
-        '<a class="icon-button" href="' + escape(home_href, quote=True) + '" aria-label="Home" title="Home">'
-        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
-        '<path d="M5 12l-2 0l9 -9l9 9l-2 0"/>'
-        '<path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"/>'
-        '<path d="M10 12h4v4h-4l0 -4"/>'
-        '</svg></a>'
-        '<a class="icon-button" href="' + escape(github_href, quote=True) + '" aria-label="GitHub" title="GitHub">'
-        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
-        '<path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5"/>'
-        '</svg></a>'
-        '<button class="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">'
-        '<svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
-        '<path d="M8 12a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/>'
-        '<path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7"/>'
-        '</svg>'
-        '<svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
-        '<path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454l0 .008"/>'
-        '</svg>'
-        '</button>'
-    )
-    date_html = f'<time>{escape(document.date)}</time>' if document.date else ""
-    return (
-        '<div class="metabar"><nav class="crumbs">' + "".join(chunks) +
-        '</nav><div class="icons">' + icon_html + '</div></div>'
-    )
-
-
-
-
 def render(document: Document, template_path: str | Path) -> str:
     template = Path(template_path).read_text(encoding="utf-8")
 
@@ -506,13 +429,12 @@ def render(document: Document, template_path: str | Path) -> str:
     section_label = escape(document.folder or document.document_tag or "Reading")
 
     replacements = {
-        "{{GALLERY}}": _gallery_html(document),
         "{{ARTICLE_TITLE}}": escape(document.article_title),
+        "{{ARTICLE_DESCRIPTION}}": escape(document.description),
         "{{AUTHOR}}": escape(document.author),
         "{{ARTICLE_DATE_META}}": date_meta,
         "{{ARTICLE_SECTION_LABEL}}": section_label,
         "{{TAGS}}": tag_block,
-        "{{BREADCRUMB}}": _breadcrumb_html(document),
         "{{BUTTONS}}": "\n".join(buttons),
         "{{ARTICLE}}": "\n".join(article),
         "{{RELATED_LINKS}}": "\n".join(related),

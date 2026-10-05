@@ -5,326 +5,352 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{{SITE_TITLE}} · {{AUTHOR}}</title>
 <script>
-  (function(){
-    try{
-      var saved = localStorage.getItem('theme');
-      var theme = saved || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-      if(theme === 'dark') document.documentElement.setAttribute('data-theme','dark');
-    }catch(e){}
-  })();
+(function(){
+  try{
+    var saved=localStorage.getItem('theme');
+    var theme=saved||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+    if(theme==='dark') document.documentElement.setAttribute('data-theme','dark');
+  }catch(e){}
+})();
 </script>
 <style>
-  :root{
-    --ink:#221F2C; --sub:#6B6353;
-    --lav:#D8C4F5; --lav-b:#6B3FA8; --lav-text:#2E1F4A;
-    --mint:#B9DEE5; --mint-b:#0A5A63;
-    --cyan:#B8E3DE; --cyan-b:#1E6E69;
-    --yellow:#F5DE8A; --yellow-b:#A87A0A;
-    --coral:#F5C4B0; --coral-b:#A8451C;
-    --gray-b:#7A6438;
-    --sand1:#FBF3DE; --sand2:#F3E3BE;
-    --card-white:#fff;
-    --def-text:#0A3E3A; --axiom-text:#4E3705; --theorem-text:#5C1B08;
-    box-sizing:border-box;
-  }
-  :root[data-theme="dark"]{
-    --ink:#F0EAD9; --sub:#B8AE97;
-    --lav:#2E2149; --lav-b:#B090E6; --lav-text:#E4D8FA;
-    --mint:#0F3A3E; --mint-b:#6FE0D6;
-    --cyan:#123B38; --cyan-b:#6FD8CE;
-    --yellow:#4A3A0A; --yellow-b:#F0C94A;
-    --coral:#4A2214; --coral-b:#F0916A;
-    --gray-b:#C9AD6E;
-    --sand1:#171512; --sand2:#1C1912;
-    --card-white:#211D16;
-    --def-text:#B7EDE6; --axiom-text:#F0DE9E; --theorem-text:#F5C5AE;
-  }
-  *,*::before,*::after{box-sizing:inherit;}
-  html,body{height:100%;margin:0;}
-  body{
-    color:var(--ink);font-family:"Latin Modern Sans","Computer Modern Sans Serif","Computer Modern Sans",sans-serif;
-    -webkit-font-smoothing:antialiased;display:flex;
-  }
-  a{color:inherit;}
-  button,input{font-family:inherit;}
+:root{
+  --bg:#fbfaf6;--fg:#1c1d24;--muted:#676873;--rule:#d9d5ca;
+  --link:#3a43a8;--green:#0f766e;--paper:#fffefa;--soft:#f1efe7;
+  --sans:"CMU Sans Serif","Computer Modern Sans","Latin Modern Sans","LM Sans 10","Computer Modern Sans Serif",Helvetica,Arial,sans-serif;
+}
+:root[data-theme="dark"]{
+  --bg:#12141a;--fg:#e8e6df;--muted:#a4a5ad;--rule:#30333d;
+  --link:#a7afff;--green:#62d1c1;--paper:#191c23;--soft:#20232b;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--bg);color:var(--fg);font-family:var(--sans);
+  font-size:1.05rem;line-height:1.75;-webkit-font-smoothing:antialiased
+}
+a{color:var(--link);text-decoration:none}
+a:hover{text-decoration:underline}
+button,input{font:inherit}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--link);outline-offset:3px}
+.wrap{width:min(58rem,calc(100% - 2.4rem));margin:0 auto}
 
-  /* ---------- fixed theme toggle (always in the same spot) ---------- */
-  .theme-toggle{
-    position:fixed;top:calc(14px + env(safe-area-inset-top,0px));right:14px;z-index:20;
-    width:38px;height:38px;border-radius:10px;border:2px solid var(--lav-b);
-    background:var(--card-white);display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;
-    box-shadow:0 2px 8px rgba(0,0,0,0.08);
-  }
-  .theme-toggle svg{width:16px;height:16px;color:var(--ink);}
-  .theme-toggle .moon{display:none;}
-  :root[data-theme="dark"] .theme-toggle .sun{display:none;}
-  :root[data-theme="dark"] .theme-toggle .moon{display:flex;}
+/* Header deliberately resembles a book's running head, not a web-app toolbar. */
+.top{
+  border-bottom:1px solid var(--rule);
+  background:var(--bg);
+}
+.top-wrap{
+  min-height:4.4rem;display:flex;align-items:center;gap:1.6rem
+}
+.brand{
+  display:flex;align-items:center;gap:.55rem;margin-right:auto;
+  color:var(--fg);font-weight:700
+}
+.brand:hover{text-decoration:none}
+.brand-mark{
+  width:1.8rem;height:1.8rem;border-radius:50%;
+  display:grid;place-items:center;background:var(--fg);color:var(--bg);
+  font-size:.95rem
+}
+.nav{display:flex;gap:1.15rem;align-items:center}
+.nav a{font-size:.88rem;color:var(--muted)}
+.nav a:hover{color:var(--fg);text-decoration:none}
+.theme{
+  width:1.9rem;height:1.9rem;border:1px solid var(--rule);border-radius:50%;
+  background:transparent;color:var(--fg);display:grid;place-items:center;cursor:pointer
+}
+.theme svg{width:14px;height:14px}
+.theme .moon{display:none}
+:root[data-theme="dark"] .theme .sun{display:none}
+:root[data-theme="dark"] .theme .moon{display:block}
 
-  /* ---------- sidebar ---------- */
-  .panel-left{
-    width:300px;flex:none;background:var(--lav);border-right:4px solid var(--lav-b);
-    padding:28px 24px;display:flex;flex-direction:column;height:100vh;overflow-y:auto;position:sticky;top:0;
-  }
-  .idbox{background:var(--card-white);border:2px solid var(--lav-b);border-radius:14px;
-    padding:16px;display:flex;gap:12px;margin-bottom:22px;}
-  .avatar{flex:none;width:42px;height:42px;border-radius:50%;background:var(--lav);border:2px solid var(--lav-b);
-    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.95rem;color:var(--lav-text);}
-  .idbox .brand{font-size:1.08rem;font-weight:800;margin:0 0 4px;color:var(--ink);}
-  .idbox .tag{font-size:12.5px;color:var(--sub);line-height:1.45;margin:0;}
+/* Introduction */
+main{padding:4.4rem 0 5rem}
+.intro{
+  max-width:43rem;margin:0 auto 3.8rem;text-align:center
+}
+.kicker{
+  color:var(--green);font-size:.78rem;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;margin-bottom:.7rem
+}
+.intro h1{
+  margin:0;font-size:clamp(2.8rem,7vw,4.7rem);line-height:1.04;
+  letter-spacing:-.035em;font-weight:750
+}
+.intro p{
+  max-width:38rem;margin:1rem auto 0;color:var(--muted);
+  font-size:1.1rem;line-height:1.7
+}
+.author{
+  margin-top:.7rem;color:var(--fg);font-size:.9rem
+}
 
-  nav.pnav ul{list-style:none;margin:0 0 20px;padding:0;display:flex;flex-direction:column;gap:5px;}
-  nav.pnav a{text-decoration:none;font-size:14px;font-weight:700;padding:8px 12px;border-radius:9px;color:var(--ink);
-    display:block;border:2px solid transparent;}
-  nav.pnav a:hover{border-color:var(--lav-b);}
-  nav.pnav a.active{background:var(--card-white);border-color:var(--lav-b);}
+/* Search is intentionally quiet. */
+.search{
+  max-width:39rem;margin:0 auto 3rem
+}
+.search-line{
+  display:flex;align-items:center;gap:.6rem;
+  border-bottom:1.5px solid var(--fg);padding:.45rem 0
+}
+.search-line svg{width:16px;height:16px;color:var(--muted);flex:none}
+.search-line input{
+  width:100%;border:0;outline:0;background:transparent;color:var(--fg);
+  font-size:1rem;padding:.25rem 0
+}
+.search-line input::placeholder{color:var(--muted)}
+.search-hint{
+  display:flex;justify-content:space-between;margin-top:.45rem;
+  color:var(--muted);font-size:.75rem
+}
+.search-hint kbd{
+  border:1px solid var(--rule);padding:.05rem .3rem;border-radius:3px;
+  background:var(--soft);font-family:inherit
+}
 
-  .search-box{margin-bottom:22px;}
-  .search-box label{font-size:11.5px;font-weight:700;color:var(--lav-text);opacity:.85;display:block;margin-bottom:7px;}
-  .search-field{display:flex;align-items:center;gap:8px;background:var(--card-white);border:2px solid var(--lav-b);
-    border-radius:10px;padding:8px 11px;}
-  .search-field svg{width:15px;height:15px;color:var(--sub);flex:none;}
-  .search-field input{border:none;background:none;outline:none;font-size:13.5px;color:var(--ink);width:100%;}
+/* Tags become a small index, not a row of UI pills. */
+.topic-row{
+  max-width:48rem;margin:0 auto 3.5rem;
+  display:flex;align-items:baseline;gap:1rem;flex-wrap:wrap;
+  padding-bottom:.75rem;border-bottom:1px solid var(--rule)
+}
+.topic-label{font-size:.8rem;color:var(--green);font-weight:700}
+.ptopics{display:flex;flex-wrap:wrap;gap:.15rem .8rem}
+.ptopics button{
+  border:0;border-bottom:1px solid transparent;background:none;color:var(--muted);
+  padding:0;font-size:.84rem;cursor:pointer
+}
+.ptopics button:hover,.ptopics button.active{color:var(--link);border-bottom-color:currentColor}
+.filter-note{
+  width:100%;font-size:.75rem;color:var(--muted);min-height:0
+}
+.filter-note button{border:0;background:none;padding:0;color:inherit;text-decoration:underline;cursor:pointer}
 
-  .panel-left h4{font-size:11.5px;letter-spacing:.03em;color:var(--lav-text);opacity:.8;margin:0 0 10px;font-weight:700;}
-  .ptopics{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:8px;}
-  .ptopics button{font-size:12px;font-weight:700;padding:5px 11px;border-radius:9px;cursor:pointer;
-    background:var(--card-white);color:var(--ink);}
-  .ptopics button:nth-child(1){border:2px solid var(--coral-b);}
-  .ptopics button:nth-child(2){border:2px solid var(--cyan-b);}
-  .ptopics button:nth-child(3){border:2px solid var(--yellow-b);}
-  .ptopics button.active{background:var(--ink);color:var(--card-white);}
-  .filter-note{font-size:11px;color:var(--lav-text);opacity:.7;margin:0 0 26px;min-height:14px;}
-  .filter-note button{background:none;border:none;color:inherit;text-decoration:underline;cursor:pointer;font-size:11px;padding:0;}
+/* Content is a journal index. */
+.section{max-width:48rem;margin:0 auto 3.7rem}
+.section-head{
+  display:flex;align-items:baseline;justify-content:space-between;
+  border-bottom:1.5px solid var(--fg);padding-bottom:.3rem;margin-bottom:0
+}
+.section-head h2{
+  margin:0;font-size:.82rem;letter-spacing:.08em;text-transform:uppercase;
+  font-weight:700
+}
+.section-head a{font-size:.78rem;color:var(--muted)}
 
-  .pelse{display:flex;flex-direction:column;gap:10px;margin-top:auto;}
-  .contact-icons{display:flex;gap:9px;}
-  .iconbtn{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;
-    background:var(--card-white);text-decoration:none;border:2px solid;}
-  .iconbtn svg{width:16px;height:16px;}
-  .iconbtn.mail{border-color:var(--coral-b);color:var(--coral-b);}
-  .iconbtn.insta{border-color:var(--yellow-b);color:var(--yellow-b);}
-  .iconbtn.gh{border-color:var(--cyan-b);color:var(--cyan-b);}
-  .pcopy{font-size:11px;color:var(--lav-text);opacity:.6;margin-top:4px;}
+/* Featured article */
+.featured-card{
+  display:block;padding:1.35rem 0 1.45rem;
+  border-bottom:1px solid var(--rule);color:var(--fg)
+}
+.featured-card:hover{text-decoration:none;background:linear-gradient(90deg,var(--soft),transparent 75%)}
+.featured-card .badge{
+  color:var(--green);font-size:.76rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.08em
+}
+.featured-card h3{
+  margin:.25rem 0 .35rem;font-size:1.55rem;line-height:1.25;letter-spacing:-.01em
+}
+.featured-card p{margin:0;max-width:39rem;color:var(--muted);font-size:.94rem;line-height:1.65}
+.featured-card .meta{margin-top:.65rem;color:var(--muted);font-size:.77rem}
 
-  /* ---------- main ---------- */
-  .panel-right{flex:1;height:100vh;overflow-y:auto;background:linear-gradient(160deg,var(--sand1),var(--sand2)) fixed;padding:44px 6vw 70px;}
-  .rwrap{max-width:800px;}
+/* Recent posts: one clean row each. */
+.recent-list{border-bottom:1px solid var(--rule)}
+.recent-card{
+  display:grid;grid-template-columns:7rem minmax(0,1fr) auto;
+  gap:1rem;align-items:baseline;padding:1rem .2rem;
+  border-bottom:1px solid var(--rule);color:var(--fg)
+}
+.recent-card:last-child{border-bottom:0}
+.recent-card:hover{background:var(--soft);text-decoration:none}
+.recent-card .date{color:var(--muted);font-size:.78rem}
+.recent-card h3{margin:0;font-size:1rem;line-height:1.4;font-weight:650}
+.recent-card .cat{color:var(--muted);font-size:.76rem;text-align:right}
 
-  .hero{margin-bottom:34px;}
-  .hero h1{font-size:clamp(1.7rem,3.6vw,2.3rem);font-weight:800;margin:0 0 10px;}
-  .hero p{font-size:1rem;color:var(--sub);max-width:60ch;line-height:1.6;margin:0;}
+/* Archive */
+.archive{margin-top:0}
+.archive .year-label{
+  margin:1.8rem 0 .15rem;color:var(--green);font-size:.78rem;font-weight:700
+}
+.archive .year-label:first-of-type{margin-top:0}
+.row{
+  display:grid;grid-template-columns:7rem minmax(0,1fr) auto;
+  gap:1rem;align-items:baseline;padding:.65rem .2rem;
+  border-bottom:1px solid var(--rule)
+}
+.row:hover{background:var(--soft)}
+.row time,.row .cat{color:var(--muted);font-size:.76rem}
+.row .ttl{font-size:.92rem;color:var(--fg)}
+.row.is-hidden,.year-label.is-hidden{display:none}
+.empty-msg{display:none;color:var(--muted);font-size:.88rem;padding:1.2rem 0}
+.back-top{display:block;margin-top:.9rem;color:var(--muted);font-size:.78rem}
 
-  .sec-head{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid var(--ink);
-    padding-bottom:8px;margin-bottom:20px;}
-  .sec-head h2{font-size:1.1rem;font-weight:800;margin:0;}
-  .sec-head a{font-size:12.5px;font-weight:700;text-decoration:none;color:var(--coral-b);}
-  .sec-head a:hover{text-decoration:underline;}
+footer{
+  border-top:1px solid var(--rule);padding:1rem 0 2rem;
+  color:var(--muted);font-size:.78rem
+}
 
-  .featured{margin-bottom:44px;}
-  .card{background:var(--card-white);border:2.5px solid var(--ac-b);border-top-width:5px;border-radius:12px;padding:18px 20px;}
-  .card.lead{padding:24px 26px;}
-  .card.lead h3{font-size:1.3rem;}
-  .card .badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:8px;margin-bottom:8px;}
-  .card h3{margin:0 0 8px;font-size:1.02rem;font-weight:800;}
-  .card h3 a{text-decoration:none;color:var(--ink);}
-  .card h3 a:hover{color:var(--theorem-text);}
-  .card p{margin:0 0 10px;font-size:0.9rem;color:var(--ink);opacity:.85;line-height:1.55;}
-  .card .meta{font-size:11.5px;color:var(--sub);}
-  .card.physics{--ac-b:var(--coral-b);}
-  .card.physics .badge{background:var(--coral);color:var(--theorem-text);}
-  .card.math{--ac-b:var(--cyan-b);}
-  .card.math .badge{background:var(--cyan);color:var(--def-text);}
-  .card.notes{--ac-b:var(--yellow-b);}
-  .card.notes .badge{background:var(--yellow);color:var(--axiom-text);}
-
-  .recent{margin-bottom:46px;}
-  .recent-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-
-  .row{display:flex;gap:16px;align-items:baseline;padding:12px 4px 12px 16px;
-    border-bottom:1.5px dashed var(--gray-b);border-left:4px solid var(--ac);}
-  .row.physics{--ac:var(--coral-b);}
-  .row.math{--ac:var(--cyan-b);}
-  .row.notes{--ac:var(--mint-b);}
-  .row time{font-size:12px;color:var(--sub);width:58px;flex:none;}
-  .row a.ttl{font-size:1rem;font-weight:700;text-decoration:none;color:var(--ink);flex:1;}
-  .row a.ttl:hover{color:var(--theorem-text);}
-  .row .cat{font-size:11px;color:var(--sub);flex:none;}
-  .row.is-hidden{display:none;}
-
-  .year-label{font-size:0.9rem;font-weight:800;color:var(--theorem-text);margin:22px 0 4px;}
-  .year-label:first-of-type{margin-top:0;}
-  .year-label.is-hidden{display:none;}
-  .empty-msg{font-size:0.9rem;color:var(--sub);padding:16px 4px;display:none;}
-  .back-top{display:inline-block;margin-top:18px;font-size:12.5px;font-weight:700;text-decoration:none;color:var(--coral-b);}
-  .back-top:hover{text-decoration:underline;}
-
-  @media (max-width:820px){
-    body{display:block;}
-    .theme-toggle{top:14px;}
-    .panel-left{position:static;width:auto;height:auto;border-right:none;border-bottom:4px solid var(--lav-b);
-      flex-direction:row;flex-wrap:wrap;align-items:center;gap:14px 22px;padding:18px 5vw;}
-    .idbox{width:100%;}
-    nav.pnav ul{flex-direction:row;flex-wrap:wrap;margin-bottom:0;}
-    .search-box{width:100%;order:2;margin-bottom:8px;}
-    .panel-left h4,.ptopics,.filter-note,.pelse{display:none;}
-    .panel-right{height:auto;padding:70px 5vw 60px;}
-    .recent-grid{grid-template-columns:1fr;}
-  }
-  :focus-visible{outline:2px solid var(--lav-b);outline-offset:2px;}
+@media(max-width:700px){
+  .wrap{width:min(100% - 2rem,58rem)}
+  .nav{display:none}
+  main{padding-top:3.2rem}
+  .intro{text-align:left}
+  .intro p{margin-left:0}
+  .recent-card,.row{grid-template-columns:5.5rem minmax(0,1fr)}
+  .recent-card .cat,.row .cat{grid-column:2;text-align:left}
+}
+@media(max-width:480px){
+  body{font-size:1rem}
+  .intro h1{font-size:2.75rem}
+  .topic-row{gap:.5rem}
+  .recent-card,.row{grid-template-columns:1fr;gap:.1rem}
+  .recent-card .cat,.row .cat{grid-column:auto}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
 </head>
 <body>
-
-<button class="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">
-  <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.2M12 19.8V22M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2 12h2.2M19.8 12H22M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/></svg>
-  <svg class="moon" viewBox="0 0 24 24" fill="currentColor"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>
-</button>
-
-<aside class="panel-left">
-  <div class="idbox">
-    <div class="avatar">{{AVATAR}}</div>
-    <div>
-      <p class="brand">{{AUTHOR}}</p>
-      <p class="tag">{{BIO}}</p>
-    </div>
+<header class="top">
+  <div class="wrap top-wrap">
+    <a class="brand" href="/">
+      <span class="brand-mark">∫</span>
+      <span>{{AUTHOR}}</span>
+    </a>
+    <nav class="nav" aria-label="Site navigation">
+      <a href="#recent">Recent</a>
+      <a href="#archive">Archive</a>
+      <a href="{{ABOUT_URL}}">About</a>
+      <a href="{{GITHUB_URL}}" target="_blank" rel="noopener">GitHub</a>
+    </nav>
+    <button class="theme" type="button" aria-label="Toggle dark mode">
+      <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.2M12 19.8V22M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2 12h2.2M19.8 12H22M4.2 19.8l1.6-1.6M18.2 18.2l1.6-1.6"/></svg>
+      <svg class="moon" viewBox="0 0 24 24" fill="currentColor"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>
+    </button>
   </div>
+</header>
 
-  <nav class="pnav"><ul>
-    <li><a href="#recent" data-sec="recent" class="active">Recent</a></li>
-    <li><a href="#archive" data-sec="archive">Archive</a></li>
-    <li><a href="{{ABOUT_URL}}">About</a></li>
-    <li><a href="{{GITHUB_URL}}" target="_blank" rel="noopener">GitHub</a></li>
-  </ul></nav>
-
-  <div class="search-box">
-    <label for="site-search">Search notes</label>
-    <div class="search-field">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-      <input id="site-search" type="text" placeholder="Search title, tag, topic…" autocomplete="off">
-    </div>
-  </div>
-
-  <h4>Filter by topic</h4>
-  <div class="ptopics">{{TOPICS}}</div>
-  <div class="filter-note"></div>
-
-  <div class="pelse">
-    <div class="contact-icons">
-      <a class="iconbtn mail" href="{{EMAIL_URL}}" aria-label="Email" title="Email">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
-      </a>
-      <a class="iconbtn insta" href="{{INSTAGRAM_URL}}" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1"/></svg>
-      </a>
-      <a class="iconbtn gh" href="{{GITHUB_URL}}" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 18L4 12l4-6M16 6l4 6-4 6"/></svg>
-      </a>
-    </div>
-    <div class="pcopy">© {{YEAR}} {{AUTHOR}}</div>
-  </div>
-</aside>
-
-<main class="panel-right">
-  <div class="rwrap">
-
-    <div class="hero">
+<main>
+  <div class="wrap">
+    <section class="intro">
+      <div class="kicker">Notes · Essays · Mathematics · Physics</div>
       <h1>{{SITE_TITLE}}</h1>
       <p>{{SITE_DESCRIPTION}}</p>
-    </div>
+      <div class="author">{{AUTHOR}}</div>
+    </section>
 
-    <section class="featured">
-    <div class="sec-head"><h2>Featured</h2></div>
-    {{FEATURED}}
-  </section>    <section id="recent" class="recent">
-    <div class="sec-head"><h2>Recent</h2><a href="{{ARCHIVE_URL}}">Full archive →</a></div>
-    <div class="recent-grid">
-      {{RECENT}}
-    </div>
-  </section>
+    <section class="search" aria-label="Search">
+      <div class="search-line">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input id="site-search" type="search" placeholder="Search the notes…" aria-label="Search articles" autocomplete="off">
+      </div>
+      <div class="search-hint">
+        <span>Search titles, descriptions and tags</span>
+        <span><kbd>/</kbd> focus search</span>
+      </div>
+    </section>
 
-  <section id="archive">
-    <div class="sec-head"><h2>Archive</h2><a href="#recent">Back to top ↑</a></div>
-    <p class="empty-msg" id="empty-msg">No documents match your search or filter.</p>
-    {{ARCHIVE}}
-    <a class="back-top" href="#recent">↑ Back to top</a>
-  </section>  </div>
+    <section class="topic-row">
+      <span class="topic-label">Index</span>
+      <div class="ptopics">{{TOPICS}}</div>
+      <div class="filter-note"></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><h2>Featured</h2></div>
+      {{FEATURED}}
+    </section>
+
+    <section id="recent" class="section">
+      <div class="section-head">
+        <h2>Recent</h2>
+        <a href="#archive">Archive ↓</a>
+      </div>
+      <div class="recent-list">{{RECENT}}</div>
+    </section>
+
+    <section id="archive" class="section archive">
+      <div class="section-head">
+        <h2>Archive</h2>
+        <a href="#recent">Recent ↑</a>
+      </div>
+      <p class="empty-msg" id="empty-msg">No articles match the current search.</p>
+      {{ARCHIVE}}
+      <a class="back-top" href="#recent">↑ back to recent</a>
+    </section>
+  </div>
 </main>
+
+<footer>
+  <div class="wrap">© {{YEAR}} {{AUTHOR}}</div>
+</footer>
 
 <script>
 (function(){
-  // dark mode
-  var btn = document.querySelector('.theme-toggle');
-  btn.addEventListener('click', function(){
-    var root = document.documentElement;
-    var isDark = root.getAttribute('data-theme') === 'dark';
-    if(isDark){ root.removeAttribute('data-theme'); } else { root.setAttribute('data-theme','dark'); }
-    try{ localStorage.setItem('theme', isDark ? 'light' : 'dark'); }catch(e){}
+  var root=document.documentElement;
+  var theme=document.querySelector('.theme');
+  if(theme) theme.addEventListener('click',function(){
+    var dark=root.getAttribute('data-theme')==='dark';
+    if(dark) root.removeAttribute('data-theme'); else root.setAttribute('data-theme','dark');
+    try{localStorage.setItem('theme',dark?'light':'dark')}catch(e){}
   });
 
-  // scrollspy: highlight Recent/Archive nav link based on scroll position within panel-right
-  var sections = document.querySelectorAll('#recent, #archive');
-  var navLinks = document.querySelectorAll('nav.pnav a[data-sec]');
-  var scrollRoot = document.querySelector('.panel-right');
-  if(scrollRoot && 'IntersectionObserver' in window){
-    var obs = new IntersectionObserver(function(entries){
-      entries.forEach(function(e){
-        if(e.isIntersecting){
-          navLinks.forEach(function(a){ a.classList.remove('active'); });
-          var match = document.querySelector('nav.pnav a[data-sec="'+e.target.id+'"]');
-          if(match) match.classList.add('active');
-        }
-      });
-    }, {root: scrollRoot, rootMargin:'-10% 0px -70% 0px'});
-    sections.forEach(function(s){ obs.observe(s); });
-  }
+  var input=document.getElementById('site-search');
+  var topics=document.querySelectorAll('.ptopics button');
+  var note=document.querySelector('.filter-note');
+  var empty=document.getElementById('empty-msg');
+  var rows=document.querySelectorAll('#archive .row');
+  var years=document.querySelectorAll('#archive .year-label');
+  var active=null;
 
-  // search + topic filter, combined, applied to the archive rows
-  var searchInput = document.getElementById('site-search');
-  var topicBtns = document.querySelectorAll('.ptopics button');
-  var note = document.querySelector('.filter-note');
-  var emptyMsg = document.getElementById('empty-msg');
-  var rows = document.querySelectorAll('#archive .row');
-  var yearLabels = document.querySelectorAll('#archive .year-label');
-  var activeTopic = null;
-
-  function applyFilters(){
-    var q = searchInput.value.trim().toLowerCase();
-    var visible = 0;
-    rows.forEach(function(r){
-      var tags = (r.dataset.tags || '').split('|').filter(Boolean);
-      var searchText = (r.dataset.search || r.querySelector('.ttl').textContent).toLowerCase();
-      var matchesTopic = !activeTopic || tags.includes(activeTopic);
-      var matchesQuery = !q || searchText.includes(q);
-      var show = matchesTopic && matchesQuery;
-      r.classList.toggle('is-hidden', !show);
+  function filter(){
+    var q=input.value.trim().toLowerCase(),visible=0;
+    rows.forEach(function(row){
+      var tags=(row.dataset.tags||'').toLowerCase().split('|').filter(Boolean);
+      var hay=(row.dataset.search||row.textContent).toLowerCase();
+      var show=(!active||tags.indexOf(active.toLowerCase())!==-1)&&(!q||hay.indexOf(q)!==-1);
+      row.classList.toggle('is-hidden',!show);
       if(show) visible++;
     });
-    yearLabels.forEach(function(label){
-      var el = label.nextElementSibling, any = false;
-      while(el && el.classList.contains('row')){
-        if(!el.classList.contains('is-hidden')) any = true;
-        el = el.nextElementSibling;
+    years.forEach(function(label){
+      var n=label.nextElementSibling,has=false;
+      while(n&&n.classList.contains('row')){
+        if(!n.classList.contains('is-hidden')) has=true;
+        n=n.nextElementSibling;
       }
-      label.classList.toggle('is-hidden', !any);
+      label.classList.toggle('is-hidden',!has);
     });
-    emptyMsg.style.display = visible === 0 ? 'block' : 'none';
+    empty.style.display=visible?'none':'block';
 
-    var bits = [];
-    if(activeTopic) bits.push(activeTopic);
-    if(q) bits.push('"' + q + '"');
-    note.innerHTML = bits.length ? ('Showing ' + bits.join(' + ') + ' <button type="button">clear</button>') : '';
-    var clearBtn = note.querySelector('button');
-    if(clearBtn){ clearBtn.addEventListener('click', function(){ setTopic(null); searchInput.value=''; applyFilters(); }); }
+    if(active||q){
+      var bits=[];
+      if(active) bits.push(active);
+      if(q) bits.push('“'+q+'”');
+      note.innerHTML='Showing '+bits.join(' · ')+' · <button type="button">clear</button>';
+      note.querySelector('button').onclick=function(){
+        active=null;input.value='';
+        topics.forEach(function(b){b.classList.remove('active')});
+        filter();
+      };
+    }else note.textContent='';
   }
-  function setTopic(topic){
-    activeTopic = topic;
-    topicBtns.forEach(function(b){ b.classList.toggle('active', b.dataset.topic === topic); });
-    applyFilters();
-  }
-  topicBtns.forEach(function(b){
-    b.addEventListener('click', function(){ setTopic(activeTopic === b.dataset.topic ? null : b.dataset.topic); });
+
+  topics.forEach(function(btn){
+    btn.addEventListener('click',function(){
+      active=active===btn.dataset.topic?null:btn.dataset.topic;
+      topics.forEach(function(b){b.classList.toggle('active',b===btn&&!!active)});
+      filter();
+    });
   });
-  searchInput.addEventListener('input', applyFilters);
+
+  input.addEventListener('input',filter);
+  document.addEventListener('keydown',function(e){
+    if(e.key==='/'&&document.activeElement!==input){
+      e.preventDefault();input.focus();
+    }
+  });
+  filter();
 })();
 </script>
 </body>

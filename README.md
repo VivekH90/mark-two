@@ -162,7 +162,6 @@ Common document-level directives are:
 | `@description` | Sets the short description used by the homepage article cards. | `@description{A short description of the article.}` |
 | `@tags` | Adds comma-separated article tags. | `@tags{Electromagnetism, Classical Field Theory}` |
 | `@button` | Adds a navigation button. | `@button{GitHub, href = https://github.com/VivekH90/blog}` |
-| `@gallery` | Adds a remote image gallery. | `@gallery{source = NASA, query = black holes, count = 7}` |
 | `@relatedlinks` | Adds a related link to the page sidebar. | `@relatedlinks{Python, href = https://www.python.org}` |
 | `@relatedlink` | Alias for `@relatedlinks`. | `@relatedlink{Python, href = https://www.python.org}` |
 
@@ -447,99 +446,12 @@ A reference can also target a page/HTML URL:
 @ref{analysis.html#fundamental-theorem}
 ```
 
-## Remote image galleries
-
-The `@gallery` directive can build a document-level remote image gallery at compile time.
-
-The supported login-free providers are:
-
-- `NASA`
-- `Openverse`
-- `Wikimedia` (also accepts `Wikimedia Commons`)
-- `Met` (The Metropolitan Museum of Art)
-- `Internet Archive`
-- `ESA/Hubble` (also accepts `ESA`, `ESA Hubble`, or `esahubble`)
-
-For example:
-
-```text
-@gallery{
-    source = Openverse,
-    query = electromagnetic field,
-    count = 7
-}
-```
-
-Wikimedia Commons:
-
-```text
-@gallery{
-    source = Wikimedia,
-    query = James Clerk Maxwell,
-    count = 7
-}
-```
-
-The Met:
-
-```text
-@gallery{
-    source = Met,
-    query = astronomy,
-    count = 7
-}
-```
-
-Internet Archive:
-
-```text
-@gallery{
-    source = Internet Archive,
-    query = physics photographs,
-    count = 7
-}
-```
-
-ESA/Hubble:
-
-```text
-@gallery{
-    source = ESA/Hubble,
-    query = nebula,
-    count = 7
-}
-```
-
-NASA remains available:
-
-```text
-@gallery{
-    source = NASA,
-    query = black holes,
-    count = 7
-}
-```
-
-An optional deterministic seed can be supplied to every provider:
-
-```text
-@gallery{
-    source = Openverse,
-    query = gravitational waves,
-    count = 6,
-    seed = 42
-}
-```
-
-The compiler resolves image metadata and keeps the resulting remote image URLs in the generated HTML. Image files are not copied into the repository.
-
 ## Generated web page
 
 The built-in template provides:
 
-- a rounded top navigation bar
-- a remote image gallery and lightbox when `@gallery` is used
-- a breadcrumb/metabar
+- a restrained site header
+- a breadcrumb and article metadata
 - Home, GitHub, and light/dark theme controls
 - a main article area
 - a right-hand Contents panel
@@ -564,7 +476,7 @@ It provides:
 - environment-name completion inside `@begin(...)` and `@end(...)`
 - snippets for document directives
 - snippets for all semantic environments
-- snippets for lists, images, galleries, references, related links, and inline formatting
+- snippets for lists, images, references, related links, and inline formatting
 - automatic bracket/parenthesis closing
 - indentation based on `@begin(...)` and `@end(...)`
 

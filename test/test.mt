@@ -8,9 +8,8 @@
 @button{Home, href = /, color = black}
 @button{GitHub, href = https://github.com/VivekH90/mark-two, color = #4f6fd8}
 @button{About, href = /about, color = #4f9d69}
-@gallery{source = NASA, query = electromagnetic fields, count = 7}
 
-@begin(section){Setting up the field, label = setting-up-the-field}
+@section{Setting up the field, label = setting-up-the-field}
 We work in flat spacetime with metric signature ((+,-,-,-)), and treat the electromagnetic four-potential (A^mu) as the dynamical field.
 
 [
@@ -30,7 +29,7 @@ u A_mu.
 ]
 @end(definition)
 
-@begin(subsection){Gauge invariance, label = gauge-invariance}
+@subsection{Gauge invariance, label = gauge-invariance}
 The transformation (A_mumapsto A_mu+partial_muchi) leaves (F_{mu
 u}) unchanged.
 
@@ -40,7 +39,7 @@ Two gauge-related potentials describe the same electromagnetic configuration.
 @end(subsection)
 @end(section)
 
-@begin(section){The Lagrangian density, label = lagrangian-density}
+@section{The Lagrangian density, label = lagrangian-density}
 We want a Lorentz scalar whose variation gives the field equations.
 [
 mathcal L_{mathrm{EM}}=-rac14F_{mu
@@ -53,7 +52,7 @@ The first term describes the free field. The second couples it to its source.
 @end(remark)
 @end(section)
 
-@begin(section){Euler-Lagrange equations, label = euler-lagrange}
+@section{Euler-Lagrange equations, label = euler-lagrange}
 Treat (A_mu) as the dynamical variable and apply the field Euler-Lagrange equation.
 [
 partial_
@@ -80,7 +79,7 @@ u.
 @end(proof)
 @end(section)
 
-@begin(section){References, label = references}
+@section{References, label = references}
 The same formalism appears in standard field theory and electrodynamics texts.
 
 @begin(enumerate)

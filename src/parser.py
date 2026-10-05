@@ -5,16 +5,13 @@ from pathlib import Path
 from typing import List
 
 from .ast import (
-    Button, Document, Environment, GallerySpec, Image, Label, ListBlock, ListItem,
+    Button, Document, Environment, Image, Label, ListBlock, ListItem,
     MathBlock, Reference, RelatedLink, Section, Subsection, TextBlock,
 )
 
 _DIRECTIVE_START = re.compile(r"^\s*@([A-Za-z][\w ]*)\s*\{")
 _BLOCK_START = re.compile(r"^\s*@begin\s*\(\s*(.*?)\s*\)\s*(?:\{(.*)\})?\s*$", re.IGNORECASE)
 _BLOCK_END = re.compile(r"^\s*@end\s*\(\s*([A-Za-z][\w-]*)\s*\)\s*$", re.IGNORECASE)
-_ENVIRONMENTS = {"theorem","lemma","definition","corollary","axiom","proposition","remark","example","conjecture","notation","warning","proof"}
-_LIST_ENVIRONMENTS = {"enumerate","itemize"}
-_BLOCK_KINDS = {"section","subsection",*_ENVIRONMENTS,*_LIST_ENVIRONMENTS}
 _ENVIRONMENTS = {
     "theorem", "lemma", "definition", "corollary", "axiom", "proposition",
     "remark", "example", "conjecture", "notation", "warning", "proof",
@@ -253,18 +250,6 @@ def _parse_list(argument: str, ordered: bool) -> ListBlock:
     return ListBlock(ordered=ordered, items=items, color=color)
 
 
-def _parse_text(argument: str) -> TextBlock:
-    if "=" not in argument:
-        return TextBlock(text=argument.strip())
-    values = _parse_key_values(argument)
-    text = values.get("text", values.get("name", ""))
-    if not text:
-        raise ValueError("@text requires text = ... or plain text content")
-    bold = values.get("bold", "false").strip().lower() in {"true", "yes", "1", "on"}
-    italic = values.get("italic", "false").strip().lower() in {"true", "yes", "1", "on"}
-    return TextBlock(text=text, bold=bold, italic=italic, color=values.get("color", ""))
-
-
 def _add_content(container, line: str) -> None:
     if line.strip():
         container.content.append(line.strip())
@@ -458,17 +443,6 @@ def _parse_block_source(source: str) -> Document:
                         color=values.get("color", "black"),
                     )
                 )
-            elif command == "gallery":
-                values = _parse_key_values(argument)
-                query = values.get("query", "").strip()
-                if not query:
-                    raise ValueError("@gallery requires query = ...")
-                document.gallery = GallerySpec(
-                    source=values.get("source", "NASA"),
-                    query=query,
-                    count=int(values.get("count", "7")),
-                    seed=int(values["seed"]) if values.get("seed") else None,
-                )
             elif command in {"relatedlinks", "relatedlink"}:
                 values = _parse_key_values(argument)
                 if "href" not in values:
@@ -617,7 +591,7 @@ def parse(source: str) -> Document:
 
         command, argument, end_index = directive
         command = command.strip().lower().replace(" ", "")
-        if command in {"documenttitle", "author", "title", "button", "section", "subsection", "image", "gallery", "relatedlinks", "relatedlink", "text", "tags"}:
+        if command in {"documenttitle", "author", "title", "button", "section", "subsection", "image", "relatedlinks", "relatedlink", "text", "tags"}:
             current_environment = None
             current_text = None
 
@@ -626,29 +600,6 @@ def parse(source: str) -> Document:
             document.document_tag = values.get("name", argument)
             document.banner = values.get("banner", "")
             document.banner_color = values.get("color", "")
-        elif command == "gallery":
-            values = _parse_key_values(argument)
-            source = values.get("source", "NASA").strip()
-            query = values.get("query", "").strip()
-            count_raw = values.get("count", "7").strip()
-            seed_raw = values.get("seed", "").strip()
-            if not query:
-                raise ValueError("@gallery requires query = ...")
-            try:
-                count = int(count_raw)
-            except ValueError as exc:
-                raise ValueError("@gallery count must be an integer") from exc
-            if count < 1 or count > 20:
-                raise ValueError("@gallery count must be between 1 and 20")
-            seed = None
-            if seed_raw:
-                try:
-                    seed = int(seed_raw)
-                except ValueError as exc:
-                    raise ValueError("@gallery seed must be an integer") from exc
-            if source.lower() != "nasa":
-                raise ValueError("Unsupported gallery source. Currently supported: NASA")
-            document.gallery = GallerySpec(source=source, query=query, count=count, seed=seed)
         elif command == "author":
             values = _parse_key_values(argument)
             document.author = values.get("name", argument)

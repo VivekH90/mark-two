@@ -110,7 +110,7 @@ def _render_featured(article: dict[str, Any] | None) -> str:
     url = escape(_article_url(article), quote=True)
     display_date, _ = _display_date(article.get("date"))
     return (
-        f'<article class="card lead {_topic_class(subject)}">'
+        f'<article class="featured-card {_topic_class(subject)}">'
         f'<span class="badge">{escape(subject)}</span>'
         f'<h3><a href="{url}">{title}</a></h3>'
         f'{description_html}'
@@ -129,11 +129,11 @@ def _render_recent(articles: list[dict[str, Any]]) -> str:
         url = escape(_article_url(article), quote=True)
         display_date, _ = _display_date(article.get("date"))
         cards.append(
-            f'<article class="card {_topic_class(subject)}">'
-            f'<span class="badge">{escape(subject)}</span>'
+            f'<article class="recent-card {_topic_class(subject)}">'
+            f'<time class="date">{escape(display_date or "Undated")}</time>'
             f'<h3><a href="{url}">{title}</a></h3>'
             f'{description_html}'
-            f'<div class="meta">{escape(display_date or "Undated")}</div>'
+            f'<span class="cat">{escape(subject)}</span>'
             f'</article>'
         )
     return "\n".join(cards) or '<p class="empty-msg" style="display:block">No articles found.</p>'

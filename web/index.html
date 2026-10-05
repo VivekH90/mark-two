@@ -5,32 +5,83 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{{ARTICLE_TITLE}} — {{AUTHOR}}</title>
 <script>
-window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']],tags:'ams'},chtml:{fontURL:'https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/output/chtml/fonts/woff-v2'}};
-(function(){try{var s=localStorage.getItem('theme');var t=s||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');if(t==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}})();
+window.MathJax={
+  tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']],tags:'ams'},
+  chtml:{fontURL:'https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/output/chtml/fonts/woff-v2'}
+};
+(function(){
+  try{
+    var saved=localStorage.getItem('mark-two-theme-v2');
+    var theme=saved||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+    if(theme==='dark') document.documentElement.setAttribute('data-theme','dark');
+  }catch(e){}
+})();
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js" defer></script>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="page">
-<header class="navbox"><div class="brand"><b>{{AUTHOR}}</b></div><nav aria-label="Site navigation"><ul>{{BUTTONS}}</ul></nav></header>
-{{GALLERY}}
+<header class="top">
+  <div class="wrap top-wrap">
+    <a class="brand" href="/">
+      <span class="brand-mark">∫</span>
+      <span>{{AUTHOR}}</span>
+    </a>
+    <nav class="site-nav" aria-label="Site navigation">
+      <ul>{{BUTTONS}}</ul>
+    </nav>
+    <button class="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
+      <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.2M12 19.8V22M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2 12h2.2M19.8 12H22M4.2 19.8l1.6-1.6M18.2 18.2l1.6-1.6"/></svg>
+      <svg class="moon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>
+    </button>
+  </div>
+</header>
 
-{{BREADCRUMB}}
-<details class="side-mobile"><summary>Contents &amp; related</summary><div class="inner-mobile"><nav class="toc" id="toc-mobile"></nav><div class="mobile-related"><h4>Related</h4><ul>{{RELATED_LINKS}}</ul></div></div></details>
-<div class="layout">
-<main class="outerbox">
-<h2 class="section-title">Reading — {{ARTICLE_SECTION_LABEL}}</h2>
-<div class="innerbox">
-<h1 class="title">{{ARTICLE_TITLE}}</h1><div class="article-meta"><div class="author"><b>{{AUTHOR}}</b></div>{{ARTICLE_DATE_META}}</div>{{TAGS}}
-<article class="reading" id="article">{{ARTICLE}}</article>
-</div></main>
-<aside class="rail" aria-label="Article information">
-<div class="rail-card toc-card"><h4>Contents</h4><nav class="toc" id="toc-desktop"></nav></div>
-<div class="rail-card related-card"><h4>Related</h4><ul>{{RELATED_LINKS}}</ul></div>
-</aside>
-</div>
-</div>
+<main class="article-shell">
+  <div class="wrap">
+    <div class="article-layout">
+      <article class="article-column">
+        <header class="article-header">
+          <div class="runhead">
+            <b>{{ARTICLE_SECTION_LABEL}}</b>
+            <span>by <i>{{AUTHOR}}</i></span>
+          </div>
+          <h1>{{ARTICLE_TITLE}}</h1>
+          <p class="lead">{{ARTICLE_DESCRIPTION}}</p>
+          <div class="article-meta">
+            <span>{{AUTHOR}}</span>
+            {{ARTICLE_DATE_META}}
+          </div>
+          {{TAGS}}
+        </header>
+
+        <details class="mobile-contents">
+          <summary>Contents</summary>
+          <nav class="toc" id="toc-mobile"></nav>
+        </details>
+
+        <article class="reading" id="article">
+          {{ARTICLE}}
+        </article>
+
+        <footer class="article-footer">
+          <ul>{{RELATED_LINKS}}</ul>
+        </footer>
+      </article>
+
+      <aside class="side" aria-label="Article navigation">
+        <nav class="toc">
+          <b>Contents</b>
+          <div id="toc-desktop"></div>
+        </nav>
+        <div class="related">
+          <b>Related</b>
+          <ul>{{RELATED_LINKS}}</ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</main>
 <script src="script.js"></script>
 </body>
 </html>

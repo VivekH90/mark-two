@@ -6,7 +6,6 @@ from pathlib import Path
 
 from .bundler import inline_web_assets
 from .catalog import update_catalog
-from .gallery import resolve_gallery
 from .homepage import build_homepage
 from .parser import parse_file
 from .renderer import render
@@ -29,8 +28,6 @@ def compile_document(
     template_path = Path(template_path).resolve()
 
     document = parse_file(source_path)
-    if document.gallery is not None:
-        document.gallery_items = resolve_gallery(document.gallery)
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
     output = render(document, template_path)

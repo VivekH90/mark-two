@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function(){
       var root=document.documentElement;
       var dark=root.getAttribute('data-theme')==='dark';
       if(dark) root.removeAttribute('data-theme'); else root.setAttribute('data-theme','dark');
-      try{localStorage.setItem('theme',dark?'light':'dark');}catch(e){}
+      try{localStorage.setItem('mark-two-theme-v2',dark?'light':'dark');}catch(e){}
     });
   }
 })();
