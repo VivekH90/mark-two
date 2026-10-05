@@ -27,7 +27,8 @@ def compile_document(
     output_path = Path(output_path).resolve()
     template_path = Path(template_path).resolve()
 
-    document = parse_file(source_path)    output_path.parent.mkdir(parents=True, exist_ok=True)
+    document = parse_file(source_path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
 
     output = render(document, template_path)
     output = inline_web_assets(output, template_path.parent)
