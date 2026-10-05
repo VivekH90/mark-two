@@ -7,6 +7,7 @@ from pathlib import Path
 from .bundler import inline_web_assets
 from .catalog import update_catalog
 from .homepage import build_homepage
+from .archive import build_archive
 from .parser import parse_file
 from .renderer import render
 from .site_config import find_project_root, get_config, init_site, set_config
@@ -68,6 +69,9 @@ def main() -> None:
     homepage_parser = build_subparsers.add_parser("homepage", help="Build the homepage from site.json and articles.json.")
     homepage_parser.add_argument("-o", "--output", help="Homepage output path")
     homepage_parser.add_argument("--template", help="Homepage template path")
+    archive_parser = build_subparsers.add_parser("archive", help="Build the full article archive.")
+    archive_parser.add_argument("-o", "--output", help="Archive output path")
+    archive_parser.add_argument("--template", help="Archive template path")
 
     known_commands = {"compile", "init", "config", "build", "-h", "--help"}
     if len(sys.argv) > 1 and sys.argv[1] not in known_commands:
@@ -99,6 +103,11 @@ def main() -> None:
 
     if args.command == "build" and args.build_target == "homepage":
         output = build_homepage(root, output=args.output, template=args.template)
+        print(f"Mark Two: wrote {output}")
+        return
+
+    if args.command == "build" and args.build_target == "archive":
+        output = build_archive(root, output=args.output, template=args.template)
         print(f"Mark Two: wrote {output}")
         return
 

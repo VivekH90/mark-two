@@ -7,7 +7,7 @@
 <script>
 (function(){
   try{
-    var saved=localStorage.getItem('theme');
+    var saved=localStorage.getItem('mark-two-theme-v2');
     var theme=saved||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
     if(theme==='dark') document.documentElement.setAttribute('data-theme','dark');
   }catch(e){}
@@ -15,13 +15,13 @@
 </script>
 <style>
 :root{
-  --bg:#fbfaf6;--fg:#1c1d24;--muted:#676873;--rule:#d9d5ca;
-  --link:#3a43a8;--green:#0f766e;--paper:#fffefa;--soft:#f1efe7;
-  --sans:"CMU Sans Serif","Computer Modern Sans","Latin Modern Sans","LM Sans 10","Computer Modern Sans Serif",Helvetica,Arial,sans-serif;
+  --bg:#fbfaf6;--fg:#1c1d24;--muted:#5c5f6b;--rule:#dcd8cc;
+  --link:#3a43a8;--green:#0f766e;--paper:#ffffff;--soft:#f1efe7;--blue-soft:#eef0fb;--orange-soft:#fffaf0;--orange-border:#c9812b;
+  --sans:"Computer Modern Sans","CMU Sans Serif","Latin Modern Sans","LM Sans 10","Computer Modern Sans Serif",Helvetica,Arial,sans-serif;
 }
 :root[data-theme="dark"]{
-  --bg:#12141a;--fg:#e8e6df;--muted:#a4a5ad;--rule:#30333d;
-  --link:#a7afff;--green:#62d1c1;--paper:#191c23;--soft:#20232b;
+  --bg:#12141a;--fg:#e8e6df;--muted:#a4a5ad;--rule:#2e313b;
+  --link:#9aa3ff;--green:#5fd0c0;--paper:#1a1d25;--soft:#1b1e26;--blue-soft:#1b1d33;--orange-soft:#241f17;--orange-border:#d99a52;
   color-scheme:dark;
 }
 *{box-sizing:border-box}
@@ -141,11 +141,10 @@ main{padding:4.4rem 0 5rem}
 .section-head a{font-size:.78rem;color:var(--muted)}
 
 /* Featured article */
-.featured-card{
-  display:block;padding:1.35rem 0 1.45rem;
-  border-bottom:1px solid var(--rule);color:var(--fg)
-}
-.featured-card:hover{text-decoration:none;background:linear-gradient(90deg,var(--soft),transparent 75%)}
+.featured-card{display:block;padding:1.25rem 1.1rem 1.35rem;border:0;border-left:5px solid var(--link);border-radius:0 10px 10px 0;background:var(--blue-soft);color:var(--fg)}
+.featured-card:hover{text-decoration:none;background:linear-gradient(90deg,var(--blue-soft),var(--soft) 75%)}
+.featured-card:nth-of-type(2){border-left-color:var(--orange-border);background:var(--orange-soft)}
+.featured-card:nth-of-type(2):hover{background:linear-gradient(90deg,var(--orange-soft),var(--soft) 75%)}
 .featured-card .badge{
   color:var(--green);font-size:.76rem;font-weight:700;
   text-transform:uppercase;letter-spacing:.08em
@@ -159,15 +158,18 @@ main{padding:4.4rem 0 5rem}
 /* Recent posts: one clean row each. */
 .recent-list{border-bottom:1px solid var(--rule)}
 .recent-card{
-  display:grid;grid-template-columns:7rem minmax(0,1fr) auto;
-  gap:1rem;align-items:baseline;padding:1rem .2rem;
-  border-bottom:1px solid var(--rule);color:var(--fg)
+  display:grid;grid-template-columns:7.4rem minmax(0,1fr);
+  gap:.15rem 1.2rem;align-items:start;padding:.9rem .6rem 1rem;
+  border-bottom:1px solid var(--rule);color:var(--fg);border-radius:4px
 }
 .recent-card:last-child{border-bottom:0}
 .recent-card:hover{background:var(--soft);text-decoration:none}
-.recent-card .date{color:var(--muted);font-size:.78rem}
-.recent-card h3{margin:0;font-size:1rem;line-height:1.4;font-weight:650}
-.recent-card .cat{color:var(--muted);font-size:.76rem;text-align:right}
+.recent-card .date{color:var(--muted);font-size:.82rem;padding-top:.2rem}
+.recent-card h3{margin:0;font-size:1.12rem;line-height:1.35;font-weight:700}
+.recent-card p{grid-column:2;margin:.18rem 0 0;color:var(--muted);font-size:.9rem;line-height:1.55}
+.recent-card .cat{grid-column:2;color:var(--green);font-size:.76rem;margin-top:.45rem}
+.recent-tags{grid-column:2;display:flex;flex-wrap:wrap;gap:.2rem .35rem;margin-top:.35rem}
+.recent-tags span{font-size:.72rem;line-height:1;border:1px solid var(--rule);border-radius:999px;padding:.25rem .55rem;color:var(--muted);background:var(--paper)}
 
 /* Archive */
 .archive{margin-top:0}
@@ -198,15 +200,15 @@ footer{
   main{padding-top:3.2rem}
   .intro{text-align:left}
   .intro p{margin-left:0}
-  .recent-card,.row{grid-template-columns:5.5rem minmax(0,1fr)}
-  .recent-card .cat,.row .cat{grid-column:2;text-align:left}
+  .recent-card,.row{grid-template-columns:6rem minmax(0,1fr)}
+  .recent-card .cat,.recent-card p,.recent-tags,.row .cat{grid-column:2}
 }
 @media(max-width:480px){
   body{font-size:1rem}
   .intro h1{font-size:2.75rem}
   .topic-row{gap:.5rem}
   .recent-card,.row{grid-template-columns:1fr;gap:.1rem}
-  .recent-card .cat,.row .cat{grid-column:auto}
+  .recent-card p,.recent-card .cat,.recent-tags,.row .cat{grid-column:auto}
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
@@ -220,7 +222,7 @@ footer{
     </a>
     <nav class="nav" aria-label="Site navigation">
       <a href="#recent">Recent</a>
-      <a href="#archive">Archive</a>
+      <a href="{{ARCHIVE_URL}}">Archive</a>
       <a href="{{ABOUT_URL}}">About</a>
       <a href="{{GITHUB_URL}}" target="_blank" rel="noopener">GitHub</a>
     </nav>
@@ -265,7 +267,7 @@ footer{
     <section id="recent" class="section">
       <div class="section-head">
         <h2>Recent</h2>
-        <a href="#archive">Archive ↓</a>
+        <a href="{{ARCHIVE_URL}}">Archive ↓</a>
       </div>
       <div class="recent-list">{{RECENT}}</div>
     </section>
@@ -277,7 +279,7 @@ footer{
       </div>
       <p class="empty-msg" id="empty-msg">No articles match the current search.</p>
       {{ARCHIVE}}
-      <a class="back-top" href="#recent">↑ back to recent</a>
+      <a class="back-top" href="{{ARCHIVE_URL}}">Full archive →</a>
     </section>
   </div>
 </main>
@@ -293,7 +295,7 @@ footer{
   if(theme) theme.addEventListener('click',function(){
     var dark=root.getAttribute('data-theme')==='dark';
     if(dark) root.removeAttribute('data-theme'); else root.setAttribute('data-theme','dark');
-    try{localStorage.setItem('theme',dark?'light':'dark')}catch(e){}
+    try{localStorage.setItem('mark-two-theme-v2',dark?'light':'dark')}catch(e){}
   });
 
   var input=document.getElementById('site-search');
