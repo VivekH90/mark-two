@@ -14,11 +14,15 @@
 })();
 </script>
 <style>
+@import url("https://cdn.jsdelivr.net/npm/computer-modern@0.1.3/cmu-serif.css");
+@import url("https://cdn.jsdelivr.net/npm/computer-modern@0.1.3/cmu-sans-serif.css");
+
 :root{
   --bg:#fbfaf6;--fg:#1c1d24;--muted:#5c5f6b;--rule:#dcd8cc;
   --link:#3a43a8;--green:#0f766e;--paper:#ffffff;--soft:#f1efe7;
   --orange-border:#c9812b;
-  --sans:"Computer Modern Sans","CMU Sans Serif","Latin Modern Sans","LM Sans 10","Computer Modern Sans Serif",Helvetica,Arial,sans-serif;
+  --serif:"CMU Serif",serif;
+  --sans:"CMU Sans Serif",sans-serif;
 }
 :root[data-theme="dark"]{
   --bg:#12141a;--fg:#e8e6df;--muted:#a4a5ad;--rule:#2e313b;
@@ -28,12 +32,13 @@
 *,*::before,*::after{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:5rem}
 body{
-  margin:0;background:var(--bg);color:var(--fg);font-family:var(--sans);
+  margin:0;background:var(--bg);color:var(--fg);font-family:var(--serif);
   font-size:1.05rem;line-height:1.75;-webkit-font-smoothing:antialiased
 }
 a{color:var(--link);text-decoration:none}
 a:hover{text-decoration:underline}
 button,input{font:inherit}
+button,input,.kicker,h1,.month,.nav,.theme{font-family:var(--sans)}
 button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--link);outline-offset:3px}
 .wrap{width:min(58rem,calc(100% - 2.4rem));margin:0 auto}
 
