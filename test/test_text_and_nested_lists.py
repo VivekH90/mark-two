@@ -97,3 +97,24 @@ def test_article_template_contains_progress_bar(tmp_path):
     assert "getElementById('bar')" in script
     assert "background:var(--accent2)" in style
     assert ".proto{" in style
+
+
+def test_display_math_html_escapes_comparison_and_alignment_characters(tmp_path):
+    source = r'''@documenttitle{Mathematics}
+@section{Test}
+[
+a < b,qquad c > d
+]
+
+[
+\begin{aligned}
+A & = B \\
+C & = D
+\end{aligned}
+]
+'''
+    _, html = _render_source(source, tmp_path)
+    assert r"\[a &lt; b,\qquad c &gt; d\]" in html
+    assert r"\begin{aligned}" in html
+    assert "&amp; = B" in html
+    assert "A &amp; = B" in html
