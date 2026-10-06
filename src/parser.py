@@ -14,7 +14,7 @@ _BLOCK_START = re.compile(r"^\s*@begin\s*\(\s*(.*?)\s*\)\s*(?:\{(.*)\})?\s*$", r
 _BLOCK_END = re.compile(r"^\s*@end\s*\(\s*([A-Za-z][\w-]*)\s*\)\s*$", re.IGNORECASE)
 _ENVIRONMENTS = {
     "theorem", "lemma", "definition", "corollary", "axiom", "proposition",
-    "remark", "example", "conjecture", "notation", "warning", "proof",
+    "remark", "example", "conjecture", "notation", "warning", "proof", "conclusion",
 }
 _LIST_ENVIRONMENTS = {"enumerate", "itemize"}
 
