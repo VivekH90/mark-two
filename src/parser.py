@@ -407,9 +407,19 @@ def _parse_block_source(source: str) -> Document:
 
         directive = _extract_directive(lines, index)
         if directive:
-            flush()
             command, argument, end_index = directive
             command = command.strip().lower().replace(" ", "")
+
+            # Inline formatting may legitimately begin a line. Treat these
+            # commands as prose so the renderer can process them recursively.
+            if command in {"bold", "italic", "color"}:
+                if target() is None:
+                    raise ValueError("Text must appear after @section{...}")
+                pending.append(raw)
+                index += 1
+                continue
+
+            flush()
 
             if command == "documenttitle":
                 values = _parse_key_values(argument)
