@@ -17,7 +17,7 @@
 :root{
   --bg:#fbfaf6;--fg:#1c1d24;--muted:#5c5f6b;--rule:#dcd8cc;
   --link:#3a43a8;--green:#0f766e;--paper:#ffffff;--soft:#f1efe7;--blue-soft:#eef0fb;--orange-soft:#fffaf0;--orange-border:#c9812b;
-  --sans:"Computer Modern Sans","CMU Sans Serif","Latin Modern Sans","LM Sans 10","Computer Modern Sans Serif",Helvetica,Arial,sans-serif;
+  --sans:"Latin Modern Roman","Computer Modern Roman","CMU Serif","TeX Gyre Termes",serif;
 }
 :root[data-theme="dark"]{
   --bg:#12141a;--fg:#e8e6df;--muted:#a4a5ad;--rule:#2e313b;
@@ -162,8 +162,8 @@ main{padding:3rem 0 5rem}
   padding:0;border:0;letter-spacing:-.005em;font-weight:700
 }
 .section-head h2::before{
-  content:counter(home-sec);color:var(--orange-border);margin-right:.7rem;
-  padding-right:.7rem;border-right:2px solid var(--rule);font-weight:700
+  content:"§" counter(home-sec);color:#b51f4b;margin-right:.58rem;
+  font-weight:700
 }
 .section-head a{float:right;margin-top:-2.7rem;font-size:.8rem;color:var(--muted)}
 

@@ -402,14 +402,14 @@ def _section_html(section: Section, number: int, environment_counters, reference
     environment_counters["__item__"] = 0
     html = [
         f'<section class="article-section">',
-        f'<h2 id="{identifier}"><span class="num">{number}</span>{escape(section.title)}</h2>',
+        f'<h2 id="{identifier}"><span class="section-number">§{number}</span><span class="section-title">{escape(section.title)}</span></h2>',
         _content_html(section.content, environment_counters, references, figure_counter, section_number=number),
     ]
     for sub_number, subsection in enumerate(section.subsections, 1):
         sub_identifier = escape(subsection.slug or "subsection", quote=True)
         html.extend([
             f'<section class="article-subsection">',
-            f'<h3 id="{sub_identifier}"><span class="num">{number}.{sub_number}</span>{escape(subsection.title)}</h3>',
+            f'<h3 id="{sub_identifier}"><span class="section-number">§{number}.{sub_number}</span><span class="section-title">{escape(subsection.title)}</span></h3>',
             _content_html(subsection.content, environment_counters, references, figure_counter, section_number=number),
             "</section>",
         ])
