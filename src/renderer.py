@@ -244,7 +244,10 @@ def _text_html(text: TextBlock, references, environment_counters, figure_counter
 
 
 def _math_html(math: MathBlock) -> str:
-    return f'<div class="math-display">\\[{math.content}\\]</div>'
+    # Escape TeX before embedding it in HTML so characters such as <, >, and &
+    # cannot be interpreted as HTML markup. The browser decodes these entities
+    # before MathJax sees the text, preserving the original TeX expression.
+    return f'<div class="math-display">\\[{escape(math.content)}\\]</div>'
 
 
 def _image_tag(image: Image, extra_style: str = "") -> str:
