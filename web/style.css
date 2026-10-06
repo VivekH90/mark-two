@@ -68,43 +68,47 @@
 
   --section-symbol:#b51f4b;
   --section-sub:#72506a;
-  --section-rule:#e6dce1;
-  --theorem-bg:#f1efff;
-  --theorem-border:#6f61c7;
-  --theorem-ink:#4c408f;
-  --lemma-bg:#f6f1ff;
-  --lemma-border:#8766bc;
-  --lemma-ink:#61488d;
+  --section-rule:#e3d9df;
+
+  /* Solid surfaces with deliberately contrasting, uniform borders. */
+  --theorem-bg:#f2efff;
+  --theorem-border:#6658b7;
+  --theorem-ink:#493d88;
+  --lemma-bg:#f7f1ff;
+  --lemma-border:#8a68bd;
+  --lemma-ink:#5d458d;
   --definition-bg:#edf8f1;
-  --definition-border:#4d9169;
-  --definition-ink:#2e6b49;
+  --definition-border:#4b9368;
+  --definition-ink:#2c6948;
   --proposition-bg:#eef4ff;
-  --proposition-border:#5477b7;
-  --proposition-ink:#385483;
-  --example-bg:#fff4e4;
-  --example-border:#c7812b;
-  --example-ink:#895515;
+  --proposition-border:#587bbc;
+  --proposition-ink:#385681;
+  --example-bg:#fff3e3;
+  --example-border:#c27a25;
+  --example-ink:#885213;
   --axiom-bg:#fff0f0;
-  --axiom-border-solid:#bc5b5b;
-  --axiom-ink-solid:#913f3f;
+  --axiom-border-solid:#ba5b5b;
+  --axiom-ink-solid:#8d3f3f;
   --remark-bg:#f3f2f0;
-  --remark-border:#9a958d;
-  --remark-ink:#676159;
+  --remark-border:#918b83;
+  --remark-ink:#625d56;
   --conjecture-bg:#fff0f7;
-  --conjecture-border:#ad6e94;
-  --conjecture-ink:#824f6f;
+  --conjecture-border:#b06d94;
+  --conjecture-ink:#7d4d6b;
   --notation-bg:#edf8f8;
-  --notation-border:#4b8e90;
+  --notation-border:#4d9092;
   --notation-ink:#356b6d;
   --warning-bg:#fff3df;
-  --warning-border-solid:#c07820;
-  --warning-ink-solid:#895315;
-  --toc-bg:#f2effd;
-  --toc-border:#d8cff4;
-  --toc-ink:#51478a;
-  --related-bg:#eef7f1;
-  --related-border:#cfe4d6;
-  --related-ink:#356a4a;
+  --warning-border-solid:#bf771e;
+  --warning-ink-solid:#875112;
+  --question-border-solid:#3e8b83;
+
+  --toc-bg:#f5f1ff;
+  --toc-border:#b8a9df;
+  --toc-ink:#55458d;
+  --related-bg:#f1f8f3;
+  --related-border:#afd0b9;
+  --related-ink:#356c4a;
   color-scheme:light;
 }
 
@@ -170,6 +174,7 @@
   --section-symbol:#e58aa8;
   --section-sub:#c9b3c7;
   --section-rule:#453b46;
+
   --theorem-bg:#292447;
   --theorem-border:#9b8be5;
   --theorem-ink:#ddd7ff;
@@ -200,12 +205,14 @@
   --warning-bg:#392b1a;
   --warning-border-solid:#dfa45c;
   --warning-ink-solid:#ffd7a1;
+  --question-border-solid:#65c2b4;
+
   --toc-bg:#25213a;
-  --toc-border:#4b426c;
-  --toc-ink:#d9d0ff;
+  --toc-border:#5e5180;
+  --toc-ink:#ddd5ff;
   --related-bg:#1f3027;
-  --related-border:#41614d;
-  --related-ink:#bfe2c9;
+  --related-border:#537b61;
+  --related-ink:#c5e5cf;
   color-scheme:dark;
 }
 
@@ -463,29 +470,30 @@ header.top{
 }
 /* Mathematical environments */
 .box{
-  margin:1.85rem 0;
-  padding:1.12rem 1.3rem 1.18rem;
+  margin:1.9rem 0;
+  padding:1.18rem 1.35rem 1.22rem;
   color:var(--fg);
-  border:1.25px solid var(--box-accent,var(--rule));
-  border-left:6px solid var(--box-accent,var(--link));
-  border-radius:14px;
+  border:1.6px solid var(--box-accent,var(--rule));
+  border-radius:15px;
   background:var(--box-fill,var(--card));
 }
 .box .label{
-  margin:0 0 .62rem;
-  padding:0 0 .42rem;
+  margin:0 0 .65rem;
+  padding:0 0 .48rem;
   font-family:var(--sans);
   font-size:1rem;
   line-height:1.35;
   font-weight:700;
-  border-bottom:1px solid color-mix(in srgb,var(--box-accent) 35%,var(--box-fill));
+  border-bottom:1px solid color-mix(in srgb,var(--box-accent) 30%,var(--box-fill));
 }
 .box .box-content,.box .proof-content{min-width:0}
-.box p{margin:.48rem 0}
-.box .math-display{margin:.8rem 0}
-.box ul,.box ol{margin:.55rem 0 .8rem}
+.box p{margin:.5rem 0}
+.box .math-display{margin:.9rem 0}
+.box ul,.box ol{margin:.6rem 0 .85rem}
 
-/* Solid mathematical statement cards. */
+/* Mathematical statement cards use a uniform outline. The fill and outline
+   are intentionally contrasting so the card reads clearly without a heavy
+   leading stripe. */
 .box.theorem,
 .box.corollary{
   --box-fill:var(--theorem-bg);
@@ -552,9 +560,9 @@ header.top{
   position:relative;
   margin:1.55rem 0 1.8rem;
   border:0;
-  border-left:3px solid var(--section-rule);
+  border-left:0;
   border-radius:0;
-  padding:.15rem 0 .55rem 1rem;
+  padding:.15rem 0 .55rem;
   background:transparent;
 }
 .box.proof .label{
@@ -631,10 +639,10 @@ figure.diagram figcaption{
 }
 .toc,
 .related{
-  border:1.5px solid var(--toc-border);
-  border-radius:16px;
+  border:1.6px solid var(--toc-border);
+  border-radius:15px;
   background:var(--toc-bg);
-  padding:1rem 1rem 1.05rem;
+  padding:1.02rem 1.05rem 1.08rem;
   box-shadow:none;
 }
 .toc{
@@ -643,10 +651,12 @@ figure.diagram figcaption{
 .toc b,
 .related b{
   display:block;
-  margin:0 0 .65rem;
+  margin:0 0 .7rem;
   color:var(--toc-ink);
   font-weight:700;
   font-size:1rem;
+  padding-bottom:.48rem;
+  border-bottom:1px solid color-mix(in srgb,var(--toc-border) 45%,var(--toc-bg));
 }
 .toc ul{
   list-style:none;
@@ -654,8 +664,8 @@ figure.diagram figcaption{
   padding:0;
 }
 .toc li{
-  margin:.2rem 0;
-  line-height:1.45;
+  margin:.22rem 0;
+  line-height:1.48;
 }
 .toc li.sub{
   padding-left:.85rem;
@@ -676,6 +686,7 @@ figure.diagram figcaption{
 }
 .related b{
   color:var(--related-ink);
+  border-bottom-color:color-mix(in srgb,var(--related-border) 45%,var(--related-bg));
 }
 .related ul{
   list-style:none;
@@ -683,7 +694,7 @@ figure.diagram figcaption{
   margin:0;
 }
 .related li{
-  margin:.35rem 0;
+  margin:.38rem 0;
 }
 .related a{
   color:var(--muted);
@@ -699,10 +710,9 @@ figure.diagram figcaption{
 .box.exercise,
 .box.question{
   --box-fill:var(--question-soft);
-  --box-accent:var(--accent2);
-  border-color:var(--accent2);
-  border-left-color:var(--accent2);
-  border-radius:14px;
+  --box-accent:var(--question-border-solid);
+  border-color:var(--question-border-solid);
+  border-radius:15px;
 }
 .box.exercise .label,
 .box.question .label{color:var(--accent2)}
@@ -736,15 +746,16 @@ figure.diagram figcaption{
   .mobile-contents{
     display:block;
     margin:0 0 2rem;
-    padding:.9rem 1rem 1rem;
-    border:1.5px solid var(--toc-border);
-    border-radius:16px;
+    padding:.95rem 1rem 1rem;
+    border:1.6px solid var(--toc-border);
+    border-radius:15px;
     background:var(--toc-bg);
   }
   .mobile-contents summary{
     cursor:pointer;
     color:var(--toc-ink);
     font-weight:700;
+    font-family:var(--sans);
   }
   .mobile-contents .toc{
     margin-top:.8rem;
