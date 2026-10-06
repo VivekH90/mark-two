@@ -1,3 +1,6 @@
+@import url("https://cdn.jsdelivr.net/npm/computer-modern@0.1.3/cmu-serif.css");
+@import url("https://cdn.jsdelivr.net/npm/computer-modern@0.1.3/cmu-sans-serif.css");
+
 :root{
   --bg:#fbfaf6;
   --fg:#1c1d24;
@@ -34,8 +37,8 @@
   --warning-border:var(--warning-ink);
 
   /* TeX typography: Roman for reading, Sans for structural headings/UI. */
-  --serif:"CMU Serif","Latin Modern Roman","Computer Modern Roman","TeX Gyre Termes",serif;
-  --sans:"CMU Sans Serif","Latin Modern Sans","Computer Modern Sans","LM Sans 10",Helvetica,Arial,sans-serif;
+  --serif:"CMU Serif",serif;
+  --sans:"CMU Sans Serif",sans-serif;
 
   /* Solid, paper-like theorem palette. */
   --theorem-bg:#eeeafc;
