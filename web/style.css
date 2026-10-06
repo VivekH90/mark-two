@@ -102,6 +102,9 @@
   --warning-border-solid:#bf771e;
   --warning-ink-solid:#875112;
   --question-border-solid:#3e8b83;
+  --conclusion-bg:#edf7f5;
+  --conclusion-border:#3f8d83;
+  --conclusion-ink:#28685f;
 
   --toc-bg:#f5f1ff;
   --toc-border:#b8a9df;
@@ -206,6 +209,9 @@
   --warning-border-solid:#dfa45c;
   --warning-ink-solid:#ffd7a1;
   --question-border-solid:#65c2b4;
+  --conclusion-bg:#19312f;
+  --conclusion-border:#68c5b8;
+  --conclusion-ink:#b7e6df;
 
   --toc-bg:#25213a;
   --toc-border:#5e5180;
@@ -555,6 +561,12 @@ header.top{
   --box-accent:var(--warning-border-solid);
 }
 .box.warning .label{color:var(--warning-ink-solid)}
+
+.box.conclusion{
+  --box-fill:var(--conclusion-bg);
+  --box-accent:var(--conclusion-border);
+}
+.box.conclusion .label{color:var(--conclusion-ink)}
 
 .box.proof{
   position:relative;

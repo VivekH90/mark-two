@@ -319,6 +319,14 @@ def _environment_html(environment: Environment, number: int, environment_counter
             '</div>'
         )
 
+    if kind == "conclusion":
+        return (
+            f'<div class="box conclusion"{identifier}>'
+            '<div class="label">Conclusion</div>'
+            f'<div class="box-content">{content}</div>'
+            '</div>'
+        )
+
     label = kind.capitalize()
     label_text = f"{label} {number}"
     if environment.title:
@@ -338,7 +346,7 @@ def _content_html(items, environment_counters, references, figure_counter, list_
     while index < len(items):
         item = items[index]
         if isinstance(item, Environment):
-            if item.kind.strip().lower() == "proof":
+            if item.kind.strip().lower() in {"proof", "conclusion"}:
                 number = ""
             else:
                 environment_counters["__item__"] = environment_counters.get("__item__", 0) + 1
@@ -390,7 +398,7 @@ def _build_reference_index(document: Document):
         for subsection in section.subsections:
             content.extend(subsection.content)
         for item in content:
-            if isinstance(item, Environment) and item.kind.strip().lower() != "proof":
+            if isinstance(item, Environment) and item.kind.strip().lower() not in {"proof", "conclusion"}:
                 item_number += 1
                 if item.label:
                     references[item.label] = (f"#{item.label}", f"{item.kind.capitalize()} {number}.{item_number}")
