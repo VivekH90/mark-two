@@ -100,6 +100,33 @@
 
   --axiom-border:var(--axiom-ink);
   --warning-border:var(--warning-ink);
+
+  --theorem-bg:#272242;
+  --theorem-border:#9a8be6;
+  --theorem-ink:#d9d3ff;
+  --definition-bg:#183326;
+  --definition-border:#67b58b;
+  --definition-ink:#b9e8c9;
+  --example-bg:#352716;
+  --example-border:#d99a52;
+  --example-ink:#ffd59b;
+  --lemma-bg:#29213b;
+  --lemma-border:#a58ae0;
+  --lemma-ink:#dacdff;
+  --remark-bg:#25252c;
+  --remark-border:#a3a0aa;
+  --remark-ink:#d7d5dc;
+  --axiom-bg:#351f22;
+  --axiom-border-solid:#d47a7a;
+  --axiom-ink-solid:#ffc1c1;
+  --notation-bg:#1c3131;
+  --notation-border:#65b9ba;
+  --notation-ink:#b6e9e9;
+  --warning-bg:#372815;
+  --warning-border-solid:#dfa052;
+  --warning-ink-solid:#ffd79e;
+
+  --section-symbol:#e07a9e;
   color-scheme:dark;
 }
 
