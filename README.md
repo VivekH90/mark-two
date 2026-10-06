@@ -2,7 +2,11 @@
 
 Mark Two is a lightweight mathematical document language that compiles `.mt` source files into clean HTML articles.
 
-It is designed for notes, mathematical writing, physics articles, and other documents where normal prose, TeX mathematics, semantic environments, figures, references, and small pieces of metadata should live together in a readable source file.
+It is designed for mathematical notes, physics articles, proofs, and technical writing where normal prose, TeX mathematics, semantic environments, figures, references, and document metadata should live together in a readable source file.
+
+The central idea is deliberately simple:
+
+> **Write the mathematics and prose naturally. Use Mark Two syntax only where structure or formatting is needed.**
 
 ## Installation
 
@@ -18,7 +22,7 @@ Mark Two requires Python 3.10 or newer.
 
 ## Usage
 
-A document can be stored anywhere in a project:
+A document can live anywhere inside a project:
 
 ```text
 mathematics/
@@ -33,7 +37,7 @@ Compile it with:
 mark-two mathematics/real-analysis/completeness/completeness.mt
 ```
 
-By default, the compiler writes a complete web bundle beside the source file:
+By default, the compiler writes the generated article beside the source file:
 
 ```text
 completeness/
@@ -47,74 +51,11 @@ A custom output path can be selected with:
 mark-two completeness.mt --output build/article.html
 ```
 
-A custom HTML template can be selected with:
+A custom article template can be supplied with:
 
 ```bash
 mark-two completeness.mt --template path/to/index.html
 ```
-
-
-## Article catalog
-
-Each compilation also updates a generated `articles.json` catalog. The catalog is
-intended for a site's homepage, tag pages, and search index. It is generated from
-the metadata already present in the `.mt` source, so the source document remains
-the source of truth.
-
-For example:
-
-```text
-@documenttitle{Physics}
-@folder{Electromagnetism}
-@author{Vivek Sharma}
-@date{27 September 2026}
-@title{Field Equations}
-@description{A derivation of the electromagnetic field equations from the Lagrangian formulation.}
-@tags{Electromagnetism, Classical Field Theory}
-```
-
-produces an article record containing fields such as:
-
-```json
-{
-  "id": "physics/electromagnetism/field_equations",
-  "title": "Field Equations",
-  "description": "A derivation of the electromagnetic field equations from the Lagrangian formulation.",
-  "subject": "Physics",
-  "folder": "Electromagnetism",
-  "author": "Vivek Sharma",
-  "date": "27 September 2026",
-  "tags": ["Electromagnetism", "Classical Field Theory"],
-  "url": "/physics/electromagnetism/field_equations/",
-  "source": "physics/electromagnetism/field_equations.mt",
-  "sections": ["Maxwell's Equations"]
-}
-```
-
-By default, Mark Two places the catalog at `articles.json` in the nearest project
-root, detected from `.git` or `pyproject.toml`. A different catalog location can
-be selected with:
-
-```bash
-mark-two completeness.mt --index path/to/articles.json
-```
-
-When one article is compiled, Mark Two replaces only that article's logical record
-in the catalog. Existing article records keep their order and contents, while a new
-article is appended. If the record has not changed, the catalog is left untouched.
-The file is written atomically so an interrupted compile cannot leave a half-written
-JSON file.
-
-This makes the build model:
-
-```text
-.mt source
-   |
-   +--> HTML page
-   |
-   +--> articles.json metadata index
-```
-
 
 Mark Two can also be invoked as a Python module:
 
@@ -122,74 +63,130 @@ Mark Two can also be invoked as a Python module:
 python3 -m mark_two completeness.mt
 ```
 
-## Updating Mark Two
+### Site commands
 
-When Mark Two is installed with `pip install -e`, normal source changes do not require reinstallation.
+Mark Two also provides commands for site-level configuration and generated pages.
 
-For a normal clone:
-
-```bash
-cd mark-two
-git pull
-```
-
-When Mark Two is used as a Git submodule:
+Initialize a site:
 
 ```bash
-git submodule update --remote resources/templates/mark-two
+mark-two init
 ```
 
-## Mark Two Syntax
+Read or change configuration:
 
-Mark Two has two kinds of syntax:
+```bash
+mark-two config get
+mark-two config get author
+mark-two config set title "Notes on Mathematics and Physics"
+```
 
-- **directives**, such as `@section{...}` and `@image{...}`
-- **enclosed environments**, written with `@begin(...)` and `@end(...)`
+Build the homepage and archive:
 
-Normal prose is written directly. There is no `@text` command.
+```bash
+mark-two build homepage
+mark-two build archive
+```
 
-### Document directives
+The site configuration is stored in `site.json`.
 
-Common document-level directives are:
+## Article metadata
+
+An article begins with document-level directives.
+
+A typical header looks like:
+
+```text
+@documenttitle{Physics, banner = images/banner.jpg}
+@folder{Electromagnetism}
+@author{Vivek Kalita}
+@date{2 October 2026}
+@title{Quantizing the Electromagnetic Field}
+@description{A semi-classical method of quantising the electromagnetic field.}
+@tags{Electromagnetism, Quantum Field Theory, Classical Field Theory}
+```
+
+The available document directives are:
 
 | Directive | Purpose | Example |
 | --- | --- | --- |
-| `@documenttitle` | Sets the document classification tag and can set the banner image/color. | `@documenttitle{Physics, banner = images/banner.jpg}` |
-| `@folder` | Sets the folder/category text used by the generated page metadata. | `@folder{Electromagnetism}` |
-| `@author` | Sets the author name. | `@author{Vivek}` |
-| `@date` | Sets the document date. | `@date{26 September 2026}` |
-| `@title` | Sets the article title. | `@title{Electromagnetic Lagrangian}` |
-| `@description` | Sets the short description used by the homepage article cards. | `@description{A short description of the article.}` |
+| `@documenttitle` | Sets the document subject/classification and can specify a banner image or color. | `@documenttitle{Physics, banner = images/banner.jpg}` |
+| `@folder` | Sets the article's folder/category metadata. | `@folder{Electromagnetism}` |
+| `@author` | Sets the author. | `@author{Vivek Kalita}` |
+| `@date` | Sets the article date. | `@date{2 October 2026}` |
+| `@title` | Sets the article title. | `@title{The Electromagnetic Lagrangian}` |
+| `@description` | Sets the short article description used by the site catalog and homepage. | `@description{A derivation of the field equations.}` |
 | `@tags` | Adds comma-separated article tags. | `@tags{Electromagnetism, Classical Field Theory}` |
-| `@button` | Adds a navigation button. | `@button{GitHub, href = https://github.com/VivekH90/blog}` |
-| `@relatedlinks` | Adds a related link to the page sidebar. | `@relatedlinks{Python, href = https://www.python.org}` |
+| `@button` | Adds a navigation button to the article header. | `@button{GitHub, href = https://github.com/VivekH90/mark-two}` |
+| `@relatedlinks` | Adds a related link to the article sidebar. | `@relatedlinks{Lagrangian Mechanics, href = /physics/classical-mechanics/lagrangian}` |
 | `@relatedlink` | Alias for `@relatedlinks`. | `@relatedlink{Python, href = https://www.python.org}` |
 
-Directives can span multiple lines. Braces, parentheses, brackets, commas, quotes, and escaped characters are handled by the parser when determining directive boundaries.
+Arguments may span multiple lines. Mark Two's parser handles nested braces, brackets, parentheses, quoted strings, commas, and escaped characters while determining where a directive ends.
 
-### Sections and subsections
+## Writing prose
 
-Sections remain ordinary directives:
+Normal prose is written directly.
+
+There is **no `@text` directive in the canonical language**.
+
+For example:
 
 ```text
-@section{Lagrange's equation for a single variable, label = single-variable}
-
-Ordinary prose goes directly here.
+The electromagnetic field is a field defined throughout spacetime. In
+classical physics it is represented by the electric and magnetic fields.
 ```
 
-Subsections use the same form:
+Blank lines separate paragraphs.
+
+This is intentional: an article source should read like an article, not like a sequence of HTML commands.
+
+## Mathematics
+
+Mark Two uses TeX mathematics directly.
+
+### Inline mathematics
+
+Use `\\(...\\)` for inline mathematics:
 
 ```text
-@subsection{The 4-vector generalization, label = four-vector-generalization}
+The wave has angular frequency \(\omega=ck\).
+```
+
+### Display mathematics
+
+Use `\\[ ... \\]` for display mathematics:
+
+```text
+The dispersion relation is
+
+\[
+\omega=ck.
+\]
+```
+
+Display mathematics is stored as a mathematical block and passed through MathJax in the generated page.
+
+## Sections and subsections
+
+Sections and subsections are structural directives:
+
+```text
+@section{The Classical Electromagnetic Field, label = classical-electromagnetic-field}
+
+Some introductory prose.
+
+@subsection{Free Electromagnetic Field, label = free-electromagnetic-field}
 
 More prose.
 ```
 
 Sections and subsections create the numbered headings used by the generated Contents navigation.
 
-## Enclosed environments
+Labels are optional, but labels are useful when a section or subsection needs to be referenced later.
 
-Semantic environments use an explicit opening and closing pair.
+## Semantic environments
+
+Mathematical statements use enclosed semantic environments.
 
 The canonical form is:
 
@@ -199,16 +196,6 @@ The canonical form is:
 The statement of the theorem.
 
 @end(theorem)
-```
-
-A proof has no title:
-
-```text
-@begin(proof)
-
-The proof goes here.
-
-@end(proof)
 ```
 
 The supported semantic environments are:
@@ -228,13 +215,34 @@ warning
 proof
 ```
 
-The title and label are optional only where the environment permits them. Proofs normally omit both:
+A proof normally has no title:
 
 ```text
 @begin(proof)
-...
+
+Proof of the result.
+
 @end(proof)
 ```
+
+The title and label are optional for theorem-like environments where appropriate. Proofs are the special case and normally omit both.
+
+### Numbering
+
+The renderer numbers theorem-like environments within each section.
+
+For example:
+
+```text
+Section 1
+    Theorem 1.1
+    Proposition 1.2
+
+Section 2
+    Definition 2.1
+```
+
+Proof environments do not consume a theorem number.
 
 ### Nested environments
 
@@ -243,7 +251,7 @@ Environments can contain other environments:
 ```text
 @begin(theorem = A Result, label = a-result)
 
-Statement of the theorem.
+Statement of the result.
 
 @begin(proof)
 
@@ -254,22 +262,27 @@ Proof of the result.
 @end(theorem)
 ```
 
-This is useful for keeping a theorem and its proof structurally connected in the source.
+This keeps the theorem and its proof structurally connected in the source.
 
-### Lists
+Structural headings such as `@section` and `@subsection` should remain outside open semantic environments.
 
-Ordered and unordered lists can also use enclosed environments:
+## Lists
+
+Ordered and unordered lists use enclosed environments.
+
+### Ordered lists
 
 ```text
 @begin(enumerate)
 
 @item{First item.}
 @item{Second item.}
+@item{Third item.}
 
 @end(enumerate)
 ```
 
-and:
+### Unordered lists
 
 ```text
 @begin(itemize)
@@ -291,11 +304,39 @@ List markers can be colored:
 @end(enumerate)
 ```
 
-List items can contain normal Mark Two content, including nested lists and semantic environments.
+List items can contain ordinary Mark Two content, including mathematics, inline formatting, nested lists, images, and semantic environments.
+
+Nested ordered lists are rendered with alphabetic markers:
+
+```text
+@begin(enumerate)
+
+@item{
+First main point.
+
+@begin(enumerate)
+@item{First sub-point.}
+@item{Second sub-point.}
+@end(enumerate)
+}
+
+@item{Second main point.}
+
+@end(enumerate)
+```
+
+which renders conceptually as:
+
+```text
+1. First main point.
+   a. First sub-point.
+   b. Second sub-point.
+2. Second main point.
+```
 
 ## Inline formatting
 
-Inline formatting works directly inside ordinary prose and other rendered text.
+Inline formatting is used directly inside ordinary prose and other rendered text.
 
 ### Bold
 
@@ -315,19 +356,80 @@ This is @italic{emphasized}.
 This is @color{red, highlighted}.
 ```
 
-CSS colors may also be supplied explicitly:
+CSS colors may also be given explicitly:
 
 ```text
 This is @color{#315a9b, highlighted}.
 ```
 
-Inline formatting can be nested:
+The key-value form is also supported:
+
+```text
+@color{color = #315a9b, text = "blue text"}
+```
+
+### Nesting
+
+Inline commands can be nested:
 
 ```text
 This is @bold{very @italic{important}}.
 
 This is @color{red, @bold{extremely important}}.
 ```
+
+The currently supported inline commands are:
+
+```text
+@bold{...}
+@italic{...}
+@color{...}
+@ref{...}
+```
+
+These are **inline formatting/reference commands**, not semantic environments.
+
+## References and labels
+
+Sections, subsections, semantic environments, and explicit label nodes can be given labels.
+
+For example:
+
+```text
+@section{Main Result, label = main-result}
+
+@begin(theorem = Fundamental Theorem, label = fundamental-theorem)
+
+The statement.
+
+@end(theorem)
+```
+
+Reference a label inline with:
+
+```text
+By @ref{fundamental-theorem}, the desired result follows.
+```
+
+Custom reference text is supported:
+
+```text
+By @ref{fundamental-theorem, text = "the theorem"}, the result follows.
+```
+
+A standalone label can also be inserted:
+
+```text
+@label{important-point}
+```
+
+References may also target an HTML page or fragment:
+
+```text
+@ref{analysis.html#fundamental-theorem}
+```
+
+Mark Two resolves known local labels to their generated anchors. Unknown references are left as unresolved links rather than silently discarded.
 
 ## Images
 
@@ -357,24 +459,16 @@ A basic image:
 
 ### Image properties
 
-An image supports:
-
 | Property | Purpose |
 | --- | --- |
 | `src` | Local path or remote image URL. |
-| `alt` | Alternative text placed in the generated `<img>` element. |
+| `alt` | Alternative text for the generated image. |
 | `caption` | Visible figure caption. |
 | `label` | HTML anchor/id for the figure. |
 | `width` | CSS width such as `60%`, `300px`, or `20rem`. |
 | `height` | CSS height such as `240px`; `auto` leaves the height automatic. |
 
-When a caption is present, Mark Two automatically adds the figure number:
-
-```text
-caption = The construction used in the proof.
-```
-
-becomes a caption in the form:
+When a caption is supplied, Mark Two automatically adds the figure number:
 
 ```text
 Figure 1: The construction used in the proof.
@@ -384,7 +478,7 @@ Figure numbering follows document order. A multi-image group counts as one figur
 
 ### Multiple images
 
-Multiple images can share one figure:
+Several images can belong to a single figure:
 
 ```text
 @image{
@@ -412,55 +506,208 @@ Individual widths and heights can be supplied with indexed properties:
 
 An image without an explicit width receives the remaining space in the row.
 
-The caption belongs to the complete multi-image figure. The label of the first image is used as the figure anchor when a label is supplied.
+The caption belongs to the complete multi-image figure, and the label of the first image is used as the figure anchor when a label is supplied.
 
-## References and labels
+## A complete article
 
-A section, subsection, or semantic environment can have a label:
+A small article can therefore look like this:
 
 ```text
-@section{Main Result, label = main-result}
+@documenttitle{Mathematics}
+@folder{Real Analysis}
+@author{Vivek Kalita}
+@date{6 October 2026}
+@title{Density of Rational Numbers}
+@description{A proof that the rational numbers are dense in the real numbers.}
+@tags{Real Analysis, Rational Numbers, Archimedean Property}
 
-@begin(theorem = Fundamental Theorem, label = fundamental-theorem)
+@section{Density of Rational Numbers, label = density-of-rational-numbers}
 
-The statement.
+The rational numbers \(\mathbb Q\) are everywhere inside the real numbers. No matter how small an interval we take, as long as it has positive length, there is always a rational number inside it.
+
+The proof is a direct application of the Archimedean property.
+
+@begin(theorem = Density of the Rational Numbers, label = density-q-in-r)
+
+For every \(a,b\in\mathbb R\) with
+
+\[
+a<b,
+\]
+
+there exists \(r\in\mathbb Q\) such that
+
+\[
+a<r<b.
+\]
 
 @end(theorem)
+
+@begin(proof)
+
+Let \(a<b\). Then
+
+\[
+b-a>0.
+\]
+
+By the Archimedean property, choose \(n\in\mathbb N\) such that
+
+\[
+n>\frac{1}{b-a}.
+\]
+
+Hence
+
+\[
+n(b-a)>1,
+\]
+
+so
+
+\[
+na+1<nb.
+\]
+
+Choose the least \(m\in\mathbb N\) satisfying
+
+\[
+m>na.
+\]
+
+By minimality,
+
+\[
+m\le na+1.
+\]
+
+Therefore,
+
+\[
+na<m\le na+1<nb.
+\]
+
+Dividing by \(n>0\),
+
+\[
+a<\frac{m}{n}<b.
+\]
+
+Since \(m/n\in\mathbb Q\), the required rational number has been found.
+
+@end(proof)
 ```
 
-Reference it inline with:
+The important stylistic rule is that the source should remain readable as mathematical writing. Mark Two supplies structure around the mathematics rather than forcing every sentence into markup.
+
+## Article catalog
+
+Each compilation updates a generated `articles.json` catalog.
+
+The catalog is intended for the homepage, archive, tag filtering, and search. It is generated from the metadata already present in the `.mt` source, so the source document remains the source of truth.
+
+A record contains fields such as:
+
+```json
+{
+  "id": "physics/electromagnetism/field_equations",
+  "title": "Field Equations",
+  "description": "A derivation of the electromagnetic field equations from the Lagrangian formulation.",
+  "subject": "Physics",
+  "folder": "Electromagnetism",
+  "author": "Vivek Kalita",
+  "date": "27 September 2026",
+  "tags": ["Electromagnetism", "Classical Field Theory"],
+  "url": "/physics/electromagnetism/field_equations/",
+  "source": "physics/electromagnetism/field_equations.mt",
+  "sections": ["Maxwell's Equations"]
+}
+```
+
+By default, Mark Two places the catalog at `articles.json` in the nearest project root, detected from `.git` or `pyproject.toml`.
+
+A different catalog path can be selected with:
+
+```bash
+mark-two completeness.mt --index path/to/articles.json
+```
+
+When an article is compiled, only its logical record is replaced. Existing records keep their order and contents, while a new article is appended. If the record has not changed, the catalog is left untouched.
+
+The catalog is written atomically so an interrupted compile cannot leave a half-written JSON file.
+
+The build model is therefore:
 
 ```text
-By @ref{fundamental-theorem}, the desired result follows.
+.mt source
+   |
+   +--> HTML article
+   |
+   +--> articles.json metadata index
 ```
 
-Custom reference text is supported:
+## Generated site
 
-```text
-By @ref{fundamental-theorem, text = "the theorem"}, the result follows.
-```
+Mark Two can build a small static site around the generated articles.
 
-A reference can also target a page/HTML URL:
-
-```text
-@ref{analysis.html#fundamental-theorem}
-```
-
-## Generated web page
-
-The built-in template provides:
+The built-in templates provide:
 
 - a restrained site header
-- a breadcrumb and article metadata
-- Home, GitHub, and light/dark theme controls
-- a main article area
-- a right-hand Contents panel
-- a right-hand Related panel
-- a mobile Contents & related panel
-- responsive article, image, list, and environment styling
-- MathJax for TeX mathematics
+- article metadata
+- Home, GitHub, and theme controls
+- responsive article styling
+- a Contents navigation generated from real section/subsection headings
+- related links
+- MathJax mathematics
+- responsive image and list styling
+- homepage search and tag filtering
+- an archive page with search and tag filtering
+- light and dark themes
 
-The Contents navigation is generated from the actual section and subsection headings in the rendered article and highlights the section currently in view.
+The article compiler inlines the local stylesheet and JavaScript into the generated article. External assets, such as the MathJax CDN script, remain external.
+
+The result is a self-contained article HTML file, which is convenient for static hosting and platforms with a page/file limit.
+
+## Site configuration
+
+A Mark Two site uses `site.json` for site-wide settings.
+
+The default configuration contains fields for:
+
+```text
+author
+bio
+title
+description
+email
+instagram
+github
+about
+archive
+featured
+copyright
+```
+
+Initialize it with:
+
+```bash
+mark-two init
+```
+
+Set a value with:
+
+```bash
+mark-two config set github https://github.com/VivekH90/blog
+```
+
+Read values with:
+
+```bash
+mark-two config get
+mark-two config get github
+```
+
+The homepage reads `articles.json` and `site.json` and renders featured, recent, topic-filtered, and archived article entries.
 
 ## VS Code extension
 
@@ -475,12 +722,12 @@ It provides:
 - completion after `@`
 - environment-name completion inside `@begin(...)` and `@end(...)`
 - snippets for document directives
-- snippets for all semantic environments
+- snippets for semantic environments
 - snippets for lists, images, references, related links, and inline formatting
-- automatic bracket/parenthesis closing
+- automatic bracket and parenthesis closing
 - indentation based on `@begin(...)` and `@end(...)`
 
-The environment snippets generate the canonical syntax. For example, the theorem snippet produces:
+The environment snippets generate the canonical syntax. For example:
 
 ```text
 @begin(theorem = Theorem Title, label = theorem-label)
@@ -488,7 +735,7 @@ The environment snippets generate the canonical syntax. For example, the theorem
 @end(theorem)
 ```
 
-The extension does not provide `@text` as a directive because ordinary prose is written directly.
+The extension does not provide `@text` because ordinary prose is written directly.
 
 ### Installing the extension
 
@@ -510,33 +757,24 @@ For extension development, open the repository in VS Code and launch the Extensi
 mark-two/
 ├── src/                 # Mark Two Python package source
 ├── test/                # Tests and example source documents
-├── web/                 # HTML template and frontend assets
+├── web/                 # HTML templates and frontend assets
 ├── build/               # Generated example HTML bundle
 ├── vscode-mark-two/     # VS Code language support
 ├── docs/                # Supporting documentation
 └── pyproject.toml       # Python package and CLI configuration
 ```
 
-## Current language rules
+## Canonical language rules
 
-The current canonical language follows a simple rule:
+The current language follows a small set of principles:
 
-**Write normal prose normally. Use directives for document structure. Use `@begin(...)` and `@end(...)` for semantic environments.**
+1. **Write normal prose normally.**
+2. **Use directives for document structure and metadata.**
+3. **Use `@begin(...)` and `@end(...)` for semantic environments.**
+4. **Use `@bold`, `@italic`, `@color`, and `@ref` inline when formatting or referencing prose.**
+5. **Use TeX directly for mathematics.**
 
-The old standalone environment commands such as:
-
-```text
-@theorem{...}
-@definition{...}
-@axiom{...}
-@proof{...}
-```
-
-are no longer part of the canonical language.
-
-Likewise, `@text` is no longer used.
-
-Use:
+The canonical theorem form is:
 
 ```text
 @begin(theorem = A Theorem, label = a-theorem)
@@ -546,17 +784,60 @@ Normal prose goes here.
 @end(theorem)
 ```
 
-instead.
+The older standalone forms such as:
 
+```text
+@theorem{...}
+@definition{...}
+@axiom{...}
+@proof{...}
+```
 
-## Build output
+are not part of the canonical language.
 
-Mark Two keeps the homepage/article template assets separate in the source tree:
+Likewise, `@text` is not part of the canonical language.
 
-- `web/index.html` for HTML
-- `web/style.css` for CSS
-- `web/script.js` for JavaScript
+The parser retains an older `@begin(kind){...}` compatibility form, but new documents should use the canonical header form:
 
-During compilation, Mark Two inlines the local stylesheet and JavaScript into the generated `index.html`. External assets, such as the MathJax CDN script, remain external.
+```text
+@begin(theorem = A Theorem, label = a-theorem)
+...
+@end(theorem)
+```
 
-The result is a single self-contained HTML page, which is convenient for static hosting and platforms that impose a page/file limit.
+## Updating Mark Two
+
+When Mark Two is installed with `pip install -e`, normal source changes do not require reinstallation.
+
+For a normal clone:
+
+```bash
+cd mark-two
+git pull
+```
+
+When Mark Two is used as a Git submodule:
+
+```bash
+git submodule update --remote resources/templates/mark-two
+```
+
+## Design philosophy
+
+Mark Two is deliberately smaller than a full markup language.
+
+The source should remain comfortable to read while writing mathematics. A reader looking at a `.mt` file should be able to follow the mathematical argument without mentally reconstructing a forest of HTML tags.
+
+The language therefore separates three layers:
+
+```text
+Mathematical prose
+       ↓
+Mark Two structure
+       ↓
+HTML presentation
+```
+
+The source expresses the mathematical structure. The renderer decides how that structure should look on the page.
+
+That separation is what allows a document such as a proof, lecture note, or physics derivation to be written once and presented consistently across the site.
