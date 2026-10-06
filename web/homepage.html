@@ -17,7 +17,8 @@
 :root{
   --bg:#fbfaf6;--fg:#1c1d24;--muted:#5c5f6b;--rule:#dcd8cc;
   --link:#3a43a8;--green:#0f766e;--paper:#ffffff;--soft:#f1efe7;--blue-soft:#eef0fb;--orange-soft:#fffaf0;--orange-border:#c9812b;
-  --sans:"Latin Modern Roman","Computer Modern Roman","CMU Serif","TeX Gyre Termes",serif;
+  --serif:"CMU Serif","Latin Modern Roman","Computer Modern Roman","TeX Gyre Termes",serif;
+  --sans:"CMU Sans Serif","Latin Modern Sans","Computer Modern Sans","LM Sans 10",Helvetica,Arial,sans-serif;
 }
 :root[data-theme="dark"]{
   --bg:#12141a;--fg:#e8e6df;--muted:#a4a5ad;--rule:#2e313b;
@@ -27,12 +28,13 @@
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{
-  margin:0;background:var(--bg);color:var(--fg);font-family:var(--sans);
+  margin:0;background:var(--bg);color:var(--fg);font-family:var(--serif);
   font-size:1.05rem;line-height:1.75;-webkit-font-smoothing:antialiased
 }
 a{color:var(--link);text-decoration:none}
 a:hover{text-decoration:underline}
 button,input{font:inherit}
+button,input,.kicker,.intro h1,.section-head h2,.nav,.theme{font-family:var(--sans)}
 button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--link);outline-offset:3px}
 .wrap{width:min(58rem,calc(100% - 2.4rem));margin:0 auto}
 .runhead{
@@ -88,6 +90,7 @@ main{padding:3rem 0 5rem}
   letter-spacing:.12em;text-transform:uppercase;margin-bottom:.7rem
 }
 .intro h1{
+  font-family:var(--sans);
   margin:0;font-size:clamp(2.5rem,6vw,3.5rem);line-height:1.08;
   letter-spacing:-.02em;font-weight:700
 }
@@ -157,6 +160,7 @@ main{padding:3rem 0 5rem}
 .section{max-width:48rem;margin:0 auto 3.7rem}
 .section-head{margin-bottom:.7rem}
 .section-head h2{
+  font-family:var(--sans);
   counter-increment:home-sec;
   font-size:1.65rem;line-height:1.3;margin:2.8rem 0 .8rem;
   padding:0;border:0;letter-spacing:-.005em;font-weight:700
