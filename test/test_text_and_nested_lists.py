@@ -118,3 +118,21 @@ C & = D
     assert r"\begin{aligned}" in html
     assert "&amp; = B" in html
     assert "A &amp; = B" in html
+
+
+def test_conclusion_environment_renders_as_unumbered_colored_box(tmp_path):
+    source = """@documenttitle{Mathematics}
+@section{Density}
+@begin(theorem = Density)
+Statement.
+@end(theorem)
+
+@begin(conclusion = Conclusion)
+Therefore the desired statement holds.
+@end(conclusion)
+"""
+    _, html = _render_source(source, tmp_path)
+    assert '<div class="box conclusion">' in html
+    assert '<div class="label">Conclusion</div>' in html
+    assert "Theorem 1.1" in html
+    assert "Conclusion 1.2" not in html
