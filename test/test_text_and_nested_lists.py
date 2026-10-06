@@ -35,6 +35,19 @@ def test_nested_enumerate_is_nested_and_renders_as_letters(tmp_path):
     assert 'type="a"' in html
 
 
+def test_inline_formatting_can_begin_a_line(tmp_path):
+    source = '''@documenttitle{Mathematics}
+@section{Test}
+@bold{This entire line is bold.}
+@italic{This entire line is italic.}
+@color{red, This entire line is red.}
+'''
+    _, html = _render_source(source, tmp_path)
+    assert '<strong>This entire line is bold.</strong>' in html
+    assert '<em>This entire line is italic.</em>' in html
+    assert 'color: red' in html
+
+
 def test_inline_formatting_is_recursive_and_html_escaped(tmp_path):
     source = '''@documenttitle{Mathematics}
 @section{Test}
