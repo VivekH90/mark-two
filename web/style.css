@@ -67,6 +67,38 @@
   --warning-ink-solid:#8d5313;
 
   --section-symbol:#b51f4b;
+  --section-sub:#72506a;
+  --section-rule:#e6dce1;
+  --theorem-bg:#f1efff;
+  --theorem-border:#6f61c7;
+  --theorem-ink:#4c408f;
+  --lemma-bg:#f6f1ff;
+  --lemma-border:#8766bc;
+  --lemma-ink:#61488d;
+  --definition-bg:#edf8f1;
+  --definition-border:#4d9169;
+  --definition-ink:#2e6b49;
+  --proposition-bg:#eef4ff;
+  --proposition-border:#5477b7;
+  --proposition-ink:#385483;
+  --example-bg:#fff4e4;
+  --example-border:#c7812b;
+  --example-ink:#895515;
+  --axiom-bg:#fff0f0;
+  --axiom-border-solid:#bc5b5b;
+  --axiom-ink-solid:#913f3f;
+  --remark-bg:#f3f2f0;
+  --remark-border:#9a958d;
+  --remark-ink:#676159;
+  --conjecture-bg:#fff0f7;
+  --conjecture-border:#ad6e94;
+  --conjecture-ink:#824f6f;
+  --notation-bg:#edf8f8;
+  --notation-border:#4b8e90;
+  --notation-ink:#356b6d;
+  --warning-bg:#fff3df;
+  --warning-border-solid:#c07820;
+  --warning-ink-solid:#895315;
   --toc-bg:#f2effd;
   --toc-border:#d8cff4;
   --toc-ink:#51478a;
@@ -135,7 +167,39 @@
   --warning-border-solid:#dfa052;
   --warning-ink-solid:#ffd79e;
 
-  --section-symbol:#e07a9e;
+  --section-symbol:#e58aa8;
+  --section-sub:#c9b3c7;
+  --section-rule:#453b46;
+  --theorem-bg:#292447;
+  --theorem-border:#9b8be5;
+  --theorem-ink:#ddd7ff;
+  --lemma-bg:#2e2640;
+  --lemma-border:#aa89df;
+  --lemma-ink:#dfd1ff;
+  --definition-bg:#1a3526;
+  --definition-border:#6fbd92;
+  --definition-ink:#c4ebd1;
+  --proposition-bg:#202d45;
+  --proposition-border:#78a0dc;
+  --proposition-ink:#d0e0ff;
+  --example-bg:#392a19;
+  --example-border:#e0a45d;
+  --example-ink:#ffd7a1;
+  --axiom-bg:#3b2325;
+  --axiom-border-solid:#db7c7c;
+  --axiom-ink-solid:#ffc7c7;
+  --remark-bg:#292a2d;
+  --remark-border:#aaa7ad;
+  --remark-ink:#ddd9e0;
+  --conjecture-bg:#392432;
+  --conjecture-border:#d08cae;
+  --conjecture-ink:#f1c8dd;
+  --notation-bg:#1f3535;
+  --notation-border:#6bbabb;
+  --notation-ink:#c4eded;
+  --warning-bg:#392b1a;
+  --warning-border-solid:#dfa45c;
+  --warning-ink-solid:#ffd7a1;
   --toc-bg:#25213a;
   --toc-border:#4b426c;
   --toc-ink:#d9d0ff;
@@ -344,150 +408,163 @@ header.top{
 .reading h2{
   font-family:var(--sans);
   counter-increment:sec;
-  font-size:1.65rem;
-  line-height:1.3;
-  margin:2.8rem 0 .8rem;
+  display:flex;
+  align-items:baseline;
+  gap:.72rem;
+  font-size:clamp(1.75rem,2.8vw,2.08rem);
+  line-height:1.2;
+  margin:3.25rem 0 1rem;
   padding:0;
   border:0;
-  letter-spacing:-.005em;
+  letter-spacing:-.008em;
   scroll-margin-top:5.5rem;
 }
-.reading h2 .num{
-  display:inline-block;
-  color:var(--crim);
+.reading h2::after{
+  content:"";
+  flex:1;
+  min-width:1.5rem;
+  border-bottom:1.5px solid var(--section-rule);
+  transform:translateY(-.22em);
+}
+.reading h2 .section-number{
+  flex:none;
+  color:var(--section-symbol);
+  font-size:.92em;
   font-weight:700;
-  margin-right:.7rem;
-  padding-right:.7rem;
-  border-right:2px solid var(--rule);
+  letter-spacing:0;
+}
+.reading h2 .section-title{
+  color:var(--fg);
+  font-weight:700;
 }
 .reading h3{
-  font-size:1.1rem;
-  line-height:1.4;
-  margin:1.7rem 0 .4rem;
+  font-family:var(--sans);
+  display:flex;
+  align-items:baseline;
+  gap:.55rem;
+  font-size:1.18rem;
+  line-height:1.35;
+  margin:2.05rem 0 .6rem;
   color:var(--fg);
   scroll-margin-top:5.5rem;
+  font-weight:700;
+  letter-spacing:-.003em;
 }
-.reading h3 .num{
-  color:var(--muted);
-  margin-right:.35rem;
+.reading h3 .section-number{
+  flex:none;
+  color:var(--section-sub);
+  font-size:.9em;
+  font-weight:700;
+  letter-spacing:0;
 }
-.reading p,.reading li{line-height:1.85}
-.reading ul,.reading ol{padding-left:1.4rem}
-.reading li{margin:.35rem 0}
-.mark-list{margin:.6rem 0 1rem}
-.mark-list li::marker{color:var(--list-color,var(--fg))}
-
+.reading h3 .section-title{
+  color:var(--fg);
+  font-weight:700;
+}
 /* Mathematical environments */
 .box{
-  margin:1.6rem 0;
-  padding:1rem 1.3rem 1.1rem;
+  margin:1.85rem 0;
+  padding:1.12rem 1.3rem 1.18rem;
   color:var(--fg);
-  border:1.5px solid var(--rule);
-  border-left:5px solid var(--box-accent,var(--link));
+  border:1.25px solid var(--box-accent,var(--rule));
+  border-left:6px solid var(--box-accent,var(--link));
   border-radius:14px;
   background:var(--box-fill,var(--card));
 }
 .box .label{
-  margin:.05rem 0 .5rem;
-  font-size:1.04rem;
-  line-height:1.45;
+  margin:0 0 .62rem;
+  padding:0 0 .42rem;
+  font-family:var(--sans);
+  font-size:1rem;
+  line-height:1.35;
   font-weight:700;
+  border-bottom:1px solid color-mix(in srgb,var(--box-accent) 35%,var(--box-fill));
 }
 .box .box-content,.box .proof-content{min-width:0}
-.box p{margin:.45rem 0}
+.box p{margin:.48rem 0}
+.box .math-display{margin:.8rem 0}
+.box ul,.box ol{margin:.55rem 0 .8rem}
 
-/* Solid theorem surfaces with rounded corners. */
+/* Solid mathematical statement cards. */
 .box.theorem,
-.box.proposition,
 .box.corollary{
   --box-fill:var(--theorem-bg);
   --box-accent:var(--theorem-border);
-  border-color:var(--theorem-border);
 }
 .box.theorem .label,
-.box.proposition .label,
 .box.corollary .label{color:var(--theorem-ink)}
+
+.box.proposition{
+  --box-fill:var(--proposition-bg);
+  --box-accent:var(--proposition-border);
+}
+.box.proposition .label{color:var(--proposition-ink)}
 
 .box.lemma{
   --box-fill:var(--lemma-bg);
   --box-accent:var(--lemma-border);
-  border-color:var(--lemma-border);
 }
 .box.lemma .label{color:var(--lemma-ink)}
 
 .box.definition{
   --box-fill:var(--definition-bg);
   --box-accent:var(--definition-border);
-  border-color:var(--definition-border);
 }
 .box.definition .label{color:var(--definition-ink)}
 
 .box.example{
   --box-fill:var(--example-bg);
   --box-accent:var(--example-border);
-  border-color:var(--example-border);
 }
 .box.example .label{color:var(--example-ink)}
 
 .box.axiom{
   --box-fill:var(--axiom-bg);
   --box-accent:var(--axiom-border-solid);
-  border-color:var(--axiom-border-solid);
 }
 .box.axiom .label{color:var(--axiom-ink-solid)}
 
 .box.remark{
   --box-fill:var(--remark-bg);
   --box-accent:var(--remark-border);
-  border-color:var(--remark-border);
 }
 .box.remark .label{color:var(--remark-ink)}
 
 .box.conjecture{
-  --box-fill:var(--example-bg);
-  --box-accent:var(--example-border);
-  border-color:var(--example-border);
+  --box-fill:var(--conjecture-bg);
+  --box-accent:var(--conjecture-border);
 }
-.box.conjecture .label{color:var(--example-ink)}
+.box.conjecture .label{color:var(--conjecture-ink)}
 
 .box.notation{
   --box-fill:var(--notation-bg);
   --box-accent:var(--notation-border);
-  border-color:var(--notation-border);
 }
 .box.notation .label{color:var(--notation-ink)}
 
 .box.warning{
   --box-fill:var(--warning-bg);
   --box-accent:var(--warning-border-solid);
-  border-color:var(--warning-border-solid);
 }
 .box.warning .label{color:var(--warning-ink-solid)}
 
 .box.proof{
   position:relative;
+  margin:1.55rem 0 1.8rem;
   border:0;
+  border-left:3px solid var(--section-rule);
   border-radius:0;
-  padding:.1rem 0 .4rem;
+  padding:.15rem 0 .55rem 1rem;
   background:transparent;
 }
 .box.proof .label{
+  margin:0 0 .48rem;
+  padding:0;
+  border:0;
   color:var(--muted);
   font-style:italic;
   font-weight:500;
 }
-.box.proof .qed{
-  float:right;
-  display:inline-block;
-  width:.8em;
-  height:.8em;
-  margin-top:.55rem;
-  border:1.5px solid var(--accent2);
-  border-radius:2px;
-  color:transparent;
-}
-.box.proof::after{content:"";display:table;clear:both}
-
 /* Inline mathematical emphasis */
 .term{
   color:var(--link);
@@ -621,9 +698,11 @@ figure.diagram figcaption{
 /* Q&A/exercise surfaces retain the old article's pale green accent. */
 .box.exercise,
 .box.question{
-  border:1px solid var(--question-border);
-  border-radius:6px;
-  background:var(--question-soft);
+  --box-fill:var(--question-soft);
+  --box-accent:var(--accent2);
+  border-color:var(--accent2);
+  border-left-color:var(--accent2);
+  border-radius:14px;
 }
 .box.exercise .label,
 .box.question .label{color:var(--accent2)}
