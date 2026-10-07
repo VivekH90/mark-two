@@ -934,7 +934,7 @@ or:
 
 The document type is metadata, not a normal user tag. It is stored in the generated `articles.json` catalog as `doctype`, and the homepage and archive use it to let readers browse **All**, **Articles**, or **Notes** independently.
 
-Existing documents that do not declare a type remain valid and are treated as `article` documents for compatibility.
+Documents that do not declare a type remain valid and are treated as `notes`. Use `@doctype(article)` explicitly when a document is intended to be an article.
 
 Only `article` and `notes` are currently accepted:
 
