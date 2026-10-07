@@ -275,13 +275,27 @@ footer{
   var empty=document.getElementById('empty');
   var count=document.getElementById('count');
   var active=null;
+  var activeType=new URLSearchParams(window.location.search).get('type')||'all';
+  if(['article','notes'].indexOf(activeType)===-1) activeType='all';
+
+  function setType(type){
+    activeType=type;
+    var params=new URLSearchParams(window.location.search);
+    if(type==='all') params.delete('type'); else params.set('type',type);
+    var query=params.toString();
+    history.replaceState(null,'',window.location.pathname+(query?'?'+query:'')+window.location.hash);
+    document.querySelectorAll('.type-chip').forEach(function(b){
+      b.classList.toggle('active',b.dataset.doctype===activeType);
+    });
+  }
 
   function filter(){
     var q=input.value.trim().toLowerCase(),visible=0;
     rows.forEach(function(row){
       var rowTags=(row.dataset.tags||'').split('|').filter(Boolean);
       var hay=(row.dataset.search||row.textContent).toLowerCase();
-      var show=(!active||rowTags.indexOf(active)!==-1)&&(!q||hay.indexOf(q)!==-1);
+      var typeMatch=activeType==='all'||row.dataset.doctype===activeType;
+      var show=typeMatch&&(!active||rowTags.indexOf(active)!==-1)&&(!q||hay.indexOf(q)!==-1);
       row.classList.toggle('is-hidden',!show);
       if(show) visible++;
     });
@@ -296,21 +310,23 @@ footer{
     });
 
     empty.style.display=visible?'none':'block';
-    count.textContent=visible+' article'+(visible===1?'':'s');
+    count.textContent=visible+' '+(activeType==='notes'?'note':'article')+(visible===1?'':'s');
 
-    if(active||q){
+    if(active||q||activeType!=='all'){
       var bits=[];
       if(active){
         var activeButton=document.querySelector('#tag-list .chip[data-tag="'+CSS.escape(active)+'"]');
         bits.push(activeButton?activeButton.firstChild.textContent.trim():active);
       }
-      if(q)bits.push('“'+q+'”');
+      if(activeType!=='all') bits.push(activeType==='notes'?'Notes':'Articles');
+      if(q) bits.push('“'+q+'”');
       note.replaceChildren(document.createTextNode('Showing '+bits.join(' · ')+' · '));
       var clearButton=document.createElement('button');
       clearButton.type='button';
       clearButton.textContent='clear';
       clearButton.addEventListener('click',function(){
         active=null;input.value='';
+        setType('all');
         tags.forEach(function(tag){tag.classList.remove('active')});
         filter();
       });
