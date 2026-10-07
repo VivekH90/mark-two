@@ -105,6 +105,9 @@
   --conclusion-bg:#edf7f5;
   --conclusion-border:#3f8d83;
   --conclusion-ink:#28685f;
+  --colourbox-bg:#fff6d8;
+  --colourbox-border:#9b6b12;
+  --colourbox-ink:#6b4a08;
 
   --toc-bg:#f5f1ff;
   --toc-border:#b8a9df;
@@ -212,6 +215,9 @@
   --conclusion-bg:#19312f;
   --conclusion-border:#68c5b8;
   --conclusion-ink:#b7e6df;
+  --colourbox-bg:#332a17;
+  --colourbox-border:#e1bd55;
+  --colourbox-ink:#f8e6a5;
 
   --toc-bg:#25213a;
   --toc-border:#5e5180;
@@ -585,6 +591,30 @@ header.top{
   font-style:italic;
   font-weight:500;
 }
+/* Titleless emphasis environment */
+.box.colourbox{
+  margin:1.65rem 0;
+  padding:1.22rem 1.42rem 1.28rem;
+  border:2px solid var(--colourbox-border);
+  border-left-width:6px;
+  border-radius:18px;
+  background:var(--colourbox-bg);
+  color:var(--colourbox-ink);
+  box-shadow:
+    0 7px 18px color-mix(in srgb,var(--colourbox-border) 12%,transparent),
+    inset 0 0 0 1px color-mix(in srgb,var(--colourbox-border) 14%,transparent);
+}
+
+.box.colourbox .box-content{
+  min-width:0;
+}
+
+.box.colourbox p:first-child{margin-top:.1rem}
+.box.colourbox p:last-child{margin-bottom:.1rem}
+.box.colourbox .math-display{
+  color:var(--fg);
+}
+
 /* Inline mathematical emphasis */
 .term{
   color:var(--link);
