@@ -12,6 +12,13 @@ class Button:
 
 
 @dataclass
+class Animation:
+    """A trusted raw HTML/CSS/JavaScript interactive animation block."""
+
+    content: str
+    label: str = ""
+
+
 class Image:
     """An article image with optional accessibility text, caption, label, size, and group."""
 
@@ -81,10 +88,10 @@ class Environment:
     kind: str
     title: str = ""
     label: str = ""
-    content: List[Union[str, Image, MathBlock, TextBlock, Label, Reference, ListBlock]] = field(default_factory=list)
+    content: List[Union[str, Image, MathBlock, TextBlock, Label, Reference, ListBlock, Animation]] = field(default_factory=list)
 
 
-ContentItem = Union[str, Image, MathBlock, TextBlock, Label, Reference, ListBlock, Environment]
+ContentItem = Union[str, Image, MathBlock, TextBlock, Label, Reference, ListBlock, Environment, Animation]
 
 
 @dataclass
