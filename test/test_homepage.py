@@ -43,3 +43,15 @@ def test_topic_list_is_limited_to_five():
     assert "Tag A (1)" in html
     assert "Tag E (1)" in html
     assert "Tag F (1)" not in html
+
+
+def test_recent_cards_expose_document_type():
+    from src.homepage import _render_recent
+    html = _render_recent([
+        {"title": "A Note", "doctype": "notes", "date": "2026-10-01"},
+        {"title": "An Article", "doctype": "article", "date": "2026-09-01"},
+    ])
+    assert 'data-doctype="notes"' in html
+    assert 'data-doctype="article"' in html
+    assert "Notes" in html
+    assert "Article" in html
