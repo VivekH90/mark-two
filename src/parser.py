@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import List
 
 from .ast import (
-    Button, Document, Environment, Image, Label, ListBlock, ListItem,
+    Animation, Button, Document, Environment, Image, Label, ListBlock, ListItem,
     MathBlock, Reference, RelatedLink, Section, Subsection, TextBlock,
 )
 
@@ -17,6 +17,7 @@ _ENVIRONMENTS = {
     "remark", "example", "conjecture", "notation", "warning", "proof", "conclusion", "colourbox",
 }
 _LIST_ENVIRONMENTS = {"enumerate", "itemize"}
+_RAW_ENVIRONMENTS = {"animation"}
 
 
 def _slugify(text: str) -> str:
@@ -329,7 +330,7 @@ def _parse_block_source(source: str) -> Document:
             item.content.append(TextBlock(text=text))
 
     def add_environment(kind, argument):
-        if kind not in _ENVIRONMENTS and kind not in _LIST_ENVIRONMENTS:
+        if kind not in _ENVIRONMENTS and kind not in _LIST_ENVIRONMENTS and kind not in _RAW_ENVIRONMENTS:
             if kind in {"section", "subsection"}:
                 raise ValueError(
                     f"Use @{kind}{{...}} for structural headings instead of @begin({kind}...)"
@@ -340,7 +341,14 @@ def _parse_block_source(source: str) -> Document:
         if parent is None or not hasattr(parent, "content"):
             raise ValueError(f"@begin({kind}...) must appear after @section{{...}}")
 
-        if kind in _LIST_ENVIRONMENTS:
+        if kind in _RAW_ENVIRONMENTS:
+            values = _parse_key_values(argument)
+            unknown = set(values) - {"label"}
+            if unknown or "name" in values:
+                raise ValueError("@begin(animation) accepts no title; only an optional label is allowed")
+            node = Animation(content="", label=values.get("label", ""))
+
+        elif kind in _LIST_ENVIRONMENTS:
             values = _parse_key_values(argument)
             unknown = set(values) - {"color"}
             if unknown:
@@ -372,6 +380,22 @@ def _parse_block_source(source: str) -> Document:
     while index < len(lines):
         raw = lines[index]
         stripped = raw.strip()
+
+        # Animation bodies are intentionally opaque to the Mark Two parser.
+        # This lets embedded HTML, CSS (@media, @keyframes, etc.), and
+        # JavaScript pass through unchanged until the matching @end(animation).
+        if environment_stack and environment_stack[-1][0] in _RAW_ENVIRONMENTS:
+            raw_kind, raw_node = environment_stack[-1]
+            if raw_kind == "animation" and re.fullmatch(r"@ends*(s*animations*)", stripped, re.IGNORECASE):
+                environment_stack.pop()
+                raw_node.content = raw_node.content.strip("
+")
+                index += 1
+                continue
+            raw_node.content += raw + "
+"
+            index += 1
+            continue
 
         if math_lines is not None:
             if stripped == r"\]":
