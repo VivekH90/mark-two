@@ -916,3 +916,29 @@ HTML presentation
 The source expresses the mathematical structure. The renderer decides how that structure should look on the page.
 
 That separation is what allows a document such as a proof, lecture note, or physics derivation to be written once and presented consistently across the site.
+
+
+## Document types
+
+Every Mark Two document can declare whether it is an **article** or **notes** document:
+
+```text
+@doctype(article)
+```
+
+or:
+
+```text
+@doctype(notes)
+```
+
+The document type is metadata, not a normal user tag. It is stored in the generated `articles.json` catalog as `doctype`, and the homepage and archive use it to let readers browse **All**, **Articles**, or **Notes** independently.
+
+Existing documents that do not declare a type remain valid and are treated as `article` documents for compatibility.
+
+Only `article` and `notes` are currently accepted:
+
+```text
+@doctype(article)
+@doctype(notes)
+```
