@@ -14,7 +14,7 @@ _BLOCK_START = re.compile(r"^\s*@begin\s*\(\s*(.*?)\s*\)\s*(?:\{(.*)\})?\s*$", r
 _BLOCK_END = re.compile(r"^\s*@end\s*\(\s*([A-Za-z][\w-]*)\s*\)\s*$", re.IGNORECASE)
 _ENVIRONMENTS = {
     "theorem", "lemma", "definition", "corollary", "axiom", "proposition",
-    "remark", "example", "conjecture", "notation", "warning", "proof", "conclusion",
+    "remark", "example", "conjecture", "notation", "warning", "proof", "conclusion", "colourbox",
 }
 _LIST_ENVIRONMENTS = {"enumerate", "itemize"}
 
@@ -350,10 +350,21 @@ def _parse_block_source(source: str) -> Document:
                 color=values.get("color", "black"),
             )
         else:
-            title, label = _block_title_label(argument)
-            if not title and kind != "proof":
-                raise ValueError(f"@begin({kind} = ...) requires an environment title")
-            node = Environment(kind=kind, title=title, label=label)
+            if kind == "colourbox":
+                values = _parse_key_values(argument)
+                unknown = set(values) - {"label"}
+                if unknown or "name" in values:
+                    raise ValueError("@begin(colourbox) accepts no title; only an optional label is allowed")
+                node = Environment(
+                    kind=kind,
+                    title="",
+                    label=values.get("label", ""),
+                )
+            else:
+                title, label = _block_title_label(argument)
+                if not title and kind != "proof":
+                    raise ValueError(f"@begin({kind} = ...) requires an environment title")
+                node = Environment(kind=kind, title=title, label=label)
 
         parent.content.append(node)
         environment_stack.append((kind, node))
