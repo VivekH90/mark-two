@@ -98,7 +98,7 @@ def _article_url(article: dict[str, Any]) -> str:
 
 
 def _doctype(article: dict[str, Any]) -> str:
-    value = str(article.get("doctype") or "article").strip().casefold()
+    value = str(article.get("doctype") or "notes").strip().casefold()
     return value if value in {"article", "notes"} else "article"
 
 
