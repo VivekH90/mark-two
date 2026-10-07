@@ -7,10 +7,10 @@ import os
 import tempfile
 from pathlib import Path
 
-from .ast import Document
+from .ast import DOCUMENT_TYPES, Document
 
 
-INDEX_VERSION = 1
+INDEX_VERSION = 2
 INDEX_FILENAME = "articles.json"
 
 
@@ -89,10 +89,14 @@ def build_catalog_entry(
     project_root = Path(root).resolve()
 
     relative_source = _relative_path(source, project_root)
+    doctype = str(document.doctype or "").strip().casefold()
+    if doctype not in DOCUMENT_TYPES:
+        allowed = " or ".join(DOCUMENT_TYPES)
+        raise ValueError(f"Document type must be {allowed}")
 
     return {
         "id": _article_id(source, project_root),
-        "doctype": document.doctype,
+        "doctype": doctype,
         "title": document.article_title,
         "description": document.description,
         "subject": document.document_tag,
