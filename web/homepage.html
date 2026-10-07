@@ -369,6 +369,7 @@ footer{
   var note=document.querySelector('.filter-note');
   var empty=document.getElementById('recent-empty');
   var rows=document.querySelectorAll('#recent .recent-card');
+  var featured=document.querySelector('.featured-card');
   var active=null;
   var activeType=new URLSearchParams(window.location.search).get('type')||'all';
   if(['article','notes'].indexOf(activeType)===-1) activeType='all';
@@ -386,6 +387,10 @@ footer{
 
   function filter(){
     var q=input.value.trim().toLowerCase(),visible=0;
+    if(featured){
+      var featuredType=featured.dataset.doctype||'article';
+      featured.classList.toggle('is-hidden',activeType!=='all'&&featuredType!==activeType);
+    }
     rows.forEach(function(row){
       var tags=(row.dataset.tags||'').toLowerCase().split('|').filter(Boolean);
       var hay=(row.dataset.search||row.textContent).toLowerCase();
