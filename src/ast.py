@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 from typing import List, Optional, Union
 
 DOCUMENT_TYPES = ("article", "notes")
-DEFAULT_DOCUMENT_TYPE = "article"
+DEFAULT_DOCUMENT_TYPE = "notes"
 
 
 @dataclass
