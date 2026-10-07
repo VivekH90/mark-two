@@ -123,3 +123,15 @@ This should fail.
     import pytest
     with pytest.raises(ValueError, match="accepts no title"):
         parse(source)
+
+
+def test_document_type_defaults_to_article_and_accepts_notes():
+    from src.parser import parse
+    assert parse("@doctype(article)\n@section{Test}\n").doctype == "article"
+    assert parse("@doctype(notes)\n@section{Test}\n").doctype == "notes"
+
+
+def test_document_type_rejects_unknown_values():
+    import pytest
+    with pytest.raises(ValueError, match="must be article or notes"):
+        parse("@doctype(blog)\n@section{Test}\n")
