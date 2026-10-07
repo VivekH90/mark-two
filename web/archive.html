@@ -310,7 +310,7 @@ footer{
     });
 
     empty.style.display=visible?'none':'block';
-    count.textContent=visible+' '+(activeType==='notes'?'note':'article')+(visible===1?'':'s');
+    count.textContent=visible+' '+(activeType==='notes'?'note':activeType==='article'?'article':'item')+(visible===1?'':'s');
 
     if(active||q||activeType!=='all'){
       var bits=[];
