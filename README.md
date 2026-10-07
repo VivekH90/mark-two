@@ -271,6 +271,54 @@ This is an emphasized note.
 
 The generated box uses rounded corners, a contrasting border, and separate light/dark theme colors.
 
+### Interactive animations
+
+Use the titleless `animation` environment when an article needs an interactive figure, animation, simulation, or other browser-based visualization.
+
+The contents of the environment are treated as **raw trusted web content**. Mark Two does not parse or escape the body, so HTML, CSS, and JavaScript can be written directly. This is intentional: CSS constructs such as `@media` and `@keyframes`, JavaScript braces, and arbitrary HTML should pass through unchanged.
+
+```text
+@begin(animation)
+
+<canvas id="oscillator" width="700" height="360"></canvas>
+
+<style>
+#oscillator {
+    width: 100%;
+    height: 360px;
+}
+</style>
+
+<script>
+const canvas = document.getElementById("oscillator");
+const ctx = canvas.getContext("2d");
+
+function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // draw the interactive visualization here
+    requestAnimationFrame(draw);
+}
+
+draw();
+</script>
+
+@end(animation)
+```
+
+Mark Two supplies the outer `.mt-animation` shell. It constrains the component to the article width, hides accidental overflow, applies the site's typography and theme colors by inheritance, and keeps the animation visually separate from surrounding prose.
+
+An animation may optionally have a label:
+
+```text
+@begin(animation, label = harmonic-oscillator)
+...
+@end(animation)
+```
+
+Animation bodies are intentionally opaque to the Mark Two parser. The closing delimiter is a line containing `@end(animation)`, so that delimiter should not be placed verbatim on its own line inside the embedded code.
+
+Because animation bodies can execute arbitrary JavaScript, this feature is intended for trusted `.mt` authors rather than untrusted user-submitted documents.
+
 ### Nested environments
 
 Environments can contain other environments:
