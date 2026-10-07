@@ -34,6 +34,7 @@ const ENVIRONMENT_SNIPPETS = [
   ["notation", '@begin(notation = ${1:Notation Title}, label = ${2:notation-label})\n${0}\n@end(notation)'],
   ["warning", '@begin(warning = ${1:Warning Title}, label = ${2:warning-label})\n${0}\n@end(warning)'],
   ["colourbox", '@begin(colourbox)\n${0}\n@end(colourbox)'],
+  ["animation", '@begin(animation)\n${0}\n@end(animation)'],
   ["proof", '@begin(proof)\n${0}\n@end(proof)'],
   ["enumerate", '@begin(enumerate)\n@item{${1:First item}}\n@item{${2:Second item}}\n@end(enumerate)'],
   ["itemize", '@begin(itemize)\n@item{${1:First item}}\n@item{${2:Second item}}\n@end(itemize)'],
@@ -50,7 +51,7 @@ function activate(context) {
           const typed = environmentMatch[2];
           const start = position.character - typed.length;
           const range = new vscode.Range(position.line, start, position.line, position.character);
-          return ["theorem","lemma","definition","corollary","axiom","proposition","remark","example","conjecture","notation","warning","proof","colourbox","enumerate","itemize"]
+          return ["theorem","lemma","definition","corollary","axiom","proposition","remark","example","conjecture","notation","warning","proof","colourbox","animation","enumerate","itemize"]
             .filter(name => name.startsWith(typed.toLowerCase()))
             .map(name => {
               const item = new vscode.CompletionItem(name, vscode.CompletionItemKind.Struct);
