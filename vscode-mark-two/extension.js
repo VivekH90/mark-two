@@ -2,6 +2,7 @@ const vscode = require("vscode");
 
 const DIRECTIVE_SNIPPETS = [
   ["documenttitle", '@documenttitle{${1:Physics}}'],
+  ["doctype", '@doctype(${1|article,notes|})'],
   ["folder", '@folder{${1:Electromagnetism}}'],
   ["author", '@author{${1:Author}}'],
   ["date", '@date{${1:26 September 2026}}'],
