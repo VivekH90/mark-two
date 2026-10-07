@@ -305,6 +305,11 @@ footer{
     }else note.textContent='';
   }
 
+  document.querySelectorAll('.type-chip').forEach(function(btn){
+    btn.addEventListener('click',function(){setType(btn.dataset.doctype);filter();});
+  });
+  setType(activeType);
+
   tags.forEach(function(tag){
     tag.addEventListener('click',function(){
       active=active===tag.dataset.tag?null:tag.dataset.tag;
