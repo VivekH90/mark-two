@@ -131,6 +131,19 @@ main{padding:3rem 0 5rem}
 }
 
 /* Tags become a small index, not a row of UI pills. */
+ .type-row{
+  max-width:48rem;margin:0 auto 1rem;
+  display:flex;align-items:baseline;gap:1rem;flex-wrap:wrap;
+  padding-bottom:.65rem;border-bottom:1px solid var(--rule)
+}
+.type-links{display:flex;flex-wrap:wrap;gap:.2rem .35rem}
+.type-link{
+  display:inline-block;font:inherit;font-size:.8rem;line-height:1;
+  padding:.34rem .72rem;margin:.25rem 0;border:1px solid var(--rule);
+  border-radius:999px;background:var(--paper);color:var(--fg);cursor:pointer
+}
+.type-link:hover,.type-link.active{border-color:var(--link);color:var(--link)}
+.type-link.active{background:var(--link);color:var(--bg)}
 .topic-row{
   max-width:48rem;margin:0 auto 3.5rem;
   display:flex;align-items:baseline;gap:1rem;flex-wrap:wrap;
@@ -223,6 +236,10 @@ main{padding:3rem 0 5rem}
 .recent-card h3{margin:0;line-height:1.3;font-size:1.25rem;font-weight:700}
 .recent-card h3 a{color:var(--link)}
 .recent-card p{margin:.18rem 0 0;color:var(--muted);font-size:.98rem;line-height:1.55}
+ .recent-type{
+  margin:.4rem 0 0;color:var(--green);font-family:var(--sans);
+  font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em
+}
 .recent-tags{display:flex;flex-wrap:wrap;gap:.25rem .35rem;margin:.45rem 0 0}
 .recent-tags .chip{
   cursor:default;margin:0
@@ -300,8 +317,17 @@ footer{
       </div>
     </section>
 
+    <section class="type-row" aria-label="Browse by document type">
+      <span class="topic-label">Browse</span>
+      <div class="type-links">
+        <button type="button" class="type-link active" data-doctype="all">All</button>
+        <button type="button" class="type-link" data-doctype="article">Articles</button>
+        <button type="button" class="type-link" data-doctype="notes">Notes</button>
+      </div>
+    </section>
+
     <section class="topic-row">
-      <span class="topic-label">Index</span>
+      <span class="topic-label">Topics</span>
       <div class="ptopics">{{TOPICS}}</div>
       <div class="filter-note"></div>
     </section>
@@ -344,13 +370,27 @@ footer{
   var empty=document.getElementById('recent-empty');
   var rows=document.querySelectorAll('#recent .recent-card');
   var active=null;
+  var activeType=new URLSearchParams(window.location.search).get('type')||'all';
+  if(['article','notes'].indexOf(activeType)===-1) activeType='all';
+
+  function setType(type){
+    activeType=type;
+    var params=new URLSearchParams(window.location.search);
+    if(type==='all') params.delete('type'); else params.set('type',type);
+    var query=params.toString();
+    history.replaceState(null,'',window.location.pathname+(query?'?'+query:'')+window.location.hash);
+    document.querySelectorAll('.type-link').forEach(function(b){
+      b.classList.toggle('active',b.dataset.doctype===activeType);
+    });
+  }
 
   function filter(){
     var q=input.value.trim().toLowerCase(),visible=0;
     rows.forEach(function(row){
       var tags=(row.dataset.tags||'').toLowerCase().split('|').filter(Boolean);
       var hay=(row.dataset.search||row.textContent).toLowerCase();
-      var show=(!active||tags.indexOf(active.toLowerCase())!==-1)&&(!q||hay.indexOf(q)!==-1);
+      var typeMatch=activeType==='all'||row.dataset.doctype===activeType;
+      var show=typeMatch&&(!active||tags.indexOf(active.toLowerCase())!==-1)&&(!q||hay.indexOf(q)!==-1);
       row.classList.toggle('is-hidden',!show);
       if(show) visible++;
     });
@@ -370,6 +410,11 @@ footer{
       note.textContent='';
     }
   }
+
+  document.querySelectorAll('.type-link').forEach(function(btn){
+    btn.addEventListener('click',function(){setType(btn.dataset.doctype);filter();});
+  });
+  setType(activeType);
 
   topics.forEach(function(btn){
     btn.addEventListener('click',function(){
