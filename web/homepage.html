@@ -175,6 +175,7 @@ main{padding:3rem 0 5rem}
 
 /* Content is a journal index. */
 .section{max-width:48rem;margin:0 auto 3.7rem}
+.section.is-hidden{display:none}
 .section-head{margin-bottom:.7rem}
 .section-head h2{
   font-family:var(--sans);
@@ -333,7 +334,7 @@ footer{
       <div class="filter-note"></div>
     </section>
 
-    <section class="section">
+    <section class="section" id="featured-section">
       <div class="section-head"><h2>Featured</h2></div>
       {{FEATURED}}
     </section>
@@ -371,6 +372,7 @@ footer{
   var empty=document.getElementById('recent-empty');
   var rows=document.querySelectorAll('#recent .recent-card');
   var featured=document.querySelector('.featured-card');
+  var featuredSection=document.getElementById('featured-section');
   var active=null;
   var activeType=new URLSearchParams(window.location.search).get('type')||'all';
   if(['article','notes'].indexOf(activeType)===-1) activeType='all';
@@ -390,7 +392,9 @@ footer{
     var q=input.value.trim().toLowerCase(),visible=0;
     if(featured){
       var featuredType=featured.dataset.doctype||'article';
-      featured.classList.toggle('is-hidden',activeType!=='all'&&featuredType!==activeType);
+      var featuredVisible=activeType==='all'||featuredType===activeType;
+      featured.classList.toggle('is-hidden',!featuredVisible);
+      if(featuredSection) featuredSection.classList.toggle('is-hidden',!featuredVisible);
     }
     rows.forEach(function(row){
       var tags=(row.dataset.tags||'').toLowerCase().split('|').filter(Boolean);
