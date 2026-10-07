@@ -615,6 +615,49 @@ header.top{
   color:var(--fg);
 }
 
+/* Interactive animations
+   The shell belongs to Mark Two. Content, CSS, and JavaScript inside it are
+   author-controlled and may be used for interactive figures and simulations. */
+.mt-animation{
+  position:relative;
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  margin:2rem 0;
+  padding:0;
+  overflow:hidden;
+  border:1.6px solid var(--rule);
+  border-radius:18px;
+  background:var(--card);
+  color:var(--fg);
+  font-family:var(--sans);
+  line-height:1.5;
+  isolation:isolate;
+  contain:layout paint;
+}
+.mt-animation *,
+.mt-animation *::before,
+.mt-animation *::after{
+  box-sizing:border-box;
+}
+.mt-animation canvas,
+.mt-animation svg,
+.mt-animation img,
+.mt-animation video,
+.mt-animation iframe{
+  display:block;
+  max-width:100%;
+}
+.mt-animation button,
+.mt-animation input,
+.mt-animation select,
+.mt-animation textarea{
+  font:inherit;
+}
+.mt-animation :where(button,input,select,textarea){
+  max-width:100%;
+}
+
 /* Inline mathematical emphasis */
 .term{
   color:var(--link);
