@@ -89,7 +89,7 @@ def build_catalog_entry(
     project_root = Path(root).resolve()
 
     relative_source = _relative_path(source, project_root)
-    doctype = str(document.doctype or "").strip().casefold()
+    doctype = str(document.doctype or "notes").strip().casefold()
     if doctype not in DOCUMENT_TYPES:
         allowed = " or ".join(DOCUMENT_TYPES)
         raise ValueError(f"Document type must be {allowed}")
