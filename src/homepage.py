@@ -97,6 +97,15 @@ def _article_url(article: dict[str, Any]) -> str:
     return str(article.get("url") or "#")
 
 
+def _doctype(article: dict[str, Any]) -> str:
+    value = str(article.get("doctype") or "article").strip().casefold()
+    return value if value in {"article", "notes"} else "article"
+
+
+def _doctype_label(value: str) -> str:
+    return "Notes" if value == "notes" else "Article"
+
+
 def _email_url(value: Any) -> str:
     """Turn a configured email address into a mailto link."""
     email = str(value or "").strip()
@@ -117,7 +126,7 @@ def _render_featured(article: dict[str, Any] | None) -> str:
     url = escape(_article_url(article), quote=True)
     display_date, _ = _display_date(article.get("date"))
     return (
-        f'<article class="featured-card {_topic_class(subject)}">'
+        f'<article class="featured-card {_topic_class(subject)}" data-doctype="{_doctype(article)}">'
         f'<span class="badge">{escape(subject)}</span>'
         f'<h3><a href="{url}">{title}</a></h3>'
         f'{description_html}'
@@ -145,11 +154,12 @@ def _render_recent(articles: list[dict[str, Any]]) -> str:
         )
         description_html = f"<p>{escape(description)}</p>" if description else ""
         cards.append(
-            f'<article class="recent-card" data-tags="{tag_data}" data-search="{search}">'
+            f'<article class="recent-card" data-doctype="{_doctype(article)}" data-tags="{tag_data}" data-search="{search}">'
             f'<time class="date">{escape(_long_display_date(article.get("date")))}</time>'
             f'<div class="recent-body">'
             f'<h3><a href="{url}">{title}</a></h3>'
             f'{description_html}'
+            f'<div class="recent-type">{escape(_doctype_label(_doctype(article)))}</div>'
             f'<div class="recent-tags">{tag_html}</div>'
             f'</div>'
             f'</article>'
@@ -196,7 +206,7 @@ def _render_archive(articles: list[dict[str, Any]]) -> str:
         search = escape(" ".join(str(x) for x in search_fields), quote=True)
         tag_data = "|".join(escape(tag, quote=True) for tag in tag_slugs)
         grouped[year].append(
-            f'<div class="row {_topic_class(subject)}" data-tags="{tag_data}" data-search="{search}">'
+            f'<div class="row {_topic_class(subject)}" data-doctype="{_doctype(article)}" data-tags="{tag_data}" data-search="{search}">'
             f'<time>{escape(display_date)}</time>'
             f'<a class="ttl" href="{escape(_article_url(article), quote=True)}">{escape(str(article.get("title") or "Untitled"))}</a>'
             f'<span class="cat">{escape(subject)}</span>'
