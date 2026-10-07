@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import List
 
 from .ast import (
-    Animation, Button, DEFAULT_DOCUMENT_TYPE, DOCUMENT_TYPES, Document, Environment,
+    Animation, Button, DOCUMENT_TYPES, Document, Environment,
     Image, Label, ListBlock, ListItem, MathBlock, Reference, RelatedLink, Section,
     Subsection, TextBlock,
 )
