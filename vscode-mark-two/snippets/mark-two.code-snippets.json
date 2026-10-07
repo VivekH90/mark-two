@@ -150,6 +150,14 @@
       "@end(warning)"
     ]
   },
+  "Colourbox": {
+    "prefix": "colourbox",
+    "body": [
+      "@begin(colourbox)",
+      "${0}",
+      "@end(colourbox)"
+    ]
+  },
   "Proof": {
     "prefix": "proof",
     "body": [
