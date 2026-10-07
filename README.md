@@ -244,6 +244,33 @@ Section 2
 
 Proof environments do not consume a theorem number.
 
+### Colourbox
+
+For short pieces of emphasis that do not need a semantic title, use the titleless `colourbox` environment:
+
+```text
+@begin(colourbox)
+
+The key idea is that a box can emphasize a paragraph without
+turning it into a theorem-like statement.
+
+@end(colourbox)
+```
+
+`colourbox` is deliberately unnumbered and has no generated title. It is a visual emphasis surface rather than a semantic mathematical environment. It may contain normal Mark Two content, including prose, mathematics, lists, images, and nested environments.
+
+An optional label may be supplied when a stable HTML anchor is useful:
+
+```text
+@begin(colourbox, label = important-note)
+
+This is an emphasized note.
+
+@end(colourbox)
+```
+
+The generated box uses rounded corners, a contrasting border, and separate light/dark theme colors.
+
 ### Nested environments
 
 Environments can contain other environments:
