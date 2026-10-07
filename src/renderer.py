@@ -405,7 +405,7 @@ def _build_reference_index(document: Document):
         for subsection in section.subsections:
             content.extend(subsection.content)
         for item in content:
-            if isinstance(item, Environment) and item.kind.strip().lower() not in {"proof", "conclusion"}:
+            if isinstance(item, Environment) and item.kind.strip().lower() not in {"proof", "conclusion", "colourbox"}:
                 item_number += 1
                 if item.label:
                     references[item.label] = (f"#{item.label}", f"{item.kind.capitalize()} {number}.{item_number}")
