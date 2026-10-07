@@ -311,12 +311,9 @@ def _animation_html(animation: Animation) -> str:
     content = animation.content
     return (
         f'<div class="mt-animation" data-mark-two-animation="true"{identifier}>'
-        f'
-{content}
-'
+        f'\n{content}\n'
         '</div>'
     )
-
 
 def _environment_html(environment: Environment, number: int, environment_counters, references, figure_counter, section_number=None) -> str:
     kind = environment.kind.strip().lower()
