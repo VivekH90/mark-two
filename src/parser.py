@@ -5,8 +5,9 @@ from pathlib import Path
 from typing import List
 
 from .ast import (
-    Animation, Button, Document, Environment, Image, Label, ListBlock, ListItem,
-    MathBlock, Reference, RelatedLink, Section, Subsection, TextBlock,
+    Animation, Button, DEFAULT_DOCUMENT_TYPE, DOCUMENT_TYPES, Document, Environment,
+    Image, Label, ListBlock, ListItem, MathBlock, Reference, RelatedLink, Section,
+    Subsection, TextBlock,
 )
 
 _DIRECTIVE_START = re.compile(r"^\s*@([A-Za-z][\w ]*)\s*\{")
@@ -18,6 +19,7 @@ _ENVIRONMENTS = {
 }
 _LIST_ENVIRONMENTS = {"enumerate", "itemize"}
 _RAW_ENVIRONMENTS = {"animation"}
+_DOCTYPE_DIRECTIVE = re.compile(r"^\s*@doctype\s*\(\s*([A-Za-z]+)\s*\)\s*$", re.IGNORECASE)
 
 
 def _slugify(text: str) -> str:
@@ -412,6 +414,18 @@ def _parse_block_source(source: str) -> Document:
         if stripped == r"\[":
             flush()
             math_lines = []
+            index += 1
+            continue
+
+        doctype_match = _DOCTYPE_DIRECTIVE.match(raw)
+        if doctype_match:
+            if environment_stack:
+                raise ValueError("@doctype must appear outside an open environment")
+            doctype = doctype_match.group(1).strip().lower()
+            if doctype not in DOCUMENT_TYPES:
+                allowed = " or ".join(DOCUMENT_TYPES)
+                raise ValueError(f"@doctype must be {allowed}")
+            document.doctype = doctype
             index += 1
             continue
 
