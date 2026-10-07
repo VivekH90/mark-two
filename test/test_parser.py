@@ -91,3 +91,35 @@ def test_article_description_directive():
         "A derivation of the quantization of the electromagnetic field, "
         "from classical Maxwell theory to photons."
     )
+
+
+def test_colourbox_is_titleless_and_can_have_a_label():
+    source = '''@documenttitle{Mathematics}
+@section{Test}
+@begin(colourbox)
+This is emphasis.
+@end(colourbox)
+@begin(colourbox, label = important)
+More emphasis.
+@end(colourbox)
+'''
+    document = parse(source)
+    first, second = document.sections[0].content
+    assert first.kind == "colourbox"
+    assert first.title == ""
+    assert first.label == ""
+    assert second.kind == "colourbox"
+    assert second.title == ""
+    assert second.label == "important"
+
+
+def test_colourbox_rejects_a_title():
+    source = '''@documenttitle{Mathematics}
+@section{Test}
+@begin(colourbox = No Title)
+This should fail.
+@end(colourbox)
+'''
+    import pytest
+    with pytest.raises(ValueError, match="accepts no title"):
+        parse(source)
