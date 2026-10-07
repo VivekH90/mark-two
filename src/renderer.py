@@ -310,6 +310,13 @@ def _environment_html(environment: Environment, number: int, environment_counter
     identifier = f' id="{escape(environment.label, quote=True)}"' if environment.label else ""
     content = _content_html(environment.content, environment_counters, references, figure_counter, 0, section_number)
 
+    if kind == "colourbox":
+        return (
+            f'<div class="box colourbox"{identifier}>'
+            f'<div class="box-content">{content}</div>'
+            '</div>'
+        )
+
     if kind == "proof":
         return (
             f'<div class="box proof"{identifier}>'
@@ -346,7 +353,7 @@ def _content_html(items, environment_counters, references, figure_counter, list_
     while index < len(items):
         item = items[index]
         if isinstance(item, Environment):
-            if item.kind.strip().lower() in {"proof", "conclusion"}:
+            if item.kind.strip().lower() in {"proof", "conclusion", "colourbox"}:
                 number = ""
             else:
                 environment_counters["__item__"] = environment_counters.get("__item__", 0) + 1
