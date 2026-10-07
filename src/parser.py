@@ -382,18 +382,17 @@ def _parse_block_source(source: str) -> Document:
         stripped = raw.strip()
 
         # Animation bodies are intentionally opaque to the Mark Two parser.
-        # This lets embedded HTML, CSS (@media, @keyframes, etc.), and
-        # JavaScript pass through unchanged until the matching @end(animation).
+        # Embedded HTML, CSS, and JavaScript are copied verbatim until the
+        # matching Mark Two environment delimiter is encountered.
         if environment_stack and environment_stack[-1][0] in _RAW_ENVIRONMENTS:
             raw_kind, raw_node = environment_stack[-1]
-            if raw_kind == "animation" and re.fullmatch(r"@ends*(s*animations*)", stripped, re.IGNORECASE):
+            raw_end = _BLOCK_END.match(raw)
+            if raw_end and raw_end.group(1).lower() == raw_kind:
                 environment_stack.pop()
-                raw_node.content = raw_node.content.strip("
-")
+                raw_node.content = raw_node.content.strip("\n")
                 index += 1
                 continue
-            raw_node.content += raw + "
-"
+            raw_node.content += raw + "\n"
             index += 1
             continue
 
