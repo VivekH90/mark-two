@@ -5,7 +5,7 @@ from pathlib import Path
 import colorsys
 import re
 
-from .ast import Document, Environment, Image, Label, ListBlock, MathBlock, Reference, Section, TextBlock
+from .ast import Animation, Document, Environment, Image, Label, ListBlock, MathBlock, Reference, Section, TextBlock
 
 _CSS_COLOR_NAMES = {
     "black": "#000000", "white": "#ffffff", "red": "#ff0000", "green": "#008000",
@@ -305,6 +305,19 @@ def _list_html(list_block: ListBlock, environment_counters, references, figure_c
     return f'<{tag} class="mark-list"{type_attr} style="--list-color: {color}; --list-color-dark: {dark_color};">\n' + "\n".join(items) + f"\n</{tag}>"
 
 
+def _animation_html(animation: Animation) -> str:
+    """Render a raw interactive animation inside Mark Two's controlled shell."""
+    identifier = f' id="{escape(animation.label, quote=True)}"' if animation.label else ""
+    content = animation.content
+    return (
+        f'<div class="mt-animation" data-mark-two-animation="true"{identifier}>'
+        f'
+{content}
+'
+        '</div>'
+    )
+
+
 def _environment_html(environment: Environment, number: int, environment_counters, references, figure_counter, section_number=None) -> str:
     kind = environment.kind.strip().lower()
     identifier = f' id="{escape(environment.label, quote=True)}"' if environment.label else ""
@@ -352,7 +365,9 @@ def _content_html(items, environment_counters, references, figure_counter, list_
     index = 0
     while index < len(items):
         item = items[index]
-        if isinstance(item, Environment):
+        if isinstance(item, Animation):
+            html.append(_animation_html(item))
+        elif isinstance(item, Environment):
             if item.kind.strip().lower() in {"proof", "conclusion", "colourbox"}:
                 number = ""
             else:
