@@ -21,7 +21,7 @@ from .site_config import find_project_root, load_config
 
 
 def _doctype(article: dict[str, Any]) -> str:
-    value = str(article.get("doctype") or "article").strip().casefold()
+    value = str(article.get("doctype") or "notes").strip().casefold()
     return value if value in {"article", "notes"} else "article"
 
 
