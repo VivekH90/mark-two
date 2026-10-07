@@ -3,6 +3,9 @@
 from dataclasses import dataclass, field
 from typing import List, Optional, Union
 
+DOCUMENT_TYPES = ("article", "notes")
+DEFAULT_DOCUMENT_TYPE = "article"
+
 
 @dataclass
 class Button:
@@ -121,6 +124,7 @@ class RelatedLink:
 
 @dataclass
 class Document:
+    doctype: str = DEFAULT_DOCUMENT_TYPE
     document_tag: str = ""
     banner: str = ""
     banner_color: str = ""
