@@ -103,6 +103,10 @@ h1{
 }
 .sbox button:hover{filter:brightness(.96)}
 
+ .type-filter{
+  max-width:48rem;margin:0 auto .8rem;
+}
+.type-links{display:flex;flex-wrap:wrap;gap:.2rem .35rem}
 .tag-filter{
   max-width:48rem;margin:0 auto 2.7rem;
   padding:.2rem 0 .9rem;border-bottom:1px solid var(--rule)
@@ -214,6 +218,15 @@ footer{
       <h1>All articles</h1>
       <p class="lead">Every article, organized month by month. Search the collection or filter it by tag.</p>
     </section>
+
+    <div class="type-filter" aria-label="Browse by document type">
+      <span class="tag-label">Browse</span>
+      <div class="type-links">
+        <button type="button" class="chip type-chip active" data-doctype="all">All</button>
+        <button type="button" class="chip type-chip" data-doctype="article">Articles</button>
+        <button type="button" class="chip type-chip" data-doctype="notes">Notes</button>
+      </div>
+    </div>
 
     <div class="tools">
       <div class="sbox">
