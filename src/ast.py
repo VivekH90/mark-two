@@ -19,6 +19,7 @@ class Animation:
     label: str = ""
 
 
+@dataclass
 class Image:
     """An article image with optional accessibility text, caption, label, size, and group."""
 
