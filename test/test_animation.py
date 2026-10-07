@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from src.ast import Animation
+from src.ast import Animation, Environment
 from src.parser import parse
 from src.renderer import render
 
@@ -69,3 +69,49 @@ document.getElementById("canvas");
     assert '<style>' in html
     assert '<script>' in html
     assert 'document.getElementById("canvas");' in html
+
+
+def test_multiple_animations_and_normal_environments_can_coexist():
+    source = r'''@documenttitle{Mathematics}
+@section{Proof}
+@begin(theorem = A Theorem)
+Statement.
+@end(theorem)
+
+@begin(animation, label = first)
+<div id="first"></div>
+<script>
+const first = { value: 1 };
+</script>
+@end(animation)
+
+@begin(proof)
+The proof continues.
+@begin(animation, label = second)
+<div id="second"></div>
+<style>
+@media (max-width: 700px) { #second { width: 100%; } }
+</style>
+@end(animation)
+@end(proof)
+'''
+    document = parse(source)
+    content = document.sections[0].content
+
+    assert isinstance(content[0], Environment)
+    assert isinstance(content[1], Animation)
+    assert isinstance(content[2], Environment)
+    assert isinstance(content[2].content[1], Animation)
+    assert content[1].label == "first"
+    assert content[2].content[1].label == "second"
+
+
+def test_animation_rejects_unknown_arguments():
+    source = '''@documenttitle{Mathematics}
+@section{Test}
+@begin(animation = Not Allowed)
+@end(animation)
+'''
+    import pytest
+    with pytest.raises(ValueError, match="accepts no title"):
+        parse(source)
