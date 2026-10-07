@@ -20,6 +20,15 @@ from .homepage import (
 from .site_config import find_project_root, load_config
 
 
+def _doctype(article: dict[str, Any]) -> str:
+    value = str(article.get("doctype") or "article").strip().casefold()
+    return value if value in {"article", "notes"} else "article"
+
+
+def _doctype_label(value: str) -> str:
+    return "Notes" if value == "notes" else "Article"
+
+
 DEFAULT_TEMPLATE = Path(__file__).resolve().parent.parent / "web" / "archive.html"
 
 
@@ -107,10 +116,11 @@ def _render_rows(articles: list[dict[str, Any]]) -> str:
             if description else ""
         )
         row = (
-            f'<article class="archive-row" data-tags="{tag_data}" data-search="{search}">'
+            f'<article class="archive-row" data-doctype="{_doctype(article)}" data-tags="{tag_data}" data-search="{search}">'
             f'<time class="archive-date">{escape(display_date or "Undated")}</time>'
             f'<div class="archive-body">'
             f'<a class="archive-title" href="{escape(_article_url(article), quote=True)}">{escape(title_text)}</a>'
+            f'<span class="archive-type">{escape(_doctype_label(_doctype(article)))}</span>'
             f'{description_html}'
             f'<div class="archive-tags">{tag_html}</div>'
             f'</div>'
