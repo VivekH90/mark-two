@@ -11,6 +11,7 @@ def test_catalog_entry_contains_homepage_and_search_metadata(tmp_path):
     source.parent.mkdir(parents=True)
     document = Document(
         document_tag="Physics",
+        doctype="notes",
         folder="Electromagnetism",
         author="Vivek Sharma",
         article_title="Field Equations",
@@ -23,6 +24,7 @@ def test_catalog_entry_contains_homepage_and_search_metadata(tmp_path):
     entry = build_catalog_entry(document, source, output, root)
 
     assert entry["id"] == "physics/electromagnetism/fields"
+    assert entry["doctype"] == "notes"
     assert entry["title"] == "Field Equations"
     assert entry["description"] == "A derivation of the electromagnetic field equations."
     assert entry["subject"] == "Physics"
