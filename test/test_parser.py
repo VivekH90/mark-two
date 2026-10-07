@@ -125,7 +125,7 @@ This should fail.
         parse(source)
 
 
-def test_document_type_defaults_to_article_and_accepts_notes():
+def test_document_type_defaults_to_notes_and_accepts_article():
     from src.parser import parse
     assert parse("@doctype(article)\n@section{Test}\n").doctype == "article"
     assert parse("@doctype(notes)\n@section{Test}\n").doctype == "notes"
