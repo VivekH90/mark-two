@@ -10,7 +10,7 @@ from html import escape
 from pathlib import Path
 from typing import Any
 
-from .site_config import find_project_root, load_config
+from .site_config import created_artifacts_root, find_project_root, load_config
 
 
 DEFAULT_TEMPLATE = Path(__file__).resolve().parent.parent / "web" / "homepage.html"
@@ -229,7 +229,7 @@ def build_homepage(
     config = load_config(root)
     articles = sorted(_load_articles(root), key=_sort_key, reverse=True)
     template_path = Path(template).resolve() if template else DEFAULT_TEMPLATE.resolve()
-    output_path = Path(output).resolve() if output else root / "index.html"
+    output_path = Path(output).resolve() if output else created_artifacts_root(root) / "index.html"
 
     if not template_path.is_file():
         raise FileNotFoundError(f"Homepage template not found: {template_path}")
