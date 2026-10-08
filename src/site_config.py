@@ -87,20 +87,24 @@ def generated_page_path(
     return created_artifacts_root(root).joinpath(*parts)
 
 def relative_site_url(root: str | Path, current_output: str | Path, public_url: str) -> str:
-    """Convert a site-root URL into a path that also works from a local file:// page."""
+    """Convert a site URL into a path relative to a generated HTML file."""
     url = str(public_url or "").strip()
-    if root is None or current_output is None:
-        return url
     if not url or url.startswith(("#", "mailto:")) or "://" in url or url.startswith("//"):
         return url
+
     target = generated_page_path(root, url, url)
-    current = Path(current_output).resolve().parent
-    relative = Path(os.path.relpath(target, current)).as_posix()
-    if url.endswith("/") and relative not in {".", ""} and not relative.endswith("/"):
-        relative += "/"
-    if relative == ".":
-        return "./"
-    return relative
+    current_dir = Path(current_output).resolve().parent
+
+    if url.endswith("/") or url == "/":
+        # The public URL names a generated directory, whose entry point is
+        # index.html. Link to the directory itself, not to index.html/.
+        relative = Path(os.path.relpath(target.parent, current_dir)).as_posix()
+        if relative == ".":
+            return "./"
+        return relative.rstrip("/") + "/"
+
+    return Path(os.path.relpath(target, current_dir)).as_posix()
+
 
 
 def _public_url_from_relative(path: str) -> str:
