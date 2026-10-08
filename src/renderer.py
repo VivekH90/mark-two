@@ -445,15 +445,48 @@ def _section_html(section: Section, number: int, environment_counters, reference
 
 
 
-def render(document: Document, template_path: str | Path) -> str:
+def _site_navigation(document: Document, site_config: dict | None = None) -> str:
+    """Build article navigation from site-wide configuration.
+
+    Home, Archive, About, and GitHub are site navigation and therefore do not
+    need to be repeated in every .mt source file. Explicit @button directives
+    remain available for additional custom links.
+    """
+    config = site_config or {}
+    core_links = [
+        ("Home", "/"),
+        ("Archive", str(config.get("archive") or "/archive/")),
+        ("About", str(config.get("about") or "/about/")),
+    ]
+    github = str(config.get("github") or "").strip()
+    if github:
+        core_links.append(("GitHub", github))
+
+    reserved = {name.casefold() for name, _ in core_links}
+    links = [
+        f'<li><a href="{escape(href, quote=True)}">{escape(name)}</a></li>'
+        for name, href in core_links
+    ]
+
+    for button in document.buttons:
+        name = str(button.name or "Button").strip()
+        if not name or name.casefold() in reserved:
+            continue
+        color = escape(button.color or "black", quote=True)
+        links.append(
+            f'<li><a href="{escape(button.href, quote=True)}" style="--button-color: {color};">{escape(name)}</a></li>'
+        )
+    return "\n".join(links)
+
+
+def render(
+    document: Document,
+    template_path: str | Path,
+    site_config: dict | None = None,
+) -> str:
     template = Path(template_path).read_text(encoding="utf-8")
 
-    buttons = []
-    for button in document.buttons:
-        color = escape(button.color or "black", quote=True)
-        buttons.append(
-            f'<li><a href="{escape(button.href, quote=True)}" style="--button-color: {color};">{escape(button.name)}</a></li>'
-        )
+    buttons = _site_navigation(document, site_config)
 
     references = _build_reference_index(document)
     article, environment_counters = [], {}
