@@ -7,6 +7,7 @@ import os
 import tempfile
 from datetime import datetime
 from pathlib import Path
+import posixpath
 from typing import Any
 
 
@@ -84,6 +85,25 @@ def generated_page_path(
     if path.endswith('/') or not parts:
         return created_artifacts_root(root).joinpath(*parts, 'index.html')
     return created_artifacts_root(root).joinpath(*parts)
+
+def relative_site_url(root: str | Path, current_output: str | Path, public_url: str) -> str:
+    """Convert a site-root URL into a path that also works from a local file:// page."""
+    url = str(public_url or "").strip()
+    if not url or url.startswith(("#", "mailto:")) or "://" in url or url.startswith("//"):
+        return url
+    target = generated_page_path(root, url, url)
+    current = Path(current_output).resolve().parent
+    relative = Path(os.path.relpath(target, current)).as_posix()
+    if url.endswith("/") and relative not in {".", ""} and not relative.endswith("/"):
+        relative += "/"
+    if relative == ".":
+        return "./"
+    return relative
+
+
+def _public_url_from_relative(path: str) -> str:
+    return path if path.startswith("/") else "/" + path
+
 
 DEFAULT_CONFIG = {
     "author": "",
