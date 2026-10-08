@@ -6,6 +6,13 @@
       "${0}"
     ]
   },
+  "Document type": {
+    "prefix": "doctype",
+    "body": [
+      "@doctype(${1|article,notes|})",
+      "${0}"
+    ]
+  },
   "Folder": {
     "prefix": "folder",
     "body": [
@@ -238,6 +245,14 @@
     "body": [
       "@button{${1:Home}, href = ${2:/}, color = ${3:black}}",
       "${0}"
+    ]
+  },
+  "Animation": {
+    "prefix": "animation",
+    "body": [
+      "@begin(animation)",
+      "${0}",
+      "@end(animation)"
     ]
   }
 }
