@@ -68,3 +68,22 @@ def test_site_navigation_markup_is_not_escaped(tmp_path):
     assert "<li><a href=" in html
     assert "&lt;li&gt;" not in html
     assert '<ul><li><a href=' in html
+
+
+def test_core_navigation_uses_template_placeholders(tmp_path):
+    template = tmp_path / "index.html"
+    template.write_text(
+        '<nav><ul><li><a href="{{HOME_URL}}">Home</a></li><li><a href="{{ARCHIVE_URL}}">Archive</a></li><li><a href="{{ABOUT_URL}}">About</a></li><li><a href="{{GITHUB_URL}}">GitHub</a></li></ul></nav>',
+        encoding="utf-8",
+    )
+    document = Document(article_title="Test", sections=[Section(title="Test")])
+    html = render(
+        document,
+        template,
+        site_config={"archive": "/archive/", "about": "/about/", "github": "https://github.com/example"},
+        project_root=tmp_path,
+        output_path=tmp_path / "created artifacts" / "math" / "test" / "index.html",
+    )
+    assert html.count("<li>") == 4
+    assert "&lt;li&gt;" not in html
+    assert "{{HOME_URL}}" not in html
