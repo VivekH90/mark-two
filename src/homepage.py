@@ -152,7 +152,7 @@ def _render_featured(articles: list[dict[str, Any]], root: Path, output_path: Pa
 
 def _render_recent(articles: list[dict[str, Any]], root: Path | None = None, output_path: Path | None = None) -> str:
     cards = []
-    for article in articles[:RECENT_LIMIT]:
+    for article in articles:
         description = _description(article)
         title_text = str(article.get("title") or "Untitled")
         title = escape(title_text)
