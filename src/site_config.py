@@ -11,6 +11,12 @@ from typing import Any
 
 
 CONFIG_FILENAME = "site.json"
+CREATED_ARTIFACTS_DIRNAME = "created artifacts"
+
+
+def created_artifacts_root(root: str | Path) -> Path:
+    """Return the directory containing generated HTML artifacts."""
+    return Path(root).resolve() / CREATED_ARTIFACTS_DIRNAME
 
 DEFAULT_CONFIG = {
     "author": "",
