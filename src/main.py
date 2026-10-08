@@ -12,7 +12,7 @@ from .homepage import build_homepage
 from .archive import build_archive
 from .parser import parse_file
 from .renderer import render
-from .site_config import CONFIG_FILENAME, created_artifact_path, created_artifacts_root, find_project_root, get_config, init_site, load_config, set_config
+from .site_config import CONFIG_FILENAME, created_artifact_path, created_artifacts_root, find_project_root, generated_page_path, get_config, init_site, load_config, set_config
 
 
 def _copy_local_image_assets(
@@ -180,13 +180,18 @@ def main() -> None:
         # article compiler, so automatic site generation is skipped there.
         site_root = Path(index_path).resolve().parent
         if (site_root / CONFIG_FILENAME).is_file():
+            site_config = load_config(site_root)
             homepage_output = build_homepage(
                 site_root,
-                output=created_artifacts_root(site_root) / "index.html",
+                output=generated_page_path(site_root, "/", "/"),
             )
             archive_output = build_archive(
                 site_root,
-                output=created_artifacts_root(site_root) / "archive" / "index.html",
+                output=generated_page_path(
+                    site_root,
+                    str(site_config.get("archive") or "/archive/"),
+                    "/archive/",
+                ),
             )
             print(f"Mark Two: wrote {homepage_output}")
             print(f"Mark Two: wrote {archive_output}")
