@@ -89,7 +89,7 @@ def generated_page_path(
 def relative_site_url(root: str | Path, current_output: str | Path, public_url: str) -> str:
     """Convert a site-root URL into a path that also works from a local file:// page."""
     url = str(public_url or "").strip()
-    if project_root is None or current_output is None:
+    if root is None or current_output is None:
         return url
     if not url or url.startswith(("#", "mailto:")) or "://" in url or url.startswith("//"):
         return url
