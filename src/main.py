@@ -10,6 +10,7 @@ from .bundler import inline_web_assets
 from .catalog import update_catalog
 from .homepage import build_homepage
 from .archive import build_archive
+from .about import build_about
 from .parser import parse_file
 from .renderer import render
 from .site_config import CONFIG_FILENAME, created_artifact_path, created_artifacts_root, find_project_root, generated_page_path, get_config, init_site, load_config, set_config
@@ -112,6 +113,9 @@ def main() -> None:
     homepage_parser = build_subparsers.add_parser("homepage", help="Build the homepage from site.json and articles.json.")
     homepage_parser.add_argument("-o", "--output", help="Homepage output path")
     homepage_parser.add_argument("--template", help="Homepage template path")
+    about_parser = build_subparsers.add_parser("about", help="Build the About page.")
+    about_parser.add_argument("-o", "--output", help="About page output path")
+    about_parser.add_argument("--template", help="About page template path")
     archive_parser = build_subparsers.add_parser("archive", help="Build the full article archive.")
     archive_parser.add_argument("-o", "--output", help="Archive output path")
     archive_parser.add_argument("--template", help="Archive template path")
@@ -146,6 +150,11 @@ def main() -> None:
 
     if args.command == "build" and args.build_target == "homepage":
         output = build_homepage(root, output=args.output, template=args.template)
+        print(f"Mark Two: wrote {output}")
+        return
+
+    if args.command == "build" and args.build_target == "about":
+        output = build_about(root, output=args.output, template=args.template)
         print(f"Mark Two: wrote {output}")
         return
 
@@ -185,6 +194,14 @@ def main() -> None:
                 site_root,
                 output=generated_page_path(site_root, "/", "/"),
             )
+            about_output = build_about(
+                site_root,
+                output=generated_page_path(
+                    site_root,
+                    str(site_config.get("about") or "/about/"),
+                    "/about/",
+                ),
+            )
             archive_output = build_archive(
                 site_root,
                 output=generated_page_path(
@@ -194,6 +211,7 @@ def main() -> None:
                 ),
             )
             print(f"Mark Two: wrote {homepage_output}")
+            print(f"Mark Two: wrote {about_output}")
             print(f"Mark Two: wrote {archive_output}")
         else:
             print(f"Mark Two: skipped site pages (no {CONFIG_FILENAME} in {site_root})")
