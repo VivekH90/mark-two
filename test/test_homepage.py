@@ -55,3 +55,24 @@ def test_recent_cards_expose_document_type():
     assert 'data-doctype="article"' in html
     assert "Notes" in html
     assert "Article" in html
+
+
+def test_featured_config_can_select_multiple_items():
+    from pathlib import Path
+    from src.homepage import _featured_articles
+    articles = [
+        {"id": "a", "doctype": "article"},
+        {"id": "b", "doctype": "notes"},
+        {"id": "c", "doctype": "article"},
+    ]
+    assert _featured_articles(articles, "a,b") == articles[:2]
+
+
+def test_recent_filter_source_can_include_older_matching_items():
+    from src.homepage import _render_recent
+    html = _render_recent([
+        {"title": "Newest", "doctype": "notes", "date": "2026-10-03"},
+        {"title": "Article", "doctype": "article", "date": "2026-10-02"},
+        {"title": "Older article", "doctype": "article", "date": "2026-09-01"},
+    ], Path("."), Path("index.html"))
+    assert "Older article" in html
