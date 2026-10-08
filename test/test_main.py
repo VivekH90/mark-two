@@ -40,6 +40,30 @@ def test_root_level_sources_get_separate_artifact_directories(tmp_path):
     assert created_artifact_path(root / "a.mt", root) == root / "created artifacts" / "a" / "index.html"
     assert created_artifact_path(root / "b.mt", root) == root / "created artifacts" / "b" / "index.html"
 
+def test_resources_path_is_not_part_of_public_artifact_tree(tmp_path):
+    from src.site_config import created_artifact_path
+
+    root = tmp_path / "site"
+    source = (
+        root
+        / "resources"
+        / "mathematics"
+        / "analysis"
+        / "real-analysis"
+        / "rational-density"
+        / "density.mt"
+    )
+
+    assert created_artifact_path(source, root) == (
+        root
+        / "created artifacts"
+        / "mathematics"
+        / "analysis"
+        / "real-analysis"
+        / "rational-density"
+        / "index.html"
+    )
+
 
 def test_sources_cannot_live_inside_created_artifacts(tmp_path):
     from src.site_config import created_artifact_path
