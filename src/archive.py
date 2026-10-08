@@ -17,7 +17,7 @@ from .homepage import (
     _slug,
     _sort_key,
 )
-from .site_config import find_project_root, load_config
+from .site_config import created_artifacts_root, find_project_root, load_config
 
 
 def _doctype(article: dict[str, Any]) -> str:
@@ -151,7 +151,7 @@ def build_archive(
     config = load_config(root)
     articles = sorted(_load_articles(root), key=_sort_key, reverse=True)
     template_path = Path(template).resolve() if template else DEFAULT_TEMPLATE.resolve()
-    output_path = Path(output).resolve() if output else root / "archive" / "index.html"
+    output_path = Path(output).resolve() if output else created_artifacts_root(root) / "archive" / "index.html"
 
     replacements = {
         "SITE_TITLE": escape(str(config.get("title") or "Notes")),
