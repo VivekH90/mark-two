@@ -8,6 +8,7 @@ import tempfile
 from pathlib import Path
 
 from .ast import DOCUMENT_TYPES, Document
+from .site_config import CREATED_ARTIFACTS_DIRNAME
 
 
 INDEX_VERSION = 2
@@ -55,7 +56,12 @@ def _article_id(source_path: Path, root: Path) -> str:
 
 
 def _article_url(output_path: Path, root: Path) -> str:
+    """Convert a generated artifact path into its public site URL."""
     relative = _relative_path(output_path, root)
+    artifacts_prefix = f"{CREATED_ARTIFACTS_DIRNAME}/"
+    if relative.startswith(artifacts_prefix):
+        relative = relative[len(artifacts_prefix):]
+
     if relative == "index.html":
         return "/"
     if relative.endswith("/index.html"):
