@@ -74,7 +74,13 @@ def compile_document(
     if (project_root / CONFIG_FILENAME).is_file():
         site_config = load_config(project_root)
 
-    output = render(document, template_path, site_config=site_config)
+    output = render(
+        document,
+        template_path,
+        site_config=site_config,
+        project_root=project_root,
+        output_path=output_path,
+    )
     output = inline_web_assets(output, template_path.parent)
     output_path.write_text(output, encoding="utf-8")
     _copy_local_image_assets(output, source_path, output_path)
