@@ -57,6 +57,31 @@ A custom article template can be supplied with:
 mark-two completeness.mt --template path/to/index.html
 ```
 
+When you compile a document in an initialized Mark Two site, the normal compile command also rebuilds the site-wide homepage and archive automatically. In other words:
+
+```bash
+mark-two completeness.mt
+```
+
+updates all three pieces in one operation:
+
+```text
+completeness.mt
+    ↓
+article HTML
+    ↓
+articles.json
+    ↓
+index.html + archive/index.html
+```
+
+The explicit site commands remain available when you only want to rebuild one page:
+
+```bash
+mark-two build homepage
+mark-two build archive
+```
+
 Mark Two can also be invoked as a Python module:
 
 ```bash
