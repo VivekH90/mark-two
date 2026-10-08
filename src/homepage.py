@@ -259,6 +259,7 @@ def build_homepage(
         "BIO": escape(str(config.get("bio") or "")),
         "AVATAR": escape(avatar),
         "GITHUB_URL": escape(str(config.get("github") or "#"), quote=True),
+        "HOME_URL": escape(relative_site_url(root, output_path, "/"), quote=True),
         "EMAIL_URL": escape(_email_url(config.get("email")), quote=True),
         "INSTAGRAM_URL": escape(str(config.get("instagram") or "#"), quote=True),
         "ABOUT_URL": escape(relative_site_url(root, output_path, str(config.get("about") or "#")), quote=True),
