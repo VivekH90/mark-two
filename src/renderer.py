@@ -6,6 +6,7 @@ import colorsys
 import re
 
 from .ast import Animation, Document, Environment, Image, Label, ListBlock, MathBlock, Reference, Section, TextBlock
+from .site_config import relative_site_url
 
 _CSS_COLOR_NAMES = {
     "black": "#000000", "white": "#ffffff", "red": "#ff0000", "green": "#008000",
@@ -445,7 +446,7 @@ def _section_html(section: Section, number: int, environment_counters, reference
 
 
 
-def _site_navigation(document: Document, site_config: dict | None = None) -> str:
+def _site_navigation(document: Document, site_config: dict | None = None, project_root: str | Path | None = None, output_path: str | Path | None = None) -> str:
     """Build article navigation from site-wide configuration.
 
     Home, Archive, About, and GitHub are site navigation and therefore do not
@@ -453,10 +454,12 @@ def _site_navigation(document: Document, site_config: dict | None = None) -> str
     remain available for additional custom links.
     """
     config = site_config or {}
+    root = project_root or "."
+    current = output_path or Path("index.html")
     core_links = [
-        ("Home", "/"),
-        ("Archive", str(config.get("archive") or "/archive/")),
-        ("About", str(config.get("about") or "/about/")),
+        ("Home", relative_site_url(root, current, "/")),
+        ("Archive", relative_site_url(root, current, str(config.get("archive") or "/archive/"))),
+        ("About", relative_site_url(root, current, str(config.get("about") or "/about/"))),
     ]
     github = str(config.get("github") or "").strip()
     if github:
@@ -483,10 +486,12 @@ def render(
     document: Document,
     template_path: str | Path,
     site_config: dict | None = None,
+    project_root: str | Path | None = None,
+    output_path: str | Path | None = None,
 ) -> str:
     template = Path(template_path).read_text(encoding="utf-8")
 
-    buttons = _site_navigation(document, site_config)
+    buttons = _site_navigation(document, site_config, project_root, output_path)
 
     references = _build_reference_index(document)
     article, environment_counters = [], {}
