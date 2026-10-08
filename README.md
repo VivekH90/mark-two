@@ -37,13 +37,27 @@ Compile it with:
 mark-two mathematics/real-analysis/completeness/completeness.mt
 ```
 
-By default, the compiler writes the generated article beside the source file:
+By default, generated HTML is kept separate from your source files under a project-level `created artifacts/` directory. The source tree is mirrored there, with each document compiled to an `index.html`:
 
 ```text
 completeness/
-├── completeness.mt
-└── index.html
+└── completeness.mt
+
+created artifacts/
+└── completeness/
+    └── index.html
 ```
+
+The homepage and archive are also generated there:
+
+```text
+created artifacts/
+├── index.html
+└── archive/
+    └── index.html
+```
+
+The `created artifacts/` directory is created automatically if it does not exist.
 
 A custom output path can be selected with:
 
@@ -869,6 +883,7 @@ mark-two/
 ├── src/                 # Mark Two Python package source
 ├── test/                # Tests and example source documents
 ├── web/                 # HTML templates and frontend assets
+├── created artifacts/   # Generated site HTML
 ├── build/               # Generated example HTML bundle
 ├── vscode-mark-two/     # VS Code language support
 ├── docs/                # Supporting documentation
