@@ -782,7 +782,7 @@ mark-two config get
 mark-two config get github
 ```
 
-The homepage reads `articles.json` and `site.json` and renders featured, recent, topic-filtered, and archived article entries.
+NaN
 
 ## VS Code extension
 
