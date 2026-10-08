@@ -10,7 +10,7 @@ from html import escape
 from pathlib import Path
 from typing import Any
 
-from .site_config import created_artifacts_root, find_project_root, load_config
+from .site_config import created_artifacts_root, find_project_root, load_config, relative_site_url
 
 
 DEFAULT_TEMPLATE = Path(__file__).resolve().parent.parent / "web" / "homepage.html"
@@ -116,10 +116,24 @@ def _email_url(value: Any) -> str:
     return f"mailto:{email}"
 
 
-def _render_featured(article: dict[str, Any] | None) -> str:
-    if article is None:
-        return '<p class="empty-msg" style="display:block">No featured article configured.</p>'
-    subject = str(article.get("subject") or article.get("folder") or "Article")
+def _featured_articles(articles: list[dict[str, Any]], value: Any) -> list[dict[str, Any]]:
+    if isinstance(value, list):
+        ids = {str(item).strip() for item in value if str(item).strip()}
+    else:
+        ids = {item.strip() for item in str(value or "").split(",") if item.strip()}
+    if not ids:
+        return []
+    return [article for article in articles if any(
+        str(article.get(key, "")) in ids for key in ("id", "source", "url")
+    )]
+
+
+def _render_featured(articles: list[dict[str, Any]], root: Path, output_path: Path) -> str:
+    if not articles:
+        return '<p class="empty-msg" style="display:block">No featured writing configured.</p>'
+    cards = []
+    for article in articles:
+        subject = str(article.get("subject") or article.get("folder") or "Article")
     description = _description(article)
     description_html = f"<p>{escape(description)}</p>" if description else ""
     title = escape(str(article.get("title") or "Untitled"))
@@ -135,13 +149,13 @@ def _render_featured(article: dict[str, Any] | None) -> str:
     )
 
 
-def _render_recent(articles: list[dict[str, Any]]) -> str:
+def _render_recent(articles: list[dict[str, Any]], root: Path, output_path: Path) -> str:
     cards = []
     for article in articles[:RECENT_LIMIT]:
         description = _description(article)
         title_text = str(article.get("title") or "Untitled")
         title = escape(title_text)
-        url = escape(_article_url(article), quote=True)
+        url = escape(relative_site_url(root, output_path, _article_url(article)), quote=True)
         tags = article.get("tags", [])
         tags = tags if isinstance(tags, list) else []
         tag_slugs = [_slug(str(tag)) for tag in tags if str(tag).strip()]
@@ -188,7 +202,7 @@ def _render_topics(articles: list[dict[str, Any]]) -> str:
     ) or '<span class="filter-note">No tags yet.</span>'
 
 
-def _render_archive(articles: list[dict[str, Any]]) -> str:
+def _render_archive(articles: list[dict[str, Any]], root: Path, output_path: Path) -> str:
     grouped: dict[str, list[str]] = defaultdict(list)
     for article in articles[:ARCHIVE_LIMIT]:
         display_date, year = _display_date(article.get("date"))
@@ -208,7 +222,7 @@ def _render_archive(articles: list[dict[str, Any]]) -> str:
         grouped[year].append(
             f'<div class="row {_topic_class(subject)}" data-doctype="{_doctype(article)}" data-tags="{tag_data}" data-search="{search}">'
             f'<time>{escape(display_date)}</time>'
-            f'<a class="ttl" href="{escape(_article_url(article), quote=True)}">{escape(str(article.get("title") or "Untitled"))}</a>'
+            f'<a class="ttl" href="{escape(relative_site_url(root, output_path, _article_url(article)), quote=True)}">{escape(str(article.get("title") or "Untitled"))}</a>'
             f'<span class="cat">{escape(subject)}</span>'
             f'</div>'
         )
@@ -234,16 +248,7 @@ def build_homepage(
     if not template_path.is_file():
         raise FileNotFoundError(f"Homepage template not found: {template_path}")
 
-    featured_id = str(config.get("featured") or "")
-    featured = next(
-        (
-            article for article in articles
-            if str(article.get("id", "")) == featured_id
-            or str(article.get("source", "")) == featured_id
-            or str(article.get("url", "")) == featured_id
-        ),
-        None,
-    )
+    featured = _featured_articles(articles, config.get("featured"))
 
     author = str(config.get("author") or "Author")
     avatar = "".join(part[0] for part in author.split()[:2]).upper() or "MT"
@@ -255,14 +260,14 @@ def build_homepage(
         "GITHUB_URL": escape(str(config.get("github") or "#"), quote=True),
         "EMAIL_URL": escape(_email_url(config.get("email")), quote=True),
         "INSTAGRAM_URL": escape(str(config.get("instagram") or "#"), quote=True),
-        "ABOUT_URL": escape(str(config.get("about") or "#"), quote=True),
-        "ARCHIVE_URL": escape(str(config.get("archive") or "#"), quote=True),
+        "ABOUT_URL": escape(relative_site_url(root, output_path, str(config.get("about") or "#")), quote=True),
+        "ARCHIVE_URL": escape(relative_site_url(root, output_path, str(config.get("archive") or "#")), quote=True),
         "YEAR": escape(str(config.get("copyright") or datetime.now().year)),
         "SITE_DESCRIPTION": escape(str(config.get("description") or "")),
-        "FEATURED": _render_featured(featured),
-        "RECENT": _render_recent(articles),
+        "FEATURED": _render_featured(featured, root, output_path),
+        "RECENT": _render_recent(articles, root, output_path),
         "TOPICS": _render_topics(articles),
-        "ARCHIVE": _render_archive(articles),
+        "ARCHIVE": _render_archive(articles, root, output_path),
     }
 
     html = template_path.read_text(encoding="utf-8")
