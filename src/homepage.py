@@ -150,7 +150,7 @@ def _render_featured(articles: list[dict[str, Any]], root: Path, output_path: Pa
     return "\n".join(cards)
 
 
-def _render_recent(articles: list[dict[str, Any]], root: Path, output_path: Path) -> str:
+def _render_recent(articles: list[dict[str, Any]], root: Path | None = None, output_path: Path | None = None) -> str:
     cards = []
     for article in articles[:RECENT_LIMIT]:
         description = _description(article)
@@ -203,7 +203,7 @@ def _render_topics(articles: list[dict[str, Any]]) -> str:
     ) or '<span class="filter-note">No tags yet.</span>'
 
 
-def _render_archive(articles: list[dict[str, Any]], root: Path, output_path: Path) -> str:
+def _render_archive(articles: list[dict[str, Any]], root: Path | None = None, output_path: Path | None = None) -> str:
     grouped: dict[str, list[str]] = defaultdict(list)
     for article in articles[:ARCHIVE_LIMIT]:
         display_date, year = _display_date(article.get("date"))
