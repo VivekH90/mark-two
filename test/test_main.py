@@ -49,3 +49,11 @@ def test_sources_cannot_live_inside_created_artifacts(tmp_path):
     source = root / "created artifacts" / "bad.mt"
     with pytest.raises(ValueError):
         created_artifact_path(source, root)
+
+
+def test_generated_page_path_honors_local_archive_url(tmp_path):
+    from src.site_config import generated_page_path
+
+    assert generated_page_path(tmp_path, "/writing/archive/", "/archive/") == (
+        tmp_path / "created artifacts" / "writing" / "archive" / "index.html"
+    )
