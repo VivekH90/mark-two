@@ -136,3 +136,18 @@ def test_document_type_rejects_unknown_values():
     import pytest
     with pytest.raises(ValueError, match="must be article or notes"):
         parse("@doctype(blog)\n@section{Test}\n")
+
+
+def test_enumerate_accepts_item_directives():
+    from src.parser import parse
+    document = parse("""@section{Test}\n\n@begin(enumerate)\n\n@item{First item.}\n@item{Second item with \\(x=1\\).}\n\n@end(enumerate)\n""")
+    items = document.sections[0].content[0].items
+    assert [item.content[0].text for item in items] == ["First item.", "Second item with \\(x=1\\)."]
+
+
+def test_nested_enumerate_is_allowed_inside_item():
+    from src.parser import parse
+    document = parse("""@section{Test}\n\n@begin(enumerate)\n\n@item{Outer.\n\n@begin(enumerate)\n@item{Inner.}\n@end(enumerate)}\n\n@end(enumerate)\n""")
+    outer = document.sections[0].content[0]
+    assert len(outer.items) == 1
+    assert any(getattr(item, "ordered", False) for item in outer.items[0].content)
