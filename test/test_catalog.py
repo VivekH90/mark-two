@@ -73,3 +73,19 @@ def test_update_catalog_does_not_rewrite_identical_catalog(tmp_path):
 
     update_catalog(document, source, output, catalog)
     assert catalog.read_text(encoding="utf-8") == first_contents
+
+
+def test_catalog_strips_created_artifacts_from_public_url(tmp_path):
+    root = tmp_path / "site"
+    source = root / "completeness" / "completeness.mt"
+    output = root / "created artifacts" / "completeness" / "index.html"
+    source.parent.mkdir(parents=True)
+
+    entry = build_catalog_entry(
+        Document(article_title="Completeness"),
+        source,
+        output,
+        root,
+    )
+
+    assert entry["url"] == "/completeness/"
