@@ -129,6 +129,19 @@ def main() -> None:
         )
         print(f"Mark Two: wrote {output_path}")
         print(f"Mark Two: updated catalog {index_path}")
+
+        # A normal compile is the complete site update: after the document and
+        # catalog are current, regenerate the site-wide homepage and archive.
+        # Projects without site.json can still use Mark Two as a standalone
+        # article compiler, so automatic site generation is skipped there.
+        site_root = Path(index_path).resolve().parent
+        if (site_root / CONFIG_FILENAME).is_file():
+            homepage_output = build_homepage(site_root)
+            archive_output = build_archive(site_root)
+            print(f"Mark Two: wrote {homepage_output}")
+            print(f"Mark Two: wrote {archive_output}")
+        else:
+            print(f"Mark Two: skipped site pages (no {CONFIG_FILENAME} in {site_root})")
         return
 
     parser.print_help()
