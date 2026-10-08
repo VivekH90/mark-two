@@ -493,6 +493,16 @@ def render(
 
     buttons = _site_navigation(document, site_config, project_root, output_path)
 
+    root = project_root or "."
+    current = output_path or Path("index.html")
+    config = site_config or {}
+    navigation_urls = {
+        "{{HOME_URL}}": relative_site_url(root, current, "/"),
+        "{{ARCHIVE_URL}}": relative_site_url(root, current, str(config.get("archive") or "/archive/")),
+        "{{ABOUT_URL}}": relative_site_url(root, current, str(config.get("about") or "/about/")),
+        "{{GITHUB_URL}}": str(config.get("github") or "#").strip(),
+    }
+
     references = _build_reference_index(document)
     article, environment_counters = [], {}
     figure_counter = {"number": 0}
@@ -514,7 +524,10 @@ def render(
         "{{ARTICLE_TITLE}}": escape(document.article_title),
         "{{ARTICLE_DESCRIPTION}}": escape(document.description),
         "{{AUTHOR}}": escape(document.author),
-        "{{HOME_URL}}": escape(relative_site_url(project_root, output_path, "/"), quote=True),
+        "{{HOME_URL}}": escape(navigation_urls["{{HOME_URL}}"], quote=True),
+        "{{ARCHIVE_URL}}": escape(navigation_urls["{{ARCHIVE_URL}}"], quote=True),
+        "{{ABOUT_URL}}": escape(navigation_urls["{{ABOUT_URL}}"], quote=True),
+        "{{GITHUB_URL}}": escape(navigation_urls["{{GITHUB_URL}}"], quote=True),
         "{{ARTICLE_DATE_META}}": date_meta,
         "{{ARTICLE_SECTION_LABEL}}": section_label,
         "{{TAGS}}": tag_block,
