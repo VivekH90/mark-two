@@ -321,7 +321,10 @@ def _parse_block_source(source: str) -> Document:
 
     def target():
         if environment_stack:
-            return environment_stack[-1][1]
+            kind, node, current_item = environment_stack[-1]
+            if kind in _LIST_ENVIRONMENTS and current_item is not None:
+                return current_item
+            return node
         return current_subsection or current_section
 
     def flush():
@@ -329,6 +332,10 @@ def _parse_block_source(source: str) -> Document:
         text = "\n".join(pending).strip()
         pending.clear()
         if item is not None and text:
+            if isinstance(item, ListBlock):
+                raise ValueError(
+                    f"@{environment_stack[-1][0]} requires @item{{...}} before list content"
+                )
             item.content.append(TextBlock(text=text))
 
     def add_environment(kind, argument):
@@ -376,8 +383,13 @@ def _parse_block_source(source: str) -> Document:
                     raise ValueError(f"@begin({kind} = ...) requires an environment title")
                 node = Environment(kind=kind, title=title, label=label)
 
+        if kind in _LIST_ENVIRONMENTS and isinstance(parent, ListBlock):
+            raise ValueError(
+                f"Nested @{kind} must appear inside an @item{{...}}"
+            )
+
         parent.content.append(node)
-        environment_stack.append((kind, node))
+        environment_stack.append((kind, node, None))
 
     while index < len(lines):
         raw = lines[index]
@@ -428,6 +440,35 @@ def _parse_block_source(source: str) -> Document:
             document.doctype = doctype
             index += 1
             continue
+
+        # List items are directives only while an enumerate/itemize
+        # environment is open. Their body is parsed as normal Mark Two content,
+        # and subsequent lines belong to the current item until the next item.
+        if environment_stack and environment_stack[-1][0] in _LIST_ENVIRONMENTS:
+            item_directive = _extract_directive(lines, index)
+            if item_directive:
+                command, argument, end_index = item_directive
+                if command.strip().lower().replace(" ", "") == "item":
+                    flush()
+                    list_kind, list_node, _ = environment_stack[-1]
+                    title = ""
+                    body = argument.strip()
+                    title_match = re.match(
+                        r"\\s*title\\s*=\\s*(?:(?:"((?:[^"\\\\]|\\\\.)*)")|(?:'((?:[^'\\\\]|\\\\.)*)'))\\s*,?\\s*(.*)\\Z",
+                        body,
+                        re.DOTALL | re.IGNORECASE,
+                    )
+                    if title_match:
+                        title = (title_match.group(1) or title_match.group(2)).strip()
+                        body = title_match.group(3).strip()
+                    list_item = ListItem(
+                        content=_parse_list_item_content(body),
+                        title=title,
+                    )
+                    list_node.items.append(list_item)
+                    environment_stack[-1] = (list_kind, list_node, list_item)
+                    index = end_index + 1
+                    continue
 
         end_match = _BLOCK_END.match(raw)
         if end_match:
