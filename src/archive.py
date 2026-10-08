@@ -17,7 +17,7 @@ from .homepage import (
     _slug,
     _sort_key,
 )
-from .site_config import created_artifacts_root, find_project_root, load_config
+from .site_config import created_artifacts_root, find_project_root, load_config, relative_site_url
 
 
 def _doctype(article: dict[str, Any]) -> str:
@@ -70,7 +70,7 @@ def _render_tag_filter(articles: list[dict[str, Any]]) -> str:
     ) or '<span class="filter-note">No tags yet.</span>'
 
 
-def _render_rows(articles: list[dict[str, Any]]) -> str:
+def _render_rows(articles: list[dict[str, Any]], root: Path, output_path: Path) -> str:
     groups: dict[str, list[str]] = defaultdict(list)
     group_order: list[tuple[datetime | None, str]] = []
 
@@ -119,7 +119,7 @@ def _render_rows(articles: list[dict[str, Any]]) -> str:
             f'<article class="archive-row" data-doctype="{_doctype(article)}" data-tags="{tag_data}" data-search="{search}">'
             f'<time class="archive-date">{escape(display_date or "Undated")}</time>'
             f'<div class="archive-body">'
-            f'<a class="archive-title" href="{escape(_article_url(article), quote=True)}">{escape(title_text)}</a>'
+            f'<a class="archive-title" href="{escape(relative_site_url(root, output_path, _article_url(article)), quote=True)}">{escape(title_text)}</a>'
             f'<span class="archive-type">{escape(_doctype_label(_doctype(article)))}</span>'
             f'{description_html}'
             f'<div class="archive-tags">{tag_html}</div>'
@@ -157,12 +157,12 @@ def build_archive(
         "SITE_TITLE": escape(str(config.get("title") or "Notes")),
         "AUTHOR": escape(str(config.get("author") or "Author")),
         "GITHUB_URL": escape(str(config.get("github") or "#"), quote=True),
-        "ABOUT_URL": escape(str(config.get("about") or "#"), quote=True),
-        "HOME_URL": escape("/"),
-        "ARCHIVE_URL": escape(str(config.get("archive") or "/archive/"), quote=True),
+        "ABOUT_URL": escape(relative_site_url(root, output_path, str(config.get("about") or "#")), quote=True),
+        "HOME_URL": escape(relative_site_url(root, output_path, "/"), quote=True),
+        "ARCHIVE_URL": escape(relative_site_url(root, output_path, str(config.get("archive") or "/archive/")), quote=True),
         "YEAR": escape(str(config.get("copyright") or datetime.now().year)),
         "TAG_FILTER": _render_tag_filter(articles),
-        "ARCHIVE_ROWS": _render_rows(articles),
+        "ARCHIVE_ROWS": _render_rows(articles, root, output_path),
     }
 
     html = template_path.read_text(encoding="utf-8")
