@@ -514,6 +514,7 @@ def render(
         "{{ARTICLE_TITLE}}": escape(document.article_title),
         "{{ARTICLE_DESCRIPTION}}": escape(document.description),
         "{{AUTHOR}}": escape(document.author),
+        "{{HOME_URL}}": escape(relative_site_url(project_root, output_path, "/"), quote=True),
         "{{ARTICLE_DATE_META}}": date_meta,
         "{{ARTICLE_SECTION_LABEL}}": section_label,
         "{{TAGS}}": tag_block,
