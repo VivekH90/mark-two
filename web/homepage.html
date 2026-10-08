@@ -371,7 +371,7 @@ footer{
   var note=document.querySelector('.filter-note');
   var empty=document.getElementById('recent-empty');
   var rows=document.querySelectorAll('#recent .recent-card');
-  var featured=document.querySelector('.featured-card');
+  var featured=document.querySelectorAll('.featured-card');
   var featuredSection=document.getElementById('featured-section');
   var active=null;
   var activeType=new URLSearchParams(window.location.search).get('type')||'all';
@@ -390,12 +390,14 @@ footer{
 
   function filter(){
     var q=input.value.trim().toLowerCase(),visible=0;
-    if(featured){
-      var featuredType=featured.dataset.doctype||'article';
+    var featuredVisibleCount=0;
+    featured.forEach(function(card){
+      var featuredType=card.dataset.doctype||'article';
       var featuredVisible=activeType==='all'||featuredType===activeType;
-      featured.classList.toggle('is-hidden',!featuredVisible);
-      if(featuredSection) featuredSection.classList.toggle('is-hidden',!featuredVisible);
-    }
+      card.classList.toggle('is-hidden',!featuredVisible);
+      if(featuredVisible) featuredVisibleCount++;
+    });
+    if(featuredSection) featuredSection.classList.toggle('is-hidden',featuredVisibleCount===0);
     rows.forEach(function(row){
       row.classList.add('is-hidden');
       row.dataset.filterMatch='0';
