@@ -75,6 +75,24 @@ def test_update_catalog_does_not_rewrite_identical_catalog(tmp_path):
     assert catalog.read_text(encoding="utf-8") == first_contents
 
 
+def test_resources_source_keeps_public_url_clean(tmp_path):
+    root = tmp_path / "site"
+    source = root / "resources" / "mathematics" / "analysis" / "density" / "density.mt"
+    output = root / "created artifacts" / "mathematics" / "analysis" / "density" / "index.html"
+    source.parent.mkdir(parents=True)
+
+    entry = build_catalog_entry(
+        Document(article_title="Density"),
+        source,
+        output,
+        root,
+    )
+
+    assert entry["source"] == "resources/mathematics/analysis/density/density.mt"
+    assert entry["url"] == "/mathematics/analysis/density/"
+
+
+
 def test_catalog_strips_created_artifacts_from_public_url(tmp_path):
     root = tmp_path / "site"
     source = root / "completeness" / "completeness.mt"
