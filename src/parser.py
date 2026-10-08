@@ -453,14 +453,6 @@ def _parse_block_source(source: str) -> Document:
                     list_kind, list_node, _ = environment_stack[-1]
                     title = ""
                     body = argument.strip()
-                    title_match = re.match(
-                        r"\\s*title\\s*=\\s*(?:(?:"((?:[^"\\\\]|\\\\.)*)")|(?:'((?:[^'\\\\]|\\\\.)*)'))\\s*,?\\s*(.*)\\Z",
-                        body,
-                        re.DOTALL | re.IGNORECASE,
-                    )
-                    if title_match:
-                        title = (title_match.group(1) or title_match.group(2)).strip()
-                        body = title_match.group(3).strip()
                     list_item = ListItem(
                         content=_parse_list_item_content(body),
                         title=title,
