@@ -10,7 +10,7 @@ from .homepage import build_homepage
 from .archive import build_archive
 from .parser import parse_file
 from .renderer import render
-from .site_config import CONFIG_FILENAME, find_project_root, get_config, init_site, load_config, set_config
+from .site_config import CONFIG_FILENAME, CREATED_ARTIFACTS_DIRNAME, created_artifacts_root, find_project_root, get_config, init_site, load_config, set_config
 
 
 def compile_document(
@@ -118,7 +118,20 @@ def main() -> None:
 
     if args.command == "compile":
         source_path = Path(args.source).resolve()
-        output_path = Path(args.output).resolve() if args.output else source_path.parent / "index.html"
+        project_root = find_project_root(source_path)
+        artifacts_root = created_artifacts_root(project_root)
+
+        if args.output:
+            output_path = Path(args.output).resolve()
+        else:
+            try:
+                relative_source = source_path.relative_to(project_root)
+            except ValueError:
+                relative_source = Path(source_path.name)
+            # Mirror the source tree inside the generated-artifacts directory,
+            # replacing the source filename with index.html.
+            output_path = artifacts_root / relative_source.parent / "index.html"
+
         output_path = compile_document(source_path, output_path, args.template)
         document = parse_file(source_path)
         index_path = update_catalog(
@@ -136,8 +149,14 @@ def main() -> None:
         # article compiler, so automatic site generation is skipped there.
         site_root = Path(index_path).resolve().parent
         if (site_root / CONFIG_FILENAME).is_file():
-            homepage_output = build_homepage(site_root)
-            archive_output = build_archive(site_root)
+            homepage_output = build_homepage(
+                site_root,
+                output=created_artifacts_root(site_root) / "index.html",
+            )
+            archive_output = build_archive(
+                site_root,
+                output=created_artifacts_root(site_root) / "archive" / "index.html",
+            )
             print(f"Mark Two: wrote {homepage_output}")
             print(f"Mark Two: wrote {archive_output}")
         else:
