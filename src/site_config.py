@@ -18,6 +18,35 @@ def created_artifacts_root(root: str | Path) -> Path:
     """Return the directory containing generated HTML artifacts."""
     return Path(root).resolve() / CREATED_ARTIFACTS_DIRNAME
 
+def created_artifact_path(
+    source_path: str | Path,
+    root: str | Path,
+) -> Path:
+    """Map a source .mt file to its generated artifact index.html.
+
+    Source directories are mirrored under created artifacts. A source
+    file at the project root gets its own directory so multiple root-level
+    documents cannot overwrite one another.
+    """
+    source = Path(source_path).resolve()
+    project_root = Path(root).resolve()
+    artifacts_root = created_artifacts_root(project_root)
+
+    try:
+        relative = source.relative_to(project_root)
+    except ValueError as exc:
+        raise ValueError(f"Source path {source} is outside project root {project_root}.") from exc
+
+    if relative == Path(CREATED_ARTIFACTS_DIRNAME) or Path(CREATED_ARTIFACTS_DIRNAME) in relative.parents:
+        raise ValueError(
+            f"Source path {source} is inside the generated artifacts directory {artifacts_root}. "
+            f"Source files must live outside {CREATED_ARTIFACTS_DIRNAME}."
+        )
+
+    if len(relative.parts) == 1:
+        return artifacts_root / relative.stem / "index.html"
+    return artifacts_root / relative.parent / "index.html"
+
 DEFAULT_CONFIG = {
     "author": "",
     "bio": "",
