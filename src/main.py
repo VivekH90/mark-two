@@ -1,6 +1,8 @@
 """Command-line entry point for Mark Two."""
 
 import argparse
+import re
+import shutil
 import sys
 from pathlib import Path
 
@@ -11,6 +13,41 @@ from .archive import build_archive
 from .parser import parse_file
 from .renderer import render
 from .site_config import CONFIG_FILENAME, created_artifact_path, created_artifacts_root, find_project_root, get_config, init_site, load_config, set_config
+
+
+def _copy_local_image_assets(
+    html: str,
+    source_path: Path,
+    output_path: Path,
+) -> None:
+    """Copy local image assets next to the generated HTML.
+
+    Mark Two source files historically resolved image paths relative to the
+    .mt file. Since generated HTML now lives under created artifacts, those
+    assets must be mirrored so the same src= paths keep working.
+    """
+    pattern = re.compile(r'<img\\b[^>]*\\bsrc=["\\']([^"\\']+)["\\']', re.IGNORECASE)
+    source_root = source_path.parent
+    output_root = output_path.parent
+
+    for raw_src in pattern.findall(html):
+        src = raw_src.strip()
+        if not src or src.startswith(("#", "/", "//")):
+            continue
+        if re.match(r"^[A-Za-z][A-Za-z0-9+.-]*:", src):
+            continue
+
+        asset_source = (source_root / src).resolve()
+        try:
+            asset_source.relative_to(source_root.resolve())
+        except ValueError:
+            continue
+        if not asset_source.is_file():
+            continue
+
+        asset_destination = (output_root / src).resolve()
+        asset_destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(asset_source, asset_destination)
 
 
 def compile_document(
@@ -39,6 +76,7 @@ def compile_document(
     output = render(document, template_path, site_config=site_config)
     output = inline_web_assets(output, template_path.parent)
     output_path.write_text(output, encoding="utf-8")
+    _copy_local_image_assets(output, source_path, output_path)
 
     return output_path
 
