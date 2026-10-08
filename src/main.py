@@ -26,7 +26,7 @@ def _copy_local_image_assets(
     .mt file. Since generated HTML now lives under created artifacts, those
     assets must be mirrored so the same src= paths keep working.
     """
-    pattern = re.compile(r'<img\\b[^>]*\\bsrc=["\\']([^"\\']+)["\\']', re.IGNORECASE)
+    pattern = re.compile(r'<img\b[^>]*\bsrc=["\']([^"\']+)["\']', re.IGNORECASE)
     source_root = source_path.parent
     output_root = output_path.parent
 
