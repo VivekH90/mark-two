@@ -399,7 +399,7 @@ def _parse_block_source(source: str) -> Document:
         # Embedded HTML, CSS, and JavaScript are copied verbatim until the
         # matching Mark Two environment delimiter is encountered.
         if environment_stack and environment_stack[-1][0] in _RAW_ENVIRONMENTS:
-            raw_kind, raw_node = environment_stack[-1]
+            raw_kind, raw_node, _ = environment_stack[-1]
             raw_end = _BLOCK_END.match(raw)
             if raw_end and raw_end.group(1).lower() == raw_kind:
                 environment_stack.pop()
