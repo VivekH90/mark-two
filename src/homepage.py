@@ -134,19 +134,20 @@ def _render_featured(articles: list[dict[str, Any]], root: Path, output_path: Pa
     cards = []
     for article in articles:
         subject = str(article.get("subject") or article.get("folder") or "Article")
-    description = _description(article)
-    description_html = f"<p>{escape(description)}</p>" if description else ""
-    title = escape(str(article.get("title") or "Untitled"))
-    url = escape(_article_url(article), quote=True)
-    display_date, _ = _display_date(article.get("date"))
-    return (
-        f'<article class="featured-card {_topic_class(subject)}" data-doctype="{_doctype(article)}">'
-        f'<span class="badge">{escape(subject)}</span>'
-        f'<h3><a href="{url}">{title}</a></h3>'
-        f'{description_html}'
-        f'<div class="meta">{escape(display_date or "Undated")}</div>'
-        f'</article>'
-    )
+        description = _description(article)
+        description_html = f"<p>{escape(description)}</p>" if description else ""
+        title = escape(str(article.get("title") or "Untitled"))
+        url = escape(relative_site_url(root, output_path, _article_url(article)), quote=True)
+        display_date, _ = _display_date(article.get("date"))
+        cards.append(
+            f'<article class="featured-card {_topic_class(subject)}" data-doctype="{_doctype(article)}">'
+            f'<span class="badge">{escape(subject)}</span>'
+            f'<h3><a href="{url}">{title}</a></h3>'
+            f'{description_html}'
+            f'<div class="meta">{escape(display_date or "Undated")}</div>'
+            f'</article>'
+        )
+    return "\n".join(cards)
 
 
 def _render_recent(articles: list[dict[str, Any]], root: Path, output_path: Path) -> str:
