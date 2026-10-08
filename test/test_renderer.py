@@ -52,3 +52,19 @@ def test_site_navigation_has_defaults_without_site_config(tmp_path):
     assert 'href="/archive/"' in html
     assert 'href="/about/"' in html
     assert ">GitHub</a>" not in html
+
+
+def test_site_navigation_markup_is_not_escaped(tmp_path):
+    template = tmp_path / "index.html"
+    template.write_text("<nav><ul>{{BUTTONS}}</ul></nav>", encoding="utf-8")
+    document = Document(article_title="Test", sections=[Section(title="Test")])
+    html = render(
+        document,
+        template,
+        site_config={"archive": "/archive/", "about": "/about/", "github": "https://github.com/example"},
+        project_root=tmp_path,
+        output_path=tmp_path / "created artifacts" / "math" / "test" / "index.html",
+    )
+    assert "<li><a href=" in html
+    assert "&lt;li&gt;" not in html
+    assert '<ul><li><a href=' in html
