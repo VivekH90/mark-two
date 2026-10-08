@@ -10,7 +10,7 @@ from .homepage import build_homepage
 from .archive import build_archive
 from .parser import parse_file
 from .renderer import render
-from .site_config import find_project_root, get_config, init_site, set_config
+from .site_config import CONFIG_FILENAME, find_project_root, get_config, init_site, load_config, set_config
 
 
 def compile_document(
@@ -31,7 +31,12 @@ def compile_document(
     document = parse_file(source_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
-    output = render(document, template_path)
+    project_root = find_project_root(source_path)
+    site_config = None
+    if (project_root / CONFIG_FILENAME).is_file():
+        site_config = load_config(project_root)
+
+    output = render(document, template_path, site_config=site_config)
     output = inline_web_assets(output, template_path.parent)
     output_path.write_text(output, encoding="utf-8")
 
