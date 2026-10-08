@@ -10,7 +10,7 @@ from .homepage import build_homepage
 from .archive import build_archive
 from .parser import parse_file
 from .renderer import render
-from .site_config import CONFIG_FILENAME, CREATED_ARTIFACTS_DIRNAME, created_artifacts_root, find_project_root, get_config, init_site, load_config, set_config
+from .site_config import CONFIG_FILENAME, created_artifact_path, created_artifacts_root, find_project_root, get_config, init_site, load_config, set_config
 
 
 def compile_document(
@@ -119,18 +119,11 @@ def main() -> None:
     if args.command == "compile":
         source_path = Path(args.source).resolve()
         project_root = find_project_root(source_path)
-        artifacts_root = created_artifacts_root(project_root)
 
         if args.output:
             output_path = Path(args.output).resolve()
         else:
-            try:
-                relative_source = source_path.relative_to(project_root)
-            except ValueError:
-                relative_source = Path(source_path.name)
-            # Mirror the source tree inside the generated-artifacts directory,
-            # replacing the source filename with index.html.
-            output_path = artifacts_root / relative_source.parent / "index.html"
+            output_path = created_artifact_path(source_path, project_root)
 
         output_path = compile_document(source_path, output_path, args.template)
         document = parse_file(source_path)
