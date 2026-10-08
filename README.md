@@ -57,7 +57,7 @@ created artifacts/
     └── index.html
 ```
 
-The `created artifacts/` directory is created automatically if it does not exist.
+The `created artifacts/` directory is created automatically if it does not exist. Root-level source files get their own directory inside it, preventing two files such as `a.mt` and `b.mt` from overwriting each other's `index.html`.
 
 A custom output path can be selected with:
 
