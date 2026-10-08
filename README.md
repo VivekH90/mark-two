@@ -782,7 +782,18 @@ mark-two config get
 mark-two config get github
 ```
 
-NaN
+The homepage reads `articles.json` and `site.json` and renders featured, recent, topic-filtered, and archived article entries.
+
+### Automatic article navigation
+
+Article and note pages automatically receive these site-wide navigation links:
+
+- **Home** → `/`
+- **Archive** → the `archive` value from `site.json` (default: `/archive/`)
+- **About** → the `about` value from `site.json` (default: `/about/`)
+- **GitHub** → the `github` value from `site.json`, when configured
+
+You do **not** need to add `@button{Home, ...}`, `@button{Archive, ...}`, `@button{About, ...}`, or `@button{GitHub, ...}` to every `.mt` file. The `@button` directive remains available for additional article-specific navigation links. If a custom button uses one of the reserved site-wide names, Mark Two keeps the automatic site navigation instead of creating a duplicate.
 
 ## VS Code extension
 
