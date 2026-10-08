@@ -397,12 +397,16 @@ footer{
       if(featuredSection) featuredSection.classList.toggle('is-hidden',!featuredVisible);
     }
     rows.forEach(function(row){
+      row.classList.add('is-hidden');
+      row.dataset.filterMatch='0';
+    });
+    rows.forEach(function(row){
       var tags=(row.dataset.tags||'').toLowerCase().split('|').filter(Boolean);
       var hay=(row.dataset.search||row.textContent).toLowerCase();
       var typeMatch=activeType==='all'||row.dataset.doctype===activeType;
-      var show=typeMatch&&(!active||tags.indexOf(active.toLowerCase())!==-1)&&(!q||hay.indexOf(q)!==-1);
-      row.classList.toggle('is-hidden',!show);
-      if(show) visible++;
+      var match=typeMatch&&(!active||tags.indexOf(active.toLowerCase())!==-1)&&(!q||hay.indexOf(q)!==-1);
+      if(match && visible<5){ row.classList.remove('is-hidden'); visible++; }
+      if(match) row.dataset.filterMatch='1';
     });
     empty.style.display=visible?'none':'block';
 
