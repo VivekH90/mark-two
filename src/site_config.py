@@ -47,6 +47,29 @@ def created_artifact_path(
         return artifacts_root / relative.stem / "index.html"
     return artifacts_root / relative.parent / "index.html"
 
+def generated_page_path(
+    root: str | Path,
+    public_url: str,
+    default_directory: str,
+) -> Path:
+    """Map a local site URL such as /archive/ to an artifact path.
+
+    Generated pages live under the created-artifacts root while their public
+    URLs remain independent of that implementation detail.
+    """
+    url = str(public_url or '').strip() or default_directory
+    if '://' in url or url.startswith('//'):
+        raise ValueError(f"Generated page URL must be a local site path, got {public_url!r}.")
+    path = url.split('?', 1)[0].split('#', 1)[0]
+    if not path.startswith('/'):
+        path = '/' + path
+    parts = [part for part in Path(path.lstrip('/')).parts if part not in ('', '.') ]
+    if any(part == '..' for part in parts):
+        raise ValueError(f"Generated page URL cannot contain '..': {public_url!r}.")
+    if path.endswith('/') or not parts:
+        return created_artifacts_root(root).joinpath(*parts, 'index.html')
+    return created_artifacts_root(root).joinpath(*parts)
+
 DEFAULT_CONFIG = {
     "author": "",
     "bio": "",
