@@ -165,20 +165,15 @@
 
     c. If `args.output` was not supplied:
 
-       i. Use the source file's parent directory.
+       i. Determine the Mark Two project root.
 
-       ii. Set the output filename to:
+       ii. Map the source path into `created artifacts/`.
 
-              index.html
+       iii. Use `index.html` inside the mirrored source directory.
 
-    Therefore:
+    Therefore the default is:
 
-        output_path =
-            resolved user output path
-
-        or
-
-        source_path.parent / "index.html"
+        created artifacts/<source directory>/index.html
 
 14. Call `compile_document()` using:
 
