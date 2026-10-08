@@ -1,5 +1,7 @@
 import sys
 
+from pathlib import Path
+
 import src.main as main
 
 
@@ -28,3 +30,22 @@ def test_compile_rebuilds_homepage_and_archive(tmp_path, monkeypatch):
 
     assert [kind for kind, *_ in calls] == ["compile", "catalog", "homepage", "archive"]
     assert calls[-1][1] == tmp_path
+
+
+def test_root_level_sources_get_separate_artifact_directories(tmp_path):
+    from src.site_config import created_artifact_path
+
+    root = tmp_path / "site"
+    root.mkdir()
+    assert created_artifact_path(root / "a.mt", root) == root / "created artifacts" / "a" / "index.html"
+    assert created_artifact_path(root / "b.mt", root) == root / "created artifacts" / "b" / "index.html"
+
+
+def test_sources_cannot_live_inside_created_artifacts(tmp_path):
+    from src.site_config import created_artifact_path
+    import pytest
+
+    root = tmp_path / "site"
+    source = root / "created artifacts" / "bad.mt"
+    with pytest.raises(ValueError):
+        created_artifact_path(source, root)
