@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About · {{SITE_TITLE}}</title>
+<style>
+:root{--bg:#fbfaf6;--fg:#1c1d24;--muted:#5c5f6b;--rule:#dcd8cc;--link:#3a43a8;--green:#0f766e}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font-family:Georgia,serif;line-height:1.75}
+a{color:var(--link);text-decoration:none}a:hover{text-decoration:underline}
+.top{border-bottom:1px solid var(--rule)}.wrap{width:min(58rem,calc(100% - 2.4rem));margin:auto}
+.top-wrap{min-height:4.4rem;display:flex;align-items:center;gap:1.6rem}
+.brand{font-weight:700;color:var(--fg);margin-right:auto}.nav{display:flex;gap:1.15rem;font-family:Arial,sans-serif;font-size:.88rem}.nav a{color:var(--muted)}
+main{padding:4rem 0}.page{max-width:48rem;margin:auto}.kicker{font:700 .78rem Arial,sans-serif;color:var(--green);letter-spacing:.12em;text-transform:uppercase}
+h1{font:700 clamp(2.5rem,6vw,3.5rem)/1.1 Arial,sans-serif;margin:.4rem 0 1rem}p{font-size:1.1rem;color:var(--muted)}
+footer{border-top:1px solid var(--rule);padding:1rem 0 2rem;color:var(--muted);font-size:.8rem}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap top-wrap">
+<a class="brand" href="{{HOME_URL}}">{{AUTHOR}}</a>
+<nav class="nav"><a href="{{HOME_URL}}">Home</a><a href="{{ARCHIVE_URL}}">Archive</a><a href="{{ABOUT_URL}}">About</a><a href="{{GITHUB_URL}}" target="_blank" rel="noopener">GitHub</a></nav>
+</div></header>
+<main><div class="wrap page"><div class="kicker">About</div><h1>{{AUTHOR}}</h1><p>{{BIO}}</p></div></main>
+<footer><div class="wrap">© {{YEAR}} {{AUTHOR}}</div></footer>
+</body></html>
