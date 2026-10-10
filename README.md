@@ -838,7 +838,7 @@ You do **not** need to add `@button{Home, ...}`, `@button{Archive, ...}`, `@butt
 
 The optional extension lives under `vscode-mark-two/`.
 
-Current extension version: **0.4.0**.
+Current extension version: **0.5.0**.
 
 It provides:
 
@@ -851,6 +851,7 @@ It provides:
 - snippets for lists, images, references, related links, and inline formatting
 - automatic bracket and parenthesis closing
 - indentation based on `@begin(...)` and `@end(...)`
+- code folding for `@begin(...)` / `@end(...)` blocks, including large `animation` environments and display-math blocks
 
 The environment snippets generate the canonical syntax. For example:
 
@@ -869,7 +870,7 @@ From the repository root:
 ```bash
 cd vscode-mark-two
 npx @vscode/vsce package
-code --install-extension ./mark-two-language-0.4.0.vsix
+code --install-extension ./mark-two-language-0.5.0.vsix
 ```
 
 After installation, reload VS Code and open a `.mt` file. The language indicator should show **Mark Two**.
