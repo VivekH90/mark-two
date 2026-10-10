@@ -41,7 +41,56 @@ const ENVIRONMENT_SNIPPETS = [
   ["itemize", '@begin(itemize)\n@item{${1:First item}}\n@item{${2:Second item}}\n@end(itemize)'],
 ];
 
+function provideFoldingRanges(document) {
+  const ranges = [];
+  const environmentStack = [];
+  const mathStack = [];
+
+  for (let lineNumber = 0; lineNumber < document.lineCount; lineNumber++) {
+    const line = document.lineAt(lineNumber).text;
+    const trimmed = line.trim();
+
+    // Fold display mathematics as one block.
+    if (trimmed === "\\[") {
+      mathStack.push(lineNumber);
+    } else if (trimmed === "\\]" && mathStack.length) {
+      const start = mathStack.pop();
+      if (lineNumber > start + 1) {
+        ranges.push(new vscode.FoldingRange(start, lineNumber, vscode.FoldingRangeKind.Region));
+      }
+    }
+
+    // Match canonical @begin(kind ...) / @end(kind) environments.
+    // This naturally supports nested animation, theorem, proof, enumerate,
+    // itemize, and other Mark Two blocks.
+    const beginMatch = line.match(/^\\s*@begin\\s*\\(\\s*([A-Za-z][\\w-]*)\\b/i);
+    if (beginMatch) {
+      environmentStack.push({ name: beginMatch[1].toLowerCase(), line: lineNumber });
+      continue;
+    }
+
+    const endMatch = line.match(/^\\s*@end\\s*\\(\\s*([A-Za-z][\\w-]*)\\s*\\)\\s*$/i);
+    if (endMatch && environmentStack.length) {
+      const expected = endMatch[1].toLowerCase();
+      const top = environmentStack[environmentStack.length - 1];
+      if (top.name === expected) {
+        environmentStack.pop();
+        if (lineNumber > top.line + 1) {
+          ranges.push(new vscode.FoldingRange(top.line, lineNumber, vscode.FoldingRangeKind.Region));
+        }
+      }
+    }
+  }
+
+  return ranges;
+}
+
 function activate(context) {
+  const foldingProvider = vscode.languages.registerFoldingRangeProvider(
+    { language: "mark-two" },
+    { provideFoldingRanges }
+  );
+
   const provider = vscode.languages.registerCompletionItemProvider(
     { language: "mark-two" },
     {
@@ -95,9 +144,9 @@ function activate(context) {
     "@"
   );
 
-  context.subscriptions.push(provider);
+  context.subscriptions.push(provider, foldingProvider);
 }
 
 function deactivate() {}
 
-module.exports = { activate, deactivate };
+module.exports = { activate, deactivate, provideFoldingRanges };
