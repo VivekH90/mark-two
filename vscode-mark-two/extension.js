@@ -63,13 +63,13 @@ function provideFoldingRanges(document) {
     // Match canonical @begin(kind ...) / @end(kind) environments.
     // This naturally supports nested animation, theorem, proof, enumerate,
     // itemize, and other Mark Two blocks.
-    const beginMatch = line.match(/^\\s*@begin\\s*\\(\\s*([A-Za-z][\\w-]*)\\b/i);
+    const beginMatch = line.match(/^\s*@begin\s*\(\s*([A-Za-z][\w-]*)\b/i);
     if (beginMatch) {
       environmentStack.push({ name: beginMatch[1].toLowerCase(), line: lineNumber });
       continue;
     }
 
-    const endMatch = line.match(/^\\s*@end\\s*\\(\\s*([A-Za-z][\\w-]*)\\s*\\)\\s*$/i);
+    const endMatch = line.match(/^\s*@end\s*\(\s*([A-Za-z][\w-]*)\s*\)\s*$/i);
     if (endMatch && environmentStack.length) {
       const expected = endMatch[1].toLowerCase();
       const top = environmentStack[environmentStack.length - 1];
