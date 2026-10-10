@@ -1,8 +1,8 @@
 {
   "name": "mark-two-language",
   "displayName": "Mark Two Language Support",
-  "description": "Syntax highlighting, snippets, and directive completions for Mark Two documents.",
-  "version": "0.4.0",
+  "description": "Syntax highlighting, code folding, snippets, and directive completions for Mark Two documents.",
+  "version": "0.5.0",
   "publisher": "VivekH90",
   "license": "MIT",
   "engines": {
