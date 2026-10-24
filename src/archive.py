@@ -29,6 +29,7 @@ def _doctype_label(value: str) -> str:
     return "Notes" if value == "notes" else "Article"
 
 
+TAG_FILTER_LIMIT = 20
 DEFAULT_TEMPLATE = Path(__file__).resolve().parent.parent / "web" / "archive.html"
 
 
@@ -66,7 +67,7 @@ def _render_tag_filter(articles: list[dict[str, Any]]) -> str:
     return "".join(
         f'<button type="button" class="chip" data-tag="{escape(key, quote=True)}">'
         f'{escape(labels[key])}<small>{counts[key]}</small></button>'
-        for key in ordered
+        for key in ordered[:TAG_FILTER_LIMIT]
     ) or '<span class="filter-note">No tags yet.</span>'
 
 
