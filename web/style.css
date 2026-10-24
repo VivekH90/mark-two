@@ -596,7 +596,6 @@ header.top{
   margin:1.65rem 0;
   padding:1.22rem 1.42rem 1.28rem;
   border:2px solid var(--colourbox-border);
-  border-left-width:6px;
   border-radius:18px;
   background:var(--colourbox-bg);
   color:var(--colourbox-ink);
