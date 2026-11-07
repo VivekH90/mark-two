@@ -12,8 +12,9 @@ from .homepage import build_homepage
 from .archive import build_archive
 from .about import build_about
 from .parser import parse_file
+from .pdf import compile_pdf, find_latex_style_dir
 from .renderer import render
-from .site_config import CONFIG_FILENAME, created_artifact_path, created_artifacts_root, find_project_root, generated_page_path, get_config, init_site, load_config, set_config
+from .site_config import CONFIG_FILENAME, created_artifact_path, created_pdf_artifact_path, created_artifacts_root, find_project_root, generated_page_path, get_config, init_site, load_config, set_config
 
 
 def _copy_local_image_assets(
@@ -103,6 +104,11 @@ def main() -> None:
     compile_parser.add_argument("--template", default=str(default_template), help="HTML template path")
     compile_parser.add_argument("--index", help="Article catalog path")
 
+    pdf_parser = subparsers.add_parser("pdf", help="Compile a LaTeX source file into a PDF artifact.")
+    pdf_parser.add_argument("source", help="Path to the .tex source file")
+    pdf_parser.add_argument("-o", "--output", help="PDF output path")
+    pdf_parser.add_argument("--engine", default="pdflatex", help="LaTeX engine (default: pdflatex)")
+
     init_parser = subparsers.add_parser("init", help="Initialize a Mark Two site configuration.")
     init_parser.add_argument("--force", action="store_true", help="Replace an existing site.json")
 
@@ -126,12 +132,31 @@ def main() -> None:
     archive_parser.add_argument("-o", "--output", help="Archive output path")
     archive_parser.add_argument("--template", help="Archive template path")
 
-    known_commands = {"compile", "init", "config", "build", "-h", "--help"}
+    known_commands = {"compile", "pdf", "init", "config", "build", "-h", "--help"}
     if len(sys.argv) > 1 and sys.argv[1] not in known_commands:
-        sys.argv.insert(1, "compile")
+        implicit_command = "pdf" if Path(sys.argv[1]).suffix.lower() == ".tex" else "compile"
+        sys.argv.insert(1, implicit_command)
 
     args = parser.parse_args()
     root = find_project_root()
+
+    if args.command == "pdf":
+        source_path = Path(args.source).resolve()
+        project_root = find_project_root(source_path)
+        output_path = (
+            Path(args.output).resolve()
+            if args.output
+            else created_pdf_artifact_path(source_path, project_root)
+        )
+        style_dir = find_latex_style_dir(mark_two_root)
+        output_path = compile_pdf(
+            source_path=source_path,
+            output_path=output_path,
+            style_dir=style_dir,
+            engine=args.engine,
+        )
+        print(f"Mark Two: wrote {output_path}")
+        return
 
     if args.command == "init":
         path = init_site(root, force=args.force)
