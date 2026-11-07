@@ -15,6 +15,7 @@
 \RequirePackage{titletoc}
 \RequirePackage[most]{tcolorbox}
 \RequirePackage{fancyhdr}
+\RequirePackage{etoolbox}
 \RequirePackage{enumitem}
 \RequirePackage{hyperref}
 
@@ -91,6 +92,19 @@
 
 \fancypagestyle{plain}{%
   \fancyhf{}
+  \fancyhead[L]{\fontfamily{cmss}\selectfont\fontsize{8}{9}\selectfont\color{Muted}\RunningTitle}
+  \fancyhead[R]{\fontfamily{cmss}\selectfont\fontsize{8}{9}\selectfont\color{Muted}\nouppercase{\rightmark}}
+  \renewcommand{\headrulewidth}{0.4pt}
+  \renewcommand{\headrule}{\hbox to\headwidth{\color{TocRule}\leaders\hrule height \headrulewidth\hfill}}
+  \renewcommand{\footrulewidth}{0pt}
+  \fancyfoot[L]{\fontfamily{cmss}\selectfont\fontsize{8}{9}\selectfont\color{Muted}\RunningAuthor}
+  \fancyfoot[R]{\fontfamily{cmss}\selectfont\small\bfseries\color{Accent}\thepage}
+}
+
+% The first contents page gets its own header; section-opening pages keep
+% the normal running title and current section header through the plain style.
+\fancypagestyle{toc}{%
+  \fancyhf{}
   \fancyhead[L]{\fontfamily{cmss}\selectfont\fontsize{8}{9}\selectfont\color{Muted}Contents}
   \fancyhead[R]{\fontfamily{cmss}\selectfont\fontsize{8}{9}\selectfont\color{Muted}\RunningTitle}
   \renewcommand{\headrulewidth}{0.4pt}
@@ -99,6 +113,7 @@
   \fancyfoot[L]{\fontfamily{cmss}\selectfont\fontsize{8}{9}\selectfont\color{Muted}\RunningAuthor}
   \fancyfoot[R]{\fontfamily{cmss}\selectfont\small\bfseries\color{Accent}\thepage}
 }
+\apptocmd{\tableofcontents}{\thispagestyle{toc}}{}{}
 
 % ----------------------------- Title page ----------------------------
 % Usage: \makemathtitle{Title}{Subtitle}{Author}{Affiliation}{Date}
