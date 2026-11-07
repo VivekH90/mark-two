@@ -19,3 +19,6 @@ mark-two = "mark_two.main:main"
 [tool.setuptools]
 packages = ["mark_two"]
 package-dir = { mark_two = "src" }
+
+[tool.setuptools.data-files]
+"share/mark-two/templates/latex" = ["templates/latex/marktwo.sty"]
