@@ -129,6 +129,54 @@ mark-two build archive
 
 The site configuration is stored in `site.json`.
 
+## LaTeX PDF output
+
+Mark Two can also compile a standalone LaTeX `.tex` document using the bundled
+`templates/latex/marktwo.sty` style package. The generated PDF follows the same
+source-tree mirroring convention as HTML and is written under
+`created artifacts/`:
+
+```text
+resources/
+└── mathematics/
+    └── analysis/
+        └── paper.tex
+
+created artifacts/
+└── mathematics/
+    └── analysis/
+        └── index.pdf
+```
+
+Compile explicitly:
+
+```bash
+mark-two pdf resources/mathematics/analysis/paper.tex
+```
+
+A `.tex` path can also be passed directly:
+
+```bash
+mark-two resources/mathematics/analysis/paper.tex
+```
+
+Use `-o` to choose a custom PDF path, or `--engine` to select another
+LaTeX executable:
+
+```bash
+mark-two pdf paper.tex --output build/paper.pdf
+mark-two pdf paper.tex --engine xelatex
+```
+
+LaTeX runs in an isolated temporary output directory. Mark Two performs two
+passes so the table of contents and cross-references can settle, then copies
+only the final PDF into the artifact directory. Auxiliary files such as
+`.aux`, `.fdb_latexmk`, `.fls`, `.log`, `.out`, and `.toc` are discarded
+with the temporary directory and are not left in the project.
+
+The PDF command requires a LaTeX distribution with the selected engine
+installed. The bundled style package is included when Mark Two is installed.
+
 ## Article metadata
 
 An article begins with document-level directives.
