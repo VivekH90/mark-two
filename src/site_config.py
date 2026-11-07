@@ -222,3 +222,36 @@ def get_config(root: str | Path, key: str | None = None) -> Any:
         valid = ", ".join(sorted(data))
         raise KeyError(f"Unknown config key '{key}'. Valid keys: {valid}")
     return data[key]
+
+def created_pdf_artifact_path(
+    source_path: str | Path,
+    root: str | Path,
+) -> Path:
+    """Map a .tex source to a PDF beside the corresponding HTML artifact."""
+    source = Path(source_path).resolve()
+    project_root = Path(root).resolve()
+    artifacts_root = created_artifacts_root(project_root)
+
+    try:
+        source.relative_to(artifacts_root)
+    except ValueError:
+        pass
+    else:
+        raise ValueError(
+            f"Source path {source} is inside the generated artifacts directory {artifacts_root}. "
+            f"Source files must live outside {CREATED_ARTIFACTS_DIRNAME}."
+        )
+
+    source_root = project_root / SOURCE_DIRNAME
+    try:
+        relative = source.relative_to(source_root)
+    except ValueError:
+        try:
+            relative = source.relative_to(project_root)
+        except ValueError as exc:
+            raise ValueError(f"Source path {source} is outside project root {project_root}.") from exc
+
+    if len(relative.parts) == 1:
+        return artifacts_root / relative.stem / "index.pdf"
+    return artifacts_root / relative.parent / "index.pdf"
+
