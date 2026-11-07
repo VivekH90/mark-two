@@ -1,0 +1,196 @@
+%% marktwo.sty
+%% Reusable LaTeX style package based on the Mathematical Paper Template.
+%% Compile documents with pdfLaTeX. Load with \usepackage{marktwo}.
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{marktwo}[2026/11/07 Mark Two mathematical paper style]
+
+% --------------------------- Dependencies ---------------------------
+\RequirePackage[T1]{fontenc}
+\RequirePackage{fix-cm}
+\RequirePackage{amsmath,amssymb,mathtools,amsthm}
+\RequirePackage{geometry}
+\RequirePackage{xcolor}
+\RequirePackage{microtype}
+\RequirePackage{titlesec}
+\RequirePackage{titletoc}
+\RequirePackage[most]{tcolorbox}
+\RequirePackage{fancyhdr}
+\RequirePackage{enumitem}
+\RequirePackage{hyperref}
+
+% --------------------------- Page geometry ---------------------------
+\geometry{
+  a4paper,
+  left=20mm,
+  right=20mm,
+  top=22mm,
+  bottom=17mm,
+  headheight=19pt,
+  headsep=5mm,
+  footskip=8mm
+}
+
+% --------------------------- Colour palette --------------------------
+\definecolor{Ink}{HTML}{20242B}
+\definecolor{Muted}{HTML}{626873}
+\definecolor{Rule}{HTML}{20242B}
+\definecolor{Accent}{HTML}{D41486}
+\definecolor{SectionBadge}{HTML}{75133F}
+\definecolor{TocRule}{HTML}{D9DDE3}
+
+\definecolor{Theorem}{HTML}{2857A4}
+\definecolor{TheoremBg}{HTML}{F1F5FC}
+\definecolor{Lemma}{HTML}{47749D}
+\definecolor{LemmaBg}{HTML}{F1F6FA}
+\definecolor{Proposition}{HTML}{5262A5}
+\definecolor{PropositionBg}{HTML}{F3F3FB}
+\definecolor{Corollary}{HTML}{247A68}
+\definecolor{CorollaryBg}{HTML}{EFF7F4}
+\definecolor{Definition}{HTML}{087F83}
+\definecolor{DefinitionBg}{HTML}{EFF8F7}
+\definecolor{Axiom}{HTML}{76519A}
+\definecolor{AxiomBg}{HTML}{F6F2FA}
+\definecolor{Example}{HTML}{A96527}
+\definecolor{ExampleBg}{HTML}{FFFAF2}
+\definecolor{Remark}{HTML}{647080}
+\definecolor{RemarkBg}{HTML}{F4F6F8}
+\definecolor{Conjecture}{HTML}{925074}
+\definecolor{ConjectureBg}{HTML}{FAF3F7}
+\definecolor{Notation}{HTML}{477A55}
+\definecolor{NotationBg}{HTML}{F2F8F1}
+\definecolor{Warning}{HTML}{A34A3E}
+\definecolor{WarningBg}{HTML}{FDF4F2}
+
+% ------------------------- Global typography -------------------------
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.32em}
+\setlength{\emergencystretch}{2em}
+\color{Ink}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=Ink,
+  urlcolor=Theorem,
+  citecolor=Muted
+}
+
+% -------------------------- Running header ---------------------------
+\newcommand{\RunningTitle}{Mathematical Paper}
+\newcommand{\RunningAuthor}{Author Name}
+\renewcommand{\sectionmark}[1]{\markright{#1}}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\fontfamily{cmss}\selectfont\fontsize{8}{9}\selectfont\color{Muted}\RunningTitle}
+\fancyhead[R]{\fontfamily{cmss}\selectfont\fontsize{8}{9}\selectfont\color{Muted}\nouppercase{\rightmark}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{TocRule}\leaders\hrule height \headrulewidth\hfill}}
+\renewcommand{\footrulewidth}{0pt}
+\fancyfoot[L]{\fontfamily{cmss}\selectfont\fontsize{8}{9}\selectfont\color{Muted}\RunningAuthor}
+\fancyfoot[R]{\fontfamily{cmss}\selectfont\small\bfseries\color{Accent}\thepage}
+
+\fancypagestyle{plain}{%
+  \fancyhf{}
+  \fancyhead[L]{\fontfamily{cmss}\selectfont\fontsize{8}{9}\selectfont\color{Muted}Contents}
+  \fancyhead[R]{\fontfamily{cmss}\selectfont\fontsize{8}{9}\selectfont\color{Muted}\RunningTitle}
+  \renewcommand{\headrulewidth}{0.4pt}
+  \renewcommand{\headrule}{\hbox to\headwidth{\color{TocRule}\leaders\hrule height \headrulewidth\hfill}}
+  \renewcommand{\footrulewidth}{0pt}
+  \fancyfoot[L]{\fontfamily{cmss}\selectfont\fontsize{8}{9}\selectfont\color{Muted}\RunningAuthor}
+  \fancyfoot[R]{\fontfamily{cmss}\selectfont\small\bfseries\color{Accent}\thepage}
+}
+
+% ----------------------------- Title page ----------------------------
+% Usage: \makemathtitle{Title}{Subtitle}{Author}{Affiliation}{Date}
+\newcommand{\makemathtitle}[5]{%
+  \gdef\RunningTitle{#1}%
+  \gdef\RunningAuthor{#3}%
+  \hypersetup{pdftitle={#1},pdfauthor={#3}}%
+  \thispagestyle{empty}%
+  \vspace*{3mm}%
+  {\fontencoding{OT1}\fontfamily{cmss}\fontseries{bx}\selectfont
+   \fontsize{40}{46}\selectfont\color{black}%
+   \begin{minipage}{\textwidth}\raggedright #1\end{minipage}\par}%
+  \vspace{2mm}%
+  {\fontfamily{cmss}\fontseries{bx}\selectfont
+   \fontsize{17}{20}\selectfont\color{Muted}#2\par}%
+  \vspace{8mm}%
+  {\normalfont\fontsize{10.5}{13}\selectfont\color{Ink}#3\par}%
+  \vspace{1.5mm}%
+  {\normalfont\fontsize{9.5}{12}\selectfont\color{Muted}#4\par}%
+  \vspace{1.5mm}%
+  {\normalfont\fontsize{9.5}{12}\selectfont\color{Muted}#5\par}%
+  \vspace{7mm}%
+  {\color{Rule}\hrule height 0.9pt}\par%
+  \vspace{7mm}%
+}
+
+% ------------------------- Section hierarchy ------------------------
+\titleformat{\section}
+  {\fontfamily{cmss}\selectfont\bfseries\Large\color{Accent}}
+  {\tcbox[on line,boxsep=0pt,left=6.5pt,right=6.5pt,top=3pt,bottom=3pt,
+     colback=SectionBadge,colframe=SectionBadge,boxrule=0pt,arc=2.2mm]
+     {\fontfamily{cmss}\selectfont\bfseries\color{white}\thesection}}
+  {0.75em}{}
+\titlespacing*{\section}{0pt}{1.0em}{0.38em}
+
+\titleformat{\subsection}
+  {\fontfamily{cmss}\selectfont\bfseries\large\color{Ink}}
+  {\fontfamily{cmss}\selectfont\bfseries\color{Accent}\thesubsection}
+  {0.65em}{}
+\titlespacing*{\subsection}{0pt}{0.7em}{0.2em}
+
+% -------------------------- Table of contents ------------------------
+\renewcommand{\contentsname}{Contents}
+\setcounter{tocdepth}{2}
+\titlecontents{section}
+  [0pt]
+  {\addvspace{0.8em}\fontfamily{cmss}\selectfont\bfseries\normalsize\color{Ink}}
+  {}
+  {}
+  {\hspace{0.45em}{\color{TocRule}\titlerule*[0.55pc]{.}}\hspace{0.35em}\contentspage}
+\titlecontents{subsection}
+  [1.8em]
+  {\addvspace{0.25em}\fontfamily{cmss}\selectfont\small\color{Muted}}
+  {\contentslabel{2.8em}}
+  {}
+  {\hspace{0.45em}{\color{TocRule}\titlerule*[0.55pc]{.}}\hspace{0.35em}\contentspage}
+
+% ---------------------- Mathematical environments -------------------
+\newcounter{mathenv}[section]
+\renewcommand{\themathenv}{\thesection.\arabic{mathenv}}
+
+\newenvironment{mathbox}[4]{%
+  \refstepcounter{mathenv}%
+  \begin{tcolorbox}[
+    enhanced,breakable,
+    colback=#3,colframe=#2,
+    boxrule=0.75pt,arc=2.0mm,
+    left=2.8mm,right=2.8mm,top=1.1mm,bottom=1.1mm,
+    before skip=0.45em,after skip=0.55em,
+    colbacktitle=#3,coltitle=#2,
+    fonttitle=\fontfamily{cmss}\selectfont\bfseries\small,
+    title={#1\enspace\themathenv\if\relax\detokenize{#4}\relax\else\quad #4\fi},
+    attach title to upper,
+    after title={\par\vspace{1pt}}
+  ]\color{Ink}\ignorespaces
+}{%
+  \end{tcolorbox}%
+}
+
+\newenvironment{theorem}[1][]{\begin{mathbox}{Theorem}{Theorem}{TheoremBg}{#1}}{\end{mathbox}}
+\newenvironment{lemma}[1][]{\begin{mathbox}{Lemma}{Lemma}{LemmaBg}{#1}}{\end{mathbox}}
+\newenvironment{proposition}[1][]{\begin{mathbox}{Proposition}{Proposition}{PropositionBg}{#1}}{\end{mathbox}}
+\newenvironment{corollary}[1][]{\begin{mathbox}{Corollary}{Corollary}{CorollaryBg}{#1}}{\end{mathbox}}
+\newenvironment{definition}[1][]{\begin{mathbox}{Definition}{Definition}{DefinitionBg}{#1}}{\end{mathbox}}
+\newenvironment{axiom}[1][]{\begin{mathbox}{Axiom}{Axiom}{AxiomBg}{#1}}{\end{mathbox}}
+\newenvironment{example}[1][]{\begin{mathbox}{Example}{Example}{ExampleBg}{#1}}{\end{mathbox}}
+\newenvironment{remark}[1][]{\begin{mathbox}{Remark}{Remark}{RemarkBg}{#1}}{\end{mathbox}}
+\newenvironment{conjecture}[1][]{\begin{mathbox}{Conjecture}{Conjecture}{ConjectureBg}{#1}}{\end{mathbox}}
+\newenvironment{notation}[1][]{\begin{mathbox}{Notation}{Notation}{NotationBg}{#1}}{\end{mathbox}}
+\newenvironment{warning}[1][]{\begin{mathbox}{Warning}{Warning}{WarningBg}{#1}}{\end{mathbox}}
+
+\renewcommand{\proofname}{\fontfamily{cmss}\selectfont\bfseries\upshape\color{Ink}Proof}
+\renewcommand{\qedsymbol}{\textcolor{SectionBadge}{$\square$}}
+
+\endinput
