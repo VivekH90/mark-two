@@ -40,7 +40,7 @@ def test_compile_pdf_keeps_only_pdf_in_destination_and_cleans_temp_files(
 ):
     source = tmp_path / "paper.tex"
     source.write_text(
-        r"\\documentclass{article}\\begin{document}Test\\end{document}",
+        r"\documentclass{article}\begin{document}Test\end{document}",
         encoding="utf-8",
     )
     styles = tmp_path / "styles"
