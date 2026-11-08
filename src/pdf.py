@@ -33,11 +33,13 @@ def compile_pdf(
     style_dir: str | Path,
     engine: str = "pdflatex",
 ) -> Path:
-    """Compile a .tex file and keep every TeX auxiliary file out of the project.
+    """Compile a .tex file and publish the PDF beside its source and in artifacts.
 
     LaTeX is run twice so the table of contents and cross-references settle.
-    Its complete working output is isolated in a temporary directory; only
-    the final PDF is copied to the requested artifact path.
+    Its complete working output is isolated in a temporary directory. Only
+    the final PDF is copied to the requested artifact path and to a
+    same-basename PDF beside the source; auxiliary files never enter the
+    project tree.
     """
     source = Path(source_path).resolve()
     output = Path(output_path).resolve()
@@ -103,5 +105,11 @@ def compile_pdf(
 
         output.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(generated_pdf, output)
+
+        # Keep a convenient PDF beside the .tex source for editors such as
+        # VS Code's PDF viewer, while retaining the canonical artifact copy.
+        source_pdf = source.with_suffix(".pdf")
+        if source_pdf != output:
+            shutil.copy2(generated_pdf, source_pdf)
 
     return output
