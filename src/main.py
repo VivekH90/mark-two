@@ -143,22 +143,22 @@ def main() -> None:
     if args.command == "pdf":
         source_path = Path(args.source).resolve()
         project_root = find_project_root(source_path)
-        output_path = (
-            Path(args.output).resolve()
-            if args.output
-            else created_pdf_artifact_path(source_path, project_root)
-        )
+        source_pdf = source_path.with_suffix(".pdf")
+        artifact_pdf = created_pdf_artifact_path(source_path, project_root)
+        output_path = Path(args.output).resolve() if args.output else source_pdf
         style_dir = find_latex_style_dir(mark_two_root)
         output_path = compile_pdf(
             source_path=source_path,
             output_path=output_path,
             style_dir=style_dir,
             engine=args.engine,
+            artifact_path=artifact_pdf,
         )
         print(f"Mark Two: wrote {output_path}")
-        source_pdf = source_path.with_suffix(".pdf")
         if source_pdf != output_path:
             print(f"Mark Two: copied beside source {source_pdf}")
+        if artifact_pdf not in {output_path, source_pdf}:
+            print(f"Mark Two: wrote artifact {artifact_pdf}")
         return
 
     if args.command == "init":
