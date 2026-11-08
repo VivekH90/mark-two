@@ -19,6 +19,11 @@
 \RequirePackage{enumitem}
 \RequirePackage{hyperref}
 
+% Start enumerate lists on a fresh line. This is especially important after
+% the run-in heading of amsthm's proof environment (e.g. forward/backward
+% implication proofs).
+\BeforeBeginEnvironment{enumerate}{\par}
+
 % --------------------------- Page geometry ---------------------------
 \geometry{
   a4paper,
