@@ -34,30 +34,31 @@
 % --------------------------- Colour palette --------------------------
 \definecolor{Ink}{HTML}{202B38}
 \definecolor{Muted}{HTML}{657181}
+\definecolor{HeaderFooter}{HTML}{77738A}
 \definecolor{Rule}{HTML}{26394D}
-\definecolor{Accent}{HTML}{B65B45}
-\definecolor{SectionBadge}{HTML}{294B68}
-\definecolor{SectionTitle}{HTML}{263D53}
-\definecolor{SubsectionTitle}{HTML}{426B70}
-\definecolor{TocRule}{HTML}{DCE2E8}
+\definecolor{Accent}{HTML}{8B2865}
+\definecolor{SectionBadge}{HTML}{5725B5}
+\definecolor{SectionTitle}{HTML}{7C3AED}
+\definecolor{SubsectionTitle}{HTML}{8B1E5A}
+\definecolor{TocRule}{HTML}{DED9E8}
 
 % Each environment pairs a saturated border with a pale, contrasting fill.
-\definecolor{Theorem}{HTML}{315C9A}
-\definecolor{TheoremBg}{HTML}{FFF4DD}
-\definecolor{Lemma}{HTML}{79509B}
-\definecolor{LemmaBg}{HTML}{EAF4FB}
+\definecolor{Theorem}{HTML}{F05A28}
+\definecolor{TheoremBg}{HTML}{FFF0E2}
+\definecolor{Lemma}{HTML}{F05A28}
+\definecolor{LemmaBg}{HTML}{FFF0E2}
 \definecolor{Proposition}{HTML}{A94743}
 \definecolor{PropositionBg}{HTML}{EAF2FC}
 \definecolor{Corollary}{HTML}{28785F}
 \definecolor{CorollaryBg}{HTML}{FFF0E5}
-\definecolor{Definition}{HTML}{087F83}
-\definecolor{DefinitionBg}{HTML}{FFF1E3}
+\definecolor{Definition}{HTML}{7C3AED}
+\definecolor{DefinitionBg}{HTML}{F1EDFF}
 \definecolor{Axiom}{HTML}{76519A}
 \definecolor{AxiomBg}{HTML}{EEF5E5}
 \definecolor{Example}{HTML}{A65E27}
 \definecolor{ExampleBg}{HTML}{EAF4FB}
-\definecolor{Remark}{HTML}{586779}
-\definecolor{RemarkBg}{HTML}{FFF5E6}
+\definecolor{Remark}{HTML}{8B1E5A}
+\definecolor{RemarkBg}{HTML}{FCEEF4}
 \definecolor{Conjecture}{HTML}{98466E}
 \definecolor{ConjectureBg}{HTML}{EAF6F0}
 \definecolor{Notation}{HTML}{39764F}
@@ -82,39 +83,40 @@
 \newcommand{\RunningTitle}{Mathematical Paper}
 \newcommand{\RunningAuthor}{Author Name}
 \renewcommand{\sectionmark}[1]{\markright{#1}}
+\renewcommand{\subsectionmark}[1]{\markright{#1}}
 
 \pagestyle{fancy}
 \fancyhf{}
-\fancyhead[L]{\fontfamily{cmss}\selectfont\fontsize{8}{9}\selectfont\color{Muted}\RunningTitle}
-\fancyhead[R]{\fontfamily{cmss}\selectfont\fontsize{8}{9}\selectfont\color{Muted}\nouppercase{\rightmark}}
+\fancyhead[L]{\fontfamily{cmss}\selectfont\fontsize{8}{9}\selectfont\color{HeaderFooter}\RunningTitle}
+\fancyhead[R]{\fontfamily{cmss}\selectfont\fontsize{8}{9}\selectfont\color{HeaderFooter}\nouppercase{\rightmark}}
 \renewcommand{\headrulewidth}{0.4pt}
 \renewcommand{\headrule}{\hbox to\headwidth{\color{TocRule}\leaders\hrule height \headrulewidth\hfill}}
 \renewcommand{\footrulewidth}{0pt}
 \fancyfoot[L]{\fontfamily{cmss}\selectfont\fontsize{8}{9}\selectfont\color{Muted}\RunningAuthor}
-\fancyfoot[R]{\fontfamily{cmss}\selectfont\small\bfseries\color{Accent}\thepage}
+\fancyfoot[R]{\fontfamily{cmss}\selectfont\small\bfseries\color{HeaderFooter}\thepage}
 
 \fancypagestyle{plain}{%
   \fancyhf{}
-  \fancyhead[L]{\fontfamily{cmss}\selectfont\fontsize{8}{9}\selectfont\color{Muted}\RunningTitle}
-  \fancyhead[R]{\fontfamily{cmss}\selectfont\fontsize{8}{9}\selectfont\color{Muted}\nouppercase{\rightmark}}
+  \fancyhead[L]{\fontfamily{cmss}\selectfont\fontsize{8}{9}\selectfont\color{HeaderFooter}\RunningTitle}
+  \fancyhead[R]{\fontfamily{cmss}\selectfont\fontsize{8}{9}\selectfont\color{HeaderFooter}\nouppercase{\rightmark}}
   \renewcommand{\headrulewidth}{0.4pt}
   \renewcommand{\headrule}{\hbox to\headwidth{\color{TocRule}\leaders\hrule height \headrulewidth\hfill}}
   \renewcommand{\footrulewidth}{0pt}
   \fancyfoot[L]{\fontfamily{cmss}\selectfont\fontsize{8}{9}\selectfont\color{Muted}\RunningAuthor}
-  \fancyfoot[R]{\fontfamily{cmss}\selectfont\small\bfseries\color{Accent}\thepage}
+  \fancyfoot[R]{\fontfamily{cmss}\selectfont\small\bfseries\color{HeaderFooter}\thepage}
 }
 
 % The first contents page gets its own header; section-opening pages keep
 % the normal running title and current section header through the plain style.
 \fancypagestyle{toc}{%
   \fancyhf{}
-  \fancyhead[L]{\fontfamily{cmss}\selectfont\fontsize{8}{9}\selectfont\color{Muted}Contents}
-  \fancyhead[R]{\fontfamily{cmss}\selectfont\fontsize{8}{9}\selectfont\color{Muted}\RunningTitle}
+  \fancyhead[L]{\fontfamily{cmss}\selectfont\fontsize{8}{9}\selectfont\color{HeaderFooter}Contents}
+  \fancyhead[R]{\fontfamily{cmss}\selectfont\fontsize{8}{9}\selectfont\color{HeaderFooter}\RunningTitle}
   \renewcommand{\headrulewidth}{0.4pt}
   \renewcommand{\headrule}{\hbox to\headwidth{\color{TocRule}\leaders\hrule height \headrulewidth\hfill}}
   \renewcommand{\footrulewidth}{0pt}
   \fancyfoot[L]{\fontfamily{cmss}\selectfont\fontsize{8}{9}\selectfont\color{Muted}\RunningAuthor}
-  \fancyfoot[R]{\fontfamily{cmss}\selectfont\small\bfseries\color{Accent}\thepage}
+  \fancyfoot[R]{\fontfamily{cmss}\selectfont\small\bfseries\color{HeaderFooter}\thepage}
 }
 \apptocmd{\tableofcontents}{\thispagestyle{toc}}{}{}
 
@@ -154,7 +156,7 @@
 
 \titleformat{\subsection}
   {\fontfamily{cmss}\selectfont\bfseries\large\color{SubsectionTitle}}
-  {\fontfamily{cmss}\selectfont\bfseries\color{Accent}\thesubsection}
+  {\fontfamily{cmss}\selectfont\bfseries\color{SubsectionTitle}\thesubsection}
   {0.65em}{}
 \titlespacing*{\subsection}{0pt}{0.7em}{0.2em}
 
@@ -186,11 +188,11 @@
     boxrule=0.75pt,arc=2.0mm,
     left=2.8mm,right=2.8mm,top=1.1mm,bottom=1.1mm,
     before skip=0.45em,after skip=0.55em,
-    colbacktitle=#3,coltitle=#2,
-    fonttitle=\fontfamily{cmss}\selectfont\bfseries\normalsize,
-    title={#1\enspace\themathenv\if\relax\detokenize{#4}\relax\else\enspace (#4).\fi},
+    colbacktitle=#3,coltitle=black,
+    fonttitle=\normalfont\normalsize\color{black},
+    title={\textbf{#1\enspace\themathenv}\if\relax\detokenize{#4}\relax\else\enspace (#4).\fi},
     attach title to upper,
-    after title={\enspace}
+    after title={\par\vspace{1pt}}
   ]\color{Ink}#5\ignorespaces
 }{%
   \end{tcolorbox}%
