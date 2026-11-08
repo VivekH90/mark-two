@@ -32,6 +32,7 @@ def compile_pdf(
     output_path: str | Path,
     style_dir: str | Path,
     engine: str = "pdflatex",
+    artifact_path: str | Path | None = None,
 ) -> Path:
     """Compile a .tex file and publish the PDF beside its source and in artifacts.
 
@@ -43,6 +44,7 @@ def compile_pdf(
     """
     source = Path(source_path).resolve()
     output = Path(output_path).resolve()
+    artifact = Path(artifact_path).resolve() if artifact_path is not None else None
     styles = Path(style_dir).resolve()
 
     if source.suffix.lower() != ".tex":
@@ -51,6 +53,8 @@ def compile_pdf(
         raise FileNotFoundError(f"LaTeX source file not found: {source}")
     if output.suffix.lower() != ".pdf":
         raise ValueError(f"PDF output path must end in .pdf: {output}")
+    if artifact is not None and artifact.suffix.lower() != ".pdf":
+        raise ValueError(f"PDF artifact path must end in .pdf: {artifact}")
     if not (styles / "marktwo.sty").is_file():
         raise FileNotFoundError(f"Mark Two LaTeX style not found: {styles / 'marktwo.sty'}")
 
@@ -103,13 +107,19 @@ def compile_pdf(
                 f"LaTeX finished without producing the expected PDF: {generated_pdf}"
             )
 
+        # Publish the primary PDF at the requested path.
         output.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(generated_pdf, output)
 
-        # Keep a convenient PDF beside the .tex source for editors such as
-        # VS Code's PDF viewer, while retaining the canonical artifact copy.
+        # Always make a same-basename copy beside the source so LaTeX editors
+        # that expect source-adjacent PDFs can open it without extra settings.
         source_pdf = source.with_suffix(".pdf")
         if source_pdf != output:
             shutil.copy2(generated_pdf, source_pdf)
+
+        # Keep the canonical site artifact as a second copy.
+        if artifact is not None and artifact not in {output, source_pdf}:
+            artifact.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(generated_pdf, artifact)
 
     return output
