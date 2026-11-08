@@ -72,6 +72,10 @@ def test_compile_pdf_keeps_only_pdf_in_destination_and_cleans_temp_files(
     source_pdf = source.with_suffix(".pdf")
     assert source_pdf.read_bytes() == b"%PDF-test"
     assert source_pdf.parent == source.parent
+    assert sorted(path.name for path in source.parent.iterdir()) == [
+        "paper.pdf",
+        "paper.tex",
+    ]
     assert len(temporary_dirs) == 2
     assert all(not directory.exists() for directory in temporary_dirs)
     assert sorted(path.name for path in destination.parent.iterdir()) == ["index.pdf"]
