@@ -156,6 +156,9 @@ def main() -> None:
             engine=args.engine,
         )
         print(f"Mark Two: wrote {output_path}")
+        source_pdf = source_path.with_suffix(".pdf")
+        if source_pdf != output_path:
+            print(f"Mark Two: copied beside source {source_pdf}")
         return
 
     if args.command == "init":
