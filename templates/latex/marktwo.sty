@@ -184,10 +184,10 @@
     left=2.8mm,right=2.8mm,top=1.1mm,bottom=1.1mm,
     before skip=0.45em,after skip=0.55em,
     colbacktitle=#3,coltitle=#2,
-    fonttitle=\fontfamily{cmss}\selectfont\bfseries\small,
-    title={#1\enspace\themathenv\if\relax\detokenize{#4}\relax\else\quad #4\fi},
+    fonttitle=\normalfont\bfseries\normalsize,
+    title={#1\enspace\themathenv\if\relax\detokenize{#4}\relax\else\enspace #4.\fi},
     attach title to upper,
-    after title={\par\vspace{1pt}}
+    after title={\enspace}
   ]\color{Ink}\ignorespaces
 }{%
   \end{tcolorbox}%
