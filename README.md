@@ -131,23 +131,12 @@ The site configuration is stored in `site.json`.
 
 ## LaTeX PDF output
 
-Mark Two can also compile a standalone LaTeX `.tex` document using the bundled
-`templates/latex/marktwo.sty` style package. The generated PDF follows the same
-source-tree mirroring convention as HTML and is written under
-`created artifacts/`:
+Mark Two can compile a standalone LaTeX `.tex` document using the bundled
+`templates/latex/marktwo.sty` style package.
 
-```text
-resources/
-└── mathematics/
-    └── analysis/
-        └── paper.tex
-
-created artifacts/
-└── mathematics/
-    └── analysis/
-        └── index.pdf
-
-A same-basename convenience copy is also placed beside the source:
+By default, the primary PDF is written beside the source file, and a second
+copy is placed under `created artifacts/` using the site's mirrored folder
+structure. For example:
 
 ```text
 resources/
@@ -155,6 +144,11 @@ resources/
     └── analysis/
         ├── paper.tex
         └── paper.pdf
+
+created artifacts/
+└── mathematics/
+    └── analysis/
+        └── index.pdf
 ```
 
 Compile explicitly:
@@ -169,8 +163,8 @@ A `.tex` path can also be passed directly:
 mark-two resources/mathematics/analysis/paper.tex
 ```
 
-Use `-o` to choose a custom PDF path, or `--engine` to select another
-LaTeX executable:
+Use `-o` to choose an additional custom PDF output path, or `--engine` to
+select another LaTeX executable:
 
 ```bash
 mark-two pdf paper.tex --output build/paper.pdf
@@ -179,10 +173,10 @@ mark-two pdf paper.tex --engine xelatex
 
 LaTeX runs in an isolated temporary output directory. Mark Two performs two
 passes so the table of contents and cross-references can settle, then copies
-only the final PDF into the artifact directory and places a same-basename
-convenience copy beside the source `.tex` file. Auxiliary files such as
-`.aux`, `.fdb_latexmk`, `.fls`, `.log`, `.out`, and `.toc` are discarded
-with the temporary directory and are not left in the project.
+only the final PDF to the source directory, the artifact directory, and any
+explicit custom output path. Auxiliary files such as `.aux`,
+`.fdb_latexmk`, `.fls`, `.log`, `.out`, and `.toc` are discarded with
+the temporary directory and are not left in the project.
 
 The PDF command requires a LaTeX distribution with the selected engine
 installed. The bundled style package is included when Mark Two is installed.
