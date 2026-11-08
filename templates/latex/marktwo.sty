@@ -91,7 +91,8 @@
 \fancyhead[R]{\fontfamily{cmss}\selectfont\fontsize{8}{9}\selectfont\color{HeaderFooter}\nouppercase{\rightmark}}
 \renewcommand{\headrulewidth}{0.4pt}
 \renewcommand{\headrule}{\hbox to\headwidth{\color{TocRule}\leaders\hrule height \headrulewidth\hfill}}
-\renewcommand{\footrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\renewcommand{\footrule}{\hbox to\headwidth{\color{TocRule}\leaders\hrule height \footrulewidth\hfill}}
 \fancyfoot[L]{\fontfamily{cmss}\selectfont\fontsize{8}{9}\selectfont\color{HeaderFooter}\RunningAuthor}
 \fancyfoot[R]{\fontfamily{cmss}\selectfont\small\bfseries\color{HeaderFooter}\thepage}
 
@@ -101,7 +102,8 @@
   \fancyhead[R]{\fontfamily{cmss}\selectfont\fontsize{8}{9}\selectfont\color{HeaderFooter}\nouppercase{\rightmark}}
   \renewcommand{\headrulewidth}{0.4pt}
   \renewcommand{\headrule}{\hbox to\headwidth{\color{TocRule}\leaders\hrule height \headrulewidth\hfill}}
-  \renewcommand{\footrulewidth}{0pt}
+  \renewcommand{\footrulewidth}{0.4pt}
+  \renewcommand{\footrule}{\hbox to\headwidth{\color{TocRule}\leaders\hrule height \footrulewidth\hfill}}
   \fancyfoot[L]{\fontfamily{cmss}\selectfont\fontsize{8}{9}\selectfont\color{HeaderFooter}\RunningAuthor}
   \fancyfoot[R]{\fontfamily{cmss}\selectfont\small\bfseries\color{HeaderFooter}\thepage}
 }
@@ -114,7 +116,8 @@
   \fancyhead[R]{\fontfamily{cmss}\selectfont\fontsize{8}{9}\selectfont\color{HeaderFooter}\RunningTitle}
   \renewcommand{\headrulewidth}{0.4pt}
   \renewcommand{\headrule}{\hbox to\headwidth{\color{TocRule}\leaders\hrule height \headrulewidth\hfill}}
-  \renewcommand{\footrulewidth}{0pt}
+  \renewcommand{\footrulewidth}{0.4pt}
+  \renewcommand{\footrule}{\hbox to\headwidth{\color{TocRule}\leaders\hrule height \footrulewidth\hfill}}
   \fancyfoot[L]{\fontfamily{cmss}\selectfont\fontsize{8}{9}\selectfont\color{HeaderFooter}\RunningAuthor}
   \fancyfoot[R]{\fontfamily{cmss}\selectfont\small\bfseries\color{HeaderFooter}\thepage}
 }
@@ -183,7 +186,7 @@
 \newenvironment{mathbox}[5]{%
   \refstepcounter{mathenv}%
   \begin{tcolorbox}[
-    enhanced,breakable,
+    enhanced,
     colback=#3,colframe=#2,
     boxrule=0.75pt,arc=2.0mm,
     left=2.8mm,right=2.8mm,top=1.1mm,bottom=1.1mm,
