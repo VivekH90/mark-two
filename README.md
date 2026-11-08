@@ -146,6 +146,15 @@ created artifacts/
 └── mathematics/
     └── analysis/
         └── index.pdf
+
+A same-basename convenience copy is also placed beside the source:
+
+```text
+resources/
+└── mathematics/
+    └── analysis/
+        ├── paper.tex
+        └── paper.pdf
 ```
 
 Compile explicitly:
@@ -170,7 +179,8 @@ mark-two pdf paper.tex --engine xelatex
 
 LaTeX runs in an isolated temporary output directory. Mark Two performs two
 passes so the table of contents and cross-references can settle, then copies
-only the final PDF into the artifact directory. Auxiliary files such as
+only the final PDF into the artifact directory and places a same-basename
+convenience copy beside the source `.tex` file. Auxiliary files such as
 `.aux`, `.fdb_latexmk`, `.fls`, `.log`, `.out`, and `.toc` are discarded
 with the temporary directory and are not left in the project.
 
