@@ -46,7 +46,8 @@ def test_compile_pdf_keeps_only_pdf_in_destination_and_cleans_temp_files(
     styles = tmp_path / "styles"
     styles.mkdir()
     (styles / "marktwo.sty").write_text("% test package", encoding="utf-8")
-    destination = tmp_path / "created artifacts" / "paper" / "index.pdf"
+    artifact_pdf = tmp_path / "created artifacts" / "paper" / "index.pdf"
+    source_pdf = source.with_suffix(".pdf")
     temporary_dirs = []
 
     monkeypatch.setattr(pdf.shutil, "which", lambda engine: "/usr/bin/pdflatex")
@@ -65,12 +66,16 @@ def test_compile_pdf_keeps_only_pdf_in_destination_and_cleans_temp_files(
 
     monkeypatch.setattr(pdf.subprocess, "run", fake_run)
 
-    result = pdf.compile_pdf(source, destination, styles)
+    result = pdf.compile_pdf(
+        source,
+        source_pdf,
+        styles,
+        artifact_path=artifact_pdf,
+    )
 
-    assert result == destination
-    assert destination.read_bytes() == b"%PDF-test"
-    source_pdf = source.with_suffix(".pdf")
+    assert result == source_pdf
     assert source_pdf.read_bytes() == b"%PDF-test"
+    assert artifact_pdf.read_bytes() == b"%PDF-test"
     assert source_pdf.parent == source.parent
     assert sorted(path.name for path in source.parent.iterdir()) == [
         "paper.pdf",
@@ -78,4 +83,4 @@ def test_compile_pdf_keeps_only_pdf_in_destination_and_cleans_temp_files(
     ]
     assert len(temporary_dirs) == 2
     assert all(not directory.exists() for directory in temporary_dirs)
-    assert sorted(path.name for path in destination.parent.iterdir()) == ["index.pdf"]
+    assert sorted(path.name for path in artifact_pdf.parent.iterdir()) == ["index.pdf"]
