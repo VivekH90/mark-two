@@ -22,7 +22,9 @@
 % Start enumerate lists on a fresh line. This is especially important after
 % the run-in heading of amsthm's proof environment (e.g. forward/backward
 % implication proofs).
-\BeforeBeginEnvironment{enumerate}{\leavevmode\newline}
+\makeatletter
+\BeforeBeginEnvironment{enumerate}{\if@inlabel\leavevmode\newline\fi}
+\makeatother
 
 % --------------------------- Page geometry ---------------------------
 \geometry{
