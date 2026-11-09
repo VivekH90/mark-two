@@ -42,8 +42,9 @@
 \definecolor{HeaderFooter}{HTML}{77738A}
 \definecolor{Rule}{HTML}{26394D}
 \definecolor{Accent}{HTML}{8B2865}
-\definecolor{SectionBadge}{HTML}{5725B5}
-\definecolor{SectionTitle}{HTML}{7C3AED}
+\definecolor{SectionBadge}{HTML}{76252B}
+\definecolor{SectionTitle}{HTML}{202124}
+\definecolor{SectionRule}{HTML}{A7B0B8}
 \definecolor{SubsectionTitle}{HTML}{8B1E5A}
 \definecolor{TocRule}{HTML}{DED9E8}
 
@@ -154,13 +155,14 @@
 }
 
 % ------------------------- Section hierarchy ------------------------
-\titleformat{\section}
-  {\fontfamily{cmss}\selectfont\bfseries\Large\color{SectionTitle}}
-  {\tcbox[on line,boxsep=0pt,left=6.5pt,right=6.5pt,top=3pt,bottom=3pt,
-     colback=SectionBadge,colframe=SectionBadge,boxrule=0pt,arc=2.2mm]
-     {\fontfamily{cmss}\selectfont\bfseries\color{white}\thesection}}
+\titleformat{\section}[block]
+  {\fontfamily{cmss}\selectfont\bfseries\LARGE\color{SectionTitle}}
+  {\tcbox[on line,boxsep=0pt,left=7pt,right=7pt,top=6pt,bottom=6pt,
+     colback=SectionBadge,colframe=SectionBadge,boxrule=0pt,arc=0.7mm]
+     {\fontfamily{cmss}\selectfont\bfseries\fontsize{22}{26}\selectfont\color{white}\thesection}}
   {0.75em}{}
-\titlespacing*{\section}{0pt}{1.0em}{0.38em}
+  [\vspace{0.35em}{\color{SectionRule}\titlerule[0.6pt]}]
+\titlespacing*{\section}{0pt}{1.0em}{0.65em}
 
 \titleformat{\subsection}
   {\fontfamily{cmss}\selectfont\bfseries\large\color{SubsectionTitle}}
