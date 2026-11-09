@@ -19,11 +19,20 @@
 \RequirePackage{enumitem}
 \RequirePackage{hyperref}
 
-% Start enumerate lists on a fresh line. This is especially important after
-% the run-in heading of amsthm's proof environment (e.g. forward/backward
-% implication proofs).
+% Only separate an enumerate from the run-in "Proof." label when
+% the proof begins immediately with that list. Lists elsewhere retain
+% their normal vertical spacing.
 \makeatletter
-\BeforeBeginEnvironment{enumerate}{\if@inlabel\leavevmode\newline\fi}
+\newif\ifmarktwo@inproof
+\AtBeginEnvironment{proof}{\marktwo@inprooftrue}
+\AtEndEnvironment{proof}{\marktwo@inprooffalse}
+\BeforeBeginEnvironment{enumerate}{%
+  \ifmarktwo@inproof
+    \if@inlabel
+      \leavevmode\newline
+    \fi
+  \fi
+}
 \makeatother
 
 % --------------------------- Page geometry ---------------------------
