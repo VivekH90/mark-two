@@ -2,12 +2,34 @@
 %% Reusable LaTeX style package based on the Mathematical Paper Template.
 %% Compile documents with pdfLaTeX. Load with \usepackage{marktwo}.
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{marktwo}[2026/11/07 Mark Two mathematical paper style]
+\ProvidesPackage{marktwo}[2026/11/11 Mark Two mathematical paper style]
 
 % --------------------------- Dependencies ---------------------------
 \RequirePackage[T1]{fontenc}
 \RequirePackage{fix-cm}
+
+% Mathematics
 \RequirePackage{amsmath,amssymb,mathtools,amsthm}
+\RequirePackage{bm}          % Bold mathematical symbols
+\RequirePackage{cancel}      % Cancel terms in derivations
+\RequirePackage{siunitx}     % Consistent physical units and number formatting
+
+% Figures and floats
+\RequirePackage{graphicx}    % Include external images
+\RequirePackage{float}       % Provides the [H] float placement specifier
+\RequirePackage{subcaption}  % Subfigures and subcaptions
+
+% Tables
+\RequirePackage{array}
+\RequirePackage{booktabs}    % Professional-quality table rules
+\RequirePackage{tabularx}    % Tables with adjustable-width columns
+\RequirePackage{longtable}   % Tables spanning multiple pages
+\RequirePackage{multirow}    % Cells spanning multiple rows
+
+% Writing, code, and layout
+\RequirePackage{csquotes}    % Consistent quotation commands
+\RequirePackage{listings}    % Source-code listings
+\RequirePackage{xurl}        % More flexible line breaks in URLs
 \RequirePackage{geometry}
 \RequirePackage{xcolor}
 \RequirePackage{microtype}
@@ -17,7 +39,10 @@
 \RequirePackage{fancyhdr}
 \RequirePackage{etoolbox}
 \RequirePackage{enumitem}
+
+% Links and cross-references
 \RequirePackage{hyperref}
+\RequirePackage[nameinlink,noabbrev]{cleveref}
 
 % Only separate an enumerate from the run-in "Proof." label when
 % the proof begins immediately with that list. Lists elsewhere retain
